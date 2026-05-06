@@ -1,0 +1,81 @@
+---
+import ResultBadge from "./ResultBadge.astro";
+import { getTeamInitials, getTeamLogo } from "../lib/teamLogos";
+import { withBase } from "../lib/paths";
+
+interface Props {
+  href: string;
+  round: number;
+  date: Date;
+  opponent: string;
+  venue: "home" | "away" | "neutral";
+  result: string;
+  description?: string;
+}
+
+const { href, round, date, opponent, venue, result, description } = Astro.props;
+const opponentLogo = getTeamLogo(opponent);
+const opponentInitials = getTeamInitials(opponent);
+const dateStr = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+  timeZone: "UTC",
+});
+const resultLetter = result.trim().charAt(0).toUpperCase();
+const score = result.trim().slice(1).trim();
+const outcomeLabel =
+  resultLetter === "W" ? "Seoul win" : resultLetter === "D" ? "Draw" : resultLetter === "L" ? "Seoul loss" : "Result";
+const venuePrefix = venue === "home" ? "vs" : venue === "away" ? "at" : "v";
+const venueLabel = venue === "home" ? "Home" : venue === "away" ? "Away" : "Neutral";
+---
+
+<a
+  href={withBase(href)}
+  class="group block h-full rounded-[1.35rem] border p-5 no-underline transition duration-200 hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-gold)]"
+  style="background: linear-gradient(180deg, color-mix(in srgb, white 8%, transparent), color-mix(in srgb, var(--color-navy) 72%, transparent)); border-color: var(--color-rule); box-shadow: 0 18px 42px color-mix(in srgb, black 18%, transparent);"
+>
+  <div class="flex items-start justify-between gap-3">
+    <div>
+      <p class="eyebrow">Round {round}</p>
+      <p class="mt-1 text-xs font-bold uppercase tracking-[0.16em]" style="color: var(--color-muted);">
+        <time datetime={date.toISOString()}>{dateStr}</time> · {venueLabel}
+      </p>
+    </div>
+    <ResultBadge result={result} size="sm" />
+  </div>
+
+  <div class="mt-5 flex items-center gap-4">
+    <span class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border bg-white p-2 shadow-inner" style="border-color: color-mix(in srgb, var(--color-gold) 26%, transparent);">
+      {opponentLogo ? (
+        <img src={opponentLogo} alt={`${opponent} logo`} class="h-full w-full object-contain" loading="lazy" />
+      ) : (
+        <span class="text-sm font-black" style="color: var(--color-navy);">{opponentInitials}</span>
+      )}
+    </span>
+    <div class="min-w-0">
+      <h3 class="text-xl font-black leading-tight tracking-tight" style="color: var(--color-ink);">
+        <span class="uppercase" style="color: var(--color-gold-light);">{venuePrefix}</span> {opponent}
+      </h3>
+      <p class="mt-1 text-sm leading-relaxed" style="color: var(--color-muted);">
+        {outcomeLabel} · Full-time report
+      </p>
+    </div>
+  </div>
+
+  <div class="mt-5 flex items-end justify-between gap-4 border-t pt-4" style="border-color: var(--color-rule);">
+    <div>
+      <p class="text-xs font-bold uppercase tracking-[0.16em]" style="color: var(--color-muted);">Seoul E-Land score</p>
+      <p class="mt-1 text-3xl font-black tabular-nums leading-none" style="color: var(--color-ink);">{score || result}</p>
+    </div>
+    <span class="text-sm font-black transition-transform group-hover:translate-x-1" style="color: var(--color-gold-light);">
+      Read →
+    </span>
+  </div>
+
+  {description && (
+    <p class="mt-4 text-sm leading-relaxed" style="color: var(--color-link);">
+      {description}
+    </p>
+  )}
+</a>

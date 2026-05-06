@@ -1,0 +1,163 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DigestCard from "../components/DigestCard.astro";
+import ResultBadge from "../components/ResultBadge.astro";
+import { getTeamInitials, getTeamLogo } from "../lib/teamLogos";
+import { withBase } from "../lib/paths";
+
+const digests = await getCollection("digests");
+digests.sort(
+  (a, b) =>
+    b.data.season - a.data.season || b.data.round - a.data.round,
+);
+
+const seasons = [...new Set(digests.map((d) => d.data.season))].sort(
+  (a, b) => b - a,
+);
+const latestDigest = digests[0];
+const currentSeason = seasons[0];
+const currentSeasonDigests = currentSeason
+  ? digests.filter((d) => d.data.season === currentSeason)
+  : [];
+const wins = currentSeasonDigests.filter((d) => d.data.result.trim().startsWith("W")).length;
+const draws = currentSeasonDigests.filter((d) => d.data.result.trim().startsWith("D")).length;
+const losses = currentSeasonDigests.filter((d) => d.data.result.trim().startsWith("L")).length;
+const latestOpponentLogo = latestDigest ? getTeamLogo(latestDigest.data.opponent) : undefined;
+const latestOpponentInitials = latestDigest ? getTeamInitials(latestDigest.data.opponent) : "";
+const latestDate = latestDigest?.data.date.toLocaleDateString("en-US", {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+const latestHref = latestDigest ? withBase(`/rounds/${latestDigest.id.replace(/\.md$/, "")}`) : "#";
+const latestScore = latestDigest?.data.result.trim().slice(1).trim();
+const latestVenue = latestDigest?.data.venue === "home" ? "Home" : latestDigest?.data.venue === "away" ? "Away" : "Neutral";
+
+function stripMarkdown(value: string) {
+  return value
+    .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, "$2")
+    .replace(/\[\[([^\]]+)\]\]/g, "$1")
+    .replace(/[*_`>#]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function getDeck(body?: string) {
+  if (!body) return "Match report, player notes, and a plain-spoken read on what the result means for Seoul E-Land.";
+  const quote = body.match(/^>\s*(.+)$/m)?.[1];
+  return stripMarkdown(quote ?? "Match report, player notes, and a plain-spoken read on what the result means for Seoul E-Land.");
+}
+---
+
+<BaseLayout
+  title="Seoul E-Land Digest"
+  description="Independent English-language Seoul E-Land FC match coverage for supporters."
+>
+  <section class="supporter-panel mb-10 rounded-[2rem]">
+    <div class="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:p-10">
+      <div class="flex flex-col justify-center">
+        <p class="eyebrow">Independent supporter publication</p>
+        <h1 class="mt-4 max-w-3xl text-5xl font-black uppercase leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+          Seoul E-Land Digest
+        </h1>
+        <p class="mt-5 max-w-2xl text-lg leading-8" style="color: var(--color-link);">
+          English-language match notes for Seoul E-Land supporters: round recaps, tactical themes, player context, and a clear read on the promotion chase.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          {currentSeason && <span class="metadata-chip">{currentSeason} season</span>}
+          <span class="metadata-chip">{digests.length} rounds covered</span>
+          {currentSeason && <span class="metadata-chip">{wins}-{draws}-{losses} record</span>}
+        </div>
+      </div>
+
+      {latestDigest && (
+        <a
+          href={latestHref}
+          class="group rounded-[1.5rem] border p-5 no-underline transition duration-200 hover:-translate-y-1"
+          style="background: color-mix(in srgb, white 10%, transparent); border-color: color-mix(in srgb, var(--color-gold) 32%, var(--color-rule)); box-shadow: 0 24px 50px color-mix(in srgb, black 24%, transparent);"
+        >
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <p class="eyebrow">Latest match</p>
+              <p class="mt-1 text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+                Round {latestDigest.data.round} · {latestDate}
+              </p>
+            </div>
+            <ResultBadge result={latestDigest.data.result} />
+          </div>
+
+          <div class="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3 text-center">
+            <div class="flex flex-col items-center gap-2">
+              <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white p-2">
+                <img src={withBase("/assets/crest.png")} alt="Seoul E-Land FC crest" class="h-full w-full object-contain" loading="lazy" />
+              </span>
+              <span class="text-xs font-black uppercase tracking-[0.12em]" style="color: var(--color-link);">Seoul E-Land</span>
+            </div>
+            <div>
+              <p class="text-4xl font-black tabular-nums leading-none" style="color: var(--color-ink);">{latestScore}</p>
+              <p class="mt-2 text-xs font-bold uppercase tracking-[0.16em]" style="color: var(--color-gold-light);">{latestVenue}</p>
+            </div>
+            <div class="flex flex-col items-center gap-2">
+              <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white p-2">
+                {latestOpponentLogo ? (
+                  <img src={latestOpponentLogo} alt={`${latestDigest.data.opponent} logo`} class="h-full w-full object-contain" loading="lazy" />
+                ) : (
+                  <span class="font-black" style="color: var(--color-navy);">{latestOpponentInitials}</span>
+                )}
+              </span>
+              <span class="text-xs font-black uppercase tracking-[0.12em]" style="color: var(--color-link);">{latestDigest.data.opponent}</span>
+            </div>
+          </div>
+
+          <p class="mt-6 border-t pt-5 text-sm leading-7" style="border-color: var(--color-rule); color: var(--color-link);">
+            {getDeck(latestDigest.body)}
+          </p>
+          <p class="mt-5 text-sm font-black" style="color: var(--color-gold-light);">
+            Read the latest digest <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
+          </p>
+        </a>
+      )}
+    </div>
+  </section>
+
+  {seasons.map((season) => {
+    const seasonDigests = digests.filter((d) => d.data.season === season);
+    return (
+      <section class="mb-12" aria-labelledby={`season-${season}`}>
+        <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p class="eyebrow">Round archive</p>
+            <h2 id={`season-${season}`} class="mt-2 text-3xl font-black tracking-tight">Season {season}</h2>
+          </div>
+          <p class="text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+            {seasonDigests.length} match reports
+          </p>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {seasonDigests.map((d) => (
+            <DigestCard
+              href={`/rounds/${d.id.replace(/\.md$/, "")}`}
+              round={d.data.round}
+              date={d.data.date}
+              opponent={d.data.opponent}
+              venue={d.data.venue}
+              result={d.data.result}
+            />
+          ))}
+        </div>
+      </section>
+    );
+  })}
+
+  {digests.length === 0 && (
+    <div class="rounded-2xl border p-6" style="background-color: color-mix(in srgb, white 8%, transparent); border-color: var(--color-rule);">
+      <p class="font-black">No round digests published yet.</p>
+      <p class="mt-2 text-sm" style="color: var(--color-muted);">
+        Check back after the next Seoul E-Land match.
+      </p>
+    </div>
+  )}
+</BaseLayout>

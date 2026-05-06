@@ -1,0 +1,302 @@
+---
+import { withBase } from "../lib/paths";
+
+interface Scorer {
+  name: string;
+  minute: number | string;
+  own_goal?: boolean;
+}
+
+interface Props {
+  date: Date;
+  round: number;
+  season: number;
+  opponent: string;
+  venue: "home" | "away" | "neutral";
+  result: string; // e.g. "W 2-1"
+  homeScorers?: Scorer[];
+  awayScorers?: Scorer[];
+}
+
+const { date, round, season, opponent, venue, result, homeScorers = [], awayScorers = [] } = Astro.props;
+
+const scorePart = result.trim().slice(1).trim();
+const [elandGoals, oppGoals] = scorePart.split("-").map(Number);
+
+const isHome = venue === "home";
+const homeScore = isHome ? elandGoals : oppGoals;
+const awayScore = isHome ? oppGoals : elandGoals;
+
+const homeWon = homeScore > awayScore;
+const awayWon = awayScore > homeScore;
+
+const dateStr = date.toLocaleDateString("en-US", {
+  weekday: "short",
+  year: "numeric",
+  month: "short",
+  day: "numeric",
+  timeZone: "UTC",
+});
+
+const venueName = isHome ? "Mokdong" : venue === "away" ? "Away" : "Neutral";
+const opponentSlug = opponent.toLowerCase().replace(/ /g, "-");
+---
+
+<div class="match-score-header">
+  <div class="match-meta">
+    <span class="match-competition">K League 2 {season} · Round {round}</span>
+    <span>{venueName}</span>
+    <time datetime={date.toISOString()}>{dateStr}</time>
+  </div>
+
+  <div class="score-display">
+    <div class={`team-side ${homeWon ? "winner" : ""}`}>
+      {isHome ? (
+        <img src={withBase("/assets/crest.png")} alt="Seoul E-Land FC" class="team-crest" />
+      ) : (
+        <img
+          src={withBase(`/assets/teams/${opponentSlug}.svg`)}
+          alt={opponent}
+          class="team-crest"
+          onerror="this.style.display='none'"
+        />
+      )}
+      <span class="team-name">{isHome ? "Seoul E-Land" : opponent}</span>
+    </div>
+
+    <div class="score-center">
+      <span class={`score-num ${homeWon ? "home-win" : ""}`}>{homeScore}</span>
+      <span class="score-sep">:</span>
+      <span class={`score-num ${awayWon ? "away-win" : ""}`}>{awayScore}</span>
+      <span class="match-status">Full Time</span>
+    </div>
+
+    <div class={`team-side ${awayWon ? "winner" : ""}`}>
+      {!isHome ? (
+        <img src={withBase("/assets/crest.png")} alt="Seoul E-Land FC" class="team-crest" />
+      ) : (
+        <img
+          src={withBase(`/assets/teams/${opponentSlug}.svg`)}
+          alt={opponent}
+          class="team-crest"
+          onerror="this.style.display='none'"
+        />
+      )}
+      <span class="team-name">{!isHome ? "Seoul E-Land" : opponent}</span>
+    </div>
+  </div>
+
+  {(homeScorers.length > 0 || awayScorers.length > 0) && (
+    <div class="scorers-display">
+      <ul class="scorers-home">
+        {homeScorers.map((s) => (
+          <li>
+            <span class="scorer-name">{s.name}</span>
+            <span class="scorer-minute">{s.minute}'</span>
+            {s.own_goal && <span class="og-badge">OG</span>}
+          </li>
+        ))}
+      </ul>
+      <ul class="scorers-away">
+        {awayScorers.map((s) => (
+          <li>
+            <span class="scorer-minute">{s.minute}'</span>
+            <span class="scorer-name">{s.name}</span>
+            {s.own_goal && <span class="og-badge">OG</span>}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+</div>
+
+<style>
+  .match-score-header {
+    background: var(--color-surface);
+    border: 1px solid var(--color-rule);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .match-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-muted);
+  }
+
+  .match-competition {
+    color: var(--color-gold);
+    font-weight: 600;
+  }
+
+  .score-display {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .team-side {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 100px;
+  }
+
+  .team-crest {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+  }
+
+  .team-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+
+  .team-side.winner .team-name {
+    color: var(--color-ink);
+  }
+
+  .score-center {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .score-center > .score-sep {
+    display: none;
+  }
+
+  .score-center {
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .score-num {
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--color-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .score-num.home-win,
+  .score-num.away-win {
+    color: var(--color-ink);
+  }
+
+  .score-sep {
+    font-size: 2rem;
+    font-weight: 300;
+    color: var(--color-muted);
+    display: inline;
+  }
+
+  .match-status {
+    display: block;
+    width: 100%;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    margin-top: 0.25rem;
+    position: absolute;
+    bottom: -1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .score-center {
+    position: relative;
+    padding-bottom: 1.25rem;
+  }
+
+  .scorers-display {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-rule);
+  }
+
+  .scorers-home,
+  .scorers-away {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 0.8rem;
+  }
+
+  .scorers-home {
+    text-align: right;
+  }
+
+  .scorers-away {
+    text-align: left;
+  }
+
+  .scorers-home li,
+  .scorers-away li {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.15rem 0;
+  }
+
+  .scorers-home li {
+    justify-content: flex-end;
+  }
+
+  .scorer-name {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  .scorer-minute {
+    color: var(--color-gold);
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .og-badge {
+    font-size: 0.65rem;
+    background: var(--color-result-loss);
+    color: white;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 480px) {
+    .score-display {
+      gap: 0.75rem;
+    }
+    .team-side {
+      min-width: 70px;
+    }
+    .team-crest {
+      width: 36px;
+      height: 36px;
+    }
+    .score-num {
+      font-size: 2rem;
+    }
+    .team-name {
+      font-size: 0.75rem;
+    }
+  }
+</style>

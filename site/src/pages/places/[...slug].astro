@@ -1,0 +1,77 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { withBase } from "../../lib/paths";
+
+export async function getStaticPaths() {
+  const places = await getCollection("places");
+  return places.map((entry) => ({
+    params: { slug: entry.id.replace(/\.md$/, "").replace(/ /g, "-").toLowerCase() },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const title = entry.id.replace(/\.md$/, "").replace(/-/g, " ");
+
+function getMentions(body?: string) {
+  if (!body) return [];
+
+  return [...body.matchAll(/\[\[(2026-R\d+_Seoul_E-Land_Digest)\]\]\s*-\s*Round\s+(\d+),\s*([0-9-]+)/g)]
+    .map((match) => ({
+      id: match[1],
+      round: match[2],
+      date: new Date(`${match[3]}T12:00:00Z`).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        timeZone: "UTC",
+      }),
+      href: withBase(`/rounds/${match[1].toLowerCase()}`),
+    }));
+}
+
+const mentions = getMentions(entry.body);
+---
+
+<BaseLayout title={title}>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel overflow-hidden rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">Ground guide</p>
+        <h1 class="mt-3 text-5xl font-black uppercase tracking-tight">Mokdong Stadium</h1>
+        <p class="mt-4 max-w-prose text-lg leading-8" style="color: var(--color-link);">
+          Seoul E-Land's home stage and the center of the matchday experience for supporters in Seoul.
+        </p>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <h2>Supporter context</h2>
+        <p>
+          Mokdong Stadium, often referenced around the club as Leoul Park, is where Seoul E-Land's home rounds,
+          community events, and promotion-race pressure all meet.
+        </p>
+      {(entry.data.city || entry.data.capacity) && (
+          <p>
+            {entry.data.city && <span><strong>City:</strong> {entry.data.city}. </span>}
+            {entry.data.capacity && <span><strong>Capacity:</strong> {entry.data.capacity.toLocaleString()}.</span>}
+          </p>
+      )}
+        {mentions.length > 0 && (
+          <>
+            <h2>Recent home mentions</h2>
+            <ul>
+              {mentions.map((mention) => (
+                <li>
+                  <a href={mention.href}>Round {mention.round}</a> - {mention.date}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    </section>
+  </article>
+</BaseLayout>

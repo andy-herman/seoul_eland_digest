@@ -1,0 +1,11 @@
+.env
+venv/
+__pycache__/
+*.pyc
+logs/*.log
+.DS_Store
+.claude/scheduled_tasks.lock
+research_dump/
+site/dist/
+site/.astro/
+site/node_modules/
