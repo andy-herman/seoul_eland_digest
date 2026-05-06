@@ -1,8 +1,8 @@
 // Copies digests + player notes from the Obsidian vault into src/content/
 // for Astro's content collections to pick up.
 //
-// Source of truth is the vault. Anything in src/content/{digests,players,places}
-// is regenerated on every build and is gitignored.
+// Source of truth is the vault. Content in src/content/{digests,digests-pt,players,places}
+// is refreshed on every build.
 
 import { mkdir, readdir, copyFile, readFile, rm, stat, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
@@ -17,11 +17,13 @@ const SITE_BASE = join(__dirname, "..", "src", "content");
 
 const SRC = {
   digests: join(VAULT_BASE, "Digests"),
+  digestsPt: join(VAULT_BASE, "Digests-PT"),
   players: join(VAULT_BASE, "Players"),
 };
 
 const DEST = {
   digests: join(SITE_BASE, "digests"),
+  digestsPt: join(SITE_BASE, "digests-pt"),
   players: join(SITE_BASE, "players"),
   places: join(SITE_BASE, "places"),
 };
@@ -81,6 +83,14 @@ async function main() {
 
   const digestCount = await copyTree(SRC.digests, DEST.digests, undefined, scrubDigestForSite);
   console.log(`[sync] copied ${digestCount} digest(s)`);
+
+  const digestPtCount = await copyTree(
+    SRC.digestsPt,
+    DEST.digestsPt,
+    (name) => /^\d{4}-R\d+_Seoul_E-Land_Digest\.md$/i.test(name),
+    scrubDigestForSite,
+  );
+  console.log(`[sync] copied ${digestPtCount} Portuguese digest(s)`);
 
   // Place names: file name ends with a venue noun. Don't match the Korean
   // surname "Park" — players named "Park Chang-hwan" must stay players.

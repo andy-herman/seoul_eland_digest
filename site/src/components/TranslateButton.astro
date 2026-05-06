@@ -1,30 +1,22 @@
 ---
+import { withBase } from "../lib/paths";
+
 interface Props {
-  label?: string;
+  href: string;
+  code: string;
+  label: string;
+  ariaLabel?: string;
 }
 
-const { label = "Portuguese" } = Astro.props;
+const { href, code, label, ariaLabel = `Read in ${label}` } = Astro.props;
 ---
 
 <a
-  href="https://translate.google.com/translate?sl=en&tl=pt&u=https%3A%2F%2Fexample.com"
-  class="translate-current-page inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-black no-underline transition-colors hover:bg-white"
+  href={withBase(href)}
+  class="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-black no-underline transition-colors hover:bg-white"
   style="border-color: color-mix(in srgb, var(--color-gold) 42%, var(--color-rule)); color: var(--color-gold-light);"
-  target="_blank"
-  rel="noopener noreferrer"
-  data-source-language="en"
-  data-target-language="pt"
+  aria-label={ariaLabel}
 >
-  <span class="text-base leading-none" aria-hidden="true">🇵🇹</span>
-  <span class="text-xs uppercase tracking-[0.18em]" aria-hidden="true">PT</span>
+  <span class="text-xs uppercase tracking-[0.18em]" aria-hidden="true">{code}</span>
   <span>{label}</span>
 </a>
-
-<script>
-  for (const link of document.querySelectorAll<HTMLAnchorElement>(".translate-current-page")) {
-    const sourceLanguage = link.dataset.sourceLanguage ?? "en";
-    const targetLanguage = link.dataset.targetLanguage ?? "pt";
-    const currentUrl = window.location.href;
-    link.href = `https://translate.google.com/translate?sl=${sourceLanguage}&tl=${targetLanguage}&u=${encodeURIComponent(currentUrl)}`;
-  }
-</script>

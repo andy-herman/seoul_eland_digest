@@ -1,18 +1,25 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
+const digestSchema = z.object({
+  date: z.coerce.date(),
+  round: z.number(),
+  team: z.string().default("Seoul E-Land FC"),
+  season: z.coerce.number(),
+  opponent: z.string(),
+  venue: z.enum(["home", "away", "neutral"]).default("home"),
+  result: z.string(), // e.g. "W 2-1"
+  tags: z.array(z.string()).default([]),
+});
+
 const digests = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/digests" }),
-  schema: z.object({
-    date: z.coerce.date(),
-    round: z.number(),
-    team: z.string().default("Seoul E-Land FC"),
-    season: z.coerce.number(),
-    opponent: z.string(),
-    venue: z.enum(["home", "away", "neutral"]).default("home"),
-    result: z.string(), // e.g. "W 2-1"
-    tags: z.array(z.string()).default([]),
-  }),
+  schema: digestSchema,
+});
+
+const digestsPt = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/digests-pt" }),
+  schema: digestSchema,
 });
 
 const players = defineCollection({
@@ -37,4 +44,4 @@ const places = defineCollection({
     .passthrough(),
 });
 
-export const collections = { digests, players, places };
+export const collections = { digests, digestsPt, players, places };
