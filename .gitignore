@@ -9,3 +9,4 @@ research_dump/
 site/dist/
 site/.astro/
 site/node_modules/
+.vercel

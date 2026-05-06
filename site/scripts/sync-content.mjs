@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const VAULT_BASE = "C:/Users/andyherman/OneDrive/Andy/Luna/Sports/Seoul_E-Land";
+const VAULT_BASE = "C:/Andy Herman/Luna Master/Sports/Seoul_E-Land";
 const SITE_BASE = join(__dirname, "..", "src", "content");
 
 const SRC = {

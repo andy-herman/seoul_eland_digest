@@ -5,7 +5,7 @@ Public-blog frontend for the [Seoul E-Land Digest](../README.md) pipeline. Built
 ## How content flows
 
 ```
-Obsidian vault (Luna)                site/
+Obsidian vault (Luna Master)         site/
 └── Sports/Seoul_E-Land/             ├── scripts/sync-content.mjs
     ├── Digests/    ───── copy ───→  ├── src/content/digests/
     └── Players/    ───── copy ───→  ├── src/content/players/
@@ -21,7 +21,7 @@ npm install        # one-time
 npm run dev        # syncs from vault, then starts Astro dev server
 ```
 
-By default the vault path is `C:/Users/andyherman/OneDrive/Andy/Luna/Sports/Seoul_E-Land`. Edit `scripts/sync-content.mjs` if the vault moves.
+By default the vault path is `C:/Andy Herman/Luna Master/Sports/Seoul_E-Land`. Edit `scripts/sync-content.mjs` if the vault moves.
 
 ## Build
 
