@@ -20,16 +20,16 @@ const { team } = Astro.props as { team: TeamProfile };
   <article class="mx-auto max-w-4xl">
     <header class="supporter-panel overflow-hidden rounded-[2rem]">
       <div class="relative grid gap-6 p-6 sm:p-8 md:grid-cols-[auto_1fr] lg:p-10">
-        <span class="flex h-28 w-28 items-center justify-center rounded-3xl bg-white p-4 shadow-lg">
+        <span class="flex h-24 w-24 items-center justify-center rounded-3xl bg-white p-4 shadow-lg sm:h-28 sm:w-28">
           {team.logo ? (
             <img src={team.logo} alt={`${team.name} logo`} class="h-full w-full object-contain" />
           ) : (
             <span class="text-2xl font-black" style="color: var(--color-navy);">{team.shortName.slice(0, 2).toUpperCase()}</span>
           )}
         </span>
-        <div>
+        <div class="min-w-0">
           <p class="eyebrow">{team.category === "competition" ? "Competition guide" : "Opponent guide"}</p>
-          <h1 class="mt-3 text-5xl font-black uppercase tracking-tight">{team.name}</h1>
+          <h1 class="mt-3 break-words text-4xl font-black uppercase tracking-tight sm:text-5xl">{team.name}</h1>
           <div class="mt-5 flex flex-wrap gap-2">
             <span class="metadata-chip">{team.location}</span>
             <span class="metadata-chip">{team.category === "competition" ? "League context" : "K League opponent"}</span>

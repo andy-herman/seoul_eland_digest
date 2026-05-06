@@ -50,6 +50,11 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+html,
+body {
+  overflow-x: hidden;
+}
+
 body {
   background:
     radial-gradient(circle at top left, color-mix(in srgb, var(--color-blue) 28%, transparent) 0, transparent 34rem),
@@ -120,6 +125,7 @@ a {
 .prose-eland {
   max-width: 68ch;
   line-height: 1.75;
+  overflow-wrap: anywhere;
 }
 .prose-eland h1 { @apply text-3xl font-bold mt-0 mb-6; }
 .prose-eland h2 { @apply text-2xl font-semibold mt-10 mb-3; color: var(--color-gold); }

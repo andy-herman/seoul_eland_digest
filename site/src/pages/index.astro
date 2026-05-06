@@ -60,10 +60,10 @@ function getDeck(body?: string) {
     <div class="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:p-10">
       <div class="flex flex-col justify-center">
         <p class="eyebrow">Independent supporter publication</p>
-        <h1 class="mt-4 max-w-3xl text-5xl font-black uppercase leading-[0.95] tracking-tight sm:text-6xl lg:text-7xl">
+        <h1 class="mt-4 max-w-3xl text-4xl font-black uppercase leading-[0.95] tracking-tight min-[380px]:text-5xl sm:text-6xl lg:text-7xl">
           Seoul E-Land Digest
         </h1>
-        <p class="mt-5 max-w-2xl text-lg leading-8" style="color: var(--color-link);">
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
           English-language match notes for Seoul E-Land supporters: round recaps, tactical themes, player context, and a clear read on the promotion chase.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
@@ -89,19 +89,19 @@ function getDeck(body?: string) {
             <ResultBadge result={latestDigest.data.result} />
           </div>
 
-          <div class="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-3 text-center">
+          <div class="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-center min-[380px]:gap-3">
             <div class="flex flex-col items-center gap-2">
-              <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white p-2">
+              <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-16 min-[380px]:w-16">
                 <img src={withBase("/assets/crest.png")} alt="Seoul E-Land FC crest" class="h-full w-full object-contain" loading="lazy" />
               </span>
               <span class="text-xs font-black uppercase tracking-[0.12em]" style="color: var(--color-link);">Seoul E-Land</span>
             </div>
             <div>
-              <p class="text-4xl font-black tabular-nums leading-none" style="color: var(--color-ink);">{latestScore}</p>
+              <p class="text-3xl font-black tabular-nums leading-none min-[380px]:text-4xl" style="color: var(--color-ink);">{latestScore}</p>
               <p class="mt-2 text-xs font-bold uppercase tracking-[0.16em]" style="color: var(--color-gold-light);">{latestVenue}</p>
             </div>
             <div class="flex flex-col items-center gap-2">
-              <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white p-2">
+              <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-16 min-[380px]:w-16">
                 {latestOpponentLogo ? (
                   <img src={latestOpponentLogo} alt={`${latestDigest.data.opponent} logo`} class="h-full w-full object-contain" loading="lazy" />
                 ) : (
