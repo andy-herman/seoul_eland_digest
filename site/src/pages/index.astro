@@ -2,9 +2,9 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DigestCard from "../components/DigestCard.astro";
-import ResultBadge from "../components/ResultBadge.astro";
+import LatestMatchCard from "../components/LatestMatchCard.astro";
 import TranslateButton from "../components/TranslateButton.astro";
-import { getTeamInitials, getTeamLogo } from "../lib/teamLogos";
+import { getDigestDeck } from "../lib/digestDeck";
 import { withBase } from "../lib/paths";
 
 const digests = await getCollection("digests");
@@ -24,36 +24,11 @@ const currentSeasonDigests = currentSeason
 const wins = currentSeasonDigests.filter((d) => d.data.result.trim().startsWith("W")).length;
 const draws = currentSeasonDigests.filter((d) => d.data.result.trim().startsWith("D")).length;
 const losses = currentSeasonDigests.filter((d) => d.data.result.trim().startsWith("L")).length;
-const latestOpponentLogo = latestDigest ? getTeamLogo(latestDigest.data.opponent) : undefined;
-const latestOpponentInitials = latestDigest ? getTeamInitials(latestDigest.data.opponent) : "";
-const latestDate = latestDigest?.data.date.toLocaleDateString("en-US", {
-  weekday: "short",
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-  timeZone: "UTC",
-});
-const latestHref = latestDigest ? withBase(`/rounds/${latestDigest.id.replace(/\.md$/, "")}`) : "#";
-const latestScore = latestDigest?.data.result.trim().slice(1).trim();
-const latestVenue = latestDigest?.data.venue === "home" ? "Home" : latestDigest?.data.venue === "away" ? "Away" : "Neutral";
+const latestHref = latestDigest ? `/rounds/${latestDigest.id.replace(/\.md$/, "")}` : "#";
 const heroStatsLabel = currentSeason
   ? `${currentSeason} season · ${digests.length} reports · ${wins}-${draws}-${losses}`
   : `${digests.length} reports`;
-
-function stripMarkdown(value: string) {
-  return value
-    .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, "$2")
-    .replace(/\[\[([^\]]+)\]\]/g, "$1")
-    .replace(/[*_`>#]/g, "")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function getDeck(body?: string) {
-  if (!body) return "Match report, player notes, and a plain-spoken read on what the result means for Seoul E-Land.";
-  const quote = body.match(/^>\s*(.+)$/m)?.[1];
-  return stripMarkdown(quote ?? "Match report, player notes, and a plain-spoken read on what the result means for Seoul E-Land.");
-}
+const deckFallback = "Match report, player notes, and a plain-spoken read on what the result means for Seoul E-Land.";
 ---
 
 <BaseLayout
@@ -87,67 +62,15 @@ function getDeck(body?: string) {
       </div>
 
       {latestDigest && (
-        <a
+        <LatestMatchCard
           href={latestHref}
-          class="latest-match-card group min-w-0 overflow-hidden rounded-[1.25rem] border p-4 no-underline transition duration-200 hover:-translate-y-1 sm:rounded-[1.5rem] sm:p-5"
-          style="background: color-mix(in srgb, white 8%, transparent); border-color: color-mix(in srgb, var(--color-gold) 26%, var(--color-rule)); box-shadow: 0 16px 36px color-mix(in srgb, black 18%, transparent);"
-        >
-          <div class="flex items-center justify-between gap-4">
-            <div class="min-w-0">
-              <p class="eyebrow">Latest match</p>
-              <p class="latest-match-meta mt-1 text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
-                Round {latestDigest.data.round} · {latestDate}
-              </p>
-            </div>
-            <ResultBadge result={latestDigest.data.result} size="sm" />
-          </div>
-
-          <div class="latest-score-strip mt-5 hidden grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 text-center min-[380px]:gap-3 sm:mt-6 sm:grid">
-            <div class="latest-team flex flex-col items-center gap-2">
-              <span class="latest-team-logo flex h-12 w-12 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-14 min-[380px]:w-14 sm:h-16 sm:w-16">
-                <img src={withBase("/assets/crest.png")} alt="Seoul E-Land FC crest" class="h-full w-full object-contain" loading="lazy" />
-              </span>
-              <span class="latest-team-name text-xs font-black" style="color: var(--color-link);">Seoul E-Land</span>
-            </div>
-            <div>
-              <p class="latest-score text-3xl font-black tabular-nums leading-none min-[380px]:text-[2.15rem] sm:text-4xl" style="color: var(--color-ink);">{latestScore}</p>
-              <p class="mt-2 text-[0.68rem] font-bold uppercase tracking-[0.14em] min-[380px]:text-xs min-[380px]:tracking-[0.16em]" style="color: var(--color-gold-light);">{latestVenue}</p>
-            </div>
-            <div class="latest-team flex flex-col items-center gap-2">
-              <span class="latest-team-logo flex h-12 w-12 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-14 min-[380px]:w-14 sm:h-16 sm:w-16">
-                {latestOpponentLogo ? (
-                  <img src={latestOpponentLogo} alt={`${latestDigest.data.opponent} logo`} class="h-full w-full object-contain" loading="lazy" />
-                ) : (
-                  <span class="font-black" style="color: var(--color-navy);">{latestOpponentInitials}</span>
-                )}
-              </span>
-              <span class="latest-team-name max-w-full text-xs font-black" style="color: var(--color-link);">{latestDigest.data.opponent}</span>
-            </div>
-          </div>
-
-          <div class="latest-mobile-summary mt-4 sm:hidden">
-            <div class="latest-mobile-team">
-              <img src={withBase("/assets/crest.png")} alt="Seoul E-Land FC crest" class="latest-mobile-logo" loading="lazy" />
-              <span>Seoul E-Land</span>
-            </div>
-            <p class="latest-mobile-score">{latestScore}</p>
-            <div class="latest-mobile-team latest-mobile-team-right">
-              {latestOpponentLogo ? (
-                <img src={latestOpponentLogo} alt={`${latestDigest.data.opponent} logo`} class="latest-mobile-logo" loading="lazy" />
-              ) : (
-                <span class="latest-mobile-logo latest-mobile-initials">{latestOpponentInitials}</span>
-              )}
-              <span>{latestDigest.data.opponent}</span>
-            </div>
-          </div>
-
-          <p class="mt-6 hidden border-t pt-5 text-sm leading-7 sm:block" style="border-color: var(--color-rule); color: var(--color-link);">
-            {getDeck(latestDigest.body)}
-          </p>
-          <p class="mt-5 text-sm font-black sm:mt-5" style="color: var(--color-gold-light);">
-            Read the latest digest <span class="inline-block transition-transform group-hover:translate-x-1">→</span>
-          </p>
-        </a>
+          round={latestDigest.data.round}
+          date={latestDigest.data.date}
+          opponent={latestDigest.data.opponent}
+          venue={latestDigest.data.venue}
+          result={latestDigest.data.result}
+          deck={getDigestDeck(latestDigest.body, deckFallback)}
+        />
       )}
     </div>
   </section>

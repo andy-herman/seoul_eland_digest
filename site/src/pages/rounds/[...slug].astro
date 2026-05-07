@@ -1,9 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
-import ResultBadge from "../../components/ResultBadge.astro";
-import TranslateButton from "../../components/TranslateButton.astro";
-import { getTeamInitials, getTeamLogo } from "../../lib/teamLogos";
+import MatchArticleHeader from "../../components/MatchArticleHeader.astro";
 import { withBase } from "../../lib/paths";
 
 export async function getStaticPaths() {
@@ -24,22 +22,6 @@ const dateStr = entry.data.date.toLocaleDateString("en-US", {
   day: "numeric",
   timeZone: "UTC",
 });
-const shortDateStr = entry.data.date.toLocaleDateString("en-US", {
-  weekday: "short",
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-  timeZone: "UTC",
-});
-const opponentLogo = getTeamLogo(entry.data.opponent);
-const opponentInitials = getTeamInitials(entry.data.opponent);
-const resultLetter = entry.data.result.trim().charAt(0).toUpperCase();
-const scorePart = entry.data.result.trim().slice(1).trim();
-const [elandScore = "—", opponentScore = "—"] = scorePart.split("-").map((part) => part.trim());
-const resultText =
-  resultLetter === "W" ? "Seoul win" : resultLetter === "D" ? "Draw" : resultLetter === "L" ? "Seoul loss" : "Full time";
-const venueLabel = entry.data.venue === "home" ? "Home" : entry.data.venue === "away" ? "Away" : "Neutral";
-const matchupLabel = entry.data.venue === "home" ? `vs ${entry.data.opponent}` : entry.data.venue === "away" ? `at ${entry.data.opponent}` : `v ${entry.data.opponent}`;
 ---
 
 <BaseLayout
@@ -47,84 +29,15 @@ const matchupLabel = entry.data.venue === "home" ? `vs ${entry.data.opponent}` :
   description={`Seoul E-Land FC ${entry.data.result} ${entry.data.opponent}, ${dateStr}.`}
 >
   <article class="mx-auto max-w-5xl">
-    <header class="supporter-panel not-prose mb-6 rounded-[1.5rem] sm:mb-8 sm:rounded-[2rem]">
-      <div class="relative min-w-0 p-5 sm:p-8 lg:p-10">
-        <div class="article-meta-stack">
-          <p class="article-meta-primary">K League 2 · Season {entry.data.season} · Round {entry.data.round}</p>
-          <p class="article-meta-secondary">
-            <span>{venueLabel}</span>
-            <span aria-hidden="true">·</span>
-            <time datetime={entry.data.date.toISOString()}>{shortDateStr}</time>
-          </p>
-        </div>
-
-        <div class="match-mobile-summary mt-4 sm:hidden">
-          <div class="match-mobile-team">
-            <img src={withBase("/assets/crest.png")} alt="Seoul E-Land FC crest" class="match-mobile-logo" />
-            <span>Seoul E-Land</span>
-          </div>
-          <div class="match-mobile-center">
-            <ResultBadge result={entry.data.result} size="sm" />
-            <p>{elandScore}-{opponentScore}</p>
-            <span>{resultText}</span>
-          </div>
-          <div class="match-mobile-team match-mobile-team-right">
-            {opponentLogo ? (
-              <img src={opponentLogo} alt={`${entry.data.opponent} logo`} class="match-mobile-logo" />
-            ) : (
-              <span class="match-mobile-logo match-mobile-initials">{opponentInitials}</span>
-            )}
-            <span>{entry.data.opponent}</span>
-          </div>
-        </div>
-
-        <div class="scoreboard-grid mt-6 hidden min-w-0 sm:mt-8 sm:grid">
-          <div class="scoreboard-team scoreboard-home min-w-0 rounded-2xl border p-3 text-center sm:rounded-3xl sm:p-5" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: var(--color-rule);">
-            <img src={withBase("/assets/crest.png")} alt="Seoul E-Land FC crest" class="scoreboard-team-logo mx-auto h-14 w-14 object-contain min-[380px]:h-16 min-[380px]:w-16 sm:h-20 sm:w-20" />
-            <p class="scoreboard-team-name mt-2 text-[0.68rem] font-black uppercase tracking-[0.08em] min-[380px]:text-xs sm:mt-3 sm:text-sm sm:tracking-[0.14em]" style="color: var(--color-link);">Seoul E-Land FC</p>
-          </div>
-
-          <div class="scoreboard-center text-center">
-            <ResultBadge result={entry.data.result} size="sm" />
-            <div class="mt-3 flex items-baseline justify-center gap-1.5 font-black tabular-nums min-[380px]:gap-2 sm:mt-4 sm:gap-3">
-              <span class="text-4xl leading-none min-[380px]:text-5xl sm:text-7xl" style="color: var(--color-ink);">{elandScore}</span>
-              <span class="text-2xl min-[380px]:text-3xl sm:text-4xl" style="color: var(--color-gold-light);">–</span>
-              <span class="text-4xl leading-none min-[380px]:text-5xl sm:text-7xl" style="color: var(--color-ink);">{opponentScore}</span>
-            </div>
-            <p class="mt-2 text-[0.64rem] font-black uppercase tracking-[0.12em] min-[380px]:text-xs min-[380px]:tracking-[0.18em] sm:mt-3" style="color: var(--color-gold-light);">
-              {resultText} · Full time
-            </p>
-          </div>
-
-          <div class="scoreboard-team scoreboard-away min-w-0 rounded-2xl border p-3 text-center sm:rounded-3xl sm:p-5" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: var(--color-rule);">
-            <span class="scoreboard-team-logo mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-16 min-[380px]:w-16 sm:h-20 sm:w-20 sm:p-3">
-              {opponentLogo ? (
-                <img src={opponentLogo} alt={`${entry.data.opponent} logo`} class="h-full w-full object-contain" />
-              ) : (
-                <span class="text-xl font-black" style="color: var(--color-navy);">{opponentInitials}</span>
-              )}
-            </span>
-            <p class="scoreboard-team-name mt-2 text-[0.68rem] font-black uppercase tracking-[0.08em] min-[380px]:text-xs sm:mt-3 sm:text-sm sm:tracking-[0.14em]" style="color: var(--color-link);">{entry.data.opponent}</p>
-          </div>
-        </div>
-
-        <div class="mt-6 min-w-0 max-w-3xl sm:mt-8">
-          <p class="eyebrow">Match digest</p>
-          <h1 class="mt-3 text-[1.85rem] font-black tracking-tight min-[380px]:text-[2.05rem] sm:text-5xl">
-            Round {entry.data.round}: {matchupLabel}
-          </h1>
-          <p class="mt-4 hidden text-base leading-7 sm:block sm:text-lg sm:leading-8" style="color: var(--color-link);">
-            A supporter-focused match report with tactical notes, player context, and the wider promotion-race read.
-          </p>
-          <div class="mt-5 flex flex-wrap items-center gap-3">
-            <TranslateButton href={`/pt/rounds/${slug}`} code="PT" label="Português" ariaLabel="Read in Portuguese" />
-            <p class="hidden text-sm font-semibold sm:block" style="color: var(--color-muted);">
-              Read this match report in Portuguese.
-            </p>
-          </div>
-        </div>
-      </div>
-    </header>
+    <MatchArticleHeader
+      slug={slug}
+      season={entry.data.season}
+      round={entry.data.round}
+      date={entry.data.date}
+      opponent={entry.data.opponent}
+      venue={entry.data.venue}
+      result={entry.data.result}
+    />
 
     <div class="editorial-shell mx-auto">
       <div class="prose-eland digest-body mx-auto">
