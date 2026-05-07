@@ -1,0 +1,7 @@
+*
+!vercel.json
+!site/
+!site/**
+site/.astro/
+site/dist/
+site/node_modules/
