@@ -72,6 +72,13 @@ function getDeck(body?: string) {
           <span class="metadata-chip">{digests.length} rounds covered</span>
           {currentSeason && <span class="metadata-chip">{wins}-{draws}-{losses} record</span>}
           <TranslateButton href="/pt/" code="PT" label="Português" ariaLabel="Read the Portuguese archive" />
+          <a
+            href={withBase("/support")}
+            class="metadata-chip no-underline transition-colors hover:bg-white hover:text-[var(--color-navy)]"
+            aria-label="Support Seoul E-Land Digest"
+          >
+            Support me
+          </a>
         </div>
       </div>
 

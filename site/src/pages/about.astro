@@ -1,30 +1,54 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/paths";
 ---
 
 <BaseLayout title="About — Seoul E-Land Digest">
-  <article class="prose-eland">
-    <h1>About</h1>
-    <p>
-      Round-by-round tactical coverage of Seoul E-Land FC (서울이랜드FC), a
-      K League 2 side based in eastern Seoul.
-    </p>
-    <p>
-      The site is built for English-speaking supporters who want more context
-      around each match: how Seoul E-Land played, which players shaped the result,
-      and what each round means for the promotion race.
-    </p>
-    <h2>Coverage</h2>
-    <ul>
-      <li>K League 2 league rounds</li>
-      <li>FA Cup and other domestic cup ties</li>
-      <li>Squad changes, transfers, and front-office news</li>
-    </ul>
-    <h2>Editorial</h2>
-    <p>
-      Opinions are mine. The "honest read" section at the end of each digest
-      is where I step back from the match recap and give a clearer read on what
-      the result really means.
-    </p>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">About the digest</p>
+        <h1 class="mt-4 text-4xl font-black uppercase tracking-tight sm:text-5xl">A supporter guide to Seoul E-Land</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          Round-by-round coverage of Seoul E-Land FC, built for supporters who want more context around every result.
+        </p>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <h2>What this site covers</h2>
+        <p>
+          Seoul E-Land Digest follows Seoul E-Land FC (서울이랜드FC), a K League 2 side based in eastern Seoul. Each report looks at how the team played, which players shaped the match, and what the result means for the promotion race.
+        </p>
+        <p>
+          The site is written for English-speaking and Portuguese-speaking supporters who want a readable way into the club, the league, and the week-to-week story of the season.
+        </p>
+
+        <h2>Coverage</h2>
+        <ul>
+          <li>K League 2 league rounds</li>
+          <li>FA Cup and other domestic cup ties</li>
+          <li>Squad changes, transfers, and front-office news</li>
+          <li>Player, opponent, and place pages that make the archive easier to follow</li>
+        </ul>
+
+        <h2>Editorial approach</h2>
+        <p>
+          Opinions are mine. The "honest read" section at the end of each digest is where I step back from the match recap and give a clearer read on what the result really means.
+        </p>
+        <p>
+          I try to keep the writing plain-spoken, fair, and useful for supporters who may not be watching every minute live.
+        </p>
+
+        <h2>Support</h2>
+        <p>
+          If the project helps you follow the Leopards, you can support the time, editing, hosting, and archive work behind it.
+        </p>
+        <p>
+          <a href={withBase("/support")}>Read what your support helps fund</a>.
+        </p>
+      </div>
+    </section>
   </article>
 </BaseLayout>

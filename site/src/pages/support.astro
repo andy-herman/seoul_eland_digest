@@ -1,0 +1,88 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const coffeeUrl = "https://buymeacoffee.com/seoulelands";
+---
+
+<BaseLayout
+  title="Support Me - Seoul E-Land Digest"
+  description="Support the fan-run Seoul E-Land Digest project and help keep match coverage, player context, and bilingual supporter notes available."
+>
+  <article class="mx-auto max-w-5xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-10">
+        <div>
+          <p class="eyebrow">Support the project</p>
+          <h1 class="mt-4 text-4xl font-black uppercase leading-tight tracking-tight sm:text-5xl">
+            Help keep Seoul E-Land coverage going
+          </h1>
+          <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+            Seoul E-Land Digest is an independent supporter project for fans who want match-by-match context, player notes, and a clearer read on the club's promotion chase.
+          </p>
+          <div class="mt-7 flex flex-wrap gap-3">
+            <a
+              href={coffeeUrl}
+              class="inline-flex items-center justify-center rounded-full px-5 py-3 text-sm font-black uppercase tracking-[0.12em] no-underline transition duration-200 hover:-translate-y-0.5"
+              style="background: var(--color-gold); color: var(--color-navy-deep); box-shadow: 0 14px 34px color-mix(in srgb, black 28%, transparent);"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Buy me a coffee
+            </a>
+            <a
+              href="#what-support-funds"
+              class="inline-flex items-center justify-center rounded-full border px-5 py-3 text-sm font-black uppercase tracking-[0.12em] no-underline transition-colors hover:bg-white"
+              style="border-color: color-mix(in srgb, var(--color-gold) 42%, var(--color-rule)); color: var(--color-gold-light);"
+            >
+              What it supports
+            </a>
+          </div>
+        </div>
+
+        <aside class="rounded-[1.5rem] border p-5" style="background: color-mix(in srgb, white 9%, transparent); border-color: color-mix(in srgb, var(--color-gold) 30%, var(--color-rule));">
+          <p class="eyebrow">Why it matters</p>
+          <p class="mt-4 text-2xl font-black leading-tight">
+            English and Portuguese coverage helps more supporters follow the Leopards with confidence.
+          </p>
+          <p class="mt-4 text-sm leading-7" style="color: var(--color-link);">
+            Your support helps cover the quiet work behind every article: reading match reports, checking player context, polishing translations, maintaining the site, and keeping the archive easy to use.
+          </p>
+        </aside>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <h2>About the project</h2>
+        <p>
+          Seoul E-Land Digest is a fan-run publication built for supporters outside Korea, new K League followers, and anyone who wants more context than a scoreline can provide.
+        </p>
+        <p>
+          The goal is simple: make Seoul E-Land easier to follow in English and Portuguese with readable match reports, squad context, opponent notes, and a running archive of the season.
+        </p>
+
+        <h2 id="what-support-funds">What your support helps fund</h2>
+        <ul>
+          <li>Time spent following each round, checking reports, and turning scattered information into useful supporter notes.</li>
+          <li>Editing and maintaining English and Portuguese pages so more fans can read comfortably.</li>
+          <li>Website hosting, domain planning, content tools, and ongoing technical upkeep.</li>
+          <li>Player, opponent, and season archive improvements that make the site more useful over time.</li>
+        </ul>
+
+        <h2>What stays free</h2>
+        <p>
+          The match archive, player pages, and Portuguese articles stay open to everyone. A coffee is a voluntary way to say thanks and help keep the project sustainable.
+        </p>
+
+        <h2>Independent and supporter-led</h2>
+        <p>
+          This site is not affiliated with Seoul E-Land FC. It is built by a supporter who wants more people to understand the club, follow the season, and enjoy the Leopards from wherever they are.
+        </p>
+
+        <p>
+          <a href={coffeeUrl} target="_blank" rel="noopener noreferrer">Support Seoul E-Land Digest on Buy Me a Coffee</a>
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
