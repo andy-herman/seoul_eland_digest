@@ -4,6 +4,7 @@ import { stripBase, withBase } from "../lib/paths";
 const pathname = stripBase(Astro.url.pathname);
 const navItems = [
   { href: "/", label: "Rounds" },
+  { href: "/matches", label: "Matches" },
   { href: "/players", label: "Squad" },
   { href: "/support", label: "Support me", mobileLabel: "Support" },
   { href: "/about", label: "About", hideOnNarrow: true },
@@ -18,7 +19,7 @@ function isActive(href: string) {
 ---
 
 <header class="sticky top-0 z-40 border-b backdrop-blur-xl" style="background-color: color-mix(in srgb, var(--color-navy-deep) 92%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));">
-  <div class="mx-auto flex max-w-6xl flex-nowrap items-center justify-between gap-2 px-3 py-2 sm:gap-5 sm:px-6 sm:py-3">
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-3 py-2 sm:flex-nowrap sm:gap-5 sm:px-6 sm:py-3">
     <a href={withBase("/")} class="flex items-center gap-3 no-underline" aria-label="Seoul E-Land Digest home">
       <span class="flex h-9 w-[4.6rem] items-center justify-center rounded-xl bg-white px-1.5 shadow-lg shadow-black/20 min-[380px]:h-10 min-[380px]:w-20 min-[380px]:px-2 sm:h-11 sm:w-24 sm:px-3">
         <img src={withBase("/assets/logo-official.svg")} alt="Seoul E-Land FC" class="h-7 w-auto min-[380px]:h-8" />
@@ -29,13 +30,14 @@ function isActive(href: string) {
       </span>
     </a>
 
-    <nav class="flex min-w-0 items-center gap-0.5 rounded-full border p-0.5 text-xs font-bold sm:gap-1 sm:p-1 sm:text-sm" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 18%, var(--color-rule));">
+    <nav class="order-3 flex w-full min-w-0 snap-x items-center gap-0.5 overflow-x-auto rounded-full border p-0.5 text-[0.7rem] font-bold sm:order-none sm:w-auto sm:gap-1 sm:p-1 sm:text-sm" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 18%, var(--color-rule)); scrollbar-width: none;">
       {navItems.map((item) => (
         <a
           href={withBase(item.href)}
-          class={`${item.hideOnNarrow ? "hidden min-[520px]:inline-flex" : "inline-flex"} shrink-0 rounded-full px-2.5 py-1.5 no-underline transition-colors min-[380px]:px-3 sm:px-4 sm:py-2 ${isActive(item.href) ? "bg-white shadow-sm" : "text-[var(--color-link)] hover:text-white"}`}
+          class={`${item.hideOnNarrow ? "hidden min-[560px]:inline-flex" : "inline-flex"} shrink-0 snap-start rounded-full px-2 py-1.5 no-underline transition-colors min-[380px]:px-2.5 sm:px-4 sm:py-2 ${isActive(item.href) ? "bg-white shadow-sm" : "text-[var(--color-link)] hover:text-white"}`}
           style={isActive(item.href) ? "color: var(--color-navy);" : undefined}
           aria-label={item.label}
+          aria-current={isActive(item.href) ? "page" : undefined}
         >
           {item.mobileLabel ? (
             <>

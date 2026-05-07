@@ -1,0 +1,288 @@
+---
+import { getCollection } from "astro:content";
+import ResultBadge from "../components/ResultBadge.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { byeRounds, fixtures, scheduleSections, season, sourceUrl, team, type MatchFixture } from "../data/matches";
+import { getTeamInitials, getTeamLogo } from "../lib/teamLogos";
+import { withBase } from "../lib/paths";
+
+const digests = await getCollection("digests");
+const reportByRound = new Map(
+  digests.map((digest) => [
+    digest.data.round,
+    `/rounds/${digest.id.replace(/\.md$/, "")}`,
+  ]),
+);
+
+const schedule = [...fixtures].sort((a, b) => a.round - b.round);
+const playedMatches = schedule.filter((match) => match.result !== "TBD");
+const upcomingMatches = schedule.filter((match) => match.result === "TBD");
+const nextMatch = upcomingMatches[0];
+const wins = playedMatches.filter((match) => match.result.startsWith("W")).length;
+const draws = playedMatches.filter((match) => match.result.startsWith("D")).length;
+const losses = playedMatches.filter((match) => match.result.startsWith("L")).length;
+const publishedSections = scheduleSections.map((section) => ({
+  ...section,
+  matches: schedule.filter(
+    (match) => match.round >= section.rounds[0] && match.round <= section.rounds[1],
+  ),
+}));
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function formatDate(date: string) {
+  return dateFormatter.format(new Date(`${date}T00:00:00Z`));
+}
+
+function formatKickoff(time: string) {
+  return time === "TBD" || time === "00:00" ? "Kickoff TBD" : `${time} KST`;
+}
+
+function venueLabel(venue: MatchFixture["venue"]) {
+  return venue === "home" ? "Home" : venue === "away" ? "Away" : "Neutral";
+}
+
+function getSectionByeRounds(rounds: readonly [number, number]) {
+  return byeRounds.filter((round) => round >= rounds[0] && round <= rounds[1]);
+}
+
+function getMatchTeams(match: MatchFixture) {
+  const seoul = {
+    name: team,
+    score: match.venue === "away" ? match.awayScore : match.homeScore,
+  };
+  const opponent = {
+    name: match.opponent,
+    score: match.venue === "away" ? match.homeScore : match.awayScore,
+  };
+
+  return match.venue === "away"
+    ? { home: opponent, away: seoul }
+    : { home: seoul, away: opponent };
+}
+
+function getLogo(teamName: string) {
+  return getTeamLogo(teamName);
+}
+
+function getScore(score?: number) {
+  return typeof score === "number" ? String(score) : "-";
+}
+---
+
+<BaseLayout
+  title="Seoul E-Land Matches"
+  description="Full Seoul E-Land FC match schedule, results, upcoming fixtures, and match report links."
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative grid gap-6 p-5 sm:gap-8 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-10">
+      <div>
+        <p class="eyebrow">Seoul E-Land FC</p>
+        <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+          Matches
+        </h1>
+        <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          The Seoul E-Land fixture list in one place: results, upcoming matches, kickoff details, and links into the round-by-round reports.
+        </p>
+        <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          {season} season · {schedule.length} league fixtures · {wins}-{draws}-{losses}
+        </p>
+      </div>
+
+      <aside class="rounded-[1.25rem] border p-5" style="background: color-mix(in srgb, white 8%, transparent); border-color: color-mix(in srgb, var(--color-gold) 26%, var(--color-rule));">
+        <p class="eyebrow">Next match</p>
+        {nextMatch ? (
+          <>
+            <p class="mt-3 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+              Round {nextMatch.round} · {formatDate(nextMatch.date)} · {venueLabel(nextMatch.venue)}
+            </p>
+            <div class="mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+              {(() => {
+                const teams = getMatchTeams(nextMatch);
+                const homeLogo = getLogo(teams.home.name);
+                const awayLogo = getLogo(teams.away.name);
+                return (
+                  <>
+                    <div class="min-w-0 text-center">
+                      {homeLogo ? (
+                        <img src={homeLogo} alt={`${teams.home.name} crest`} class="mx-auto h-14 w-14 rounded-xl bg-white object-contain p-2" loading="lazy" />
+                      ) : (
+                        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-white text-sm font-black" style="color: var(--color-navy);">
+                          {getTeamInitials(teams.home.name)}
+                        </span>
+                      )}
+                      <p class="mt-2 text-sm font-black leading-tight">{teams.home.name}</p>
+                    </div>
+                    <span class="text-xs font-black uppercase tracking-[0.18em]" style="color: var(--color-gold-light);">vs</span>
+                    <div class="min-w-0 text-center">
+                      {awayLogo ? (
+                        <img src={awayLogo} alt={`${teams.away.name} crest`} class="mx-auto h-14 w-14 rounded-xl bg-white object-contain p-2" loading="lazy" />
+                      ) : (
+                        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-white text-sm font-black" style="color: var(--color-navy);">
+                          {getTeamInitials(teams.away.name)}
+                        </span>
+                      )}
+                      <p class="mt-2 text-sm font-black leading-tight">{teams.away.name}</p>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+          </>
+        ) : (
+          <p class="mt-3 text-lg font-black">No upcoming fixture is listed yet.</p>
+        )}
+      </aside>
+    </div>
+  </section>
+
+  <section aria-labelledby="full-schedule">
+    <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="eyebrow">Fixture list</p>
+        <h2 id="full-schedule" class="mt-2 text-3xl font-black tracking-tight">Published schedule</h2>
+      </div>
+      <p class="text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+        {playedMatches.length} played · {upcomingMatches.length} upcoming
+      </p>
+    </div>
+
+    <nav aria-label="Schedule sections" class="mb-4 flex gap-2 overflow-x-auto pb-1">
+      {publishedSections.map((section) => (
+        section.status === "published" ? (
+          <a href={`#${section.id}`} class="metadata-chip no-underline">
+            {section.label} · R{section.rounds[0]}-R{section.rounds[1]}
+          </a>
+        ) : (
+          <span class="metadata-chip opacity-60">
+            {section.label} · pending
+          </span>
+        )
+      ))}
+    </nav>
+
+    <p class="mb-6 max-w-3xl rounded-2xl border px-4 py-3 text-sm font-bold leading-6" style="background: color-mix(in srgb, white 5%, transparent); border-color: color-mix(in srgb, var(--color-gold) 14%, var(--color-rule)); color: var(--color-link);">
+      <span class="sm:hidden">32 fixtures · Double round-robin · Byes R17/R30.</span>
+      <span class="hidden sm:inline">Schedule based on the K League published fixture list. The 17-team division uses a double round-robin: Seoul E-Land play 32 league fixtures across rounds 1-34, with bye rounds at R17 and R30.</span>
+      <a href={sourceUrl} class="font-black underline underline-offset-2" style="color: var(--color-gold-light);" target="_blank" rel="noopener noreferrer">View K League schedule</a>.
+    </p>
+
+    <div class="grid gap-8">
+      {publishedSections.map((section) => {
+        if (section.status === "pending") {
+          return (
+            <section id={section.id} class="scroll-mt-24 rounded-2xl border p-5 sm:scroll-mt-28" style="background: color-mix(in srgb, white 5%, transparent); border-color: color-mix(in srgb, var(--color-gold) 14%, var(--color-rule));">
+              <p class="eyebrow">{section.label}</p>
+              <h3 class="mt-2 text-2xl font-black tracking-tight">Fixtures to be added</h3>
+              <p class="mt-2 max-w-2xl text-sm font-bold leading-6" style="color: var(--color-muted);">
+                Rounds {section.rounds[0]}-{section.rounds[1]} will be listed here when the next set of Seoul E-Land fixtures is available.
+              </p>
+            </section>
+          );
+        }
+
+        return (
+          <section id={section.id} class="scroll-mt-24 sm:scroll-mt-28" aria-labelledby={`${section.id}-heading`}>
+            <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p class="eyebrow">{section.label}</p>
+                <h3 id={`${section.id}-heading`} class="mt-2 text-2xl font-black tracking-tight">
+                  Rounds {section.rounds[0]}-{section.rounds[1]}
+                </h3>
+              </div>
+              <p class="text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+                {section.matches.length} fixtures
+                {getSectionByeRounds(section.rounds).length > 0 && ` · bye R${getSectionByeRounds(section.rounds).join(", R")}`}
+              </p>
+            </div>
+
+            <ol class="grid gap-3">
+              {section.matches.map((match) => {
+                const teams = getMatchTeams(match);
+                const homeLogo = getLogo(teams.home.name);
+                const awayLogo = getLogo(teams.away.name);
+                const reportHref = reportByRound.get(match.round);
+                const isUpcoming = match.result === "TBD";
+
+                return (
+                  <li
+                    class="overflow-hidden rounded-2xl border"
+                    style={`background: ${isUpcoming ? "color-mix(in srgb, var(--color-blue) 18%, var(--color-surface))" : "color-mix(in srgb, white 6%, transparent)"}; border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));`}
+                  >
+                    <div class="grid gap-4 p-4 sm:grid-cols-[8.5rem_minmax(0,1fr)_auto] sm:items-center">
+                      <div>
+                        <p class="text-xs font-black uppercase tracking-[0.16em]" style="color: var(--color-gold-light);">
+                          Round {match.round}
+                        </p>
+                        <p class="mt-1 text-sm font-bold leading-5" style="color: var(--color-link);">
+                          {formatDate(match.date)} · {formatKickoff(match.time)}
+                        </p>
+                        <p class="mt-1 hidden text-xs font-bold leading-5 min-[380px]:block" style="color: var(--color-muted);">{match.stadium}</p>
+                        <span class="metadata-chip mt-3">{venueLabel(match.venue)}</span>
+                      </div>
+
+                      <div class="grid gap-2">
+                        <div class="grid grid-cols-[minmax(0,1fr)_2.25rem] items-center gap-3">
+                          <div class="flex min-w-0 items-center gap-3">
+                            {homeLogo ? (
+                              <img src={homeLogo} alt={`${teams.home.name} crest`} class="h-10 w-10 shrink-0 rounded-xl bg-white object-contain p-1.5" loading="lazy" />
+                            ) : (
+                              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-xs font-black" style="color: var(--color-navy);">
+                                {getTeamInitials(teams.home.name)}
+                              </span>
+                            )}
+                            <p class="min-w-0 truncate text-sm font-black">{teams.home.name}</p>
+                          </div>
+                          <p class="text-right text-xl font-black tabular-nums">{getScore(teams.home.score)}</p>
+                        </div>
+
+                        <div class="grid grid-cols-[minmax(0,1fr)_2.25rem] items-center gap-3">
+                          <div class="flex min-w-0 items-center gap-3">
+                            {awayLogo ? (
+                              <img src={awayLogo} alt={`${teams.away.name} crest`} class="h-10 w-10 shrink-0 rounded-xl bg-white object-contain p-1.5" loading="lazy" />
+                            ) : (
+                              <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-xs font-black" style="color: var(--color-navy);">
+                                {getTeamInitials(teams.away.name)}
+                              </span>
+                            )}
+                            <p class="min-w-0 truncate text-sm font-black">{teams.away.name}</p>
+                          </div>
+                          <p class="text-right text-xl font-black tabular-nums">{getScore(teams.away.score)}</p>
+                        </div>
+                      </div>
+
+                      <div class="flex flex-wrap items-center gap-3 sm:flex-col sm:items-end">
+                        {isUpcoming ? (
+                          <span class="inline-flex rounded-full border px-3 py-1.5 text-sm font-black uppercase tracking-[0.12em]" style="border-color: color-mix(in srgb, var(--color-gold) 34%, var(--color-rule)); color: var(--color-gold-light);">
+                            Upcoming
+                          </span>
+                        ) : (
+                          <ResultBadge result={match.result} size="sm" />
+                        )}
+                        {reportHref ? (
+                          <a href={withBase(reportHref)} class="text-sm font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">
+                            Read report
+                          </a>
+                        ) : (
+                          <span class="text-sm font-bold" style="color: var(--color-muted);">
+                            Match page pending
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        );
+      })}
+    </div>
+  </section>
+</BaseLayout>
