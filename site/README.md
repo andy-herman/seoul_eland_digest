@@ -7,12 +7,15 @@ Public-blog frontend for the [Seoul E-Land Digest](../README.md) pipeline. Built
 ```
 Obsidian vault (Luna Master)         site/
 └── Sports/Seoul_E-Land/             ├── scripts/sync-content.mjs
-    ├── Digests/    ───── copy ───→  ├── src/content/digests/
-    └── Players/    ───── copy ───→  ├── src/content/players/
-                              └────→ └── src/content/places/  (filtered)
+    ├── Digests/                     ├── src/content/digests/
+    ├── Digests-PT/    ─── copy ───→ ├── src/content/digests-pt/
+    ├── Players/                     ├── src/content/players/
+    │                          └───→ ├── src/content/places/  (filtered)
+    └── Scouting Report/...          ├── src/content/prematch-previews/
+                               └───→ └── src/content/prematch-previews-pt/
 ```
 
-The vault is the source of truth. The sync script copies markdown files into `src/content/` on every `dev`/`build`. The synced folders are gitignored.
+The vault is the authoring source of truth. The sync script copies sanitized, supporter-facing markdown into `src/content/` on every `dev`/`build`; committed copies let Vercel build even when the local vault is unavailable.
 
 ## Develop
 
@@ -21,7 +24,7 @@ npm install        # one-time
 npm run dev        # syncs from vault, then starts Astro dev server
 ```
 
-By default the vault path is `C:/Andy Herman/Luna Master/Sports/Seoul_E-Land`. Edit `scripts/sync-content.mjs` if the vault moves.
+By default the vault path is `C:/Andy Herman/Luna Master/Sports/Seoul_E-Land`; set `SEOUL_ELAND_VAULT_BASE` if the vault moves. Pre-match previews can also be overridden at build time with `PREMATCH_PREVIEW_DIR` and `PREMATCH_PREVIEW_PT_DIR`.
 
 ## Build
 
@@ -32,12 +35,11 @@ npm run preview    # serve the built site locally
 
 ## Deploy
 
-Not wired up yet. Two reasonable options:
+Vercel is configured from the repository root:
 
-- **GitHub Pages** — free for public repos. Requires the project to be in git first. Add a workflow at `.github/workflows/deploy.yml`.
-- **Cloudflare Pages / Netlify** — free tier, custom domain support, automatic deploys on push.
-
-Either way: pick a domain, set `site` in `astro.config.mjs` to the canonical URL, and (for GitHub Pages) set the `base` if deploying to a subpath.
+- Install: `cd site && npm ci`
+- Build: `cd site && npm run build`
+- Output: `site/dist`
 
 ## Layout
 

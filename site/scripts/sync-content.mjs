@@ -12,13 +12,15 @@ import { fileURLToPath } from "node:url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const VAULT_BASE = "C:/Andy Herman/Luna Master/Sports/Seoul_E-Land";
+const VAULT_BASE = process.env.SEOUL_ELAND_VAULT_BASE || "C:/Andy Herman/Luna Master/Sports/Seoul_E-Land";
 const SITE_BASE = join(__dirname, "..", "src", "content");
 
 const SRC = {
   digests: join(VAULT_BASE, "Digests"),
   digestsPt: join(VAULT_BASE, "Digests-PT"),
   players: join(VAULT_BASE, "Players"),
+  prematchPreviews: join(VAULT_BASE, "Scouting Report", "K League 2 2026", "Pre-Match Previews"),
+  prematchPreviewsPt: join(VAULT_BASE, "Scouting Report", "K League 2 2026", "Pre-Match Previews-PT"),
 };
 
 const DEST = {
@@ -26,6 +28,8 @@ const DEST = {
   digestsPt: join(SITE_BASE, "digests-pt"),
   players: join(SITE_BASE, "players"),
   places: join(SITE_BASE, "places"),
+  prematchPreviews: join(SITE_BASE, "prematch-previews"),
+  prematchPreviewsPt: join(SITE_BASE, "prematch-previews-pt"),
 };
 
 function polishFanFacingCopy(content) {
@@ -49,6 +53,16 @@ function scrubReferenceNoteForSite(content) {
     .replace(/\r?\n\*(?:Player note|Home venue)[^\n]*\r?\n/g, "\n")
     .replace(/\r?\n\*Not yet narrated[^\n]*\r?\n/g, "\n")
     .replace(/\r?\n## Mentions\s*$/g, "\n"));
+}
+
+function scrubPreviewForSite(content) {
+  return polishFanFacingCopy(content
+    .split(/\r?\n/)
+    .filter((line) => {
+      const trimmed = line.trim();
+      return !/^>\s*Private draft/i.test(trimmed) && !/^Generated:/i.test(trimmed);
+    })
+    .join("\n"));
 }
 
 async function copyTree(srcDir, destDir, predicate, transform) {
@@ -104,6 +118,12 @@ async function main() {
     return placeRegex.test(name);
   }, scrubReferenceNoteForSite);
   console.log(`[sync] copied ${placeCount} place note(s)`);
+
+  const previewCount = await copyTree(SRC.prematchPreviews, DEST.prematchPreviews, undefined, scrubPreviewForSite);
+  console.log(`[sync] copied ${previewCount} pre-match preview(s)`);
+
+  const previewPtCount = await copyTree(SRC.prematchPreviewsPt, DEST.prematchPreviewsPt, undefined, scrubPreviewForSite);
+  console.log(`[sync] copied ${previewPtCount} Portuguese pre-match preview(s)`);
 
   // Always seed empty content folders so Astro doesn't error if vault is empty.
   for (const dir of Object.values(DEST)) {

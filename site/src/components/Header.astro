@@ -8,21 +8,22 @@ interface Props {
 const { locale = "en" } = Astro.props;
 const isPortuguese = locale === "pt";
 const pathname = stripBase(Astro.url.pathname);
+const englishNavItems = [
+  { href: "/", label: "Rounds" },
+  { href: "/matches", label: "Matches" },
+  { href: "/players", label: "Squad" },
+  { href: "/support", label: "Support me", mobileLabel: "Support" },
+  { href: "/about", label: "About", hideOnNarrow: true },
+];
 const navItems = isPortuguese
   ? [
       { href: "/pt/", label: "Rodadas" },
-      { href: "/matches", label: "Partidas" },
+      { href: "/pt/matches", label: "Partidas" },
       { href: "/players", label: "Elenco" },
       { href: "/support", label: "Apoie" },
       { href: "/about", label: "Sobre", hideOnNarrow: true },
     ]
-  : [
-      { href: "/", label: "Rounds" },
-      { href: "/matches", label: "Matches" },
-      { href: "/players", label: "Squad" },
-      { href: "/support", label: "Support me", mobileLabel: "Support" },
-      { href: "/about", label: "About", hideOnNarrow: true },
-    ];
+  : englishNavItems;
 
 function isActive(href: string) {
   if (href === "/") {
