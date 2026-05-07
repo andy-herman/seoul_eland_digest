@@ -11,6 +11,7 @@ interface Props {
 }
 
 const { title, description, lang = "en" } = Astro.props;
+const locale = lang === "pt" ? "pt" : "en";
 ---
 
 <!doctype html>
@@ -24,10 +25,10 @@ const { title, description, lang = "en" } = Astro.props;
     <link rel="icon" type="image/svg+xml" href={withBase("/assets/crest.svg")} />
   </head>
   <body class="min-h-screen flex flex-col">
-    <Header />
+    <Header locale={locale} />
     <main class="flex-1 px-4 py-6 sm:px-6 sm:py-10 mx-auto w-full max-w-6xl">
       <slot />
     </main>
-    <Footer />
+    <Footer locale={locale} />
   </body>
 </html>

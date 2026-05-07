@@ -35,14 +35,14 @@ const labels = isPortuguese
       season: "Temporada",
       round: "Rodada",
       venue: venue === "home" ? "Casa" : venue === "away" ? "Fora" : "Neutro",
-      resultText: resultLetter === "W" ? "Vitória do Seoul" : resultLetter === "D" ? "Empate" : resultLetter === "L" ? "Derrota do Seoul" : "Fim de jogo",
-      matchup: venue === "away" ? `em ${opponent}` : `contra ${opponent}`,
+      resultText: resultLetter === "W" ? "Vitória" : resultLetter === "D" ? "Empate" : resultLetter === "L" ? "Derrota" : "Fim de jogo",
+      matchup: venue === "away" ? `fora contra ${opponent}` : venue === "home" ? `contra ${opponent}` : `em campo neutro contra ${opponent}`,
       eyebrow: "Resumo da partida",
       deck: "Um relato para torcedores, com notas táticas, contexto dos jogadores e leitura da briga pelo acesso.",
       toggleHref: `/rounds/${slug}`,
       toggleCode: "EN",
-      toggleLabel: "English",
-      toggleAria: "Read in English",
+      toggleLabel: "Inglês",
+      toggleAria: "Ler em inglês",
       toggleHelp: "Ler este relato em inglês.",
       crestAlt: "Escudo do Seoul E-Land FC",
       opponentAlt: `Logo do ${opponent}`,
@@ -82,7 +82,7 @@ const labels = isPortuguese
         <span>Seoul E-Land</span>
       </div>
       <div class="match-mobile-center">
-        <ResultBadge result={result} size="sm" />
+        <ResultBadge result={result} size="sm" locale={locale} />
         <p>{elandScore}-{opponentScore}</p>
         <span>{labels.resultText}</span>
       </div>
@@ -103,7 +103,7 @@ const labels = isPortuguese
       </div>
 
       <div class="scoreboard-center text-center">
-        <ResultBadge result={result} size="sm" />
+        <ResultBadge result={result} size="sm" locale={locale} />
         <div class="mt-3 flex items-baseline justify-center gap-1.5 font-black tabular-nums min-[380px]:gap-2 sm:mt-4 sm:gap-3">
           <span class="text-4xl leading-none min-[380px]:text-5xl sm:text-7xl" style="color: var(--color-ink);">{elandScore}</span>
           <span class="text-2xl min-[380px]:text-3xl sm:text-4xl" style="color: var(--color-gold-light);">–</span>

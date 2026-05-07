@@ -1,20 +1,37 @@
 ---
 import { stripBase, withBase } from "../lib/paths";
 
+interface Props {
+  locale?: "en" | "pt";
+}
+
+const { locale = "en" } = Astro.props;
+const isPortuguese = locale === "pt";
 const pathname = stripBase(Astro.url.pathname);
-const navItems = [
-  { href: "/", label: "Rounds" },
-  { href: "/matches", label: "Matches" },
-  { href: "/players", label: "Squad" },
-  { href: "/support", label: "Support me", mobileLabel: "Support" },
-  { href: "/about", label: "About", hideOnNarrow: true },
-];
+const navItems = isPortuguese
+  ? [
+      { href: "/pt/", label: "Rodadas" },
+      { href: "/matches", label: "Partidas" },
+      { href: "/players", label: "Elenco" },
+      { href: "/support", label: "Apoie" },
+      { href: "/about", label: "Sobre", hideOnNarrow: true },
+    ]
+  : [
+      { href: "/", label: "Rounds" },
+      { href: "/matches", label: "Matches" },
+      { href: "/players", label: "Squad" },
+      { href: "/support", label: "Support me", mobileLabel: "Support" },
+      { href: "/about", label: "About", hideOnNarrow: true },
+    ];
 
 function isActive(href: string) {
   if (href === "/") {
-    return pathname === "/" || pathname === "/pt/" || pathname.startsWith("/rounds") || pathname.startsWith("/pt/rounds");
+    return pathname === "/" || pathname.startsWith("/rounds");
   }
-  return href === "/" ? pathname === "/" : pathname.startsWith(href);
+  if (href === "/pt/") {
+    return pathname === "/pt/" || pathname.startsWith("/pt/rounds");
+  }
+  return pathname.startsWith(href);
 }
 ---
 
@@ -26,7 +43,9 @@ function isActive(href: string) {
       </span>
       <span class="hidden sm:block leading-tight">
         <span class="block text-sm font-black uppercase tracking-[0.18em]" style="color: var(--color-ink);">Digest</span>
-        <span class="block text-[0.68rem] font-bold uppercase tracking-[0.2em]" style="color: var(--color-gold-light);">Supporter publication</span>
+        <span class="block text-[0.68rem] font-bold uppercase tracking-[0.2em]" style="color: var(--color-gold-light);">
+          {isPortuguese ? "Publicação de torcida" : "Supporter publication"}
+        </span>
       </span>
     </a>
 

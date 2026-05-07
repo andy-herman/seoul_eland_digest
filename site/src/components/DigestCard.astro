@@ -28,11 +28,11 @@ const resultLetter = result.trim().charAt(0).toUpperCase();
 const score = result.trim().slice(1).trim();
 const outcomeLabel = isPortuguese
   ? resultLetter === "W"
-    ? "Vitória do Seoul"
+    ? "Vitória"
     : resultLetter === "D"
       ? "Empate"
       : resultLetter === "L"
-        ? "Derrota do Seoul"
+        ? "Derrota"
         : "Resultado"
   : resultLetter === "W"
     ? "Seoul win"
@@ -43,8 +43,10 @@ const outcomeLabel = isPortuguese
         : "Result";
 const venuePrefix = isPortuguese
   ? venue === "away"
-    ? "em"
-    : "contra"
+    ? "fora contra"
+    : venue === "home"
+      ? "contra"
+      : "campo neutro contra"
   : venue === "home"
     ? "vs"
     : venue === "away"
@@ -62,7 +64,7 @@ const venueLabel = isPortuguese
       ? "Away"
       : "Neutral";
 const roundLabel = isPortuguese ? "Rodada" : "Round";
-const reportLabel = isPortuguese ? "Relato final" : "Full-time report";
+const reportLabel = isPortuguese ? "Relato da partida" : "Full-time report";
 const scoreLabel = isPortuguese ? "Placar do Seoul E-Land" : "Seoul E-Land score";
 const readLabel = isPortuguese ? "Ler" : "Read";
 ---
@@ -79,7 +81,7 @@ const readLabel = isPortuguese ? "Ler" : "Read";
         <time datetime={date.toISOString()}>{dateStr}</time> · {venueLabel}
       </p>
     </div>
-    <ResultBadge result={result} size="sm" />
+    <ResultBadge result={result} size="sm" locale={locale} />
   </div>
 
   <div class="digest-card-match mt-5 flex items-center gap-4">

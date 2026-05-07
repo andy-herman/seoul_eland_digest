@@ -1,24 +1,32 @@
 ---
 import { withBase } from "../lib/paths";
 
+interface Props {
+  locale?: "en" | "pt";
+}
+
+const { locale = "en" } = Astro.props;
+const isPortuguese = locale === "pt";
 const year = new Date().getFullYear();
 ---
 
 <footer class="mt-16 border-t" style="border-color: color-mix(in srgb, var(--color-gold) 22%, var(--color-rule)); color: var(--color-muted);">
   <div class="mx-auto grid max-w-6xl gap-6 px-5 py-9 text-sm sm:grid-cols-[1fr_auto] sm:px-6">
     <div class="flex items-start gap-4">
-      <img src={withBase("/assets/crest.png")} alt="Seoul E-Land FC crest" class="h-12 w-12 object-contain" loading="lazy" />
+      <img src={withBase("/assets/crest.png")} alt={isPortuguese ? "Escudo do Seoul E-Land FC" : "Seoul E-Land FC crest"} class="h-12 w-12 object-contain" loading="lazy" />
       <div>
         <p class="font-black uppercase tracking-[0.18em]" style="color: var(--color-ink);">Seoul E-Land Digest</p>
         <p class="mt-2 max-w-xl leading-relaxed">
-          Independent English-language notes for supporters following Seoul E-Land FC, match by match.
+          {isPortuguese
+            ? "Cobertura independente em português para torcedores que acompanham o Seoul E-Land FC, partida a partida."
+            : "Independent English-language notes for supporters following Seoul E-Land FC, match by match."}
         </p>
       </div>
     </div>
     <div class="flex flex-col gap-2 sm:items-end">
-      <a href={withBase("/support")} class="font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">Support me</a>
+      <a href={withBase("/support")} class="font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">{isPortuguese ? "Apoie" : "Support me"}</a>
       <span>© {year} Seoul E-Land Digest</span>
-      <span>Made for fans of the Leopards.</span>
+      <span>{isPortuguese ? "Feito para torcedores dos Leopards." : "Made for fans of the Leopards."}</span>
     </div>
   </div>
 </footer>
