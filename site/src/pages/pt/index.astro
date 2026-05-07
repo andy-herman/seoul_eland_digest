@@ -36,6 +36,9 @@ const latestDate = latestDigest?.data.date.toLocaleDateString("pt-BR", {
 const latestHref = latestDigest ? withBase(`/pt/rounds/${latestDigest.id.replace(/\.md$/, "")}`) : "#";
 const latestScore = latestDigest?.data.result.trim().slice(1).trim();
 const latestVenue = latestDigest?.data.venue === "home" ? "Casa" : latestDigest?.data.venue === "away" ? "Fora" : "Neutro";
+const heroStatsLabel = currentSeason
+  ? `Temporada ${currentSeason} · ${digests.length} relatos · ${wins}-${draws}-${losses}`
+  : `${digests.length} relatos`;
 
 function stripMarkdown(value: string) {
   return value
@@ -58,20 +61,20 @@ function getDeck(body?: string) {
   description="Cobertura em português do Seoul E-Land FC para torcedores."
   lang="pt"
 >
-  <section class="supporter-panel mb-10 rounded-[2rem]">
-    <div class="relative grid gap-8 p-6 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:p-10">
-      <div class="flex flex-col justify-center">
+  <section class="supporter-panel home-hero mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative grid min-w-0 gap-6 p-5 sm:gap-8 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:p-10">
+      <div class="flex min-w-0 flex-col justify-center">
         <p class="eyebrow">Publicação independente para torcedores</p>
-        <h1 class="mt-4 max-w-3xl text-4xl font-black uppercase leading-[0.95] tracking-tight min-[380px]:text-5xl sm:text-6xl lg:text-7xl">
+        <h1 class="mt-3 max-w-3xl text-[2.08rem] font-black uppercase leading-[0.95] tracking-tight min-[380px]:text-[2.45rem] sm:text-6xl lg:text-7xl">
           Seoul E-Land Digest
         </h1>
-        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
           Relatos em português para torcedores do Seoul E-Land: resumos de rodada, temas táticos, contexto dos jogadores e uma leitura clara da briga pelo acesso.
         </p>
-        <div class="mt-7 flex flex-wrap gap-3">
-          {currentSeason && <span class="metadata-chip">Temporada {currentSeason}</span>}
-          <span class="metadata-chip">{digests.length} rodadas cobertas</span>
-          {currentSeason && <span class="metadata-chip">Campanha {wins}-{draws}-{losses}</span>}
+        <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          {heroStatsLabel}
+        </p>
+        <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
           <TranslateButton href="/" code="EN" label="English" ariaLabel="Read the English archive" />
         </div>
       </div>
@@ -79,43 +82,59 @@ function getDeck(body?: string) {
       {latestDigest && (
         <a
           href={latestHref}
-          class="group rounded-[1.5rem] border p-5 no-underline transition duration-200 hover:-translate-y-1"
-          style="background: color-mix(in srgb, white 10%, transparent); border-color: color-mix(in srgb, var(--color-gold) 32%, var(--color-rule)); box-shadow: 0 24px 50px color-mix(in srgb, black 24%, transparent);"
+          class="latest-match-card group min-w-0 overflow-hidden rounded-[1.25rem] border p-4 no-underline transition duration-200 hover:-translate-y-1 sm:rounded-[1.5rem] sm:p-5"
+          style="background: color-mix(in srgb, white 8%, transparent); border-color: color-mix(in srgb, var(--color-gold) 26%, var(--color-rule)); box-shadow: 0 16px 36px color-mix(in srgb, black 18%, transparent);"
         >
           <div class="flex items-center justify-between gap-4">
-            <div>
+            <div class="min-w-0">
               <p class="eyebrow">Última partida</p>
-              <p class="mt-1 text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+              <p class="latest-match-meta mt-1 text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
                 Rodada {latestDigest.data.round} · {latestDate}
               </p>
             </div>
-            <ResultBadge result={latestDigest.data.result} />
+            <ResultBadge result={latestDigest.data.result} size="sm" />
           </div>
 
-          <div class="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-2 text-center min-[380px]:gap-3">
-            <div class="flex flex-col items-center gap-2">
-              <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-16 min-[380px]:w-16">
+          <div class="latest-score-strip mt-5 hidden grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 text-center min-[380px]:gap-3 sm:mt-6 sm:grid">
+            <div class="latest-team flex flex-col items-center gap-2">
+              <span class="latest-team-logo flex h-12 w-12 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-14 min-[380px]:w-14 sm:h-16 sm:w-16">
                 <img src={withBase("/assets/crest.png")} alt="Escudo do Seoul E-Land FC" class="h-full w-full object-contain" loading="lazy" />
               </span>
-              <span class="text-xs font-black uppercase tracking-[0.12em]" style="color: var(--color-link);">Seoul E-Land</span>
+              <span class="latest-team-name text-xs font-black" style="color: var(--color-link);">Seoul E-Land</span>
             </div>
             <div>
-              <p class="text-3xl font-black tabular-nums leading-none min-[380px]:text-4xl" style="color: var(--color-ink);">{latestScore}</p>
-              <p class="mt-2 text-xs font-bold uppercase tracking-[0.16em]" style="color: var(--color-gold-light);">{latestVenue}</p>
+              <p class="latest-score text-3xl font-black tabular-nums leading-none min-[380px]:text-[2.15rem] sm:text-4xl" style="color: var(--color-ink);">{latestScore}</p>
+              <p class="mt-2 text-[0.68rem] font-bold uppercase tracking-[0.14em] min-[380px]:text-xs min-[380px]:tracking-[0.16em]" style="color: var(--color-gold-light);">{latestVenue}</p>
             </div>
-            <div class="flex flex-col items-center gap-2">
-              <span class="flex h-14 w-14 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-16 min-[380px]:w-16">
+            <div class="latest-team flex flex-col items-center gap-2">
+              <span class="latest-team-logo flex h-12 w-12 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-14 min-[380px]:w-14 sm:h-16 sm:w-16">
                 {latestOpponentLogo ? (
                   <img src={latestOpponentLogo} alt={`Logo do ${latestDigest.data.opponent}`} class="h-full w-full object-contain" loading="lazy" />
                 ) : (
                   <span class="font-black" style="color: var(--color-navy);">{latestOpponentInitials}</span>
                 )}
               </span>
-              <span class="text-xs font-black uppercase tracking-[0.12em]" style="color: var(--color-link);">{latestDigest.data.opponent}</span>
+              <span class="latest-team-name max-w-full text-xs font-black" style="color: var(--color-link);">{latestDigest.data.opponent}</span>
             </div>
           </div>
 
-          <p class="mt-6 border-t pt-5 text-sm leading-7" style="border-color: var(--color-rule); color: var(--color-link);">
+          <div class="latest-mobile-summary mt-4 sm:hidden">
+            <div class="latest-mobile-team">
+              <img src={withBase("/assets/crest.png")} alt="Escudo do Seoul E-Land FC" class="latest-mobile-logo" loading="lazy" />
+              <span>Seoul E-Land</span>
+            </div>
+            <p class="latest-mobile-score">{latestScore}</p>
+            <div class="latest-mobile-team latest-mobile-team-right">
+              {latestOpponentLogo ? (
+                <img src={latestOpponentLogo} alt={`Logo do ${latestDigest.data.opponent}`} class="latest-mobile-logo" loading="lazy" />
+              ) : (
+                <span class="latest-mobile-logo latest-mobile-initials">{latestOpponentInitials}</span>
+              )}
+              <span>{latestDigest.data.opponent}</span>
+            </div>
+          </div>
+
+          <p class="mt-6 hidden border-t pt-5 text-sm leading-7 sm:block" style="border-color: var(--color-rule); color: var(--color-link);">
             {getDeck(latestDigest.body)}
           </p>
           <p class="mt-5 text-sm font-black" style="color: var(--color-gold-light);">

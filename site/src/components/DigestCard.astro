@@ -69,7 +69,7 @@ const readLabel = isPortuguese ? "Ler" : "Read";
 
 <a
   href={withBase(href)}
-  class="group block h-full rounded-[1.35rem] border p-5 no-underline transition duration-200 hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-gold)]"
+  class="digest-card group block h-full rounded-[1.35rem] border p-5 no-underline transition duration-200 hover:-translate-y-1 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--color-gold)]"
   style="background: linear-gradient(180deg, color-mix(in srgb, white 8%, transparent), color-mix(in srgb, var(--color-navy) 72%, transparent)); border-color: var(--color-rule); box-shadow: 0 18px 42px color-mix(in srgb, black 18%, transparent);"
 >
   <div class="flex items-start justify-between gap-3">
@@ -82,8 +82,8 @@ const readLabel = isPortuguese ? "Ler" : "Read";
     <ResultBadge result={result} size="sm" />
   </div>
 
-  <div class="mt-5 flex items-center gap-4">
-    <span class="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border bg-white p-2 shadow-inner" style="border-color: color-mix(in srgb, var(--color-gold) 26%, transparent);">
+  <div class="digest-card-match mt-5 flex items-center gap-4">
+    <span class="digest-card-logo flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border bg-white p-2 shadow-inner" style="border-color: color-mix(in srgb, var(--color-gold) 26%, transparent);">
       {opponentLogo ? (
         <img src={opponentLogo} alt={`${opponent} logo`} class="h-full w-full object-contain" loading="lazy" />
       ) : (
@@ -100,7 +100,7 @@ const readLabel = isPortuguese ? "Ler" : "Read";
     </div>
   </div>
 
-  <div class="mt-5 flex items-end justify-between gap-4 border-t pt-4" style="border-color: var(--color-rule);">
+  <div class="digest-card-score mt-5 flex items-end justify-between gap-4 border-t pt-4" style="border-color: var(--color-rule);">
     <div>
       <p class="text-xs font-bold uppercase tracking-[0.16em]" style="color: var(--color-muted);">{scoreLabel}</p>
       <p class="mt-1 text-3xl font-black tabular-nums leading-none" style="color: var(--color-ink);">{score || result}</p>

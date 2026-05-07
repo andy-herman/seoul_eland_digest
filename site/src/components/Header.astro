@@ -5,20 +5,23 @@ const pathname = stripBase(Astro.url.pathname);
 const navItems = [
   { href: "/", label: "Rounds" },
   { href: "/players", label: "Squad" },
-  { href: "/about", label: "About" },
-  { href: "/support", label: "Support me" },
+  { href: "/about", label: "About", hideOnNarrow: true },
+  { href: "/support", label: "Support me", hideOnMobile: true },
 ];
 
 function isActive(href: string) {
+  if (href === "/") {
+    return pathname === "/" || pathname === "/pt/" || pathname.startsWith("/rounds") || pathname.startsWith("/pt/rounds");
+  }
   return href === "/" ? pathname === "/" : pathname.startsWith(href);
 }
 ---
 
-<header class="sticky top-0 z-40 border-b backdrop-blur-xl" style="background-color: color-mix(in srgb, var(--color-navy-deep) 88%, transparent); border-color: color-mix(in srgb, var(--color-gold) 20%, var(--color-rule));">
-  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:flex-nowrap sm:gap-5 sm:px-6">
+<header class="sticky top-0 z-40 border-b backdrop-blur-xl" style="background-color: color-mix(in srgb, var(--color-navy-deep) 92%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));">
+  <div class="mx-auto flex max-w-6xl flex-nowrap items-center justify-between gap-2 px-3 py-2 sm:gap-5 sm:px-6 sm:py-3">
     <a href={withBase("/")} class="flex items-center gap-3 no-underline" aria-label="Seoul E-Land Digest home">
-      <span class="flex h-10 w-20 items-center justify-center rounded-xl bg-white px-2 shadow-lg shadow-black/20 sm:h-11 sm:w-24 sm:px-3">
-        <img src={withBase("/assets/logo-official.svg")} alt="Seoul E-Land FC" class="h-8 w-auto" />
+      <span class="flex h-9 w-[4.6rem] items-center justify-center rounded-xl bg-white px-1.5 shadow-lg shadow-black/20 min-[380px]:h-10 min-[380px]:w-20 min-[380px]:px-2 sm:h-11 sm:w-24 sm:px-3">
+        <img src={withBase("/assets/logo-official.svg")} alt="Seoul E-Land FC" class="h-7 w-auto min-[380px]:h-8" />
       </span>
       <span class="hidden sm:block leading-tight">
         <span class="block text-sm font-black uppercase tracking-[0.18em]" style="color: var(--color-ink);">Digest</span>
@@ -26,11 +29,11 @@ function isActive(href: string) {
       </span>
     </a>
 
-    <nav class="flex max-w-full items-center gap-1 overflow-x-auto rounded-full border p-1 text-xs font-bold sm:text-sm" style="background-color: color-mix(in srgb, white 7%, transparent); border-color: var(--color-rule);">
+    <nav class="flex min-w-0 items-center gap-0.5 rounded-full border p-0.5 text-xs font-bold sm:gap-1 sm:p-1 sm:text-sm" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 18%, var(--color-rule));">
       {navItems.map((item) => (
         <a
           href={withBase(item.href)}
-          class={`shrink-0 rounded-full px-3 py-2 no-underline transition-colors sm:px-4 ${isActive(item.href) ? "bg-white shadow-sm" : "text-[var(--color-link)] hover:text-white"}`}
+          class={`${item.hideOnMobile ? "hidden min-[560px]:inline-flex" : item.hideOnNarrow ? "hidden min-[430px]:inline-flex" : "inline-flex"} shrink-0 rounded-full px-2.5 py-1.5 no-underline transition-colors min-[380px]:px-3 sm:px-4 sm:py-2 ${isActive(item.href) ? "bg-white shadow-sm" : "text-[var(--color-link)] hover:text-white"}`}
           style={isActive(item.href) ? "color: var(--color-navy);" : undefined}
         >
           {item.label}
