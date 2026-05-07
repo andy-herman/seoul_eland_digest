@@ -5,8 +5,8 @@ const pathname = stripBase(Astro.url.pathname);
 const navItems = [
   { href: "/", label: "Rounds" },
   { href: "/players", label: "Squad" },
+  { href: "/support", label: "Support me", mobileLabel: "Support" },
   { href: "/about", label: "About", hideOnNarrow: true },
-  { href: "/support", label: "Support me", hideOnMobile: true },
 ];
 
 function isActive(href: string) {
@@ -33,10 +33,18 @@ function isActive(href: string) {
       {navItems.map((item) => (
         <a
           href={withBase(item.href)}
-          class={`${item.hideOnMobile ? "hidden min-[560px]:inline-flex" : item.hideOnNarrow ? "hidden min-[430px]:inline-flex" : "inline-flex"} shrink-0 rounded-full px-2.5 py-1.5 no-underline transition-colors min-[380px]:px-3 sm:px-4 sm:py-2 ${isActive(item.href) ? "bg-white shadow-sm" : "text-[var(--color-link)] hover:text-white"}`}
+          class={`${item.hideOnNarrow ? "hidden min-[520px]:inline-flex" : "inline-flex"} shrink-0 rounded-full px-2.5 py-1.5 no-underline transition-colors min-[380px]:px-3 sm:px-4 sm:py-2 ${isActive(item.href) ? "bg-white shadow-sm" : "text-[var(--color-link)] hover:text-white"}`}
           style={isActive(item.href) ? "color: var(--color-navy);" : undefined}
+          aria-label={item.label}
         >
-          {item.label}
+          {item.mobileLabel ? (
+            <>
+              <span class="min-[430px]:hidden">{item.mobileLabel}</span>
+              <span class="hidden min-[430px]:inline">{item.label}</span>
+            </>
+          ) : (
+            item.label
+          )}
         </a>
       ))}
     </nav>
