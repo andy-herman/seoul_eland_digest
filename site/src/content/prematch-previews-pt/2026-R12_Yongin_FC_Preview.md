@@ -73,12 +73,12 @@ O mais útil para o Seoul é usar essas informações como complemento: a decis�
 
 ## Contexto da Série (Primeiro Confronto)
 
-Este será o primeiro confronto oficial entre Seoul E-Land e Yongin FC. O Yongin é uma das novidades do campeonato de 2026, promovido à K League 2 juntamente com Gimhae e Paju Frontier, compondo a expansão deste ano. Sem histórico entre as equipes, o parâmetro é a tabela: o Seoul vem em alta (3º, 19 pontos, +8 saldo) contra o estreante Yongin (15º, 6 pontos, -5 saldo), além da vantagem de jogar no Mokdong após dura derrota para o Asan. O exemplo relevante é a vitória do Seoul por 3 a 1 em cima do Paju Frontier na R7 — referência de como administrar equipes menos experientes sem deixar as transições desequilibrarem o jogo.
+Este será o primeiro confronto oficial entre Seoul E-Land e Yongin FC. O Yongin é uma das novidades do campeonato de 2026, promovido à K League 2 juntamente com Gimhae e Paju Frontier, compondo a expansão deste ano. Sem histórico entre as equipes, o parâmetro é a tabela: o Seoul vem em alta (3º, 19 pontos, +8 saldo) contra o estreante Yongin (15º, 6 pontos, -5 saldo), além da vantagem de jogar no Mokdong após dura derrota para o Asan. O exemplo relevante é a vitória do Seoul por 3 a 1 em cima do Paju Frontier na R7, referência de como administrar equipes menos experientes sem deixar as transições desequilibrarem o jogo.
 
 ## Como o Seoul E-Land se Compara
 
-O atual Seoul aposta na flexibilidade de sistema, uso intenso dos alas, ênfase na bola parada e adaptações frequentes durante o jogo — conjunto de recursos interessantes para este duelo. Isso pesa porque o melhor caminho do Yongin é encurtar o campo central, convidar o Seoul a cruzar bolas previsíveis e buscar o contra-ataque no espaço deixado atrás.
-A bola parada é trunfo importante — tem sido um dos pontos altos em 2026. Girando a bola de um lado para o outro antes de cruzar, o Seoul força o Yongin a defender de frente para a própria meta, não apenas tirar cruzamentos pelo alto.
+O atual Seoul aposta na flexibilidade de sistema, uso intenso dos alas, ênfase na bola parada e adaptações frequentes durante o jogo, conjunto de recursos interessantes para este duelo. Isso pesa porque o melhor caminho do Yongin é encurtar o campo central, convidar o Seoul a cruzar bolas previsíveis e buscar o contra-ataque no espaço deixado atrás.
+A bola parada é trunfo importante, tem sido um dos pontos altos em 2026. Girando a bola de um lado para o outro antes de cruzar, o Seoul força o Yongin a defender de frente para a própria meta, não apenas tirar cruzamentos pelo alto.
 
 ## Estratégia Que Pode Funcionar
 
