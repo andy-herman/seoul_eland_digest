@@ -21,3 +21,4 @@ tags: [player, k-league-2, seoul-e-land]
 - [[2026-R02_Seoul_E-Land_Digest]] - Round 2, 2026-03-06
 - [[2026-R01_Seoul_E-Land_Digest]] - Round 1, 2026-02-27
 - [[2026-R11_Seoul_E-Land_Digest]] - Round 11, 2026-05-09
+- [[2026-R12_Seoul_E-Land_Digest]] - Round 12, 2026-05-16
