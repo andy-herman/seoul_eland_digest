@@ -65,7 +65,7 @@ const labels = isPortuguese
     };
 ---
 
-<header class="supporter-panel not-prose mb-6 rounded-[1.5rem] sm:mb-8 sm:rounded-[2rem]">
+<header class="supporter-panel not-prose mb-3 rounded-[1.5rem] sm:mb-4 sm:rounded-[2rem]">
   <div class="relative min-w-0 p-5 sm:p-8 lg:p-10">
     <div class="article-meta-stack">
       <p class="article-meta-primary">K League 2 · {labels.season} {season} · {labels.round} {round}</p>
@@ -143,3 +143,22 @@ const labels = isPortuguese
     </div>
   </div>
 </header>
+
+<div
+  class="match-sticky-strip not-prose sticky top-14 z-30 mb-6 rounded-2xl border px-4 py-2.5 backdrop-blur sm:top-[4.75rem] sm:mb-8 sm:px-6 sm:py-3"
+  style="background-color: color-mix(in srgb, var(--color-navy-deep) 92%, transparent); border-color: color-mix(in srgb, var(--color-gold) 24%, var(--color-rule));"
+  aria-label={`${labels.round} ${round}, ${labels.matchup}, ${labels.resultText} ${elandScore}-${opponentScore}`}
+>
+  <div class="flex min-w-0 items-center gap-3">
+    <span class="shrink-0 text-xs font-black uppercase tracking-[0.16em]" style="color: var(--color-gold-light);">
+      {labels.round} {round}
+    </span>
+    <ResultBadge result={result} size="sm" locale={locale} />
+    <span class="min-w-0 flex-1 truncate text-sm font-black" style="color: var(--color-ink);">
+      {labels.matchup}
+    </span>
+    <span class="hidden shrink-0 text-xs font-bold uppercase tracking-[0.12em] sm:inline" style="color: var(--color-muted);">
+      {shortDateLabel}
+    </span>
+  </div>
+</div>
