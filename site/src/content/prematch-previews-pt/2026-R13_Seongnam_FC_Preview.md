@@ -18,7 +18,7 @@ predicted_lineup_note: "Predicted from the actual Round 12 XI plus Lee Ju-hyuk r
 predicted_lineup: [{"name":"Min Sung-jun","role":"GK","line":"goalkeeper"},{"name":"Park Jae-hwan","role":"RCB","line":"defense"},{"name":"Kim Oh-kyu","role":"CB","line":"defense"},{"name":"Baek Ji-woong","role":"LCB","line":"defense"},{"name":"Son Hyuk-chan","role":"RM","line":"midfield"},{"name":"Seo Jin-seok","role":"CM","line":"midfield"},{"name":"Park Chang-hwan","role":"CM","line":"midfield"},{"name":"Lee Ju-hyuk","role":"LM","line":"midfield"},{"name":"Kang Hyeon-je","role":"RF","line":"attack"},{"name":"Park Jae-yong","role":"ST","line":"attack"},{"name":"Euller","role":"LF","line":"attack"}]
 tags: [seoul-eland, pre-match-preview, scouting]
 ---
-# Seoul E-Land vs Seongnam FC – Prévia da Partida
+# Seoul E-Land vs Seongnam FC, Prévia da Partida
 
 ## Visão Geral
 
@@ -86,7 +86,7 @@ Para este fim de semana, o aviso é simples: não cair na armadilha do playoff. 
 
 ## Como o Seoul E-Land se Compara
 
-O DNA atual do Seoul – flexibilidade tática, amplitude com alas, força na bola parada e ajustes ao longo do jogo – oferece armas suficientes para este duelo. Isso é chave, pois o melhor caminho do Seongnam passa por fechar o centro, convidar o E-Land a cruzar bolas previsíveis e atacar os espaços deixados.
+O DNA atual do Seoul, flexibilidade tática, amplitude com alas, força na bola parada e ajustes ao longo do jogo, oferece armas suficientes para este duelo. Isso é chave, pois o melhor caminho do Seongnam passa por fechar o centro, convidar o E-Land a cruzar bolas previsíveis e atacar os espaços deixados.
 
 A vantagem na bola parada pode decidir. Em 2026, o E-Land tem sido regular ao criar perigo nesses lances. Se trabalhar de um lado ao outro antes de cruzar, obriga o Seongnam a defender voltado para a própria meta, não só afastar bolas pelo alto.
 
@@ -124,7 +124,7 @@ Fique de olho também na janela de substituições. O Seoul já mostrou que sabe
 O modelo aponta leve favoritismo do Seoul: 47% de vitória, 31% empate, 22% Seongnam. Os números de gols esperados giram em torno de Seongnam 1,05 x 1,60 do Seoul.
 Ainda não foram divulgados odds públicos firmes; pela tabela e pelo fator casa, o Seoul é favorito, mas não absoluto.
 Os placares mais prováveis são 2x1 e 1x0 para os anfitriões, mas o 1x1 é bem realista, dado o histórico de empates do Seongnam.
-O favoritismo do Seoul é claro, mas o empate tem peso alto e real. O Seongnam foi montado para dificultar, e o E-Land não vence desde a rodada 10. A análise é de probabilidade – não recomendação de aposta.
+O favoritismo do Seoul é claro, mas o empate tem peso alto e real. O Seongnam foi montado para dificultar, e o E-Land não vence desde a rodada 10. A análise é de probabilidade, não recomendação de aposta.
 
 ## Conclusão
 
