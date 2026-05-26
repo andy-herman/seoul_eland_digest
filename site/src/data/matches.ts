@@ -173,7 +173,7 @@ export const fixtures: MatchFixture[] = [
     homeScore: 2,
     awayScore: 2,
   },
-  { round: 13, date: "2026-05-24", time: "19:00", venue: "home", opponent: "Seongnam FC", stadium: "Mokdong Stadium", result: "TBD" },
+  { round: 13, date: "2026-05-24", time: "19:00", venue: "home", opponent: "Seongnam FC", stadium: "Mokdong Stadium", homeScore: 3, awayScore: 1, result: "W 3-1" },
   { round: 14, date: "2026-05-31", time: "16:30", venue: "away", opponent: "Jeonnam Dragons", stadium: "Gwangyang Football Stadium", result: "TBD" },
   { round: 15, date: "2026-06-07", time: "19:30", venue: "home", opponent: "Chungbuk Cheongju", stadium: "Mokdong Stadium", result: "TBD" },
   { round: 16, date: "2026-07-05", time: "19:30", venue: "away", opponent: "Gimhae FC", stadium: "Gimhae Stadium", result: "TBD" },
