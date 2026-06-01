@@ -58,7 +58,7 @@ O próximo compromisso será em casa, no [[Mokdong Stadium]], contra o novato Yo
 
 ## Opinião do Editor
 
-Não faz sentido dourar a pílula: o 0 a 3 sofrido pelo Seoul E-Land fora de casa expôs o limite do discurso de “estabilidade” como justificativa absoluta. Ignorar as falhas estruturais do setor defensivo atrás de uma sequência positiva é um erro recorrente. Não compro essa tese de que três bolas na trave significam puro azar. A dificuldade de se organizar em bolas paradas, o nervosismo sob pressão e as reincidentes expulsões não são coincidência, são sinais de problemas que podem minar a briga pelo acesso.
+Não faz sentido dourar a pílula: o 0 a 3 sofrido pelo Seoul E-Land fora de casa expôs o limite do discurso de "estabilidade" como justificativa absoluta. Ignorar as falhas estruturais do setor defensivo atrás de uma sequência positiva é um erro recorrente. Não compro essa tese de que três bolas na trave significam puro azar. A dificuldade de se organizar em bolas paradas, o nervosismo sob pressão e as reincidentes expulsões não são coincidência, são sinais de problemas que podem minar a briga pelo acesso.
 
 Tenho respeito pelo trabalho de [[Kim Do-gyun]], pela aposta nos garotos, pela confiança nos veteranos e pelo clima criado. Mas a derrota passou pelo básico: checar infiltrações, garantir disciplina defensiva e manter a cabeça fria nas transições. Se o E-Land quer realmente disputar o acesso, a linha de três e o meio-campo precisam entregar mais do que intensidade. Consistência importa mais do que estilo, sobretudo nos dois setores cruciais das áreas, com o playoff se aproximando.
 

@@ -45,7 +45,7 @@ A narrativa de entressafra do E-Land é de estabilidade e ambição seletiva, ma
 
 O retorno de Alan Cariús deve acrescentar qualidade técnica quando ele estiver apto, mas os relatos confirmam que ele segue em reabilitação. O movimento de juventude é real, com Baek Ji-woong e Ahn Joo-wan nos planos do clube, este último estabelecendo mais adiante na temporada um recorde de estreia mais jovem, mas a abertura mostrou que o clube ainda não está pronto para entregar as chaves aos garotos.
 
-O engajamento com a torcida segue como prioridade, evidenciado pelo Kids Football Festival e pelos planos de campo aberto em Mokdong, o “Leoul Park”. Isso cria boa vontade, mas os resultados em campo seguem sendo a moeda mais importante.
+O engajamento com a torcida segue como prioridade, evidenciado pelo Kids Football Festival e pelos planos de campo aberto em Mokdong, o "Leoul Park". Isso cria boa vontade, mas os resultados em campo seguem sendo a moeda mais importante.
 
 ## Olhar tático e estratégico
 
@@ -67,4 +67,4 @@ Este não é o tipo de estreia que se pode simplesmente ignorar. O Seoul E-Land 
 
 Apesar do otimismo com continuidade e juventude, a realidade é que a profundidade do elenco ainda é questionável. Perder veteranos importantes e confiar na mesma formação e nas mesmas personalidades ano após ano alimenta estagnação. Se Kim Do-gyun não instalar flexibilidade tática, ou ao menos transições defensivas mais confiáveis, o E-Land corre o risco de repetir a mediocridade conhecida.
 
-No fim, a narrativa consensual de “briga entre os três primeiros” parece deslocada diante do que a estreia mostrou. A menos que venha uma melhora radical, o E-Land não parece material de acesso, e a torcida tem todos os motivos para esperar mais do mesmo.
+No fim, a narrativa consensual de "briga entre os três primeiros" parece deslocada diante do que a estreia mostrou. A menos que venha uma melhora radical, o E-Land não parece material de acesso, e a torcida tem todos os motivos para esperar mais do mesmo.

@@ -65,6 +65,6 @@ Não vou dourar a pílula para uma sequência de atuações mornas. É verdade: 
 
 Fica difícil acreditar que o time tenha, hoje, uma fórmula sustentável para subir de forma direta. Os jogos repetem o roteiro: salvação nos minutos finais, sensação de déjà-vu, cara de time mais para playoffs do que para líder. Isso é avanço se comparado aos anos de turbulência, mas se [[Kim Do-gyun]] não ajusta as transições defensivas e aproveita melhor a rotação, vira limite. A tabela não mente depois de 12 rodadas, e a gangorra do E-Land reflete bem onde o time está.
 
-A paciência tem prazo. Jogos em casa contra rivais diretos deveriam pesar a favor, mas têm servido para mostrar o tanto que ainda falta para o time afinar de verdade e dar sentido ao discurso de “não resetar” o projeto. Empates como esse mantêm o E-Land no pelotão, mas longe de qualquer zona de conforto, especialmente com a primavera avançando e uma maratona de partidas pela frente.
+A paciência tem prazo. Jogos em casa contra rivais diretos deveriam pesar a favor, mas têm servido para mostrar o tanto que ainda falta para o time afinar de verdade e dar sentido ao discurso de "não resetar" o projeto. Empates como esse mantêm o E-Land no pelotão, mas longe de qualquer zona de conforto, especialmente com a primavera avançando e uma maratona de partidas pela frente.
 
 ---

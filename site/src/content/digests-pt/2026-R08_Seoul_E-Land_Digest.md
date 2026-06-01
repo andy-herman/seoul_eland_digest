@@ -52,7 +52,7 @@ Central ao plano ofensivo, Kim Hyun teve um gol anulado, mas participou ao estic
 
 O contexto da temporada permanece: Kim Do-gyun (김도균) conduz o Seoul E-Land rumo à primeira tentativa realmente convincente de acesso após mais de uma década no deserto. As renovações de Euller, Osmar (오스마르) e Kim Oh-kyu (김오규) por contratos longos instalaram uma continuidade rara, resistindo à rotatividade que prejudicou anos anteriores. Em contraste, o clube sofreu perdas reais: a saída de Gu Sung-yun deixa a profundidade no gol menor, e a ida de Pedrinho para o Ulsan tirou um meio-campista criativo da rotação. A chegada de Min Sung-jun como novo goleiro já rende dividendos, com quatro jogos sem sofrer gols até a Rodada 10, e Alan Cariús ainda está no caminho para a plena forma, o que pode aprofundar as opções no meio.
 
-A integração de jovens já não é simbólica. O uso constante de Baek Ji-woong e a estreia recorde de Ahn Joo-wan mostram disposição para confiar adolescentes em minutos importantes. Quanto à presença comunitária, o Kids Football Festival e as ações educativas do E-Land no Mokdong Stadium, o “Leoul Park”, construíram engajamento orgânico e visível, algo que nem todo clube da K League 2 pode dizer que tem.
+A integração de jovens já não é simbólica. O uso constante de Baek Ji-woong e a estreia recorde de Ahn Joo-wan mostram disposição para confiar adolescentes em minutos importantes. Quanto à presença comunitária, o Kids Football Festival e as ações educativas do E-Land no Mokdong Stadium, o "Leoul Park", construíram engajamento orgânico e visível, algo que nem todo clube da K League 2 pode dizer que tem.
 
 A ida iminente de Byun Kyung-jun para o serviço militar em agosto exigirá ajuste estratégico. Sua sequência de gols aumenta a urgência de encontrar alternativas ofensivas antes de sua saída. Gerenciar a carga de Euller por desconforto na posterior da coxa e a recuperação de Alan Cariús continua prioridade, e, com a profundidade testada, as prioridades de mercado do clube podem mudar quando a janela abrir.
 
@@ -72,7 +72,7 @@ A próxima partida é contra o Hwaseong FC no Mokdong Stadium. O E-Land precisar
 
 ## Minha leitura honesta
 
-Esta vitória não pode ser reduzida a “apenas mais três pontos” contra um adversário fraco. As falhas do Ansan facilitaram, mas a maturidade ao lidar com adversidade, gols anulados pelo VAR e mudanças de função, sinaliza um elenco que passou da esperança para a crença. A capacidade de Kim Do-gyun de extrair rendimento de jovens como Baek Ji-woong, enquanto mantém a ponta afiada com nomes como Euller e Byun Kyung-jun, dá ao E-Land um modelo real para resultados sustentáveis no alto.
+Esta vitória não pode ser reduzida a "apenas mais três pontos" contra um adversário fraco. As falhas do Ansan facilitaram, mas a maturidade ao lidar com adversidade, gols anulados pelo VAR e mudanças de função, sinaliza um elenco que passou da esperança para a crença. A capacidade de Kim Do-gyun de extrair rendimento de jovens como Baek Ji-woong, enquanto mantém a ponta afiada com nomes como Euller e Byun Kyung-jun, dá ao E-Land um modelo real para resultados sustentáveis no alto.
 
 A crítica vai em uma direção: se este elenco quer abandonar o status de eterno quase, precisa mostrar a mesma calma e clareza contra as melhores defesas e os meio-campos mais incômodos da liga. O próximo mês será uma prova de fogo. A fase afiada de Byun Kyung-jun logo acabará com sua saída, e a rotação será testada. Vejo sinais de disciplina e melhora tática, mas os times de meio de tabela não são a régua verdadeira.
 

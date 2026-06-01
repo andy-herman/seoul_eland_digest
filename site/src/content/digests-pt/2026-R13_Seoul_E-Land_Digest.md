@@ -19,7 +19,7 @@ O Seoul E-Land FC encerrou uma sequência de duas partidas sem vencer com uma vi
 
 ## Relato da Partida
 
-[[Kim Do-gyun]] mandou seu time a campo num 3-4-3 com [[Min Sung-jun]] (민성준) no gol. A zaga rendeu a primeira notícia: com o capitão Kim Il-gyu (김일구) indisponível, Osmar (오스마르) voltou ao time titular ao lado de [[Park Jae-hwan]] (박재환) e [[Baek Ji-woong]] (백지웅). Nos corredores laterais, [[Kang Hyeon-je]] (강현재) pela direita e Oh In-pyo (오인표) pela esquerda, com [[Seo Jin-seok]] (서진석) e [[Park Chang-hwan]] (박창환) por dentro. No ataque, [[Park Jae-yong]] (박재용) recuperou a posição de centroavante após a rotação para o banco na Rodada 12, com Cho Jun-hyun (조준현) pela direita e Euller (에울레르) pela esquerda. Três trocas em relação à Rodada 12: Osmar no lugar de Kim Il-gyu, Cho Jun-hyun no lugar de Son Hyuk-chan e [[Park Jae-yong]] voltando a entrar no lugar de [[Kim Hyun]].
+[[Kim Do-gyun]] mandou seu time a campo num 3-4-3 com [[Min Sung-jun]] (민성준) no gol. A zaga rendeu a primeira notícia: com o capitão [[Kim Oh-kyu]] (김오규) indisponível, Osmar (오스마르) voltou ao time titular ao lado de [[Park Jae-hwan]] (박재환) e [[Baek Ji-woong]] (백지웅). Nos corredores laterais, [[Kang Hyeon-je]] (강현재) pela direita e Oh In-pyo (오인표) pela esquerda, com [[Seo Jin-seok]] (서진석) e [[Park Chang-hwan]] (박창환) por dentro. No ataque, [[Park Jae-yong]] (박재용) recuperou a posição de centroavante após a rotação para o banco na Rodada 12, com Cho Jun-hyun (조준현) pela direita e Euller (에울레르) pela esquerda. Três trocas em relação à Rodada 12: Osmar no lugar de Kim Oh-kyu, Cho Jun-hyun no lugar de Son Hyuk-chan e [[Park Jae-yong]] voltando a entrar no lugar de [[Kim Hyun]].
 
 O momento que definiu a noite veio aos 7 minutos. Park Soo-bin, o volante mais ativo do Seongnam, acertou a sola sobre o tornozelo de [[Park Chang-hwan]] num bate-rebate dentro do campo de defesa do Seoul. O árbitro Park Jong-myung mostrou o vermelho direto sem hesitar; a imagem confirmou o pé alto e imprudente. O Seongnam, equipe construída sobre organização propensa a empatar, agora teria que defender exatamente esse perfil com um a menos durante 83 minutos.
 
@@ -41,7 +41,7 @@ O artilheiro do time está liderando do jeito certo. Cinco gols de um atacante r
 **Euller (에울레르):**
 O catalisador da partida antes mesmo do gol. Suas faltas criaram os dois gols do primeiro tempo, sendo o segundo direto, e sua movimentação na frente desorganizou ainda mais o desenho debilitado do Seongnam toda vez que ele puxou para o centro. Foi honesto na avaliação pós-jogo de que o Seoul "não soube aproveitar" a vantagem numérica e "faltou serenidade", um indicativo de que ele enxerga a margem maior de evolução mesmo numa vitória por 3 a 1.
 
-> **Marca de carreira — Euller agora soma 15 gols + 15 assistências na K League.**
+> **Marca de carreira, Euller agora soma 15 gols + 15 assistências na K League.**
 >
 > Cada um desses números, todos os gols e todas as assistências, saíram com a camisa do Seoul E-Land. Ele chegou do Marítimo em janeiro de 2025 sem minutos prévios na liga coreana; o gol da R13 foi o 15º na K League, espelhado por 15 assistências em 50 partidas pelo clube. Marcou justamente a 50ª aparição com um gol, o que combina com o jogador: "Quero ser lembrado na história do clube", disse depois. Uma simetria curiosa que a próxima contribuição ofensiva já apaga, mas o ponto mais profundo não some tão fácil: em menos de 18 meses, Euller virou o brasileiro mais produtivo da história do [[Seoul E-Land FC]].
 

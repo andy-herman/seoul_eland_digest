@@ -45,7 +45,7 @@ A implicação mais ampla para a briga pelo acesso é direta: esta não é a for
 
 ## Notícias e transferências
 
-O contexto mais amplo do Seoul E-Land segue em fluxo. O clube perdeu vários titulares importantes no inverno, incluindo Gu Sung-yun para o FC Seoul e Pedrinho para o Ulsan, deixando o técnico [[Kim Do-gyun]] com um elenco mais curto e jovem. A dependência constante da base é evidente, com Baek Ji-woong e agora Ahn Joo-wan tendo minutos reais, mas a coesão ainda não chegou. Euller e Osmar renovaram por três anos, segurando a espinha dorsal, mas as lesões se acumulam, sobretudo no meio. O “Kids Football Festival” e as sessões de campo aberto no [[Mokdong Stadium]], o Leoul Park, estão atraindo centenas de famílias e sugerem energia comunitária positiva, mesmo enquanto os resultados travam.
+O contexto mais amplo do Seoul E-Land segue em fluxo. O clube perdeu vários titulares importantes no inverno, incluindo Gu Sung-yun para o FC Seoul e Pedrinho para o Ulsan, deixando o técnico [[Kim Do-gyun]] com um elenco mais curto e jovem. A dependência constante da base é evidente, com Baek Ji-woong e agora Ahn Joo-wan tendo minutos reais, mas a coesão ainda não chegou. Euller e Osmar renovaram por três anos, segurando a espinha dorsal, mas as lesões se acumulam, sobretudo no meio. O "Kids Football Festival" e as sessões de campo aberto no [[Mokdong Stadium]], o Leoul Park, estão atraindo centenas de famílias e sugerem energia comunitária positiva, mesmo enquanto os resultados travam.
 
 O retorno rápido de Byun Kyung-jun da lesão será decisivo. Com o alistamento militar se aproximando, suas contribuições precisam ser maximizadas rapidamente. Enquanto isso, Alan Cariús segue em reabilitação, e a condição física de Euller exigirá gestão cuidadosa.
 

@@ -19,7 +19,7 @@ Seoul E-Land FC ended a two-game winless run with a 3-1 home win over [[Seongnam
 
 ## Match Report
 
-[[Kim Do-gyun]] sent his team out in a 3-4-3 with [[Min Sung-jun]] (민성준) in goal. The back three drew the first headline: with captain Kim Il-gyu (김일구) unavailable, Osmar (오스마르) returned to start alongside [[Park Jae-hwan]] (박재환) and [[Baek Ji-woong]] (백지웅). The wingback channels gave [[Kang Hyeon-je]] (강현재) the right and Oh In-pyo (오인표) the left, with [[Seo Jin-seok]] (서진석) and [[Park Chang-hwan]] (박창환) central. Up top, [[Park Jae-yong]] (박재용) returned to the central striker role after his Round 12 bench rotation, flanked by Cho Jun-hyun (조준현) on the right and Euller (에울레르) on the left. Three changes from Round 12: Osmar in for Kim Il-gyu, Cho Jun-hyun in for Son Hyuk-chan, [[Park Jae-yong]] back in for [[Kim Hyun]].
+[[Kim Do-gyun]] sent his team out in a 3-4-3 with [[Min Sung-jun]] (민성준) in goal. The back three drew the first headline: with captain [[Kim Oh-kyu]] (김오규) unavailable, Osmar (오스마르) returned to start alongside [[Park Jae-hwan]] (박재환) and [[Baek Ji-woong]] (백지웅). The wingback channels gave [[Kang Hyeon-je]] (강현재) the right and Oh In-pyo (오인표) the left, with [[Seo Jin-seok]] (서진석) and [[Park Chang-hwan]] (박창환) central. Up top, [[Park Jae-yong]] (박재용) returned to the central striker role after his Round 12 bench rotation, flanked by Cho Jun-hyun (조준현) on the right and Euller (에울레르) on the left. Three changes from Round 12: Osmar in for Kim Oh-kyu, Cho Jun-hyun in for Son Hyuk-chan, [[Park Jae-yong]] back in for [[Kim Hyun]].
 
 The match's defining moment came in the 7th minute. Park Soo-bin, Seongnam's most industrious midfielder, went studs-up on [[Park Chang-hwan]]'s ankle in a scramble inside Seoul's half. Referee Park Jong-myung produced the straight red without hesitation; replay confirmed the contact was high and reckless. Seongnam, a team built on draw-prone organization, were now asked to defend that exact profile with one fewer body for 83 minutes.
 
@@ -41,7 +41,7 @@ The team's leading scorer is leading now in the right way. Five goals from a str
 **Euller (에울레르):**
 The match's catalyst even before the goal. His free kicks created both opening half goals, the second by going in directly, and his movement up front pulled Seongnam's depleted shape further out of shape every time he drifted central. Was honest in his post-match assessment that Seoul "failed to capitalize" on the numerical advantage and "lacked composure", a tell that he sees the bigger room for improvement even on a 3-1 win.
 
-> **Career milestone — Euller now sits on 15 goals + 15 assists in K League play.**
+> **Career milestone, Euller now sits on 15 goals + 15 assists in K League play.**
 >
 > All of those numbers, every single goal and every single assist, have come in a Seoul E-Land shirt. He arrived from Marítimo in January 2025 with no prior K League minutes; the R13 strike was his 15th career K League goal, paired with 15 career K League assists across 50 Seoul E-Land appearances. He marked appearance number 50 with a goal, which fits the player: "I want to become someone remembered in club history," he said afterward. A neat symmetry that the next attacking contribution will retire, but the underlying point is harder to retire: in less than 18 months, Euller has become the most productive Brazilian to wear the [[Seoul E-Land FC]] crest.
 
@@ -52,7 +52,7 @@ Drew the red card in the 7th by being where he should be, and finished the match
 Nineteen minutes is not a referendum, but it is a worry. With the captain unavailable and the back three already light on natural set-piece presence, Osmar's withdrawal forces [[Kim Do-gyun]] to think hard about R14 organization. No injury timeline reported as of writing; the broadcast read it as ankle discomfort from an aerial duel.
 
 **Baek Ji-woong (백지웅):**
-Asked to run the back three in real time after Osmar's exit, and did the job without theatre. He was first to scraps in the box on both Seongnam set pieces in the second half and ran clean stoppage minutes. Still only 21; still showing the season's most consistent defensive growth curve.
+Asked to run the back three in real time after Osmar's exit, and did the job without theater. He was first to scraps in the box on both Seongnam set pieces in the second half and ran clean stoppage minutes. Still only 21; still showing the season's most consistent defensive growth curve.
 
 **Min Sung-jun (민성준):**
 Mostly routine, but the one concession was a Kim Min-jae strike struck cleanly enough that there is no plausible save complaint. Distribution was tidier than in recent rounds; the back four in front of him is more settled than the late-game scrambles of Round 12.

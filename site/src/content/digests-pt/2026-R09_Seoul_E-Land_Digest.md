@@ -43,7 +43,7 @@ Na reta final, o E-Land empurrou jogadores para frente, mas mostrou pouca calma 
 
 ## Notícias e transferências
 
-As manchetes fora de campo nesta semana são positivas: o engajamento de torcedores do Seoul E-Land segue entre os melhores da [[K League 2 2026]]. O Kids Football Festival em Mokdong levou centenas de jovens torcedores a se conectarem com os jogadores, e há impulso real em iniciativas como os dias abertos do “Leoul Park”. Esse foco comunitário não é enfeite; constrói lealdade de longo prazo para um clube que ainda persegue seu primeiro acesso.
+As manchetes fora de campo nesta semana são positivas: o engajamento de torcedores do Seoul E-Land segue entre os melhores da [[K League 2 2026]]. O Kids Football Festival em Mokdong levou centenas de jovens torcedores a se conectarem com os jogadores, e há impulso real em iniciativas como os dias abertos do "Leoul Park". Esse foco comunitário não é enfeite; constrói lealdade de longo prazo para um clube que ainda persegue seu primeiro acesso.
 
 Do lado do elenco, o retorno de Euller de uma lesão administrada na posterior da coxa chega em boa hora. A sequência de gols de Byun Kyung-jun desde a volta da reabilitação impressiona, mas sua saída programada para agosto pesa. Com saídas recentes, Gu Sung-yun, Pedrinho e Aaron Calver, além de recuperações em andamento, Osmar e Alan Cariús, a profundidade do elenco está sendo testada. O clube deve ter cuidado para não depender apenas da versatilidade dos jovens, evidente nas mudanças frequentes de posição de Baek Ji-woong.
 
