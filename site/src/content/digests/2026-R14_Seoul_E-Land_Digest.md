@@ -47,7 +47,11 @@ Anchoring the back three, Park was rarely flashy but persistent and organized th
 
 ## News and Transfers
 
-No major transfer movement or front-office news emerged during this round's window. The focus, as it should be, remained on [[Alan Cariús]]'s injury comeback and the team's climb to second. The club's selection management, with deliberate rotation and careful handling of key foreigners, is now as much a story as any personnel move. If [[Kim Do-gyun]] and his staff get their summer physical preparation right, the missed transfer rumors of recent weeks may end up looking irrelevant.
+The round's most notable off-pitch story is a transfer one. Reports have linked striker John Iredale with a move to Gwangju FC, the K League 1 side, and it is the kind of speculation that fits the calendar: the summer window around the World Cup break is exactly when a deal like this would take shape. For a forward who arrived in January 2025 and announced himself with ten goals in his debut K League 2 season, interest from the top flight is a logical next step, and the pull of a move up a division is obvious. The important caveat is that this is speculation rather than a confirmed deal.
+
+From Seoul E-Land's side, the calculation is more nuanced than losing a ten-goal striker sounds. Iredale has slipped down the 2026 pecking order: he was not part of the matchday front line in either Round 13 or Round 14, with Park Jae-yong, Euller, Alan Cariús, Byun Kyung-jun, Kang Hyeon-je, and Geraldes the forwards [[Kim Do-gyun]] has leaned on. A sale would still thin the depth a promotion push needs, especially with the summer heat forcing heavy rotation, but it would not cost the team a current starter. The real tension is philosophical: whether a promotion contender should hand a top-flight side a ready-made scorer, or whether a fee for a fringe forward is simply smart business to reinvest in the run-in.
+
+Around that, the focus stayed on [[Alan Cariús]]'s injury comeback and the climb to second. The club's selection management, with deliberate rotation and careful handling of its key foreigners, is now as much a story as any single transfer.
 
 ## Tactical and Strategic Watch
 
