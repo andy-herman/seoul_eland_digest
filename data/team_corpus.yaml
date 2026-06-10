@@ -191,6 +191,43 @@ teams:
               note: "Started Round 14 at left wingback and holds the spot, with Oh In-pyo the alternative if Kim Do-gyun wants a different left-side balance."
             - player: "Osmar"
               note: "Limped off early in Round 13 and did not feature in the Round 14 starting group. Still a set-piece-quality swing factor, but a bench or late call rather than an automatic start until his fitness is confirmed."
+        - round: 16
+          opponent_id: gimhae-fc
+          label: "Predicted Seoul XI"
+          formation: "3-4-3"
+          team_name: "Seoul E-Land"
+          note: "Predicted from the Round 15 XI, with the failed rotation reversed and the strongest available attackers restored after the World Cup break. Official team sheet may differ at kickoff."
+          starters:
+            - { name: "Min Sung-jun", role: "GK", line: "goalkeeper" }
+            - { name: "Park Jae-hwan", role: "RCB", line: "defense" }
+            - { name: "Kim Oh-kyu", role: "CB", line: "defense" }
+            - { name: "Baek Ji-woong", role: "LCB", line: "defense" }
+            - { name: "Oh In-pyo", role: "RWB", line: "midfield" }
+            - { name: "Seo Jin-seok", role: "CM", line: "midfield" }
+            - { name: "Park Chang-hwan", role: "CM", line: "midfield" }
+            - { name: "Kim Joo-hwan", role: "LWB", line: "midfield" }
+            - { name: "Kang Hyeon-je", role: "RF", line: "attack" }
+            - { name: "Park Jae-yong", role: "ST", line: "attack" }
+            - { name: "Euller", role: "LF", line: "attack" }
+          basis:
+            - "Start from the Round 15 XI (the most recent match, a 1-2 home loss to Chungbuk Cheongju): a 3-4-3 with Min Sung-jun; Park Jae-hwan, Kim Oh-kyu and a reshuffled back three; Oh In-pyo, Seo Jin-seok, Park Chang-hwan; Kim Hyun, Kang Hyeon-je and Alan Cariús, with Euller, Byun Kyung-jun and Geraldes off the bench."
+            - "Reverse the rotation that backfired. Dropping Baek Ji-woong for a returning defender was blamed for the defensive lapses that cost the Cheongju game, so expect Baek Ji-woong restored to the back three."
+            - "Restore the first-choice attack. After a chastening loss and a full World Cup break to reset, Kim Do-gyun is likely to go back to his strongest front line: Euller, held back and only introduced as a substitute in Round 15, returns, and Park Jae-yong, the team's leading scorer, comes back as the central striker."
+            - "Kim Hyun (the Round 15 scorer) and Alan Cariús become high-quality rotation and impact options rather than guaranteed starters, especially away at the bottom side where Kim Do-gyun can manage minutes."
+            - "Squad depth is thinner now: John Iredale and Bae Jin-woo have both left for Gwangju, but neither started Round 15, so the projected XI is unaffected even as the bench shortens."
+          selection_watch:
+            - player: "Baek Ji-woong"
+              note: "Dropped from the back three in Round 15, a change widely blamed for the defensive lapses in the defeat. Expected to be restored after the break."
+            - player: "Euller"
+              note: "Held back and only used as a Round 15 substitute. After a damaging loss and the long break, expected back in the starting front line against the league's weakest side."
+            - player: "Park Jae-yong"
+              note: "The team's leading scorer; expected to return as the central striker for a game Seoul should dominate."
+            - player: "Kim Hyun"
+              note: "Scored his first league goal in Round 15. Pushes for a start but is more likely a rotation option against a bottom side."
+            - player: "Alan Cariús"
+              note: "Started Round 15 but, like the whole front line, was wasteful in front of goal. A rotation and impact striker rather than a lock."
+            - player: "John Iredale and Bae Jin-woo"
+              note: "Both departed to Gwangju (K League 1) over the break, thinning the forward and full-back depth, though neither was a Round 15 starter."
     collection_plan:
       priority_queries: ["서울이랜드 김도균", "서울이랜드 전술", "서울이랜드 부상", "서울이랜드 경기 리뷰"]
       data_to_collect: ["lineups", "formations", "injuries", "manager quotes", "set-piece details", "substitution patterns"]
@@ -406,11 +443,24 @@ teams:
     evidence_level: "seed"
     background: "Fresh 2026 K League 2 matchup for Seoul E-Land."
     current_profile:
-      manager: null
-      shapes_seen: []
-      style_of_play: "Research priority because Seoul's first meeting needs a proper opponent profile."
-      set_pieces: "Capture marking scheme in the first meeting and reuse for the return fixture."
-      key_players: ["이승재", "베카", "이래준"]
+      manager: "Son Hyun-jun"
+      shapes_seen: ["4-4-2", "4-5-1"]
+      style_of_play: "Under Son Hyun-jun, Gimhae are a brand-new professional club in their debut K League 2 season, promoted as reigning K3 (third-tier) champions. The step up has been brutal: they sit dead last with comfortably the leakiest defense in the division, and only ended a long opening winless run with a first-ever pro win in the spring. They tend to sit deep and try to survive games, but they concede in volume."
+      set_pieces: "With the worst goals-against record in the league by some distance, Gimhae's box is the obvious target. Seoul should expect to win repeated set-piece and crossing situations, while Gimhae's own dead-ball threat is minimal."
+      key_players: ["Lee Seung-jae", "Beka", "Lee Rae-jun"]
+      strategy_intro: "The danger against Gimhae is not Gimhae; it is Seoul's own state of mind. Coming straight off a humiliating home loss to the division's other bottom-half side, the job is to be ruthless and professional against the weakest team in the league, and to bury the game early rather than let a nervy, winnable match drift."
+      strategy_notes:
+        - "Score early and keep scoring. Gimhae have the league's worst defense by a distance, so Seoul should treat this as a chance to rebuild goal difference and confidence, not a tricky away day to survive."
+        - "Do not repeat the Cheongju mistakes. The Round 15 loss came from wasteful finishing and late lapses against a deep block, and the same script is on offer here, so concentration and clinical finishing are the whole game."
+        - "Attack the box relentlessly. Crosses, cutbacks and set-pieces into the leakiest defense in the division are the highest-percentage route; make Gimhae defend their own goal for 90 minutes."
+        - "Respect the occasion, not the opponent. A wounded promotion side must not gift a struggling debutant belief, and an early goal removes any upset narrative before it can start."
+        - "Manage a thinner squad. With Iredale and Bae Jin-woo gone to Gwangju, game-management once ahead matters for keeping legs fresh across the second half."
+      forecast_model:
+        probabilities: { seoul_eland_win: 0.70, draw: 0.19, gimhae_fc_win: 0.11 }
+        expected_goals: { seoul_eland: 2.2, opponent: 0.8 }
+        market_snapshot: "Seoul are heavy favorites away at the bottom side with the league's worst defense."
+        correct_score_band: "A comfortable Seoul win (2-0, 3-0, 3-1) is the central expectation; the only real risk is a Cheongju-style upset if Seoul are wasteful and complacent."
+        market_read: "The number to respect is not Gimhae's win chance but Seoul's own focus: on talent this is a routine away win, but the Round 15 defeat proved this team can trip over a deep block."
     collection_plan:
       priority_queries: ["김해FC 서울이랜드", "김해FC 전술", "Gimhae FC Seoul E-Land"]
       data_to_collect: ["default formation", "pressing habits", "attacking outlets", "corner defense"]

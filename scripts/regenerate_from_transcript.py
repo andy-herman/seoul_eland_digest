@@ -47,6 +47,7 @@ DUMP = SCRIPT_DIR / "research_dump"
 DEFAULT_SOURCES = {
     13: ["r13_transcript_raw.txt"],
     14: ["r14_transcript_raw.txt", "r14_sportsg.txt"],
+    15: ["r15_transcript_raw.txt"],
 }
 
 
@@ -129,6 +130,25 @@ def main():
             "a slight knock); Alan Carius finally scoring; and the World-Cup-break "
             "plan to prepare for summer heat. Paraphrase aggressively and keep "
             "any direct quote to 14 words or fewer per the writing rules."
+        ),
+        15: (
+            "EDITORIAL STEER FOR THIS ROUND: This is a deflating, damaging home "
+            "DEFEAT (1-2) for a side that came in 2nd and on a two-match winning "
+            "run. Seoul E-Land lost to Chungbuk Cheongju, the previously winless, "
+            "bottom-of-the-table draw machine, who took their FIRST win of the "
+            "entire season here with a stoppage-time comeback. LEAD WITH AND "
+            "SUSTAIN THE FAN DISAPPOINTMENT: this is the exact upset the pre-match "
+            "preview warned about, except worse than a draw. Be honest and "
+            "critical. The story is dominance squandered: E-Land led 1-0 through "
+            "Kim Hyun's emotional first league goal, controlled the game, created "
+            "the better chances throughout (Cariús, Geraldes, Byun Kyung-jun, "
+            "Euller all missed openings), and still lost, undone by wasteful "
+            "finishing and two late defensive lapses, the Lee Jung-won equalizer "
+            "off a poor clearance and Garcia's stoppage-time winner after a Son "
+            "Hyuk-chan lapse. Note the Baek Ji-woong rotation out of the back "
+            "three that did not pay off, and that this lands right before the "
+            "World Cup break, so it festers. Kim Hyun's first league goal is the "
+            "one genuine bright spot. Do not sugarcoat the promotion-race cost."
         ),
     }.get(args.round)
     if extra:

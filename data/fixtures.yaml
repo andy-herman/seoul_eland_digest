@@ -109,7 +109,9 @@ fixtures:
     date: 2026-06-07
     venue: home
     opponent: "Chungbuk Cheongju"
-    result: "TBD"
+    home_score: 1
+    away_score: 2
+    result: "L 1-2"
   - round: 16
     date: 2026-07-05
     venue: away

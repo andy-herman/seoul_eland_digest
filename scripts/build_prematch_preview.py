@@ -81,6 +81,12 @@ PLAYER_NAME_OVERRIDES = {
     "허승찬": "Heo Seung-chan",
     "김선민": "Kim Sun-min",
     "이라클리": "Irakli",
+    # Gimhae FC
+    "이승재": "Lee Seung-jae",
+    "베카": "Beka",
+    "이래준": "Lee Rae-jun",
+    "여재율": "Yeo Jae-yul",
+    "김경수": "Kim Kyung-soo",
 }
 
 
