@@ -1,0 +1,62 @@
+# ============================================================
+# Seoul E-Land FC Weekly Digest - Configuration
+# ============================================================
+
+# Output location: where digest files get written
+# This is your Obsidian vault subfolder
+vault:
+  base_path: "C:/Andy Herman/Luna Master/Sports/Seoul_E-Land"
+  digests_subfolder: "Digests"
+  portuguese_digests_subfolder: "Digests-PT"
+  players_subfolder: "Players"
+  matches_subfolder: "Matches"
+  index_filename: "Seoul_E-Land_Index.md"
+
+# Time window for "this week's news"
+window:
+  days_lookback: 7
+  timezone: "America/Los_Angeles"
+
+# All jobs route through a single Azure OpenAI deployment (keyless auth via
+# DefaultAzureCredential / az login). Set the deployment name in .env via
+# AZURE_OPENAI_DEPLOYMENT, or override per-job below with a 'deployment' key.
+# Temperature is fixed at the deployment default - GPT-5 family rejects custom values.
+models:
+  translation:
+    max_tokens: 4000
+
+  deduplication:
+    max_tokens: 2000
+
+  analyst_voice:
+    max_tokens: 8000
+
+  portuguese_digest:
+    max_tokens: 8000
+
+# Logging
+logging:
+  level: "INFO"
+  log_dir: "logs"
+
+# Feature flags
+features:
+  include_fan_sentiment: true     # Pull from DC Inside, FM Korea (filtered)
+  match_report_mode: true         # Tactical deep-dive on match weeks
+  player_index_enabled: true      # Build/update player notes for Obsidian graph
+  max_articles_per_run: 50        # Hard cap to control cost
+  dedupe_threshold: 0.75          # Similarity threshold for clustering
+
+# Team identifiers - used for filtering articles
+team:
+  korean_names:
+    - "서울이랜드"
+    - "서울 이랜드"
+    - "서울E"
+    - "이랜드FC"
+    - "이랜드 FC"
+  english_names:
+    - "Seoul E-Land"
+    - "Seoul Eland"
+  manager_korean: "김도균"
+  manager_english: "Kim Do-gyun"

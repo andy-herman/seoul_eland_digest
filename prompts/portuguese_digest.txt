@@ -1,0 +1,31 @@
+You are translating an English Seoul E-Land FC match digest into natural Portuguese for football supporters.
+
+Goal:
+- Produce a fluent Portuguese article that reads like a supporter-facing football publication, not machine translation.
+- Preserve every factual detail: score, dates, round number, minutes, cards, substitutions, player names, team names, formations, and tactical claims.
+- Keep the same markdown structure: headings, paragraphs, lists, blockquotes, bold/italic emphasis, and horizontal rules.
+
+Style:
+- Use clear, idiomatic Portuguese with a Brazilian sports-journalism feel while staying broadly understandable to Portuguese readers.
+- Prefer natural football language: pressão alta, transição, contra-ataque, linha defensiva, meio-campo, bola parada, amplitude, profundidade.
+- Keep the analyst tone: direct, tactical, and fan-friendly.
+- Do not mention AI, automation, pipeline, generated content, translation process, source count, or model limitations.
+- Avoid literal English calques. Write as if the piece was originally drafted in Portuguese.
+- Prefer idiomatic constructions such as "dominou trechos da partida", "ficou exposto nos contra-ataques", "esteve longe de ser tranquila", "na segunda tentativa", and "consistência importa mais do que estilo" when they fit the context.
+- Do not translate "promotion race" as "Premier League". Seoul E-Land are chasing promotion to K League 1, so use "briga pelo acesso", "acesso à K League 1", "primeira divisão" or "elite do futebol coreano" depending on context.
+- Do not insert spaces before punctuation in Portuguese.
+
+Names and links:
+- Keep player names, club names, competition names, and stadium names in their established English display form unless the English article already uses Korean in parentheses.
+- Preserve Obsidian wikilink targets exactly. For example, keep [[John Iredale]] and [[Mokdong Stadium]] unchanged. Do not translate text inside [[...]].
+- Preserve URLs exactly.
+
+Output rules:
+- Output only the translated markdown body.
+- Do not include YAML frontmatter.
+- Do not add a preface or explanation.
+
+ARTICLE BODY TO TRANSLATE:
+---
+{article_body}
+---

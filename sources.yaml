@@ -1,0 +1,115 @@
+# ============================================================
+# Korean Sports News Sources for Seoul E-Land FC Coverage
+# ============================================================
+# Sources are tiered by signal quality.
+# Tier 1 = always check, high editorial standard
+# Tier 2 = check, but expect some noise
+# Tier 3 = fan/community, only with quality filters
+
+sources:
+  # ----- TIER 1: Mainstream sports media (highest signal) -----
+
+  - name: "Naver Sports Search"
+    type: "search"
+    url: "https://search.naver.com/search.naver?where=news&query=%EC%84%9C%EC%9A%B8%EC%9D%B4%EB%9E%9C%EB%93%9C&sort=1"
+    tier: 1
+    notes: "Aggregates most major Korean sports outlets, sorted by recency"
+    method: "scrape"
+
+  - name: "Nate Sports"
+    type: "search"
+    url: "https://news.nate.com/search?q=%EC%84%9C%EC%9A%B8%EC%9D%B4%EB%9E%9C%EB%93%9C&f=sports"
+    tier: 1
+    notes: "Reliable aggregator with full article text"
+    method: "scrape"
+
+  - name: "K League Official"
+    type: "club_news"
+    url: "https://www.kleague.com/news_list.do"
+    rss: null
+    tier: 1
+    notes: "Official league communications - fixtures, results, disciplinary"
+    method: "scrape"
+    filter_for_team: true
+
+  - name: "Seoul E-Land Official Site"
+    type: "club_news"
+    url: "https://www.seoulelandfc.com/news"
+    tier: 1
+    notes: "Club's own communications - injuries, transfers, signings"
+    method: "scrape"
+
+  # ----- TIER 1: Specialized football journalism -----
+
+  - name: "MoneyToday Sports"
+    type: "outlet"
+    url: "https://www.mt.co.kr/sports/"
+    tier: 1
+    notes: "Strong tactical analysis - this is where match deep-dives often appear"
+    method: "scrape"
+
+  - name: "Sports Kyunghyang"
+    type: "outlet"
+    url: "https://sports.khan.co.kr/"
+    tier: 1
+    notes: "스포츠경향 - reliable match coverage"
+    method: "scrape"
+
+  - name: "Footballist"
+    type: "outlet"
+    url: "https://www.footballist.co.kr/"
+    tier: 1
+    notes: "풋볼리스트 - tactical pieces and long-form"
+    method: "scrape"
+
+  # ----- TIER 2: Aggregators and broader sports media -----
+
+  - name: "Sports Chosun"
+    type: "outlet"
+    url: "https://sports.chosun.com/"
+    tier: 2
+    notes: "스포츠조선 - decent K League coverage, mixed quality"
+    method: "scrape"
+
+  - name: "OSEN"
+    type: "outlet"
+    url: "https://osen.mt.co.kr/"
+    tier: 2
+    method: "scrape"
+
+  - name: "Interfootball"
+    type: "outlet"
+    url: "https://www.interfootball.co.kr/"
+    tier: 2
+    notes: "인터풋볼 - football-only outlet, good for transfers"
+    method: "scrape"
+
+  # ----- TIER 1: Reference (semi-real-time updates) -----
+
+  - name: "Namu Wiki - Seoul E-Land 2026 Season"
+    type: "reference"
+    url: "https://namu.wiki/w/%EC%84%9C%EC%9A%B8%20%EC%9D%B4%EB%9E%9C%EB%93%9C%20FC/2026%EB%85%84/K%EB%A6%AC%EA%B7%B82"
+    tier: 1
+    notes: "Community-curated, surprisingly rigorous match-by-match record"
+    method: "scrape"
+    check_revision: true
+
+  # ----- TIER 3: Fan communities (filtered for signal) -----
+  # Only enabled if features.include_fan_sentiment is true
+  # We cluster threads by topic and only surface threads with significant engagement
+
+  - name: "FM Korea - Domestic Football"
+    type: "fan_forum"
+    url: "https://www.fmkorea.com/index.php?mid=football_universe&category=4093288554"
+    tier: 3
+    notes: "에펨코리아 국내축구 - high-engagement threads only"
+    method: "scrape"
+    min_comments: 30  # Filter out low-engagement chatter
+
+  - name: "DC Inside - Seoul E-Land Gallery"
+    type: "fan_forum"
+    url: "https://gall.dcinside.com/board/lists/?id=elandfc"
+    tier: 3
+    notes: "DC인사이드 이랜드 갤러리 - supporter perspective, raw"
+    method: "scrape"
+    min_comments: 15

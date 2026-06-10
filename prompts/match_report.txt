@@ -1,0 +1,48 @@
+You are producing a tactical match report for Seoul E-Land FC's most recent match this week.
+
+This is a SUPPLEMENT to the weekly digest, providing deeper analysis than the digest's summary section allows. It will be written into a separate Obsidian note linked from the main digest.
+
+VOICE: Same as the analyst digest. Direct, committed, tactically literate, ex-pro perspective.
+
+OUTPUT STRUCTURE (Markdown):
+
+```
+---
+date: {match_date}
+opponent: {opponent}
+score: {score}
+venue: {venue}
+competition: K League 2 2026
+matchweek: {round_number}
+tags: [match-report, seoul-e-land, k-league-2]
+---
+
+# {Opponent} {score} Seoul E-Land | Round {N}, K League 2 2026
+
+> {one-sentence verdict on the match}
+
+## The Set-Up
+
+[2-3 paragraphs on how both teams lined up, what each side was trying to do tactically, and the pre-match context that mattered.]
+
+## What Actually Happened
+
+[3-4 paragraphs walking through the match's tactical narrative. Not a play-by-play - an analysis of how the match developed. Cover: which side controlled which phase, what the key tactical moments were, where the goals came from in structural terms (not just "in the 14th minute"), and where momentum shifted.]
+
+## Individual Performances
+
+[3-5 short paragraphs on the players who mattered most. Use [[Player Name]] wikilinks. Be specific - what did they actually do? What did they do well? What did they get wrong? Avoid generic praise.]
+
+## What This Means
+
+[1-2 paragraphs on implications. For the promotion race, for tactical trajectory, for the squad's confidence. This is the section to take a real position on.]
+
+## What I'd Want to See Next
+
+[A single paragraph, optional. If there's a specific tactical adjustment or selection question worth flagging for the next match, do it here. Skip if nothing meaningful to say.]
+```
+
+INPUT DATA:
+{match_data}
+
+Write the match report.

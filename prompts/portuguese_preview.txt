@@ -1,0 +1,47 @@
+You are translating an English Seoul E-Land FC pre-match preview into natural Portuguese for football supporters.
+
+Goal:
+- Produce a fluent Portuguese pre-match article that reads like a supporter-facing football publication, not machine translation.
+- Preserve every factual detail: round number, dates, opponents, table standings, predicted lineups, fitness/suspension notes, key player names, formations, tactical claims, forecast probabilities, and expected-goals figures.
+- Keep the same markdown structure: headings, paragraphs, tables, lists, blockquotes, bold/italic emphasis, and horizontal rules.
+
+Style:
+- Use clear, idiomatic Portuguese with a Brazilian sports-journalism feel while staying broadly understandable to Portuguese readers.
+- Prefer natural football language: pressão alta, transição, contra-ataque, linha defensiva, meio-campo, bola parada, amplitude, profundidade, escalação provável, lesionados, suspensos.
+- Keep the preview tone: forward-looking, tactically curious, framed as scouting and expectation rather than reporting on a played match.
+- Section title equivalents to use:
+  * "At a Glance" → "Visão Geral"
+  * "Why This Match Matters" → "Por Que Esta Partida Importa"
+  * "Predicted XI Basis and Fitness Watch" → "Base da Escalação Provável e Observatório de Lesões"
+  * "Why this shape" → "Por que esta formação"
+  * "Selection watch" → "Observatório de seleção"
+  * "Opponent Scouting Report" → "Relatório de Observação do Adversário"
+  * "Recent Opponent News Context" → "Contexto Recente do Adversário"
+  * "What Last Season Told Us" → "O Que a Temporada Passada Nos Mostrou"
+  * "Series Context (First-Ever Meeting)" → "Contexto da Série (Primeiro Confronto)"
+  * "How Seoul E-Land Match Up" → "Como o Seoul E-Land se Compara"
+  * "Strategy That Can Work" → "Estratégia Que Pode Funcionar"
+  * "Keys to a Seoul E-Land Win" → "Chaves para uma Vitória do Seoul E-Land"
+  * "Things to Watch" → "Pontos de Observação"
+  * "Forecast vs the Market" → "Projeção vs o Mercado"
+  * "Bottom Line" → "Conclusão"
+- Do not mention AI, automation, pipeline, generated content, translation process, or model limitations.
+- Avoid literal English calques. Write as if the piece was originally drafted in Portuguese.
+- Do not translate "promotion race" as "Premier League". Seoul E-Land are chasing promotion to K League 1, so use "briga pelo acesso", "acesso à K League 1", "primeira divisão" or "elite do futebol coreano" depending on context.
+- Do not insert spaces before punctuation in Portuguese.
+
+Names and links:
+- Keep player names, club names, competition names, and stadium names in their established English display form unless the English article already uses Korean in parentheses.
+- Preserve Obsidian wikilink targets exactly. Do not translate text inside [[...]].
+- Preserve URLs exactly.
+- Preserve table cell values that are short labels or stats (W 2-1, 3rd, 19 points, +8 GD, etc.) - only translate prose cells.
+
+Output rules:
+- Output only the translated markdown body.
+- Do not include YAML frontmatter.
+- Do not add a preface or explanation.
+
+ARTICLE BODY TO TRANSLATE:
+---
+{article_body}
+---

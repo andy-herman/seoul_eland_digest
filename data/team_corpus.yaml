@@ -1,0 +1,695 @@
+# Internal K League 2 team corpus for Seoul E-Land pre/post-match research.
+# This file is not part of the public Astro site. Treat it as pipeline input.
+version: 1
+season: 2026
+league: "K League 2"
+subject_club: "Seoul E-Land FC"
+last_updated: "2026-05-07"
+source_policy:
+  evidence_levels:
+    seed: "Initial scaffold from fixture data and known club context; verify before using as a hard claim."
+    sourced: "Backed by one or more saved source notes."
+    match_derived: "Derived from Seoul E-Land match reports or transcripts."
+  preferred_sources:
+    - "K League official schedule and club pages"
+    - "Seoul E-Land official match/news pages"
+    - "K League United previews and recaps"
+    - "Korean sports reporting from Naver-indexed outlets"
+    - "User-supplied match transcripts"
+official_sources:
+  - label: "K League 2 2026 team standings"
+    url: "https://www.kleague.com/record/team.do?leagueId=2"
+    endpoint: "https://www.kleague.com/record/teamRank.do"
+    saved_snapshot: "research_dump/scouting/kleague_official_2026_snapshot.json"
+  - label: "K League 2 2026 player rankings and club player records"
+    url: "https://www.kleague.com/record/player.do?leagueId=2"
+    endpoints:
+      - "https://www.kleague.com/record/rankSort.do"
+      - "https://www.kleague.com/record/selectPersonalRecordByClub.do"
+    saved_snapshot: "research_dump/scouting/kleague_official_2026_snapshot.json"
+teams:
+  - id: seoul-eland
+    canonical_name: "Seoul E-Land FC"
+    short_name: "Seoul E-Land"
+    is_subject_club: true
+    kleague_team_id: "K31"
+    aliases:
+      en: ["Seoul E-Land", "Seoul Eland", "Seoul E-Land FC"]
+      ko: ["서울이랜드", "서울 이랜드", "서울E", "이랜드FC", "이랜드 FC"]
+    home:
+      city: "Seoul"
+      stadium: "Mokdong Stadium"
+    evidence_level: "match_derived"
+    background: "Subject club for the digest pipeline and public site."
+    current_profile:
+      manager: "Kim Do-gyun"
+      shapes_seen: ["3-4-3", "4-3-3", "3-4-1-2", "4-4-2"]
+      style_of_play: "Flexible shape, wingback/width usage, set-piece emphasis, and frequent in-match adaptation."
+      set_pieces: "Attacking set pieces have been a repeated strength in early 2026 digests."
+      key_players: ["Park Jae-yong", "Euller", "Osmar", "Baek Ji-woong", "Min Sung-jun", "Byun Kyung-jun"]
+      predicted_lineups:
+        - round: 11
+          opponent_id: chungnam-asan
+          label: "Predicted Seoul XI"
+          formation: "4-3-3"
+          team_name: "Seoul E-Land"
+          note: "Predicted from recent match usage and fitness signals, not confirmed. The official team sheet may differ at kickoff."
+          starters:
+            - { name: "Min Sung-jun", role: "GK", line: "goalkeeper" }
+            - { name: "Kim Joo-hwan", role: "RB", line: "defense" }
+            - { name: "Kim Oh-kyu", role: "RCB", line: "defense" }
+            - { name: "Park Jae-hwan", role: "LCB", line: "defense" }
+            - { name: "Son Hyuk-chan", role: "LB", line: "defense" }
+            - { name: "Baek Ji-woong", role: "CM", line: "midfield" }
+            - { name: "Seo Jin-seok", role: "CM", line: "midfield" }
+            - { name: "Park Chang-hwan", role: "CM", line: "midfield" }
+            - { name: "Euller", role: "RW", line: "attack" }
+            - { name: "Park Jae-yong", role: "ST", line: "attack" }
+            - { name: "Kang Hyeon-je", role: "LW", line: "attack" }
+          basis:
+            - "The base XI follows the Round 10 Gimpo win, where Seoul used a 4-3-3 with Min Sung-jun; Son Hyuk-chan, Park Jae-hwan, Kim Oh-kyu, Kim Joo-hwan; Baek Ji-woong, Seo Jin-seok, Park Chang-hwan; Kang Hyeon-je, Park Jae-yong, and Euller."
+            - "That setup gave Seoul more central stability than the Round 9 3-4-3, which exposed transition gaps against Hwaseong."
+            - "Euller is kept in the XI because Round 9 and Round 10 notes both point to him being back from the hamstring issue and immediately influential."
+            - "Byun Kyung-jun remains a high-impact alternative, but the Gimpo pattern suggests he may be protected as a second-half runner rather than forced into the starting XI."
+          selection_watch:
+            - player: "Osmar"
+              note: "He is listed in the current squad and would raise Seoul's aerial/set-piece ceiling, but recent digest evidence flags rehab/management and he was not part of the Round 10 starting group. The conservative call is bench or late fitness decision rather than an automatic start."
+            - player: "Francisco Geraldes"
+              note: "He is listed as a current midfielder, but there is not enough recent match evidence in the digest notes to project him straight into an away start. Treat him as a creative option to monitor if he appears in the matchday squad."
+            - player: "Alan Cariús"
+              note: "Round 10 notes still describe him as recovering, so he should not be projected as a starter yet. If available, his role is more likely bench depth than a first-XI lock."
+        - round: 12
+          opponent_id: yongin
+          label: "Predicted Seoul XI"
+          formation: "3-4-3"
+          team_name: "Seoul E-Land"
+          note: "Predicted from the actual Round 11 starting XI plus the Lee Ju-hyuk suspension swap. Official team sheet may differ at kickoff."
+          starters:
+            - { name: "Min Sung-jun", role: "GK", line: "goalkeeper" }
+            - { name: "Park Jae-hwan", role: "RCB", line: "defense" }
+            - { name: "Kim Oh-kyu", role: "CB", line: "defense" }
+            - { name: "Baek Ji-woong", role: "LCB", line: "defense" }
+            - { name: "Bae Seo-jun", role: "RM", line: "midfield" }
+            - { name: "Kang Young-seok", role: "CM", line: "midfield" }
+            - { name: "Park Chang-hwan", role: "CM", line: "midfield" }
+            - { name: "Jo Jun-hyun", role: "LM", line: "midfield" }
+            - { name: "Alan Cariús", role: "RF", line: "attack" }
+            - { name: "Park Jae-yong", role: "ST", line: "attack" }
+            - { name: "Euller", role: "LF", line: "attack" }
+          basis:
+            - "Use Round 11 (the most recent match) as the prediction base, not Round 10. Kim Do-gyun fielded a 3-4-3 with Park Jae-hwan, Kim Oh-kyu, and Baek Ji-woong as the back three; Bae Seo-jun, Kang Young-seok, Park Chang-hwan, and Lee Ju-hyuk in midfield; and Cariús, Park Jae-yong, Euller up front."
+            - "Lee Ju-hyuk is suspended after the Round 11 DOGSO red, so the only structural change is replacing him on the left of midfield. Jo Jun-hyun is the cleanest fit: he came on as the direct second-half sub in that exact band against Asan, the strongest continuity signal available."
+            - "Cariús stays in. He started Round 11 (his first start back from injury), went the full 90, and hit the woodwork in the second half. There is no fitness reason to drop him after one start, and continuity is more useful than another reshuffle in a must-respond home fixture."
+            - "Kang Young-seok keeps his place after his K League pro debut in Round 11. The argument for protecting him would be the Asan loss context, but he was not the source of the defensive concession and the opponent quality drops significantly here."
+            - "The 3-4-3 also makes sense against Yongin specifically: a brand-new K2 side that has been transition-leaning so far. A back three with Mokdong width should compress them centrally and force the play wide where Seoul are stronger."
+          selection_watch:
+            - player: "Lee Ju-hyuk"
+              note: "Suspended for one match after Round 11 (DOGSO red, jersey-pull infringement on Denilson). Returns Round 13."
+            - player: "Jo Jun-hyun"
+              note: "Most likely starter to fill Lee Ju-hyuk's vacated left-side midfield role. He came on in that exact zone in the second half at Asan, the cleanest internal continuity option."
+            - player: "Alan Cariús"
+              note: "Started Round 11 and played 90 minutes; expected to keep his place. Watch only if there is a flagged knock from the Asan workload or if Kim Do-gyun rotates Park Jae-yong off the central role."
+            - player: "Kang Young-seok"
+              note: "K League pro debut in Round 11. Kept here on continuity grounds, but a quieter call would be Seo Jin-seok back into the central midfield band, especially if Kim Do-gyun wants more experience after the Asan defeat."
+            - player: "Osmar"
+              note: "Returning veteran availability remains the swing factor for set-piece quality. Same caveats as the R11 watch list - bench or late call rather than an automatic start."
+            - player: "Byun Kyung-jun"
+              note: "Continues as the high-impact second-half option. Pre-military-service window means his minutes are valuable, but the Gimpo template suggests he is most useful as a closer."
+        - round: 13
+          opponent_id: seongnam-fc
+          label: "Predicted Seoul XI"
+          formation: "3-4-3"
+          team_name: "Seoul E-Land"
+          note: "Predicted from the actual Round 12 XI plus Lee Ju-hyuk returning from suspension. Official team sheet may differ at kickoff."
+          starters:
+            - { name: "Min Sung-jun", role: "GK", line: "goalkeeper" }
+            - { name: "Park Jae-hwan", role: "RCB", line: "defense" }
+            - { name: "Kim Oh-kyu", role: "CB", line: "defense" }
+            - { name: "Baek Ji-woong", role: "LCB", line: "defense" }
+            - { name: "Son Hyuk-chan", role: "RM", line: "midfield" }
+            - { name: "Seo Jin-seok", role: "CM", line: "midfield" }
+            - { name: "Park Chang-hwan", role: "CM", line: "midfield" }
+            - { name: "Lee Ju-hyuk", role: "LM", line: "midfield" }
+            - { name: "Kang Hyeon-je", role: "RF", line: "attack" }
+            - { name: "Park Jae-yong", role: "ST", line: "attack" }
+            - { name: "Euller", role: "LF", line: "attack" }
+          basis:
+            - "Use Round 12 (the most recent match) as the prediction base: a 3-4-3 with Min Sung-jun; Park Jae-hwan, Kim Oh-kyu, Baek Ji-woong; Son Hyuk-chan, Seo Jin-seok, Park Chang-hwan, Oh In-pyo; Kang Hyeon-je, Kim Hyun, Euller."
+            - "Lee Ju-hyuk is back from his Round 11 suspension. He reclaims the wide-left midfield role he held in Round 11, with Oh In-pyo the man to drop back to the bench."
+            - "Park Jae-yong returns to the central striker role. He started Rounds 6 to 10, was rotated to the bench for Round 12, but came on at halftime and was Seoul's most pointed forward in the second half. Kim Hyun, who started centrally in Round 12 and was quiet, is the most likely man to make way."
+            - "The two-game winless run (Round 11 loss, Round 12 draw) points toward Kim Do-gyun leaning back on his established attackers rather than continuing to rotate."
+            - "Back three and Min Sung-jun unchanged. The Round 12 concessions were a rehearsed-set-piece goal and late game management, not a personnel problem in defense."
+          selection_watch:
+            - player: "Lee Ju-hyuk"
+              note: "Available again after serving his one-match Round 11 suspension. Expected to return directly to wide-left midfield."
+            - player: "Park Jae-yong"
+              note: "Bench start in Round 12, but a lively halftime introduction. Expected to be restored to the central striker role for a must-respond home fixture."
+            - player: "Kim Hyun"
+              note: "Started Round 12 centrally and was quiet. The most likely starter to drop once Park Jae-yong is restored, though he stays a useful change."
+            - player: "Oh In-pyo"
+              note: "Started Round 12; likely the man to make way for Lee Ju-hyuk. Could still keep his place if Kim Do-gyun eases Lee Ju-hyuk back through the bench."
+            - player: "Alan Cariús"
+              note: "Late cameo in Round 12. Still a rotation/impact option rather than a projected starter."
+            - player: "Byun Kyung-jun"
+              note: "Continues as the high-impact second-half option. Pre-military-service window keeps his minutes valuable."
+            - player: "Osmar"
+              note: "Returning veteran availability remains the swing factor for set-piece quality. Bench or late call rather than an automatic start."
+        - round: 15
+          opponent_id: chungbuk-cheongju
+          label: "Predicted Seoul XI"
+          formation: "3-4-3"
+          team_name: "Seoul E-Land"
+          note: "Predicted from the actual Round 14 starting XI, adjusted for Euller's likely return to the front line for a home match before the World Cup break. Official team sheet may differ at kickoff."
+          starters:
+            - { name: "Min Sung-jun", role: "GK", line: "goalkeeper" }
+            - { name: "Park Jae-hwan", role: "RCB", line: "defense" }
+            - { name: "Kim Oh-kyu", role: "CB", line: "defense" }
+            - { name: "Baek Ji-woong", role: "LCB", line: "defense" }
+            - { name: "Son Hyuk-chan", role: "RWB", line: "midfield" }
+            - { name: "Seo Jin-seok", role: "CM", line: "midfield" }
+            - { name: "Park Chang-hwan", role: "CM", line: "midfield" }
+            - { name: "Kim Joo-hwan", role: "LWB", line: "midfield" }
+            - { name: "Kang Hyeon-je", role: "RF", line: "attack" }
+            - { name: "Park Jae-yong", role: "ST", line: "attack" }
+            - { name: "Euller", role: "LF", line: "attack" }
+          basis:
+            - "Use Round 14 (the most recent match, a 1-0 win at Jeonnam) as the base XI: a 3-4-3 with Min Sung-jun; Park Jae-hwan, Kim Oh-kyu, Baek Ji-woong; Son Hyuk-chan, Seo Jin-seok, Park Chang-hwan, Kim Joo-hwan; Kang Hyeon-je, Park Jae-yong, Byun Kyung-jun."
+            - "The single biggest Round 14 caveat flips for Round 15. At Jeonnam, Kim Do-gyun deliberately held the foreign trio (Euller, Geraldes, Alan Cariús) on the bench to manage loads on a brutally hot away trip. Round 15 is at home and is the last match before the World Cup break, so that load-management logic reverses: he can start his best XI and let them rest during the break."
+            - "Euller is the cleanest man to come back in. Kim Do-gyun said flatly after Round 14 that the attack stalls without him, and he still came off the bench to set up the winner while carrying a slight knock. At home against the league's most stubborn defensive side, his creativity is exactly what is needed, so he returns to the front line in place of Byun Kyung-jun."
+            - "Park Jae-yong keeps the central striker role. He is the team's leading scorer and started Round 14; there is no reason to move him for a winnable home game."
+            - "The back three and Min Sung-jun are unchanged. Round 14 was a clean sheet, and the unit has settled with Kim Oh-kyu anchoring the middle while Osmar remains a fitness question."
+          selection_watch:
+            - player: "Euller"
+              note: "Played Round 14 carrying a slight knock and was visibly below full mobility, but he is the system's indispensable creator. Expected to start at home before a rest; the only thing that keeps him out is the knock worsening."
+            - player: "Alan Cariús"
+              note: "Scored the Round 14 winner off the bench on his return from a 10-month injury layoff. Kim Do-gyun is still managing his minutes and framed his best as coming after the break, so he is more likely an impact option again than a first-XI lock, though a home start is defensible on form."
+            - player: "Byun Kyung-jun"
+              note: "Started Round 14 in the all-domestic front line; reverts to high-impact closer if Euller returns to the XI. Pre-military-service window keeps his minutes valuable."
+            - player: "Francisco Geraldes"
+              note: "Came on in the second half at Jeonnam; a midfield/creative option to monitor rather than a projected starter."
+            - player: "Kim Joo-hwan"
+              note: "Started Round 14 at left wingback and holds the spot, with Oh In-pyo the alternative if Kim Do-gyun wants a different left-side balance."
+            - player: "Osmar"
+              note: "Limped off early in Round 13 and did not feature in the Round 14 starting group. Still a set-piece-quality swing factor, but a bench or late call rather than an automatic start until his fitness is confirmed."
+    collection_plan:
+      priority_queries: ["서울이랜드 김도균", "서울이랜드 전술", "서울이랜드 부상", "서울이랜드 경기 리뷰"]
+      data_to_collect: ["lineups", "formations", "injuries", "manager quotes", "set-piece details", "substitution patterns"]
+    source_notes: []
+
+  - id: ansan-greeners
+    canonical_name: "Ansan Greeners"
+    short_name: "Ansan"
+    is_subject_club: false
+    kleague_team_id: "K32"
+    aliases:
+      en: ["Ansan Greeners", "Ansan"]
+      ko: ["안산그리너스", "안산 그리너스", "안산"]
+    home:
+      city: "Ansan"
+      stadium: "Ansan Wa Stadium"
+    evidence_level: "seed"
+    background: "Gyeonggi-based K League 2 opponent."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Needs current-season verification before preview use."
+      set_pieces: "Track both boxes, especially Seoul's attacking second balls."
+      key_players: ["마촙", "리마", "정현우"]
+    collection_plan:
+      priority_queries: ["안산그리너스 서울이랜드", "안산 그리너스 전술", "Ansan Greeners Seoul E-Land"]
+      data_to_collect: ["default formation", "transition outlets", "set-piece marking", "recent form"]
+    source_notes: []
+
+  - id: busan-ipark
+    canonical_name: "Busan IPark"
+    short_name: "Busan"
+    is_subject_club: false
+    kleague_team_id: "K06"
+    aliases:
+      en: ["Busan IPark", "Busan I Park", "Busan"]
+      ko: ["부산아이파크", "부산 아이파크", "부산"]
+    home:
+      city: "Busan"
+      stadium: "Busan Gudeok Stadium"
+    evidence_level: "seed"
+    background: "High-profile K League 2 opponent with top-flight history and promotion expectations."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Scout as a promotion-race benchmark; verify pressing, buildup, and transition profile before each match."
+      set_pieces: "Capture defensive marking and second-phase pressure."
+      key_players: ["크리스찬", "백가온", "가브리엘"]
+    collection_plan:
+      priority_queries: ["부산아이파크 서울이랜드", "부산 아이파크 전술", "Busan IPark Seoul E-Land preview"]
+      data_to_collect: ["main chance creators", "pressing height", "transition routes", "set-piece targets"]
+    source_notes: []
+
+  - id: cheonan
+    canonical_name: "Cheonan"
+    short_name: "Cheonan"
+    is_subject_club: false
+    kleague_team_id: "K38"
+    aliases:
+      en: ["Cheonan", "Cheonan City", "Cheonan City FC"]
+      ko: ["천안", "천안시티", "천안시티FC"]
+    home:
+      city: "Cheonan"
+      stadium: "Cheonan Stadium"
+    evidence_level: "match_derived"
+    background: "K League 2 opponent that produced a physical, low-margin draw against Seoul E-Land in Round 4."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Round 4 context emphasized pressure after Seoul went down to ten men; verify open-play profile separately."
+      set_pieces: "Track wide fouls and restarts because discipline shaped the prior meeting."
+      key_players: ["라마스", "사르자니", "이준호"]
+    collection_plan:
+      priority_queries: ["천안시티FC 서울이랜드", "천안 서울이랜드 퇴장", "Cheonan Seoul E-Land"]
+      data_to_collect: ["physicality", "card/foul patterns", "late pressure", "wide service"]
+    source_notes: []
+
+  - id: chungnam-asan
+    canonical_name: "Chungnam Asan"
+    short_name: "Asan"
+    is_subject_club: false
+    kleague_team_id: "K34"
+    aliases:
+      en: ["Chungnam Asan", "Asan"]
+      ko: ["충남아산", "충남 아산", "아산"]
+    home:
+      city: "Asan"
+      stadium: "Asan Yi Sun-sin Stadium"
+    evidence_level: "sourced"
+    background: "South Chungcheong K League 2 opponent and Seoul E-Land's next listed away fixture after Round 10."
+    current_profile:
+      manager: "Andre"
+      shapes_seen: ["defense-first transition block"]
+      style_of_play: "New manager Andre was appointed on 2026-04-29 after Lim Gwan-sik's dismissal. Available club research describes a shift from Lim's all-team 'Wolf Pack' pressing toward cooperative defending and fast counters after regains."
+      set_pieces: "Kim Jong-min is a 188cm forward and likely aerial focal point; R11 also carries his planned 100 K League appearance ceremony context."
+      key_players: ["은고이", "김종민", "나임", "손준호", "한교원"]
+      recent_seoul_meetings:
+        - date: "2025-02-23"
+          venue_for_seoul: "home"
+          result: "Seoul E-Land 2-1 Chungnam Asan"
+          takeaway: "Seoul controlled enough of the key moments to edge a tight opener; the useful carryover is that Asan can be beaten if Seoul turn territory into early pressure rather than letting the game settle into a scrap."
+        - date: "2025-06-28"
+          venue_for_seoul: "away"
+          result: "Chungnam Asan 1-1 Seoul E-Land"
+          takeaway: "The away meeting was the warning label: Asan kept the game close at Yi Sun-sin Stadium, and Seoul did not separate themselves enough in the final third to turn control into all three points."
+        - date: "2025-10-26"
+          venue_for_seoul: "home"
+          result: "Seoul E-Land 4-1 Chungnam Asan"
+          stats: "49-51 possession, 14-12 shots, 10-6 shots on target, 7-7 corners"
+          takeaway: "Seoul's best template came when they stayed dangerous even without a possession monopoly: chance quality, wide-channel speed, and a ruthless second half turned a level game into a blowout."
+      strategy_notes:
+        - "Use width to move Asan's compact block before crossing. Early floated service lets Kim Jong-min and the center backs defend facing forward; switches, overlaps, and cutbacks make them turn."
+        - "Keep a true rest-defense triangle behind attacks. Andre's first idea is likely to be cooperative defending into fast counters, so Seoul's holding midfielder and outside center backs must kill the first pass after turnovers."
+        - "Force Asan to chase the game state. Their 2025 losses to Seoul became worse once they had to open up, while the away draw stayed uncomfortable because Seoul never fully broke the match open."
+        - "Attack second balls around set pieces. Seoul's set-piece edge matters most if the first contact is treated as the start of the chance, not the whole chance."
+      forecast_model:
+        as_of: "2026-05-07"
+        method: "Simple Poisson model using current 2026 goals for/against rates with a small home-field adjustment, then compared against available 1X2 market ranges."
+        expected_goals:
+          chungnam_asan: 1.32
+          seoul_eland: 1.52
+        probabilities:
+          chungnam_asan_win: 0.33
+          draw: 0.25
+          seoul_eland_win: 0.42
+          over_2_5: 0.54
+          both_teams_score: 0.57
+        correct_score_band: "1-1 is the single most common score, with 1-2 Seoul the best away-win scoreline."
+        market_snapshot: "Market prices clustered around Asan 2.77-2.92, Draw 3.18-3.25, Seoul 2.30-2.40, with Seoul effectively a narrow away favorite near a -0.25 handicap profile."
+        market_read: "The model is close to the market: Seoul are the right slight favorite, but not by enough to treat the fixture as routine."
+    collection_plan:
+      priority_queries: ["충남아산 서울이랜드", "충남아산 전술", "Chungnam Asan Seoul E-Land preview"]
+      data_to_collect: ["home form", "defensive block", "wide progression", "set-piece targets"]
+    source_notes:
+      - "research_dump/scouting/k2_2026_research_ansan_busan_cheonan_chungnam_asan_raw.txt"
+      - "research_dump/scouting/kleague_official_2026_snapshot.json"
+      - "https://www.chosun.com/english/sports-en/2026/04/29/FNIH2SE52VA6FDKX4F3XKSR5LA/"
+      - "https://ng.soccerway.com/matches/2025/10/26/korea-republic/k-league/seoul-e-land/national-police-agency-football-club/4598162/head2head/"
+      - "https://www.sportytrader.com/en/odds/chungnam-asan-fc-seoul-e-land-8273856/"
+
+  - id: chungbuk-cheongju
+    canonical_name: "Chungbuk Cheongju"
+    short_name: "Cheongju"
+    is_subject_club: false
+    kleague_team_id: "K37"
+    aliases:
+      en: ["Chungbuk Cheongju", "Cheongju"]
+      ko: ["충북청주", "충북 청주", "청주"]
+    home:
+      city: "Cheongju"
+      stadium: "Cheongju Stadium"
+    evidence_level: "seed"
+    background: "Cheongju-based K League 2 opponent on Seoul E-Land's 2026 schedule."
+    current_profile:
+      manager: "Luiz Quinta"
+      shapes_seen: ["4-4-2", "4-2-3-1"]
+      style_of_play: "Under Luiz Quinta, the club's first foreign manager (a former Flamengo head coach and FC Porto assistant), Cheongju have leaned toward a more proactive, attack-minded brief, but the table tells a blunter story: they are the division's definitive draw machine, still hunting a first win deep into the season after a long string of stalemates. They defend in a compact, disciplined block, are genuinely hard to break down, and live in low-event games."
+      set_pieces: "With one of the lowest-scoring attacks in the division, set pieces are one of Cheongju's more realistic routes to a goal, so Seoul must respect restarts in their own box. The flip side is that a single dead-ball moment can decide an otherwise low-event game in Seoul's favor too."
+      key_players: ["Garcia", "Lee Jong-eon", "Heo Seung-chan"]
+      strategy_intro: "The plan against Cheongju is not complicated, but it has to be deliberate. This is the league's most stubborn draw side, a team that has turned the low-event stalemate into an identity, so the job is to break the game open early without handing them the transition moments that are their only real route to a point."
+      strategy_notes:
+        - "Score first and score early. Cheongju's entire 2026 identity is the low-event draw, so the faster Seoul make them chase the game, the more they have to abandon the compact block that has earned all those stalemates."
+        - "Patience over panic against a packed box. Expect a deep, narrow shell; switches of play, overlap timing, and cutbacks to pull the block apart are worth far more than hopeful early crosses."
+        - "Win the set-piece battle at both ends. With Cheongju's attack toothless and goals scarce, a single dead ball can be the difference, and Seoul's set-piece strength is a logical edge."
+        - "Respect the counter, not the possession. The danger is not Cheongju keeping the ball; it is Seoul over-committing and getting caught by Garcia or Lee Jong-eon, so clean rest-defense behind the wingbacks is essential."
+        - "Manage the pre-break game state. This is the last match before the World Cup break and it is at home, so once ahead Seoul can game-manage and protect legs rather than force the issue."
+      forecast_model:
+        probabilities: { seoul_eland_win: 0.60, draw: 0.29, chungbuk_cheongju_win: 0.11 }
+        expected_goals: { seoul_eland: 1.7, opponent: 0.7 }
+        market_snapshot: "Seoul are clear home favorites against the only winless side in the division."
+        correct_score_band: "A 1-0 or 2-0 Seoul win sits at the center of the range, with a frustrating low-score draw as the obvious upset path."
+        market_read: "The number that matters is the elevated draw chance: no team in K League 2 draws as often as Cheongju, so the realistic risk is a stalemate, not a defeat."
+    collection_plan:
+      priority_queries: ["충북청주 서울이랜드", "충북청주 전술", "Chungbuk Cheongju Seoul E-Land"]
+      data_to_collect: ["compactness", "transition threat", "chance concession type", "set-piece marking"]
+    source_notes: []
+
+  - id: daegu
+    canonical_name: "Daegu"
+    short_name: "Daegu"
+    is_subject_club: false
+    kleague_team_id: "K17"
+    aliases:
+      en: ["Daegu", "Daegu FC"]
+      ko: ["대구FC", "대구 FC", "대구"]
+    home:
+      city: "Daegu"
+      stadium: "Daegu iM Bank Park"
+    evidence_level: "match_derived"
+    background: "Club with recent top-flight pedigree; Seoul E-Land won away in Round 5."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Round 5 notes emphasized Seoul's 4-3-3 execution more than Daegu's own settled profile."
+      set_pieces: "Review Round 5 for Seoul's layered set-piece impact and Daegu's defensive reactions."
+      key_players: ["에드가", "세라핌", "박기현"]
+    collection_plan:
+      priority_queries: ["대구FC 서울이랜드", "대구 서울이랜드 리뷰", "Daegu Seoul E-Land"]
+      data_to_collect: ["directness", "pressing height", "central channel vulnerability", "home/away split"]
+    source_notes: []
+
+  - id: gimhae-fc
+    canonical_name: "Gimhae FC"
+    short_name: "Gimhae"
+    is_subject_club: false
+    kleague_team_id: "K41"
+    aliases:
+      en: ["Gimhae FC", "Gimhae"]
+      ko: ["김해FC", "김해 FC", "김해"]
+    home:
+      city: "Gimhae"
+      stadium: "Gimhae Stadium"
+    evidence_level: "seed"
+    background: "Fresh 2026 K League 2 matchup for Seoul E-Land."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Research priority because Seoul's first meeting needs a proper opponent profile."
+      set_pieces: "Capture marking scheme in the first meeting and reuse for the return fixture."
+      key_players: ["이승재", "베카", "이래준"]
+    collection_plan:
+      priority_queries: ["김해FC 서울이랜드", "김해FC 전술", "Gimhae FC Seoul E-Land"]
+      data_to_collect: ["default formation", "pressing habits", "attacking outlets", "corner defense"]
+    source_notes: []
+
+  - id: gimpo-citizen
+    canonical_name: "Gimpo Citizen"
+    short_name: "Gimpo"
+    is_subject_club: false
+    kleague_team_id: "K36"
+    aliases:
+      en: ["Gimpo Citizen", "Gimpo FC", "Gimpo"]
+      ko: ["김포FC", "김포 FC", "김포"]
+    home:
+      city: "Gimpo"
+      stadium: "Gimpo Solteo Football Field"
+    evidence_level: "match_derived"
+    background: "Compact Gyeonggi opponent; Seoul E-Land beat Gimpo in Round 10."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Use Round 10 notes as Seoul-specific evidence, then add fresh Gimpo form before the return match."
+      set_pieces: "Track restart volume and second-ball pressure."
+      key_players: ["루이스", "루안", "디자우마"]
+    collection_plan:
+      priority_queries: ["김포FC 서울이랜드", "김포 서울이랜드 리뷰", "Gimpo Seoul E-Land"]
+      data_to_collect: ["direct channel balls", "block height", "fouls near box", "late-game adjustments"]
+    source_notes: []
+
+  - id: gyeongnam
+    canonical_name: "Gyeongnam"
+    short_name: "Gyeongnam"
+    is_subject_club: false
+    kleague_team_id: "K20"
+    aliases:
+      en: ["Gyeongnam", "Gyeongnam FC"]
+      ko: ["경남FC", "경남 FC", "경남"]
+    home:
+      city: "Changwon"
+      stadium: "Changwon Football Center"
+    evidence_level: "match_derived"
+    background: "Familiar K League 2 opponent; Seoul E-Land beat Gyeongnam in Round 2."
+    current_profile:
+      manager: null
+      shapes_seen: ["3-4-1-2"]
+      style_of_play: "Round 2 notes referenced Gyeongnam's own three-back system; verify whether that remains current."
+      set_pieces: "Track Seoul's ability to create from wide service and Gyeongnam's central congestion."
+      key_players: ["손호준", "단레이", "원기종"]
+    collection_plan:
+      priority_queries: ["경남FC 서울이랜드", "경남 서울이랜드", "Gyeongnam Seoul E-Land"]
+      data_to_collect: ["formation continuity", "central block", "transition chances", "set-piece defense"]
+    source_notes: []
+
+  - id: hwaseong-fc
+    canonical_name: "Hwaseong FC"
+    short_name: "Hwaseong"
+    is_subject_club: false
+    kleague_team_id: "K39"
+    aliases:
+      en: ["Hwaseong FC", "Hwaseong"]
+      ko: ["화성FC", "화성 FC", "화성"]
+    home:
+      city: "Hwaseong"
+      stadium: "Hwaseong Sports Complex"
+    evidence_level: "match_derived"
+    background: "Gyeonggi opponent that beat Seoul E-Land in Round 9."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Round 9 evidence shows they punished defensive looseness and transition gaps."
+      set_pieces: "Review penalty sequence, second goal buildup, and Seoul's difficulty with runners from deep."
+      key_players: ["페트로프", "플라나", "김대환"]
+    collection_plan:
+      priority_queries: ["화성FC 서울이랜드", "화성 서울이랜드 플라나", "Hwaseong Seoul E-Land"]
+      data_to_collect: ["counter patterns", "runners from midfield", "penalty/foul pressure", "game management"]
+    source_notes: []
+
+  - id: jeonnam-dragons
+    canonical_name: "Jeonnam Dragons"
+    short_name: "Jeonnam"
+    is_subject_club: false
+    kleague_team_id: "K07"
+    aliases:
+      en: ["Jeonnam Dragons", "Jeonnam"]
+      ko: ["전남드래곤즈", "전남 드래곤즈", "전남"]
+    home:
+      city: "Gwangyang"
+      stadium: "Gwangyang Football Stadium"
+    evidence_level: "seed"
+    background: "Historically significant Korean club and a difficult away trip on Seoul E-Land's schedule."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Needs current-season verification before preview use."
+      set_pieces: "Prioritize defensive wide free kicks and corners before the Gwangyang away match."
+      key_players: ["발디비아", "호난", "르본"]
+    collection_plan:
+      priority_queries: ["전남드래곤즈 서울이랜드", "전남 서울이랜드", "Jeonnam Dragons Seoul E-Land"]
+      data_to_collect: ["home form", "chance creators", "fullback/wingback aggression", "late-game pressure"]
+    source_notes: []
+
+  - id: paju-frontier
+    canonical_name: "Paju Frontier"
+    short_name: "Paju"
+    is_subject_club: false
+    kleague_team_id: "K40"
+    aliases:
+      en: ["Paju Frontier", "Paju"]
+      ko: ["파주", "파주프론티어", "파주 프론티어"]
+    home:
+      city: "Paju"
+      stadium: "Paju Stadium"
+    evidence_level: "match_derived"
+    background: "Paju-based opponent; Seoul E-Land won away in Round 7."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Round 7 notes showed Paju resistance fading late against Seoul's bench impact."
+      set_pieces: "Track vulnerability to Seoul's aerial targets and second-half substitutions."
+      key_players: ["보르하 바스톤", "최범경", "이준석"]
+    collection_plan:
+      priority_queries: ["파주 서울이랜드", "파주프론티어 서울이랜드", "Paju Frontier Seoul E-Land"]
+      data_to_collect: ["late fatigue", "defensive block height", "corner marking", "bench response"]
+    source_notes: []
+
+  - id: seongnam-fc
+    canonical_name: "Seongnam FC"
+    short_name: "Seongnam"
+    is_subject_club: false
+    kleague_team_id: "K08"
+    aliases:
+      en: ["Seongnam FC", "Seongnam"]
+      ko: ["성남FC", "성남 FC", "성남"]
+    home:
+      city: "Seongnam"
+      stadium: "Tancheon Stadium"
+    evidence_level: "sourced"
+    background: "Heritage Seoul-metro club (the Magpies / 까치). Worst-ever finish in 2024 (last), recovered to 5th in 2025, and sit mid-table in 2026. A meaningful promotion-picture opponent that Seoul E-Land have not yet faced this season."
+    current_profile:
+      manager: "Jeon Kyung-jun"
+      shapes_seen: ["short-passing possession build"]
+      style_of_play: "Jeon Kyung-jun (전경준), appointed for 2026 after managing Jeonnam Dragons, favors quick-paced football built on short passing and effective ball circulation. Seongnam are 9th of 17 after 10 games (3-5-2, 14 points, 11 goals for, 9 against, +2). The standout trait is how draw-prone they are: five draws already, only two losses. They are hard to beat but light on cutting edge."
+      set_pieces: "Seongnam carry aerial presence through Brazilian center back Venício Tomás and a tall foreign contingent. Defensive set-piece marking is the area to probe; the attack itself has been modest (11 goals in 10)."
+      key_players: ["윤민호", "안젤로티", "이준상", "빌레로", "박수빈"]
+      recent_seoul_meetings:
+        - date: "2025"
+          venue_for_seoul: "neutral"
+          result: "Seongnam 1-0 Seoul E-Land (2025 K League 2 promotion playoffs)"
+          takeaway: "Seongnam ended Seoul E-Land's 2025 season in the playoffs with a tight 1-0. The carryover lesson is that Seongnam defend a knockout-style low-margin game well; Seoul lost that tie by failing to break a compact, organized block, exactly the trap to avoid again."
+      prior_meetings_intro: |
+        There is one meeting that frames this fixture, and it stings: Seongnam knocked Seoul E-Land out of the 2025 K League 2 promotion playoffs. It was a single-game, low-margin elimination, and Seongnam won it by defending a compact block well.
+      prior_meetings_outro: |
+        The lesson for this weekend is simple: do not let this become a repeat of that playoff night. If Seoul score first and force Seongnam to chase the game, the organized block has to open up. If the match stays narrow and low-event, Seongnam have already shown they can win exactly that kind of contest against this opponent.
+      first_meeting_note: |
+        Seoul E-Land and Seongnam FC have not met in the 2026 K League 2 regular season yet, so Round 13 is the first 2026 head-to-head. The relevant history is recent and painful: Seongnam knocked Seoul E-Land out of the 2025 promotion playoffs with a 1-0 win. That gives this fixture an edge beyond the table positions. Seongnam are a heritage club having a stabilizing season under new manager Jeon Kyung-jun, draw-prone and organized rather than explosive.
+      strategy_intro: |
+        The tactical plan should be active rather than simply cautious. Seongnam are organized and draw-prone, so the danger is not being overrun, it is being held to another frustrating low-event match. Seoul need to make the game eventful on their terms.
+      strategy_notes:
+        - "Break the block early. Seongnam have five draws in ten games; they are comfortable in tight, low-event matches. An early Seoul goal at Mokdong forces them to come out of their organized shape."
+        - "Win the set-piece exchange. Venício Tomás gives Seongnam aerial presence, but their attack has managed only 11 goals in 10 games. Seoul's set-piece edge is the most reliable route to the first goal."
+        - "Respect the playoff scar tissue. Seongnam beat Seoul E-Land 1-0 in the 2025 playoffs by defending a low-margin game well. Seoul cannot let this become another patient, narrow contest decided by one moment."
+        - "Stay disciplined after the Asan red card and the R12 set-piece concessions. Two of the last three matches were undone by avoidable lapses; against an organized side, the cleaner team usually takes the points."
+      forecast_model:
+        as_of: "2026-05-18"
+        method: "Simple Poisson model using current 2026 goals for/against rates with a Mokdong home-field adjustment."
+        expected_goals:
+          opponent: 1.05
+          seoul_eland: 1.60
+        probabilities:
+          opponent_win: 0.22
+          draw: 0.31
+          seoul_eland_win: 0.47
+          over_2_5: 0.48
+          both_teams_score: 0.52
+        correct_score_band: "2-1 and 1-0 Seoul are the central outcomes, but a 1-1 draw is very live given how often Seongnam split the points."
+        market_snapshot: "No firm public market price located yet; on table positions and home advantage Seoul should be a clear but not overwhelming favorite."
+        market_read: "Seoul are the rightful favorite, but the high draw probability is the honest story. Seongnam's profile is built to frustrate, and Seoul have not won since Round 10."
+    collection_plan:
+      priority_queries: ["성남FC 서울이랜드", "성남 서울이랜드", "Seongnam FC Seoul E-Land"]
+      data_to_collect: ["pressing vs block", "central chance creation", "wide overloads", "set-piece matchups"]
+    source_notes:
+      - "research_dump/scouting/k2_2026_research_seongnam_suwon_yongin_raw.txt"
+      - "research_dump/scouting/kleague_official_2026_snapshot.json"
+
+  - id: suwon-bluewings
+    canonical_name: "Suwon Bluewings"
+    short_name: "Suwon Bluewings"
+    is_subject_club: false
+    kleague_team_id: "K02"
+    aliases:
+      en: ["Suwon Bluewings", "Suwon Samsung Bluewings", "Suwon Samsung"]
+      ko: ["수원삼성", "수원 삼성", "수원 블루윙즈", "수원삼성블루윙즈"]
+    home:
+      city: "Suwon"
+      stadium: "Suwon World Cup Stadium"
+    evidence_level: "match_derived"
+    background: "One of Korean football's marquee clubs and a major promotion-race reference point."
+    current_profile:
+      manager: null
+      shapes_seen: ["4-3-3"]
+      style_of_play: "Round 1 notes showed Suwon controlling midfield rhythm and punishing Seoul's rigidity."
+      set_pieces: "Track Seoul's defensive assignments and Suwon's pressure after turnovers."
+      key_players: ["헤이스", "박현빈", "강현묵"]
+    collection_plan:
+      priority_queries: ["수원삼성 서울이랜드", "수원 블루윙즈 서울이랜드", "Suwon Bluewings Seoul E-Land"]
+      data_to_collect: ["midfield control", "pressing triggers", "counterattack routes", "crowd/game-state pressure"]
+    source_notes: []
+
+  - id: suwon-fc
+    canonical_name: "Suwon FC"
+    short_name: "Suwon FC"
+    is_subject_club: false
+    kleague_team_id: "K29"
+    aliases:
+      en: ["Suwon FC"]
+      ko: ["수원FC", "수원 FC"]
+    home:
+      city: "Suwon"
+      stadium: "Suwon Sports Complex"
+    evidence_level: "match_derived"
+    background: "Suwon-based opponent; Seoul E-Land beat Suwon FC convincingly in Round 6."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "Round 6 notes emphasized Suwon FC struggling with Seoul's width and rotations."
+      set_pieces: "Review Osmar's set-piece impact and Suwon FC's defensive-box organization."
+      key_players: ["프리조", "하정우", "윌리안"]
+    collection_plan:
+      priority_queries: ["수원FC 서울이랜드", "수원 FC 서울이랜드", "Suwon FC Seoul E-Land"]
+      data_to_collect: ["wide defending", "midfield recovery speed", "direct attacks", "corner defense"]
+    source_notes: []
+
+  - id: yongin
+    canonical_name: "Yongin FC"
+    short_name: "Yongin"
+    is_subject_club: false
+    kleague_team_id: "K42"
+    aliases:
+      en: ["Yongin", "Yongin FC"]
+      ko: ["용인", "용인FC", "용인 FC"]
+    home:
+      city: "Yongin"
+      stadium: "Yongin Mireu Stadium"
+    evidence_level: "seed"
+    background: "Yongin-based K League 2 opponent. 2026 is Yongin FC's debut season as a brand-new club promoted into K League 2 alongside Gimhae and Paju Frontier."
+    current_profile:
+      manager: null
+      shapes_seen: []
+      style_of_play: "First-year K League 2 side currently 15th in the table after nine matches (1-3-5, six points). Coverage describes a transition-leaning approach built around a few experienced names, with the squad still finding stability at this level."
+      set_pieces: "No clear K League 2 set-piece pattern established yet. Defensive set pieces are still being calibrated and have been a soft spot in early-season concessions."
+      key_players: ["가브리엘", "석현준", "이승준", "김민우"]
+      first_meeting_note: |
+        This is Seoul E-Land's first competitive meeting with Yongin FC at any level. Yongin are a 2026 expansion club, promoted into K League 2 alongside Gimhae and Paju Frontier in this season's three-club expansion. Without prior series data, the analytical anchor is the table: Seoul's 3rd-place form (19 points, +8 GD) versus Yongin's 15th-place position (6 points, -5 GD), and the home-field advantage at Mokdong after a chastening loss at Asan. The relevant precedent is Seoul's earlier 3-1 win over fellow expansion side Paju Frontier in Round 7 - a useful template for managing a less-experienced K2 opponent without letting transitions become awkward.
+      strategy_intro: |
+        The tactical plan should be active rather than simply cautious. Yongin are a transition-and-set-piece opponent for now, so Seoul need to make them defend longer sequences while still protecting the first outlet after turnovers.
+      strategy_notes:
+        - "Use width to move Yongin's compact block before crossing. Early floated service lets Yongin's defenders defend facing forward; switches, overlaps, and cutbacks make them turn."
+        - "Keep a true rest-defense triangle behind attacks. Yongin's clearest weapon is transition, so Seoul's holding midfielder and outside center backs must kill the first pass after turnovers (especially after the R11 Asan defeat where this same pattern hurt them)."
+        - "Force Yongin to chase the game state. Their 15th-place context means they need points more than Seoul does; an early Seoul lead at Mokdong forces them out of a low block."
+        - "Attack second balls around set pieces. Yongin have conceded -5 on goal difference in nine games; Seoul's set-piece edge should be the cleanest route to a controlled score."
+        - "Treat Lee Ju-hyuk's R11 red-card suspension as a chance to show structural depth, not as a damage limitation problem - Bae Seo-jun or Son Hyuk-chan slotting in should be a normal selection call, not an excuse."
+      forecast_model:
+        as_of: "2026-05-10"
+        method: "Simple Poisson model using current 2026 goals for/against rates with a Mokdong home-field adjustment."
+        expected_goals:
+          opponent: 0.85
+          seoul_eland: 1.95
+        probabilities:
+          opponent_win: 0.14
+          draw: 0.21
+          seoul_eland_win: 0.65
+          over_2_5: 0.58
+          both_teams_score: 0.45
+        correct_score_band: "2-0 and 2-1 Seoul are the central outcomes; a clean sheet is a realistic target after the Yongin attack's modest output to date."
+        market_snapshot: "No firm public market price located yet for this fixture; based on table positions and home advantage, Seoul should be a heavy favorite."
+        market_read: "The model and the table both lean strongly Seoul. The risk is complacency post-Asan and a Lee Ju-hyuk-shaped midfield gap, not the opponent's own ceiling."
+    collection_plan:
+      priority_queries: ["용인FC 서울이랜드", "용인 서울이랜드", "Yongin FC Seoul E-Land"]
+      data_to_collect: ["default shape", "build-up pattern", "transition outlets", "late substitutions"]
+    source_notes:
+      - "research_dump/scouting/k2_2026_research_seongnam_suwon_yongin_raw.txt"
+      - "research_dump/klu_Introducing_Gimhae__Paju__and_Yongin__K_League.txt"

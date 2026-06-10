@@ -1,0 +1,199 @@
+# Seoul E-Land FC -- 2026 K League 2 Season fixtures
+# Source: K League official schedule API as of 2026-05-06
+# This is authoritative truth for the analyst pipeline. The scraper anchors
+# its date window around `date` per round. The analyst MUST narrate from
+# these facts and is forbidden from inventing additional matches.
+season: 2026
+team: "Seoul E-Land FC"
+fixtures:
+  - round: 1
+    date: 2026-02-28
+    venue: away
+    opponent: "Suwon Bluewings"
+    home_score: 2
+    away_score: 1
+    result: "L 1-2"
+  - round: 2
+    date: 2026-03-07
+    venue: home
+    opponent: "Gyeongnam"
+    home_score: 1
+    away_score: 0
+    result: "W 1-0"
+  - round: 3
+    date: 2026-03-14
+    venue: home
+    opponent: "Busan IPark"
+    home_score: 2
+    away_score: 3
+    result: "L 2-3"
+  - round: 4
+    date: 2026-03-21
+    venue: away
+    opponent: "Cheonan"
+    home_score: 0
+    away_score: 0
+    result: "D 0-0"
+  - round: 5
+    date: 2026-03-29
+    venue: away
+    opponent: "Daegu"
+    home_score: 1
+    away_score: 3
+    result: "W 3-1"
+  - round: 6
+    date: 2026-04-04
+    venue: home
+    opponent: "Suwon FC"
+    home_score: 3
+    away_score: 0
+    result: "W 3-0"
+  - round: 7
+    date: 2026-04-11
+    venue: away
+    opponent: "Paju Frontier"
+    home_score: 1
+    away_score: 3
+    result: "W 3-1"
+  - round: 8
+    date: 2026-04-19
+    venue: away
+    opponent: "Ansan Greeners"
+    home_score: 0
+    away_score: 2
+    result: "W 2-0"
+  - round: 9
+    date: 2026-04-26
+    venue: home
+    opponent: "Hwaseong FC"
+    home_score: 1
+    away_score: 2
+    result: "L 1-2"
+  - round: 10
+    date: 2026-05-03
+    venue: home
+    opponent: "Gimpo Citizen"
+    home_score: 2
+    away_score: 1
+    result: "W 2-1"
+  # Upcoming
+  - round: 11
+    date: 2026-05-09
+    venue: away
+    opponent: "Chungnam Asan"
+    home_score: 3
+    away_score: 0
+    result: "L 0-3"
+  - round: 12
+    date: 2026-05-16
+    venue: home
+    opponent: "Yongin"
+    home_score: 2
+    away_score: 2
+    result: "D 2-2"
+  - round: 13
+    date: 2026-05-24
+    venue: home
+    opponent: "Seongnam FC"
+    home_score: 3
+    away_score: 1
+    result: "W 3-1"
+  - round: 14
+    date: 2026-05-31
+    venue: away
+    opponent: "Jeonnam Dragons"
+    home_score: 0
+    away_score: 1
+    result: "W 1-0"
+  - round: 15
+    date: 2026-06-07
+    venue: home
+    opponent: "Chungbuk Cheongju"
+    result: "TBD"
+  - round: 16
+    date: 2026-07-05
+    venue: away
+    opponent: "Gimhae FC"
+    result: "TBD"
+  # Round 17: bye
+  - round: 18
+    date: 2026-07-18
+    venue: away
+    opponent: "Suwon FC"
+    result: "TBD"
+  - round: 19
+    date: 2026-07-24
+    venue: home
+    opponent: "Cheonan"
+    result: "TBD"
+  - round: 20
+    date: 2026-08-02
+    venue: away
+    opponent: "Busan IPark"
+    result: "TBD"
+  - round: 21
+    date: 2026-08-07
+    venue: away
+    opponent: "Hwaseong FC"
+    result: "TBD"
+  - round: 22
+    date: 2026-08-16
+    venue: home
+    opponent: "Ansan Greeners"
+    result: "TBD"
+  - round: 23
+    date: 2026-08-23
+    venue: home
+    opponent: "Paju Frontier"
+    result: "TBD"
+  - round: 24
+    date: 2026-08-29
+    venue: away
+    opponent: "Seongnam FC"
+    result: "TBD"
+  - round: 25
+    date: 2026-09-04
+    venue: away
+    opponent: "Chungbuk Cheongju"
+    result: "TBD"
+  - round: 26
+    date: 2026-09-12
+    venue: home
+    opponent: "Suwon Bluewings"
+    result: "TBD"
+  - round: 27
+    date: 2026-09-19
+    venue: home
+    opponent: "Daegu"
+    result: "TBD"
+  - round: 28
+    date: 2026-10-09
+    venue: away
+    opponent: "Gimpo Citizen"
+    result: "TBD"
+  - round: 29
+    date: 2026-10-18
+    venue: home
+    opponent: "Gimhae FC"
+    result: "TBD"
+  # Round 30: bye
+  - round: 31
+    date: 2026-10-31
+    venue: away
+    opponent: "Yongin"
+    result: "TBD"
+  - round: 32
+    date: 2026-11-07
+    venue: home
+    opponent: "Jeonnam Dragons"
+    result: "TBD"
+  - round: 33
+    date: 2026-11-22
+    venue: home
+    opponent: "Chungnam Asan"
+    result: "TBD"
+  - round: 34
+    date: 2026-11-29
+    venue: away
+    opponent: "Gyeongnam"
+    result: "TBD"

@@ -1,0 +1,54 @@
+# Wikilinks that should NEVER become files in Players/.
+#
+# obsidian_writer.update_player_index() reads this file before deciding whether
+# a wikilink target deserves a player note. Anything matching here is silently
+# ignored.
+#
+# Three layers of filtering:
+#   1. exact_names    - literal match against the wikilink target
+#   2. team_suffixes  - any wikilink ending with one of these is treated as a team
+#   3. venue_suffixes - any wikilink ending with one of these is treated as a venue
+#
+# Opponent team names are also auto-loaded from data/fixtures.yaml so you don't
+# need to list them here unless they need a manual override.
+
+exact_names:
+  # Opposing team managers we don't want as player notes
+  - Cha Du-ri          # Hwaseong manager
+  - Kim Byung-soo      # Daegu manager
+  - Lee Jung-hyo       # Suwon Bluewings manager
+  - Park Geon-ha       # Suwon FC manager
+  - Cho Sung-hwan      # Busan IPark manager
+  - Park Jin-seop      # Cheonan manager
+  - Bae Sung-jae       # Gyeongnam manager
+  - Choi Mo-sik        # Ansan Greeners manager
+  - Gerardus           # Paju Frontier manager
+  # Generic concepts the analyst wikilinks but aren't really player-style notes
+  - K League 2 2026
+  - K League 2
+  - K League
+  # Departed E-Land players (not on the 2026 squad)
+  - Gu Sung-yun        # to FC Seoul
+  - Aaron Calver       # left
+  - Pedrinho           # to Ulsan
+  - Seo Jae-min        # to Incheon
+
+team_suffixes:
+  - FC
+  - IPark
+  - Bluewings
+  - Greeners
+  - Citizen
+  - Frontier
+  - United
+  - City
+  - Asan      # for Chungnam Asan when stripped
+  - Samsung   # for Suwon Samsung
+
+venue_suffixes:
+  - Stadium
+  - Park       # caution: not for player names like "Park Chang-hwan" - matched only at end of full name
+  - Stadion
+  - Arena
+  - Field
+  - Ground

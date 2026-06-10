@@ -5,6 +5,8 @@ __pycache__/
 logs/*.log
 .DS_Store
 .claude/scheduled_tasks.lock
+.claude/worktrees/
+.claude/settings.local.json
 research_dump/
 site/dist/
 site/.astro/
