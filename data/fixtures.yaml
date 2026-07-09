@@ -116,7 +116,9 @@ fixtures:
     date: 2026-07-05
     venue: away
     opponent: "Gimhae FC"
-    result: "TBD"
+    home_score: 1
+    away_score: 3
+    result: "W 3-1"
   # Round 17: bye
   - round: 18
     date: 2026-07-18

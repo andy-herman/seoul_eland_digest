@@ -228,6 +228,40 @@ teams:
               note: "Started Round 15 but, like the whole front line, was wasteful in front of goal. A rotation and impact striker rather than a lock."
             - player: "John Iredale and Bae Jin-woo"
               note: "Both departed to Gwangju (K League 1) over the break, thinning the forward and full-back depth, though neither was a Round 15 starter."
+        - round: 18
+          opponent_id: suwon-fc
+          label: "Predicted Seoul XI"
+          formation: "4-2-3-1"
+          team_name: "Seoul E-Land"
+          note: "Predicted from the actual Round 16 XI at Gimhae, the first match of the declared back-four era, with Park Jae-yong promoted to striker. Official team sheet may differ at kickoff."
+          starters:
+            - { name: "Min Sung-jun", role: "GK", line: "goalkeeper" }
+            - { name: "Oh In-pyo", role: "RB", line: "defense" }
+            - { name: "Kim Oh-kyu", role: "RCB", line: "defense" }
+            - { name: "Baek Ji-woong", role: "LCB", line: "defense" }
+            - { name: "Kim Joo-hwan", role: "LB", line: "defense" }
+            - { name: "Yun Seok-ju", role: "CM", line: "midfield" }
+            - { name: "Park Chang-hwan", role: "CM", line: "midfield" }
+            - { name: "Lee Ju-hyuk", role: "RAM", line: "attack" }
+            - { name: "Alan Cariús", role: "AM", line: "attack" }
+            - { name: "Euller", role: "LAM", line: "attack" }
+            - { name: "Park Jae-yong", role: "ST", line: "attack" }
+          basis:
+            - "Start from the Round 16 XI at Gimhae (W 3-1): a 4-2-3-1 with Min Sung-jun; Oh In-pyo, Kim Oh-kyu, Baek Ji-woong, Kim Joo-hwan; Yun Seok-ju and Park Chang-hwan; Lee Ju-hyuk, Alan Cariús, Euller behind Kim Hyun. Kim Do-gyun publicly declared the back four the second-half-of-season system, so no reversion is projected."
+            - "Promote Park Jae-yong. Team-leading six goals and two decisive substitute contributions in his last three appearances; against a direct promotion rival the leading scorer starts."
+            - "Kim Hyun drops to first striker alternate after a willing but goalless Round 16 start (withdrawn on 56 minutes)."
+            - "Gabriel impressed off the bench on the right at Gimhae and pushes Lee Ju-hyuk for the right-sided start."
+          selection_watch:
+            - player: "Park Jae-yong"
+              note: "Match-winner off the bench at Gimhae, six goals. Expected to start."
+            - player: "Kim Hyun"
+              note: "Started Round 16 but was withdrawn at 56 minutes; likely first change now."
+            - player: "Gabriel"
+              note: "Changed the Gimhae match from the right after coming on around 56 minutes. Alternative to Lee Ju-hyuk."
+            - player: "Euller"
+              note: "Yellow card in the Round 16 flashpoint with Bruno Costa. Starts, but discipline is part of the assignment."
+            - player: "Osmar"
+              note: "Scored against Suwon FC in Round 6 from a set piece; minutes managed all season. If fit, a set-piece weapon in both boxes."
     collection_plan:
       priority_queries: ["서울이랜드 김도균", "서울이랜드 전술", "서울이랜드 부상", "서울이랜드 경기 리뷰"]
       data_to_collect: ["lineups", "formations", "injuries", "manager quotes", "set-piece details", "substitution patterns"]
@@ -681,13 +715,13 @@ teams:
       city: "Suwon"
       stadium: "Suwon Sports Complex"
     evidence_level: "match_derived"
-    background: "Suwon-based opponent; Seoul E-Land beat Suwon FC convincingly in Round 6."
+    background: "Suwon-based opponent relegated from K League 1 after the 2025 playoff; Seoul E-Land beat Suwon FC 3-0 in Round 6, the club's first-ever league win over them. Kim Do-gyun previously managed Suwon FC (the 'Kim Do-gyun derby')."
     current_profile:
-      manager: null
-      shapes_seen: []
-      style_of_play: "Round 6 notes emphasized Suwon FC struggling with Seoul's width and rotations."
-      set_pieces: "Review Osmar's set-piece impact and Suwon FC's defensive-box organization."
-      key_players: ["프리조", "하정우", "윌리안"]
+      manager: "Park Kun-ha (박건하), appointed 2025-12-24"
+      shapes_seen: ["3-5-2", "5-3-2 without the ball"]
+      style_of_play: "Draw-heavy (5 in first 15) with passive first halves and strong second-half surges (0 first-half shots then 3 second-half goals in the 5/3 Suwon derby; comeback 3-1 at Ansan post-break). Post-break build-up visibly improved. Round 6 notes emphasized Suwon FC struggling with Seoul's width and rotations."
+      set_pieces: "Review Osmar's set-piece impact and Suwon FC's defensive-box organization. Matheus Babi (191cm) is their main aerial target."
+      key_players: ["마테우스 바비", "하정우", "김정환", "프리조"]
     collection_plan:
       priority_queries: ["수원FC 서울이랜드", "수원 FC 서울이랜드", "Suwon FC Seoul E-Land"]
       data_to_collect: ["wide defending", "midfield recovery speed", "direct attacks", "corner defense"]
