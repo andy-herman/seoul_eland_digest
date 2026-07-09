@@ -11,6 +11,7 @@ const pathname = stripBase(Astro.url.pathname);
 const englishNavItems = [
   { href: "/", label: "Rounds" },
   { href: "/matches", label: "Matches" },
+  { href: "/previews", label: "Previews" },
   { href: "/players", label: "Squad" },
   { href: "/support", label: "Support me", mobileLabel: "Support" },
   { href: "/about", label: "About", hideOnNarrow: true },
@@ -19,6 +20,7 @@ const navItems = isPortuguese
   ? [
       { href: "/pt/", label: "Rodadas" },
       { href: "/pt/matches", label: "Partidas" },
+      { href: "/pt/previews", label: "Prévias" },
       { href: "/players", label: "Elenco" },
       { href: "/support", label: "Apoie" },
       { href: "/about", label: "Sobre", hideOnNarrow: true },

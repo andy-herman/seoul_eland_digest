@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TranslateButton from "../../../components/TranslateButton.astro";
+import { fixtures } from "../../../data/matches";
+import { withBase } from "../../../lib/paths";
+import { getPreMatchPreviews } from "../../../lib/prematchPreviews";
+
+const previews = getPreMatchPreviews("pt").sort(
+  (a, b) => Number(b.data.round || 0) - Number(a.data.round || 0),
+);
+
+const nextMatch = [...fixtures]
+  .sort((a, b) => a.round - b.round)
+  .find((match) => match.result === "TBD");
+
+const fixtureByRound = new Map(fixtures.map((match) => [match.round, match]));
+
+const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function formatDate(date?: string) {
+  if (!date) return "Data a definir";
+  const parsed = new Date(`${date}T00:00:00Z`);
+  return Number.isNaN(parsed.getTime()) ? date : dateFormatter.format(parsed);
+}
+
+function venueLabel(round: number) {
+  const fixture = fixtureByRound.get(round);
+  if (!fixture) return undefined;
+  return fixture.venue === "home" ? "Casa" : fixture.venue === "away" ? "Fora" : "Neutro";
+}
+---
+
+<BaseLayout
+  title="Prévias do Seoul E-Land"
+  description="Relatórios de pré-jogo do Seoul E-Land FC: escalação provável, análise do adversário, chaves táticas e leitura do modelo para cada rodada coberta."
+  lang="pt"
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        Prévias
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        Relatórios de pré-jogo de cada rodada coberta: escalação provável, análise do adversário, chaves táticas e a leitura do modelo antes da bola rolar.
+      </p>
+      <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+        {previews.length} prévias publicadas
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/previews" code="EN" label="Inglês" ariaLabel="Ler as prévias em inglês" />
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Prévias de pré-jogo" class="grid gap-4">
+    {previews.map((preview) => {
+      const round = Number(preview.data.round || 0);
+      const isNext = nextMatch?.round === round;
+      const venue = venueLabel(round);
+
+      return (
+        <a
+          href={withBase(`/pt/previews/${preview.slug}`)}
+          class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6"
+          style={`background: ${isNext ? "color-mix(in srgb, var(--color-gold) 12%, var(--color-surface))" : "color-mix(in srgb, white 6%, transparent)"}; border-color: color-mix(in srgb, var(--color-gold) ${isNext ? "40%" : "16%"}, var(--color-rule));`}
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="metadata-chip">Rodada {preview.data.round || "TBD"}</span>
+            {preview.data.opponent && <span class="metadata-chip">{preview.data.opponent}</span>}
+            {venue && <span class="metadata-chip">{venue}</span>}
+            <span class="metadata-chip">{formatDate(preview.data.date)}</span>
+            {isNext && (
+              <span class="inline-flex rounded-full border px-3 py-1 text-xs font-black uppercase tracking-[0.14em]" style="border-color: color-mix(in srgb, var(--color-gold) 45%, var(--color-rule)); color: var(--color-gold-light);">
+                Próximo jogo
+              </span>
+            )}
+          </div>
+          <h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">
+            {preview.title}
+          </h2>
+          <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">
+            {preview.description}
+          </p>
+          <p class="mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+            Ler a prévia completa →
+          </p>
+        </a>
+      );
+    })}
+  </section>
+</BaseLayout>

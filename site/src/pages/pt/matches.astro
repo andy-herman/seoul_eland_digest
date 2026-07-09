@@ -6,7 +6,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { byeRounds, fixtures, scheduleSections, season, sourceUrl, team, type MatchFixture } from "../../data/matches";
 import { getTeamInitials, getTeamLogo } from "../../lib/teamLogos";
 import { withBase } from "../../lib/paths";
-import { getPreMatchPreviewForRound, renderPreviewMarkdown } from "../../lib/prematchPreviews";
+import { getPreMatchPreviewForRound } from "../../lib/prematchPreviews";
 
 const digests = await getCollection("digestsPt");
 const reportByRound = new Map(
@@ -21,7 +21,6 @@ const playedMatches = schedule.filter((match) => match.result !== "TBD");
 const upcomingMatches = schedule.filter((match) => match.result === "TBD");
 const nextMatch = upcomingMatches[0];
 const nextMatchPreview = nextMatch ? getPreMatchPreviewForRound(nextMatch.round, "pt") : undefined;
-const nextMatchPreviewHtml = nextMatchPreview ? renderPreviewMarkdown(nextMatchPreview.body, nextMatchPreview) : "";
 const wins = playedMatches.filter((match) => match.result.startsWith("W")).length;
 const draws = playedMatches.filter((match) => match.result.startsWith("D")).length;
 const losses = playedMatches.filter((match) => match.result.startsWith("L")).length;
@@ -148,7 +147,7 @@ function getScore(score?: number) {
             </div>
             {nextMatchPreview && (
               <a
-                href="#next-match-preview"
+                href={withBase(`/pt/previews/${nextMatchPreview.slug}`)}
                 class="mt-5 block rounded-2xl border p-4 no-underline transition hover:-translate-y-0.5"
                 style="background: color-mix(in srgb, var(--color-gold) 14%, transparent); border-color: color-mix(in srgb, var(--color-gold) 34%, var(--color-rule));"
               >
@@ -157,10 +156,10 @@ function getScore(score?: number) {
                 </p>
                 <h2 class="mt-2 text-lg font-black leading-tight">{nextMatchPreview.title}</h2>
                 <p class="mt-2 text-sm font-bold leading-6" style="color: var(--color-link);">
-                  Scouting, confrontos recentes, chaves táticas e leitura do modelo estão abaixo.
+                  Scouting, confrontos recentes, chaves táticas e leitura do modelo.
                 </p>
                 <p class="mt-3 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
-                  Ir para a prévia ↓
+                  Ler a prévia completa →
                 </p>
               </a>
             )}
@@ -171,28 +170,6 @@ function getScore(score?: number) {
       </aside>
     </div>
   </section>
-
-  {nextMatchPreview && (
-    <article id="next-match-preview" class="editorial-shell preview-article mb-8 scroll-mt-24 sm:mb-10 sm:scroll-mt-28">
-      <header class="mb-8 border-b pb-6" style="border-color: #e7dac9;">
-        <p class="text-xs font-black uppercase tracking-[0.18em]" style="color: var(--color-gold);">
-          Prévia do jogo · Rodada {nextMatch?.round || nextMatchPreview.data.round || "TBD"}
-        </p>
-        <h2 class="mt-3 text-3xl font-black leading-tight tracking-tight sm:text-5xl" style="color: var(--color-navy);">
-          {nextMatchPreview.title}
-        </h2>
-        <p class="mt-4 max-w-3xl text-base font-semibold leading-7" style="color: var(--color-editorial-muted);">
-          {nextMatchPreview.description}
-        </p>
-        <div class="mt-5 flex flex-wrap gap-2">
-          <span class="metadata-chip" style="background: #fff; color: var(--color-navy);">Adversário: {nextMatchPreview.data.opponent || "TBD"}</span>
-          <span class="metadata-chip" style="background: #fff; color: var(--color-navy);">{nextMatchPreview.data.date || "Data a definir"}</span>
-        </div>
-      </header>
-
-      <div class="prose-eland digest-body preview-body" set:html={nextMatchPreviewHtml} />
-    </article>
-  )}
 
   <section aria-labelledby="full-schedule">
     <div class="mb-5 flex flex-wrap items-end justify-between gap-3">

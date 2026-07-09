@@ -1,0 +1,68 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TranslateButton from "../../../components/TranslateButton.astro";
+import { withBase } from "../../../lib/paths";
+import {
+  getPreMatchPreviews,
+  renderPreviewMarkdown,
+  type PreMatchPreview,
+} from "../../../lib/prematchPreviews";
+
+export async function getStaticPaths() {
+  const previews = getPreMatchPreviews("pt");
+  const enSlugs = new Set(getPreMatchPreviews("en").map((preview) => preview.slug));
+
+  return previews.map((preview) => ({
+    params: { slug: preview.slug },
+    props: { preview, hasEnglish: enSlugs.has(preview.slug) },
+  }));
+}
+
+interface Props {
+  preview: PreMatchPreview;
+  hasEnglish: boolean;
+}
+
+const { preview, hasEnglish } = Astro.props;
+const previewHtml = renderPreviewMarkdown(preview.body, preview);
+---
+
+<BaseLayout
+  title={preview.title}
+  description={preview.description}
+  lang="pt"
+>
+  <article class="editorial-shell preview-article mx-auto">
+    <header class="mb-8 border-b pb-6" style="border-color: #e7dac9;">
+      <p class="text-xs font-black uppercase tracking-[0.18em]" style="color: var(--color-gold);">
+        Prévia do jogo · Rodada {preview.data.round || "TBD"}
+      </p>
+      <h1 class="mt-3 text-3xl font-black leading-tight tracking-tight sm:text-5xl" style="color: var(--color-navy);">
+        {preview.title}
+      </h1>
+      <p class="mt-4 max-w-3xl text-base font-semibold leading-7" style="color: var(--color-editorial-muted);">
+        {preview.description}
+      </p>
+      <div class="mt-5 flex flex-wrap items-center gap-2">
+        <span class="metadata-chip" style="background: #fff; color: var(--color-navy);">Adversário: {preview.data.opponent || "TBD"}</span>
+        <span class="metadata-chip" style="background: #fff; color: var(--color-navy);">{preview.data.date || "Data a definir"}</span>
+        {hasEnglish && (
+          <TranslateButton
+            href={`/previews/${preview.slug}`}
+            code="EN"
+            label="Inglês"
+            ariaLabel="Read this preview in English"
+          />
+        )}
+      </div>
+    </header>
+
+    <div class="prose-eland digest-body preview-body" set:html={previewHtml} />
+  </article>
+
+  <nav class="mx-auto mt-10 max-w-5xl border-t pt-6" style="border-color: var(--color-rule);">
+    <a href={withBase("/pt/previews")} class="text-sm font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">
+      ← Todas as prévias
+    </a>
+  </nav>
+</BaseLayout>
