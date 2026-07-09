@@ -115,8 +115,9 @@ Também vale observar o momento das trocas: o Seoul já mostrou força ao ajusta
 A projeção do modelo é clara, mas apertada a favor do Seoul: vitória do Seoul em 65%, empate em 21% e Yongin em 14%. O centro de gols esperados é Yongin 0,85 x Seoul 1,95.
 O mercado público ainda não divulgou odds firmes, mas pelo contexto de tabela e mando, o favoritismo é amplo do Seoul.
 As faixas de placar mais prováveis batem com o desenho tático: 2-0 e 2-1 Seoul são os cenários centrais, com o clean sheet sendo uma meta realista diante do ataque modesto do Yongin.
-Tanto modelo quanto tabela pesam forte a favor do Seoul. O risco aqui é de acomodação pós-Asan e o buraco deixado pela suspensão do Lee Ju-hyuk, mais do que uma ameaça real do Yongin. É um cheque de probabilidade, não recomendação de aposta.
+Tanto modelo quanto tabela pesam forte a favor do Seoul. O risco aqui é de acomodação pós-Asan e o buraco deixado pela suspensão do Lee Ju-hyuk, mais do que uma ameaça real do Yongin. É um check de probabilidade, não recomendação de aposta.
 
 ## Conclusão
 
 O cenário ideal para o Seoul neste duelo passa por paciência, equilíbrio e eficiência nas bolas paradas. O Yongin FC tem armas de transição e jogo aéreo para incomodar, mas o time da casa tem todos os recursos para controlar a partida se proteger bem os contra-ataques e aproveitar com inteligência a amplitude.
+
