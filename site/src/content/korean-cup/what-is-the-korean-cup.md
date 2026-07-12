@@ -53,20 +53,7 @@ Fifteen K3 and K4 clubs came through Round 1 to reach the stage where the K Leag
 
 ### Round 2 (July 15): the K League 2 clubs arrive
 
-All 17 K League 2 clubs enter here, most drawn against a Round 1 survivor from the lower divisions, with a couple of all-K2 ties where the numbers do not divide evenly. A selection of the confirmed pairings:
-
-| Home | Away |
-| --- | --- |
-| Ulsan Citizen (K3) | Seoul E-Land (K2) |
-| Busan Transportation Corp (K3) | Suwon Samsung Bluewings (K2) |
-| Pyeongchang United (K4) | Suwon FC (K2) |
-| Siheung (K3) | Daegu (K2) |
-| Yangpyeong (K3) | Hwaseong (K2) |
-| Namyangju (K4) | Gimpo (K2) |
-| Mokpo (K3) | Cheonan (K2) |
-| Jeonnam Dragons (K2) | Chungnam Asan (K2) |
-
-The lower-division side hosts, which is why Seoul E-Land travel to Ulsan Citizen rather than the other way around. The remaining ties, including league leaders Busan IPark's, complete the 16-match round.
+All 17 K League 2 clubs enter here, drawn against the fifteen Round 1 survivors from the lower divisions, plus one all-K2 tie (Jeonnam Dragons v Chungnam Asan) where the numbers do not divide evenly. The full 16-tie draw is shown in the bracket at the top of this page. Home advantage is mixed: the K League 2 club hosts in ten of the sixteen ties, while the lower-division side hosts in the other six, Seoul E-Land's trip to K3 Ulsan Citizen among them.
 
 ### Round 3 (July 29): the top flight joins
 

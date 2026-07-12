@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TranslateButton from "../../components/TranslateButton.astro";
+import KoreanCupBracket from "../../components/KoreanCupBracket.astro";
 import { withBase } from "../../lib/paths";
 
 export async function getStaticPaths() {
@@ -45,6 +46,8 @@ const slug = entry.id.replace(/\.md$/, "");
         </div>
       )}
     </header>
+
+    {slug === "what-is-the-korean-cup" && <KoreanCupBracket locale="en" />}
 
     <div class="prose-eland digest-body preview-body">
       <Content />

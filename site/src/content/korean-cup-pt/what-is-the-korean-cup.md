@@ -53,20 +53,7 @@ Quinze clubes da K3 e K4 passaram pela 1ª Fase para chegar à fase em que os cl
 
 ### 2ª Fase (15 de julho): os clubes da K League 2 chegam
 
-Todos os 17 clubes da K League 2 entram aqui, a maioria sorteada contra um sobrevivente da 1ª Fase vindo das divisões inferiores, com alguns confrontos entre times da K2 onde os números não fecham de forma exata. Uma seleção dos confrontos confirmados:
-
-| Mandante | Visitante |
-| --- | --- |
-| Ulsan Citizen (K3) | Seoul E-Land (K2) |
-| Busan Transportation Corp (K3) | Suwon Samsung Bluewings (K2) |
-| Pyeongchang United (K4) | Suwon FC (K2) |
-| Siheung (K3) | Daegu (K2) |
-| Yangpyeong (K3) | Hwaseong (K2) |
-| Namyangju (K4) | Gimpo (K2) |
-| Mokpo (K3) | Cheonan (K2) |
-| Jeonnam Dragons (K2) | Chungnam Asan (K2) |
-
-O time da divisão inferior joga em casa, e é por isso que o Seoul E-Land viaja para enfrentar o Ulsan Citizen, e não o contrário. Os confrontos restantes, incluindo o do líder Busan IPark, completam a rodada de 16 jogos.
+Todos os 17 clubes da K League 2 entram aqui, sorteados contra os quinze sobreviventes da 1ª Fase vindos das divisões inferiores, mais um confronto entre times da K2 (Jeonnam Dragons x Chungnam Asan), já que os números não fecham de forma exata. O chaveamento completo dos 16 confrontos está no quadro no topo desta página. O mando de campo é misto: o clube da K League 2 joga em casa em dez dos dezesseis confrontos, enquanto o time da divisão inferior é mandante nos outros seis, incluindo a viagem do Seoul E-Land ao Ulsan Citizen (K3).
 
 ### 3ª Fase (29 de julho): a primeira divisão entra
 

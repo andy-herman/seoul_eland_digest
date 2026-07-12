@@ -1,0 +1,384 @@
+---
+import { withBase } from "../lib/paths";
+
+interface Props {
+  locale?: "en" | "pt";
+}
+const { locale = "en" } = Astro.props;
+const isPt = locale === "pt";
+
+type Tier = "K1" | "K2" | "K3" | "K4";
+interface Club {
+  name: string;
+  tier: Tier;
+  kcode?: string; // K League emblem code
+  logo?: string; // explicit override (local asset or external url)
+  seoul?: boolean;
+}
+
+// Official K League emblem CDN (same source the rest of the site uses).
+function emblem(kcode: string) {
+  return `https://www.kleague.com/assets/images/emblem/emblem_${kcode}.png`;
+}
+function crest(club: Club) {
+  if (club.logo) return club.logo;
+  if (club.kcode) return emblem(club.kcode);
+  return undefined; // fall back to initials badge
+}
+function initials(name: string) {
+  return name
+    .replace(/\b(fc|1995|2008|citizens?|united|corp|dragons)\b/gi, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((p) => p[0]?.toUpperCase())
+    .join("");
+}
+
+const SEOUL = withBase("/assets/crest.png");
+
+// Round 2 (Jul 15, 2026): all 16 ties, home v away. Source-confirmed draw.
+const round2: Array<[Club, Club]> = [
+  [{ name: "Jeonnam Dragons", tier: "K2", kcode: "K07" }, { name: "Chungnam Asan", tier: "K2", kcode: "K34" }],
+  [{ name: "Daegu FC", tier: "K2", kcode: "K17" }, { name: "Siheung Citizens", tier: "K3" }],
+  [{ name: "Ulsan Citizens", tier: "K3" }, { name: "Seoul E-Land", tier: "K2", kcode: "K31", logo: SEOUL, seoul: true }],
+  [{ name: "Cheonan City", tier: "K2", kcode: "K38" }, { name: "FC Mokpo", tier: "K3" }],
+  [{ name: "Busan Transportation Corp", tier: "K3" }, { name: "Suwon Samsung Bluewings", tier: "K2", kcode: "K02" }],
+  [{ name: "Ansan Greeners", tier: "K2", kcode: "K32" }, { name: "Jinju Citizens", tier: "K4" }],
+  [{ name: "Gyeongju KHNP", tier: "K3" }, { name: "Chungbuk Cheongju", tier: "K2", kcode: "K37" }],
+  [{ name: "Hwaseong FC", tier: "K2", kcode: "K39" }, { name: "Yangpyeong FC", tier: "K3" }],
+  [{ name: "Yeoju FC", tier: "K3" }, { name: "Gyeongnam FC", tier: "K2", kcode: "K20" }],
+  [{ name: "Yongin FC", tier: "K2", kcode: "K42" }, { name: "Dangjin Citizens", tier: "K3" }],
+  [{ name: "Namyangju Citizens", tier: "K4" }, { name: "Gimpo FC", tier: "K2", kcode: "K36" }],
+  [{ name: "Suwon FC", tier: "K2", kcode: "K29" }, { name: "Pyeongchang United", tier: "K4" }],
+  [{ name: "Changwon FC", tier: "K3" }, { name: "Gimhae FC 2008", tier: "K2", kcode: "K41" }],
+  [{ name: "Seongnam FC", tier: "K2", kcode: "K08" }, { name: "Pocheon Citizens", tier: "K3" }],
+  [{ name: "Busan IPark", tier: "K2", kcode: "K06" }, { name: "Geoje Citizens", tier: "K4" }],
+  [{ name: "Paju Frontier", tier: "K2", kcode: "K40" }, { name: "FC Gangneung", tier: "K3" }],
+];
+
+// Round 3 (Jul 29, 2026): the 8 K League 1 clubs join the 16 Round 2 winners.
+const r3Entrants: Club[] = [
+  { name: "Ulsan HD", tier: "K1", kcode: "K01" },
+  { name: "FC Seoul", tier: "K1", kcode: "K09" },
+  { name: "Incheon United", tier: "K1", kcode: "K18" },
+  { name: "Gimcheon Sangmu", tier: "K1", kcode: "K35" },
+  { name: "Gwangju FC", tier: "K1", kcode: "K22" },
+  { name: "Jeju SK", tier: "K1", kcode: "K04" },
+  { name: "FC Anyang", tier: "K1", kcode: "K27" },
+  { name: "Bucheon FC 1995", tier: "K1", kcode: "K26" },
+];
+
+// Round of 16 (Aug 19, 2026): the 4 AFC Champions League Elite clubs are seeded in.
+const giants: Club[] = [
+  { name: "Jeonbuk Hyundai Motors", tier: "K1", kcode: "K05" },
+  { name: "Daejeon Hana Citizen", tier: "K1", kcode: "K10" },
+  { name: "Pohang Steelers", tier: "K1", kcode: "K03" },
+  { name: "Gangwon FC", tier: "K1", kcode: "K21" },
+];
+
+const t = isPt
+  ? {
+      r2: "2ª Fase, o chaveamento completo",
+      r2date: "15 jul 2026 · 32 times, 16 confrontos",
+      our: "Nosso jogo",
+      r3: "3ª Fase, a K League 1 entra",
+      r3date: "29 jul 2026 · +8 clubes da K League 1",
+      r3note: "Destaque: FC Seoul x vencedor de Busan IPark. O E-Land, se avançar, pega o Ulsan HD.",
+      r16: "Oitavas, os gigantes entram",
+      r16date: "19 ago 2026 · +4 semeados da AFC Champions League Elite",
+      qf: "Quartas de final",
+      qfdate: "19 mai 2027 · novo sorteio aberto",
+      sf: "Semifinais",
+      sfdate: "26 mai 2027",
+      fn: "Final",
+      fndate: "5 jun 2027 · jogo único",
+      reward: "O campeão garante vaga na AFC Champions League Two",
+      caption: "Chaveamento da Hana Bank Copa da Coreia 2026-27. Os clubes de divisões inferiores jogam em casa em seis confrontos; nos outros dez, o clube da K League 2 é o mandante.",
+    }
+  : {
+      r2: "Round 2, the full draw",
+      r2date: "Jul 15, 2026 · 32 teams, 16 ties",
+      our: "Our tie",
+      r3: "Round 3, the top flight joins",
+      r3date: "Jul 29, 2026 · +8 K League 1 clubs",
+      r3note: "Marquee: FC Seoul v the Busan IPark winner. Seoul E-Land, if through, meet Ulsan HD.",
+      r16: "Round of 16, the giants drop in",
+      r16date: "Aug 19, 2026 · +4 AFC Champions League Elite seeds",
+      qf: "Quarterfinals",
+      qfdate: "May 19, 2027 · open re-draw",
+      sf: "Semifinals",
+      sfdate: "May 26, 2027",
+      fn: "Final",
+      fndate: "Jun 5, 2027 · single match",
+      reward: "The champion qualifies for the AFC Champions League Two",
+      caption: "The 2026-27 Hana Bank Korea Cup bracket. Lower-division clubs host six of the ties; in the other ten the K League 2 club is at home.",
+    };
+
+function tierLabel(tier: Tier) {
+  return tier;
+}
+---
+
+<section class="kc-bracket not-prose" aria-label={t.caption}>
+  <p class="kc-caption">{t.caption}</p>
+
+  <div class="kc-round-head">
+    <h3>{t.r2}</h3>
+    <span>{t.r2date}</span>
+  </div>
+  <ol class="kc-grid">
+    {round2.map(([home, away]) => {
+      const highlight = home.seoul || away.seoul;
+      return (
+        <li class={`kc-tie${highlight ? " kc-tie-seoul" : ""}`}>
+          {highlight && <span class="kc-our">{t.our}</span>}
+          {[home, away].map((club) => {
+            const src = crest(club);
+            return (
+              <div class={`kc-team${club.seoul ? " kc-team-seoul" : ""}`}>
+                {src ? (
+                  <img class="kc-logo" src={src} alt={`${club.name} crest`} loading="lazy" width="28" height="28" />
+                ) : (
+                  <span class="kc-logo kc-initials" aria-hidden="true">{initials(club.name)}</span>
+                )}
+                <span class="kc-name">{club.name}</span>
+                <span class="kc-tier">{tierLabel(club.tier)}</span>
+              </div>
+            );
+          })}
+        </li>
+      );
+    })}
+  </ol>
+
+  <div class="kc-round-head kc-round-head-later">
+    <h3>{t.r3}</h3>
+    <span>{t.r3date}</span>
+  </div>
+  <ul class="kc-crest-row">
+    {r3Entrants.map((club) => (
+      <li class="kc-crest-chip">
+        <img class="kc-logo" src={crest(club)} alt={`${club.name} crest`} loading="lazy" width="24" height="24" />
+        <span>{club.name}</span>
+      </li>
+    ))}
+  </ul>
+  <p class="kc-note">{t.r3note}</p>
+
+  <div class="kc-round-head kc-round-head-later">
+    <h3>{t.r16}</h3>
+    <span>{t.r16date}</span>
+  </div>
+  <ul class="kc-crest-row">
+    {giants.map((club) => (
+      <li class="kc-crest-chip kc-crest-giant">
+        <img class="kc-logo" src={crest(club)} alt={`${club.name} crest`} loading="lazy" width="24" height="24" />
+        <span>{club.name}</span>
+      </li>
+    ))}
+  </ul>
+
+  <ol class="kc-final-steps">
+    <li><strong>{t.qf}</strong><span>{t.qfdate}</span></li>
+    <li><strong>{t.sf}</strong><span>{t.sfdate}</span></li>
+    <li><strong>{t.fn}</strong><span>{t.fndate}</span></li>
+  </ol>
+
+  <p class="kc-reward">{t.reward}</p>
+</section>
+
+<style>
+  .kc-bracket {
+    margin: 0.5rem 0 2.25rem;
+    color: var(--color-editorial-ink);
+  }
+  .kc-caption {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--color-editorial-muted);
+    margin: 0 0 1.25rem;
+  }
+  .kc-round-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    border-top: 2px solid var(--color-gold);
+    padding-top: 0.6rem;
+    margin: 0 0 0.9rem;
+  }
+  .kc-round-head-later {
+    margin-top: 1.75rem;
+  }
+  .kc-round-head h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--color-navy);
+  }
+  .kc-round-head span {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-editorial-muted);
+  }
+  .kc-grid {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+  .kc-tie {
+    position: relative;
+    border: 1px solid #e7dac9;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 0.55rem 0.7rem;
+    display: grid;
+    gap: 0.35rem;
+  }
+  .kc-tie-seoul {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-gold) 35%, transparent);
+  }
+  .kc-our {
+    position: absolute;
+    top: -0.65rem;
+    right: 0.6rem;
+    background: var(--color-gold);
+    color: #ffffff;
+    font-size: 0.6rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.45rem;
+    border-radius: 999px;
+  }
+  .kc-team {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .kc-logo {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    border-radius: 6px;
+    background: #ffffff;
+    flex: none;
+  }
+  .kc-initials {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.68rem;
+    font-weight: 800;
+    color: var(--color-navy);
+    border: 1px solid #e7dac9;
+  }
+  .kc-name {
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--color-navy);
+    line-height: 1.2;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .kc-team-seoul .kc-name {
+    color: var(--color-blue);
+  }
+  .kc-tier {
+    margin-left: auto;
+    font-size: 0.62rem;
+    font-weight: 800;
+    color: var(--color-editorial-muted);
+    border: 1px solid #e7dac9;
+    border-radius: 999px;
+    padding: 0.08rem 0.35rem;
+    flex: none;
+  }
+  .kc-crest-row {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .kc-crest-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: 1px solid #e7dac9;
+    border-radius: 999px;
+    background: #ffffff;
+    padding: 0.28rem 0.6rem 0.28rem 0.32rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--color-navy);
+  }
+  .kc-crest-chip .kc-logo {
+    width: 24px;
+    height: 24px;
+  }
+  .kc-crest-giant {
+    border-color: var(--color-gold);
+    background: color-mix(in srgb, var(--color-gold) 10%, #ffffff);
+  }
+  .kc-note {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--color-editorial-muted);
+    margin: 0.8rem 0 0;
+  }
+  .kc-final-steps {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.6rem;
+  }
+  .kc-final-steps li {
+    border: 1px solid #e7dac9;
+    border-radius: 12px;
+    background: #ffffff;
+    padding: 0.6rem 0.7rem;
+    display: grid;
+    gap: 0.15rem;
+  }
+  .kc-final-steps strong {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--color-navy);
+  }
+  .kc-final-steps span {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: var(--color-editorial-muted);
+  }
+  .kc-reward {
+    margin: 1.25rem 0 0;
+    border-radius: 12px;
+    background: var(--color-navy);
+    color: #ffffff;
+    font-weight: 800;
+    text-align: center;
+    padding: 0.85rem 1rem;
+    font-size: 0.95rem;
+  }
+  @media (max-width: 640px) {
+    .kc-grid {
+      grid-template-columns: 1fr;
+    }
+    .kc-final-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
