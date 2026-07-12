@@ -5,9 +5,12 @@ import { fixtures } from "../../data/matches";
 import { withBase } from "../../lib/paths";
 import { getPreMatchPreviews } from "../../lib/prematchPreviews";
 
-const previews = getPreMatchPreviews().sort(
-  (a, b) => Number(b.data.round || 0) - Number(a.data.round || 0),
-);
+const previews = getPreMatchPreviews().sort((a, b) => {
+  const aSeason = a.data.kind === "season" ? 1 : 0;
+  const bSeason = b.data.kind === "season" ? 1 : 0;
+  if (aSeason !== bSeason) return bSeason - aSeason;
+  return Number(b.data.round || 0) - Number(a.data.round || 0);
+});
 
 const nextMatch = [...fixtures]
   .sort((a, b) => a.round - b.round)
@@ -60,8 +63,9 @@ function venueLabel(round: number) {
 
   <section aria-label="Pre-match previews" class="grid gap-4">
     {previews.map((preview) => {
+      const isSeason = preview.data.kind === "season";
       const round = Number(preview.data.round || 0);
-      const isNext = nextMatch?.round === round;
+      const isNext = !isSeason && nextMatch?.round === round;
       const venue = venueLabel(round);
 
       return (
@@ -71,14 +75,23 @@ function venueLabel(round: number) {
           style={`background: ${isNext ? "color-mix(in srgb, var(--color-gold) 12%, var(--color-surface))" : "color-mix(in srgb, white 6%, transparent)"}; border-color: color-mix(in srgb, var(--color-gold) ${isNext ? "40%" : "16%"}, var(--color-rule));`}
         >
           <div class="flex flex-wrap items-center gap-2">
-            <span class="metadata-chip">Round {preview.data.round || "TBD"}</span>
-            {preview.data.opponent && <span class="metadata-chip">{preview.data.opponent}</span>}
-            {venue && <span class="metadata-chip">{venue}</span>}
-            <span class="metadata-chip">{formatDate(preview.data.date)}</span>
-            {isNext && (
-              <span class="inline-flex rounded-full border px-3 py-1 text-xs font-black uppercase tracking-[0.14em]" style="border-color: color-mix(in srgb, var(--color-gold) 45%, var(--color-rule)); color: var(--color-gold-light);">
-                Next match
-              </span>
+            {isSeason ? (
+              <>
+                <span class="metadata-chip">{preview.data.label || "Season preview"}</span>
+                {preview.data.round_range && <span class="metadata-chip">{preview.data.round_range}</span>}
+              </>
+            ) : (
+              <>
+                <span class="metadata-chip">Round {preview.data.round || "TBD"}</span>
+                {preview.data.opponent && <span class="metadata-chip">{preview.data.opponent}</span>}
+                {venue && <span class="metadata-chip">{venue}</span>}
+                <span class="metadata-chip">{formatDate(preview.data.date)}</span>
+                {isNext && (
+                  <span class="inline-flex rounded-full border px-3 py-1 text-xs font-black uppercase tracking-[0.14em]" style="border-color: color-mix(in srgb, var(--color-gold) 45%, var(--color-rule)); color: var(--color-gold-light);">
+                    Next match
+                  </span>
+                )}
+              </>
             )}
           </div>
           <h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">

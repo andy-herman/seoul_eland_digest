@@ -393,7 +393,7 @@ export function renderPreviewMarkdown(
   markdown: string,
   preview?: Pick<PreMatchPreview, "forecast" | "predictedLineup" | "locale">,
 ) {
-  const lines = markdown.replace(/^# .+\r?\n+/, "").split(/\r?\n/);
+  const lines = markdown.replace(/^\s*# .+\r?\n+/, "").split(/\r?\n/);
   const html: string[] = [];
   let currentHeading = "";
   let renderedGlanceVisuals = false;
