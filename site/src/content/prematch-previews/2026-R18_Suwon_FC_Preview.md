@@ -10,7 +10,7 @@ opponent: "Suwon FC"
 venue_for_seoul: "away"
 forecast_probabilities: {"seoul_eland_win":0.38,"draw":0.28,"opponent_win":0.34}
 forecast_labels: {"seoul_eland_win":"Seoul win","draw":"Draw","opponent_win":"Suwon FC win"}
-forecast_note: "Model read before Suwon FC's Round 17 match; rounded to whole percentages."
+forecast_note: "Model read on the completed Round 16 standings; rounded to whole percentages."
 predicted_lineup_label: "Predicted Seoul XI"
 predicted_lineup_team: "Seoul E-Land"
 predicted_formation: "4-2-3-1"
@@ -27,17 +27,17 @@ tags: [seoul-eland, pre-match-preview, scouting]
 | --- | --- |
 | Fixture | Round 18, 2026-07-18, 19:30, Suwon Sports Complex |
 | Venue for Seoul | Away |
-| Seoul table context | 3rd, 16 played, 29 points, 9-2-5, 28-19 (+9) |
-| Opponent table context | 5th, 15 played, 26 points, 7-5-3, 29-21 (+8), R17 vs Jeonnam still to play |
+| Seoul table context | 5th, 16 played, 29 points, 9-2-5, 28-19 (+9) |
+| Opponent table context | 4th, 16 played, 29 points, 8-5-3, 34-21 (+13) |
 | Prior 2026 meetings | R6 (2026-04-04): Seoul 3-0 at Mokdong |
 | Future 2026 meetings | None; this is the return fixture |
 | Forecast read | Seoul 38%, draw 28%, Suwon FC 34% |
 
-Note on timing: Seoul E-Land have the Round 17 bye, so this preview is written with Suwon FC still to host Jeonnam Dragons on July 10. Their record and mood can shift once more before kickoff; the read below should be refreshed against that result.
+Note on timing: the standings above reflect the completed first round robin, through Round 16. Seoul E-Land had the Round 17 bye, so Round 18 at Suwon FC is their return to league action.
 
 ## Why This Match Matters
 
-This is the closest thing to a six-pointer the July calendar offers. Third hosts nobody this round; third visits fifth, separated by three points, with Busan IPark (33) and Suwon Bluewings (32) setting the pace above both. Beat Suwon FC away and Seoul E-Land keep the top two within touching distance while pushing a direct promotion rival six points back with the head-to-head sweep. Lose, and a relegated club with a bigger budget and a settling system pulls level, with Daegu (28) lurking between them.
+This is the closest thing to a six-pointer the July calendar offers. Fifth visits fourth, and the two are level on points, Seoul E-Land and Suwon FC both on 29 and separated only by goal difference, with Busan IPark (36), Suwon Bluewings (32), and Daegu (31) setting the pace above them. Beat Suwon FC away and Seoul leapfrog them and push back toward the automatic-promotion places, completing a season sweep after the 3-0 at Mokdong. Lose, and a relegated club with a bigger budget and a settling system pulls three clear, with the top of the table drifting further out of view.
 
 There is also a subplot the Korean press will not leave alone: this is the Kim Do-gyun derby, round two. Seoul's manager used to manage Suwon FC, and the Round 6 meeting, which E-Land won 3-0 for their first league victory over this club in their history, ended with him calling the performance "close to perfect" and thanking the Suwon FC support. Now he brings a rebuilt back-four system to his former home ground.
 
@@ -68,7 +68,7 @@ The lineup graphic is a best read, not a leaked team sheet. It starts from the R
 
 ## Opponent Scouting Report
 
-Suwon FC are the division's draw specialists with a second-half engine. Park Kun-ha's side sit fifth at 7-5-3, and five draws in fifteen tell an honest story: hard to beat, slow to start. The pattern is remarkably consistent. In the May 3 derby against Suwon Bluewings they produced zero first-half shots and then scored three second-half goals; at Ansan after the break they went behind early and scored three after halftime; at Cheonan in June they conceded in the sixth minute of stoppage time and still rescued the point four minutes later. Whatever else happens on July 18, the last half hour will be dangerous.
+Suwon FC are the division's draw specialists with a second-half engine. Park Kun-ha's side sit fourth at 8-5-3, and five draws in sixteen tell an honest story: hard to beat, slow to start. The pattern is remarkably consistent. In the May 3 derby against Suwon Bluewings they produced zero first-half shots and then scored three second-half goals; at Ansan after the break they went behind early and scored three after halftime; at Cheonan in June they conceded in the sixth minute of stoppage time and still rescued the point four minutes later. Whatever else happens on July 18, the last half hour will be dangerous.
 
 Park Kun-ha, appointed in December after relegation, is historically a 3-5-2 manager: aggressive wingbacks, a solid base, quick counters, dropping to a 5-3-2 without the ball. The current-season reporting adds an important post-break note: their build-up play has visibly improved, with FourFourTwo highlighting 115 completed passes in advanced areas against Ansan. This is no longer purely a counter side.
 
@@ -108,7 +108,7 @@ Watch the first fifteen minutes for shape confirmation: if Suwon FC start in the
 
 ## Forecast vs the Market
 
-The model read is narrow and honest about the venue: 38% Seoul win, 28% draw, 34% Suwon FC win, with an expected-goals center around Seoul 1.4, Suwon FC 1.2. The draw share deserves respect, five of Suwon FC's fifteen matches have ended level, and their late-game scoring makes a 1-1 the single most likely individual scoreline. The case for the Seoul edge anyway: the head-to-head evidence from April was one-sided, the bye gives Seoul a genuine freshness advantage, and E-Land's post-break performance level (a 60-40 dismantling of Gimhae that deserved more than 3-1) was simply higher than Suwon FC's grind past Ansan. This is a probability check against the spread, not a wagering recommendation.
+The model read is narrow and honest about the venue: 38% Seoul win, 28% draw, 34% Suwon FC win, with an expected-goals center around Seoul 1.4, Suwon FC 1.2. The draw share deserves respect, five of Suwon FC's sixteen matches have ended level, and their late-game scoring makes a 1-1 the single most likely individual scoreline. The case for the Seoul edge anyway: the head-to-head evidence from April was one-sided, the bye gives Seoul a genuine freshness advantage, and E-Land's post-break performance level (a 60-40 dismantling of Gimhae that deserved more than 3-1) was simply higher than Suwon FC's grind past Ansan. This is a probability check against the spread, not a wagering recommendation.
 
 ## Bottom Line
 

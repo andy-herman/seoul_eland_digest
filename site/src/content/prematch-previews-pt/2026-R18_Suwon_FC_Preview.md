@@ -10,7 +10,7 @@ opponent: "Suwon FC"
 venue_for_seoul: "away"
 forecast_probabilities: {"seoul_eland_win":0.38,"draw":0.28,"opponent_win":0.34}
 forecast_labels: {"seoul_eland_win":"Vitória do Seoul","draw":"Empate","opponent_win":"Vitória do Suwon FC"}
-forecast_note: "Leitura do modelo antes da partida do Suwon FC na 17ª rodada; arredondado para percentuais inteiros."
+forecast_note: "Leitura do modelo com a tabela da 16ª rodada concluída; arredondado para percentuais inteiros."
 predicted_lineup_label: "Escalação provável do Seoul"
 predicted_lineup_team: "Seoul E-Land"
 predicted_formation: "4-2-3-1"
@@ -27,17 +27,17 @@ tags: [seoul-eland, pre-match-preview, scouting]
 | --- | --- |
 | Partida | 18ª rodada, 2026-07-18, 19h30, Suwon Sports Complex |
 | Mando para o Seoul | Fora |
-| Contexto do Seoul na tabela | 3º, 16 jogos, 29 pontos, 9-2-5, 28-19 (+9) |
-| Contexto do adversário | 5º, 15 jogos, 26 pontos, 7-5-3, 29-21 (+8), ainda joga a 17ª rodada contra o Jeonnam |
+| Contexto do Seoul na tabela | 5º, 16 jogos, 29 pontos, 9-2-5, 28-19 (+9) |
+| Contexto do adversário | 4º, 16 jogos, 29 pontos, 8-5-3, 34-21 (+13) |
 | Confrontos em 2026 | 6ª rodada (2026-04-04): Seoul 3 a 0 no Mokdong |
 | Confrontos futuros em 2026 | Nenhum; este é o jogo de volta |
 | Leitura da projeção | Seoul 38%, empate 28%, Suwon FC 34% |
 
-Nota sobre o momento: o Seoul E-Land folga na 17ª rodada, então esta prévia foi escrita com o Suwon FC ainda por receber o Jeonnam Dragons em 10 de julho. O retrospecto e o clima podem mudar mais uma vez antes da bola rolar; a leitura abaixo deve ser atualizada com aquele resultado.
+Nota sobre o momento: a tabela acima reflete o primeiro turno concluído, até a 16ª rodada. O Seoul E-Land folgou na 17ª rodada, então a 18ª rodada no Suwon FC marca o retorno à ação na liga.
 
 ## Por Que Esta Partida Importa
 
-É o mais próximo de um confronto de seis pontos que o calendário de julho oferece. O terceiro visita o quinto, separados por três pontos, com Busan IPark (33) e Suwon Bluewings (32) ditando o ritmo acima de ambos. Vença o Suwon FC fora e o Seoul E-Land mantém os dois primeiros ao alcance, empurrando um rival direto seis pontos para trás com a varredura no confronto direto. Perca, e um clube recém-rebaixado, com orçamento maior e um sistema em consolidação, empata na pontuação, com o Daegu (28) à espreita entre os dois.
+É o mais próximo de um confronto de seis pontos que o calendário de julho oferece. O quinto visita o quarto, e os dois estão empatados em pontos, Seoul E-Land e Suwon FC ambos com 29 e separados apenas pelo saldo de gols, com Busan IPark (36), Suwon Bluewings (32) e Daegu (31) ditando o ritmo acima deles. Vença o Suwon FC fora e o Seoul salta à frente do rival e volta a mirar as vagas de acesso direto, completando a varredura na temporada após o 3 a 0 no Mokdong. Perca, e um clube recém-rebaixado, com orçamento maior e um sistema em consolidação, abre três pontos, com o topo da tabela ficando mais distante.
 
 Há também um enredo que a imprensa coreana não vai soltar: este é o derby de Kim Do-gyun, segundo capítulo. O treinador do Seoul já comandou o Suwon FC, e o encontro da 6ª rodada, vencido pelo E-Land por 3 a 0, a primeira vitória da história do clube sobre este adversário na liga, terminou com ele chamando a atuação de "perto da perfeição" e agradecendo à torcida do Suwon FC. Agora ele leva um sistema reconstruído de quatro defensores à sua antiga casa.
 
@@ -68,7 +68,7 @@ O gráfico da escalação é a melhor leitura possível, não um vazamento. Part
 
 ## Relatório de Observação do Adversário
 
-O Suwon FC é o especialista em empates da divisão, com um motor de segundo tempo. O time de Park Kun-ha é o quinto colocado com 7-5-3, e cinco empates em quinze jogos contam uma história honesta: difícil de bater, lento para começar. O padrão é notavelmente consistente. No derby de 3 de maio contra o Suwon Bluewings, não finalizaram nenhuma vez no primeiro tempo e marcaram três gols no segundo; em Ansan, depois da pausa, saíram atrás cedo e viraram com três gols após o intervalo; em Cheonan, em junho, sofreram gol aos 51 dos acréscimos e ainda arrancaram o empate quatro minutos depois. Aconteça o que acontecer em 18 de julho, a última meia hora será perigosa.
+O Suwon FC é o especialista em empates da divisão, com um motor de segundo tempo. O time de Park Kun-ha é o quarto colocado com 8-5-3, e cinco empates em dezesseis jogos contam uma história honesta: difícil de bater, lento para começar. O padrão é notavelmente consistente. No derby de 3 de maio contra o Suwon Bluewings, não finalizaram nenhuma vez no primeiro tempo e marcaram três gols no segundo; em Ansan, depois da pausa, saíram atrás cedo e viraram com três gols após o intervalo; em Cheonan, em junho, sofreram gol aos 51 dos acréscimos e ainda arrancaram o empate quatro minutos depois. Aconteça o que acontecer em 18 de julho, a última meia hora será perigosa.
 
 Park Kun-ha, contratado em dezembro depois do rebaixamento, é historicamente um treinador de 3-5-2: alas agressivos, base sólida, contra-ataques rápidos, recuando para um 5-3-2 sem a bola. O noticiário da temporada acrescenta uma nota importante pós-pausa: a construção de jogo melhorou visivelmente, com a FourFourTwo destacando 115 passes completados em zonas avançadas contra o Ansan. Já não é um time puramente de contra-ataque.
 
@@ -108,7 +108,7 @@ Observe os primeiros quinze minutos para confirmar o desenho: se o Suwon FC come
 
 ## Projeção vs o Mercado
 
-A leitura do modelo é apertada e honesta quanto ao mando: 38% de vitória do Seoul, 28% de empate, 34% de vitória do Suwon FC, com um centro de gols esperados em torno de Seoul 1,4 e Suwon FC 1,2. A fatia do empate merece respeito, cinco dos quinze jogos do Suwon FC terminaram igualados, e os gols tardios deles fazem do 1 a 1 o placar individual mais provável. O argumento para a vantagem do Seoul mesmo assim: a evidência do confronto direto de abril foi unilateral, a folga dá ao Seoul uma vantagem real de frescor, e o nível de atuação do E-Land depois da pausa (um 60 a 40 sobre o Gimhae que merecia mais do que 3 a 1) foi simplesmente superior ao triunfo suado do Suwon FC sobre o Ansan. Isto é uma checagem de probabilidades contra o mercado, não uma recomendação de aposta.
+A leitura do modelo é apertada e honesta quanto ao mando: 38% de vitória do Seoul, 28% de empate, 34% de vitória do Suwon FC, com um centro de gols esperados em torno de Seoul 1,4 e Suwon FC 1,2. A fatia do empate merece respeito, cinco dos dezesseis jogos do Suwon FC terminaram igualados, e os gols tardios deles fazem do 1 a 1 o placar individual mais provável. O argumento para a vantagem do Seoul mesmo assim: a evidência do confronto direto de abril foi unilateral, a folga dá ao Seoul uma vantagem real de frescor, e o nível de atuação do E-Land depois da pausa (um 60 a 40 sobre o Gimhae que merecia mais do que 3 a 1) foi simplesmente superior ao triunfo suado do Suwon FC sobre o Ansan. Isto é uma checagem de probabilidades contra o mercado, não uma recomendação de aposta.
 
 ## Conclusão
 
