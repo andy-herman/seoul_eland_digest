@@ -44,4 +44,22 @@ const places = defineCollection({
     .passthrough(),
 });
 
-export const collections = { digests, digestsPt, players, places };
+const koreanCupSchema = z.object({
+  title: z.string(),
+  order: z.number().default(0),
+  description: z.string().default(""),
+  date: z.coerce.date().optional(),
+  tags: z.array(z.string()).default([]),
+});
+
+const koreanCup = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/korean-cup" }),
+  schema: koreanCupSchema,
+});
+
+const koreanCupPt = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/korean-cup-pt" }),
+  schema: koreanCupSchema,
+});
+
+export const collections = { digests, digestsPt, players, places, koreanCup, koreanCupPt };

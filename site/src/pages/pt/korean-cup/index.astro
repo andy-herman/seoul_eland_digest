@@ -1,0 +1,62 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TranslateButton from "../../../components/TranslateButton.astro";
+import { withBase } from "../../../lib/paths";
+
+const articles = (await getCollection("koreanCupPt")).sort(
+  (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0),
+);
+---
+
+<BaseLayout
+  title="O Seoul E-Land e a Copa da Coreia"
+  description="O que é a Copa da Coreia, o chaveamento de 2026 detalhado rodada a rodada, e onde o Seoul E-Land FC entra no mata-mata."
+  lang="pt"
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        Copa da Coreia
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        A única competição em que um time da K League 2 pode dividir o gramado com os gigantes. O que é a Copa da Coreia, o chaveamento de 2026, e o caminho do Seoul E-Land pelo mata-mata.
+      </p>
+      <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+        {articles.length} {articles.length === 1 ? "artigo" : "artigos"}
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/korean-cup" code="EN" label="Inglês" ariaLabel="Ler a seção da Copa da Coreia em inglês" />
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Artigos da Copa da Coreia" class="grid gap-4">
+    {articles.map((article, index) => (
+      <a
+        href={withBase(`/pt/korean-cup/${article.id.replace(/\.md$/, "")}`)}
+        class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6"
+        style="background: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));"
+      >
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="metadata-chip">Parte {index + 1}</span>
+          {article.data.tags?.filter((tag) => tag !== "korean-cup").slice(0, 2).map((tag) => (
+            <span class="metadata-chip">{tag.replace(/-/g, " ")}</span>
+          ))}
+        </div>
+        <h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">
+          {article.data.title}
+        </h2>
+        {article.data.description && (
+          <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">
+            {article.data.description}
+          </p>
+        )}
+        <p class="mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          Ler o artigo →
+        </p>
+      </a>
+    ))}
+  </section>
+</BaseLayout>

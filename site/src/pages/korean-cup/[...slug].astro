@@ -1,0 +1,59 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import { withBase } from "../../lib/paths";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("koreanCup");
+  const ptSlugs = new Set(
+    (await getCollection("koreanCupPt")).map((a) => a.id.replace(/\.md$/, "")),
+  );
+  return articles.map((entry) => ({
+    params: { slug: entry.id.replace(/\.md$/, "") },
+    props: { entry, hasPortuguese: ptSlugs.has(entry.id.replace(/\.md$/, "")) },
+  }));
+}
+
+const { entry, hasPortuguese } = Astro.props;
+const { Content } = await render(entry);
+const slug = entry.id.replace(/\.md$/, "");
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.description}>
+  <article class="editorial-shell preview-article mx-auto">
+    <header class="mb-8 border-b pb-6" style="border-color: #e7dac9;">
+      <p class="text-xs font-black uppercase tracking-[0.18em]" style="color: var(--color-gold);">
+        Korean Cup
+      </p>
+      <h1 class="mt-3 text-3xl font-black leading-tight tracking-tight sm:text-5xl" style="color: var(--color-navy);">
+        {entry.data.title}
+      </h1>
+      {entry.data.description && (
+        <p class="mt-4 max-w-3xl text-base font-semibold leading-7" style="color: var(--color-editorial-muted);">
+          {entry.data.description}
+        </p>
+      )}
+      {hasPortuguese && (
+        <div class="mt-5 flex flex-wrap items-center gap-2">
+          <TranslateButton
+            href={`/pt/korean-cup/${slug}`}
+            code="PT"
+            label="Português"
+            ariaLabel="Ler este artigo em português"
+          />
+        </div>
+      )}
+    </header>
+
+    <div class="prose-eland digest-body preview-body">
+      <Content />
+    </div>
+  </article>
+
+  <nav class="mx-auto mt-10 max-w-5xl border-t pt-6" style="border-color: var(--color-rule);">
+    <a href={withBase("/korean-cup")} class="text-sm font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">
+      ← All Korean Cup articles
+    </a>
+  </nav>
+</BaseLayout>
