@@ -10,6 +10,16 @@ tags: [korean-cup, seoul-e-land]
 
 > A Copa da Coreia é uma rodada de bônus para o Seoul E-Land: primeiro um adversário da K3, e uma briga pelo acesso a proteger. Mas ela vem com uma peculiaridade real: a copa permite escalar menos estrangeiros do que a liga, e o elenco do Seoul foi montado de um jeito que sente isso. Aqui estão o sorteio, o histórico, a regra e o teto honesto.
 
+## Atualização, 15 de julho: o Seoul E-Land está eliminado
+
+Este artigo foi escrito antes da segunda fase, e errou justamente na parte sobre a qual estava mais confiante. O Seoul E-Land perdeu por 4 a 2 na prorrogação para o Ulsan Citizen FC, time da K3, e está eliminado da Hana Bank Copa da Coreia 2026-27 no primeiro obstáculo que encontrou.
+
+O confronto estava 2 a 2 nos noventa minutos. Son Hyuk-chan foi expulso aos noventa, e Kim Min-gi marcou duas vezes na prorrogação, aos 104 e aos 117, para liquidar. Um clube profissional, diante de um adversário semiprofissional duas divisões abaixo, caiu com um a menos na meia hora extra.
+
+A seção abaixo previa esta partida como um jogo que o Seoul deveria vencer com folga mesmo com um time rodado. A previsão estava errada, e vale deixá-la na página em vez de apagá-la em silêncio, porque o raciocínio era razoável e o resultado aconteceu assim mesmo. O resto do artigo, o histórico da copa, a conta do rodízio e a regra dos estrangeiros, segue valendo como foi escrito. O duelo projetado com o Ulsan HD na 3ª fase nunca aconteceu.
+
+Há um consolo, e ele não é pouco: o argumento de calendário deste artigo era que a liga é a prioridade. O Seoul agora não tem mais compromissos de copa e um caminho totalmente livre para a briga pelo acesso.
+
 ## O Sorteio: Ulsan Citizen, Depois o Abismo
 
 O Seoul E-Land entra na Hana Bank Copa da Coreia 2026-27 na 2ª Fase, em 15 de julho, sorteado contra o Ulsan Citizen FC, um time da terceira divisão (K3) que venceu um jogo da 1ª Fase para chegar aqui. O clube da divisão inferior joga em casa, então o E-Land viaja, mas a diferença de nível é grande: um clube profissional de tempo integral da K League 2 contra um adversário semiprofissional da K3. É um jogo que o Seoul deve vencer com folga, mesmo sem seu time mais forte.

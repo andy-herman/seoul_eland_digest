@@ -48,6 +48,10 @@ const playerSlugs = new Set([
   "son-hyuk-chan",
   "yang-seung-min",
   "yoon-seok-ju",
+  "yun-seok-ju",
+  "ahn-joo-wan",
+  "bae-seo-jun",
+  "oh-in-pyo",
 ]);
 
 const placeSlugs = new Set(["mokdong-stadium"]);

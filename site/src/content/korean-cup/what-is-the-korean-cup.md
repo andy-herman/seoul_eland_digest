@@ -69,4 +69,6 @@ The Cup pauses over the winter and resumes in spring. From the quarterfinals onw
 
 ## Where This Leaves Seoul E-Land
 
-Seoul E-Land begin at Round 2 against K3 Ulsan Citizen on July 15, a tie a full-time professional club is expected to win. Beyond that, the climb steepens quickly: Ulsan HD in Round 3, then potentially one of the continental giants in the Round of 16. How far E-Land should chase the Cup while fighting for promotion, and the quirk in the competition's rules that could actually help them go deeper, is the subject of the next article.
+Seoul E-Land began at Round 2 against K3 Ulsan Citizen on July 15, and went out. Ulsan Citizen won 4-2 after extra time, having been level at 2-2 through ninety minutes, with Seoul finishing the match a man down. The projected climb, Ulsan HD in Round 3 and then one of the continental giants in the last 16, never started.
+
+That makes the rest of this bracket a spectator's document for E-Land supporters, and there is still plenty in it worth following: the FC Seoul and Busan IPark tie in Round 3, the four continental heavyweights entering in August, and a K3 club that has already knocked out a professional side still alive in the draw. How Seoul got it wrong, what the cup's foreign-player rule has to do with it, and what the elimination means for the promotion push is the subject of the next article.

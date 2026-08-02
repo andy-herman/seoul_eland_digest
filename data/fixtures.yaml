@@ -124,7 +124,9 @@ fixtures:
     date: 2026-07-18
     venue: away
     opponent: "Suwon FC"
-    result: "TBD"
+    home_score: 2
+    away_score: 2
+    result: "D 2-2"
   - round: 19
     date: 2026-07-24
     venue: home

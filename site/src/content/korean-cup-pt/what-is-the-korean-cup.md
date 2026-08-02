@@ -69,4 +69,6 @@ A Copa faz uma pausa no inverno e retoma na primavera. A partir das quartas há 
 
 ## Onde Isso Deixa o Seoul E-Land
 
-O Seoul E-Land começa na 2ª Fase contra o Ulsan Citizen, da K3, em 15 de julho, um jogo que um clube profissional é obrigado a vencer. Além disso, a subida fica íngreme rápido: Ulsan HD na 3ª Fase, e depois, potencialmente, um dos gigantes continentais nas oitavas. O quanto o E-Land deve perseguir a Copa enquanto briga pela promoção, e a peculiaridade nas regras da competição que pode realmente ajudá-los a ir mais longe, é o assunto do próximo artigo.
+O Seoul E-Land começou na 2ª Fase contra o Ulsan Citizen, da K3, em 15 de julho, e caiu. O Ulsan Citizen venceu por 4 a 2 na prorrogação, depois de 2 a 2 nos noventa minutos, com o Seoul terminando a partida com um a menos. A subida projetada, Ulsan HD na 3ª Fase e depois um dos gigantes continentais nas oitavas, nunca começou.
+
+Isso transforma o resto deste chaveamento em um documento de espectador para o torcedor do E-Land, e ainda há muita coisa nele que vale acompanhar: o duelo entre FC Seoul e Busan IPark na 3ª Fase, os quatro pesos-pesados continentais entrando em agosto, e um clube da K3 que já eliminou um time profissional seguindo vivo no sorteio. Onde o Seoul errou, o que a regra dos estrangeiros da copa tem a ver com isso, e o que a eliminação significa para a briga pelo acesso é o assunto do próximo artigo.

@@ -10,6 +10,16 @@ tags: [korean-cup, seoul-e-land]
 
 > The Korean Cup is a free hit for Seoul E-Land, a K3 opponent first and a promotion race to protect. But it comes with a genuine quirk: the cup lets a club field fewer foreigners than the league does, and Seoul's squad is built in a way that feels it. Here is the draw, the history, the rule, and the honest ceiling.
 
+## Update, July 15: Seoul E-Land Are Out
+
+This article was written before the second round, and it was wrong about the part it was most confident about. Seoul E-Land lost 4-2 after extra time to Ulsan Citizen FC, the K3 side, and are eliminated from the 2026-27 Hana Bank Korea Cup at the first hurdle they faced.
+
+The tie was level at 2-2 after ninety minutes. Son Hyuk-chan was sent off in the ninetieth minute, and Kim Min-gi scored twice in extra time, in the 104th and the 117th, to finish it. A full-time professional club, playing a semi-professional opponent from two divisions below, went out with ten men in the extra half hour.
+
+The section below predicted this as a match Seoul should win comfortably even with a rotated side. That call was wrong, and it is worth leaving on the page rather than quietly editing away, because the reasoning was reasonable and the result still happened. The rest of the article, the cup's history, the rotation calculus, and the foreign-player rule, stands as written. The projected Round 3 meeting with Ulsan HD never happened.
+
+There is one consolation and it is not nothing: the fixture congestion argument in this article was that the league is the priority. Seoul now have no cup commitments and a completely clear run at the promotion race.
+
 ## The Draw: Ulsan Citizen, Then the Cliff
 
 Seoul E-Land enter the 2026-27 Hana Bank Korea Cup at Round 2 on July 15, drawn against Ulsan Citizen FC, a third-tier K3 side who won a Round 1 tie to get here. The lower-division club hosts, so E-Land travel, but the gap in level is wide: a full-time K League 2 professional club against a semi-professional K3 opponent. This is a match Seoul are expected to win comfortably, even without their strongest eleven.

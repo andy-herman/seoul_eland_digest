@@ -7,6 +7,7 @@ tags: [player, k-league-2, seoul-e-land]
 
 # Park Jae-yong
 
+*Player note for [[Seoul E-Land FC]]. Auto-generated and grown over the season.*
 
 ## Mentions
 
