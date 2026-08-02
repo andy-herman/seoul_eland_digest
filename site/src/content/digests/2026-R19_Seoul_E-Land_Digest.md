@@ -19,11 +19,11 @@ This was the best night and the most alarming night of Seoul E-Land's season, an
 
 ## Match Report
 
-[[Kim Do-gyun]] went back to a back four for the home fixture, a 4-3-3 with [[Min Sung-jun]] (민성준) in goal, [[Bae Seo-jun]] (배서준) and [[Oh In-pyo]] (오인표) as full-backs, and Osmar (오스마르) alongside [[Baek Ji-woong]] (백지웅) in the middle. The midfield three was Alan Carius (알랑 카리우스), [[Yun Seok-ju]] (윤석주), and [[Park Chang-hwan]] (박창환) wearing the armband, with Byun Kyung-jun (변경준), [[Kim Hyun]] (김현), and Euller (에울레르) in front. That is two shapes in two matches: the 3-4-3 away at a promotion rival, the back four at home against a bottom-half side. Cheonan City came in a 3-4-3 of their own under Park Jin-seop (박진섭).
+[[Kim Do-gyun]] went back to a back four for the home fixture, a 4-3-3 with [[Min Sung-jun]] (민성준) in goal, [[Bae Seo-jun]] (배서준) and [[Oh In-pyo]] (오인표) as full-backs, and Osmar (오스마르) alongside [[Baek Ji-woong]] (백지웅) in the middle. The midfield three was Alan Carius (알랑 카리우스), [[Yoon Seok-ju]] (윤석주), and [[Park Chang-hwan]] (박창환) wearing the armband, with Byun Kyung-jun (변경준), [[Kim Hyun]] (김현), and Euller (에울레르) in front. That is two shapes in two matches: the 3-4-3 away at a promotion rival, the back four at home against a bottom-half side. Cheonan City came in a 3-4-3 of their own under Park Jin-seop (박진섭).
 
 The occasion mattered before the football did. This was Byun Kyung-jun's last match before enlisting for military service, and the home end came with banners and messages for a forward whose pace off the bench has changed several matches this season. He started, which was the right call.
 
-Seoul began as though the evening would be simple. Euller, who the commentary team called a Cheonan killer, twice found the far post with left-footed deliveries that had the visiting defense scrambling, and [[Yun Seok-ju]] continued his recent habit of striking cleanly from distance with a half-volley that flashed past the frame. Then, against the run of everything, Cheonan scored. Cha Seung-hyun (차승현) pressed Euller and won the ball high, Seoul failed to clear the danger, Lee Ji-hoon (이지훈) crossed, and Bruno Lamas (라마스) arrived at the far post to finish on thirteen minutes. Seventh goal of the season for Lamas, and Seoul were behind at home to the side sitting well below them.
+Seoul began as though the evening would be simple. Euller, who the commentary team called a Cheonan killer, twice found the far post with left-footed deliveries that had the visiting defense scrambling, and [[Yoon Seok-ju]] continued his recent habit of striking cleanly from distance with a half-volley that flashed past the frame. Then, against the run of everything, Cheonan scored. Cha Seung-hyun (차승현) pressed Euller and won the ball high, Seoul failed to clear the danger, Lee Ji-hoon (이지훈) crossed, and Bruno Lamas (라마스) arrived at the far post to finish on thirteen minutes. Seventh goal of the season for Lamas, and Seoul were behind at home to the side sitting well below them.
 
 The response took four minutes and it was extraordinary. Alan Carius collected the ball in a position where the angle had effectively closed, on his left foot, and rather than cut back he simply hit it, up and over Lee Seung-gyu (이승규) and into the top of the goal. It was the finish of a striker who spent ten months injured and knows exactly what his left foot can do; the Saudi second-division golden boot he won before arriving suddenly made sense in a way it had not in a Seoul shirt before. One apiece inside seven minutes.
 
@@ -59,7 +59,7 @@ Another goal off the bench, another decisive substitute contribution, and a prom
 **Byun Kyung-jun (변경준):**
 His farewell before military service, and a start he earned. The pace that made him Seoul's most reliable impact substitute will be missed for the rest of the run-in, and the squad is thinner in behind without him. A proper send-off from the Mokdong crowd.
 
-**Yun Seok-ju (윤석주):**
+**Yoon Seok-ju (윤석주):**
 Struck the ball cleanly from range again, a week after hitting the woodwork at Suwon FC. The long-range threat is becoming a genuine feature of his game and it gives Seoul a way to hurt teams that defend deep.
 
 ## News and Transfers

@@ -19,11 +19,11 @@ Esta foi a melhor noite e a noite mais preocupante da temporada do Seoul E-Land,
 
 ## Relato da Partida
 
-[[Kim Do-gyun]] voltou à linha de quatro para o jogo em casa, um 4-3-3 com [[Min Sung-jun]] (민성준) no gol, [[Bae Seo-jun]] (배서준) e [[Oh In-pyo]] (오인표) como laterais, e Osmar (오스마르) ao lado de [[Baek Ji-woong]] (백지웅) por dentro. O trio de meio teve Alan Carius (알랑 카리우스), [[Yun Seok-ju]] (윤석주) e [[Park Chang-hwan]] (박창환) com a braçadeira, e na frente Byun Kyung-jun (변경준), [[Kim Hyun]] (김현) e Euller (에울레르). São dois desenhos em dois jogos: o 3-4-3 fora contra um rival pelo acesso, a linha de quatro em casa contra um time da metade de baixo. O Cheonan City veio em seu próprio 3-4-3, sob comando de Park Jin-seop (박진섭).
+[[Kim Do-gyun]] voltou à linha de quatro para o jogo em casa, um 4-3-3 com [[Min Sung-jun]] (민성준) no gol, [[Bae Seo-jun]] (배서준) e [[Oh In-pyo]] (오인표) como laterais, e Osmar (오스마르) ao lado de [[Baek Ji-woong]] (백지웅) por dentro. O trio de meio teve Alan Carius (알랑 카리우스), [[Yoon Seok-ju]] (윤석주) e [[Park Chang-hwan]] (박창환) com a braçadeira, e na frente Byun Kyung-jun (변경준), [[Kim Hyun]] (김현) e Euller (에울레르). São dois desenhos em dois jogos: o 3-4-3 fora contra um rival pelo acesso, a linha de quatro em casa contra um time da metade de baixo. O Cheonan City veio em seu próprio 3-4-3, sob comando de Park Jin-seop (박진섭).
 
 A ocasião importava antes mesmo do futebol. Era a última partida de Byun Kyung-jun antes do alistamento no serviço militar, e a torcida veio com faixas e mensagens para um atacante cuja velocidade saindo do banco mudou várias partidas nesta temporada. Ele começou jogando, e foi a decisão certa.
 
-O Seoul começou como se a noite fosse ser simples. Euller, que a transmissão chamou de carrasco do Cheonan, duas vezes achou o segundo poste com cobranças de canhota que deixaram a defesa visitante em pânico, e [[Yun Seok-ju]] manteve o hábito recente de bater firme de longe com um voleio que passou perto. Então, contra tudo o que o jogo dizia, o Cheonan marcou. Cha Seung-hyun (차승현) pressionou Euller e roubou a bola no ataque, o Seoul não conseguiu afastar o perigo, Lee Ji-hoon (이지훈) cruzou, e Bruno Lamas (라마스) apareceu no segundo poste para finalizar aos treze minutos. Sétimo gol de Lamas na temporada, e o Seoul atrás do placar em casa diante de um time bem abaixo na tabela.
+O Seoul começou como se a noite fosse ser simples. Euller, que a transmissão chamou de carrasco do Cheonan, duas vezes achou o segundo poste com cobranças de canhota que deixaram a defesa visitante em pânico, e [[Yoon Seok-ju]] manteve o hábito recente de bater firme de longe com um voleio que passou perto. Então, contra tudo o que o jogo dizia, o Cheonan marcou. Cha Seung-hyun (차승현) pressionou Euller e roubou a bola no ataque, o Seoul não conseguiu afastar o perigo, Lee Ji-hoon (이지훈) cruzou, e Bruno Lamas (라마스) apareceu no segundo poste para finalizar aos treze minutos. Sétimo gol de Lamas na temporada, e o Seoul atrás do placar em casa diante de um time bem abaixo na tabela.
 
 A resposta levou quatro minutos e foi extraordinária. Alan Carius pegou a bola numa posição em que o ângulo estava praticamente fechado, na canhota, e em vez de cortar para trás simplesmente bateu, por cima de Lee Seung-gyu (이승규) e no ângulo. Foi a finalização de um centroavante que passou dez meses lesionado e sabe exatamente do que seu pé esquerdo é capaz; a artilharia da segunda divisão saudita que ele conquistou antes de chegar de repente fez sentido de um jeito que ainda não tinha feito com a camisa do Seoul. Um a um em sete minutos.
 
@@ -59,7 +59,7 @@ Mais um gol saindo do banco, mais uma contribuição decisiva como substituto, e
 **Byun Kyung-jun (변경준):**
 Sua despedida antes do serviço militar, e uma titularidade merecida. A velocidade que fez dele o substituto mais confiável do elenco vai fazer falta no restante da reta final, e o grupo fica mais curto nas costas da defesa sem ele. Uma despedida à altura por parte da torcida do Mokdong.
 
-**Yun Seok-ju (윤석주):**
+**Yoon Seok-ju (윤석주):**
 Bateu firme de longe outra vez, uma semana depois de acertar a trave no Suwon FC. A ameaça de fora da área está virando um traço real do seu jogo e dá ao Seoul uma forma de machucar times que se fecham.
 
 ## Bastidores e Mercado

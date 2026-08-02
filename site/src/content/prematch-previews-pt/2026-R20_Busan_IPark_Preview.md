@@ -15,7 +15,7 @@ predicted_lineup_label: "Escalação provável do Seoul"
 predicted_lineup_team: "Seoul E-Land"
 predicted_formation: "4-3-3"
 predicted_lineup_note: "Projetada a partir do XI titular da 19ª rodada contra o Cheonan, com Byun Kyung-jun indisponível às vésperas do alistamento em 3 de agosto e Park Jae-yong promovido após marcar novamente saindo do banco. Um retorno ao 3-4-3 usado fora na 18ª rodada é a alternativa viva."
-predicted_lineup: [{"name":"Min Sung-jun","role":"GK","line":"goalkeeper"},{"name":"Bae Seo-jun","role":"RB","line":"defense"},{"name":"Osmar","role":"RCB","line":"defense"},{"name":"Baek Ji-woong","role":"LCB","line":"defense"},{"name":"Oh In-pyo","role":"LB","line":"defense"},{"name":"Alan Carius","role":"CM","line":"midfield"},{"name":"Yun Seok-ju","role":"CM","line":"midfield"},{"name":"Park Chang-hwan","role":"CM","line":"midfield"},{"name":"Lee Ju-hyuk","role":"RF","line":"attack"},{"name":"Park Jae-yong","role":"ST","line":"attack"},{"name":"Euller","role":"LF","line":"attack"}]
+predicted_lineup: [{"name":"Min Sung-jun","role":"GK","line":"goalkeeper"},{"name":"Bae Seo-jun","role":"RB","line":"defense"},{"name":"Osmar","role":"RCB","line":"defense"},{"name":"Baek Ji-woong","role":"LCB","line":"defense"},{"name":"Oh In-pyo","role":"LB","line":"defense"},{"name":"Alan Carius","role":"CM","line":"midfield"},{"name":"Yoon Seok-ju","role":"CM","line":"midfield"},{"name":"Park Chang-hwan","role":"CM","line":"midfield"},{"name":"Lee Ju-hyuk","role":"RF","line":"attack"},{"name":"Park Jae-yong","role":"ST","line":"attack"},{"name":"Euller","role":"LF","line":"attack"}]
 tags: [seoul-eland, pre-match-preview, scouting]
 ---
 
@@ -51,7 +51,7 @@ A escalação é a melhor leitura possível, não um vazamento de súmula. Parte
 
 ### Por que esta formação
 
-- Partir do 4-3-3 da 19ª rodada: Min Sung-jun; Bae Seo-jun, Osmar, Baek Ji-woong, Oh In-pyo; Alan Carius, Yun Seok-ju, Park Chang-hwan; Byun Kyung-jun, Kim Hyun, Euller. É a evidência mais recente e o ponto de partida obrigatório da previsão.
+- Partir do 4-3-3 da 19ª rodada: Min Sung-jun; Bae Seo-jun, Osmar, Baek Ji-woong, Oh In-pyo; Alan Carius, Yoon Seok-ju, Park Chang-hwan; Byun Kyung-jun, Kim Hyun, Euller. É a evidência mais recente e o ponto de partida obrigatório da previsão.
 - Byun Kyung-jun sai. Ele se alista no dia seguinte a esta partida e foi homenageado na 19ª rodada. Lee Ju-hyuk é o substituto natural pelo lado, tendo cruzado para o gol de Oh In-pyo no Suwon FC na 18ª rodada e entrado na 19ª.
 - Park Jae-yong entra no lugar de Kim Hyun no centro. Ele marcou em três das últimas quatro partidas, começando ou não, lidera a artilharia do time com folga e voltou a marcar saindo do banco na 19ª rodada. Contra a melhor defesa que o Seoul vai enfrentar neste mês, o artilheiro começa jogando.
 - Carius permanece no trio de meio em vez de subir. Foi ali que jogou na 19ª rodada e foi dali que suas entregas criaram três gols.
@@ -64,7 +64,7 @@ A escalação é a melhor leitura possível, não um vazamento de súmula. Parte
 - Alan Carius: Craque da Rodada, plenamente apto, inegociável.
 - Ahn Joo-wan: o garoto de dezessete anos que quebrou o recorde pede mais minutos e é a opção óbvia de velocidade no banco agora que Byun Kyung-jun partiu.
 - Osmar: trinta e sete anos e duas partidas inteiras dentro de uma sequência pesada. Vale observar se Kim Oh-kyu entra para administrar sua carga num jogo hostil fora de casa.
-- Yun Seok-ju: teve cãibras no fim no Suwon FC e levou uma pancada na 19ª rodada, mas foi titular nas duas.
+- Yoon Seok-ju: teve cãibras no fim no Suwon FC e levou uma pancada na 19ª rodada, mas foi titular nas duas.
 
 ## Relatório de Observação do Adversário
 

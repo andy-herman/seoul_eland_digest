@@ -15,7 +15,7 @@ predicted_lineup_label: "Predicted Seoul XI"
 predicted_lineup_team: "Seoul E-Land"
 predicted_formation: "4-3-3"
 predicted_lineup_note: "Predicted from the actual Round 19 XI against Cheonan, with Byun Kyung-jun unavailable ahead of his August 3 enlistment and Park Jae-yong promoted after scoring off the bench again. A reversion to the Round 18 away 3-4-3 is the live alternative."
-predicted_lineup: [{"name":"Min Sung-jun","role":"GK","line":"goalkeeper"},{"name":"Bae Seo-jun","role":"RB","line":"defense"},{"name":"Osmar","role":"RCB","line":"defense"},{"name":"Baek Ji-woong","role":"LCB","line":"defense"},{"name":"Oh In-pyo","role":"LB","line":"defense"},{"name":"Alan Carius","role":"CM","line":"midfield"},{"name":"Yun Seok-ju","role":"CM","line":"midfield"},{"name":"Park Chang-hwan","role":"CM","line":"midfield"},{"name":"Lee Ju-hyuk","role":"RF","line":"attack"},{"name":"Park Jae-yong","role":"ST","line":"attack"},{"name":"Euller","role":"LF","line":"attack"}]
+predicted_lineup: [{"name":"Min Sung-jun","role":"GK","line":"goalkeeper"},{"name":"Bae Seo-jun","role":"RB","line":"defense"},{"name":"Osmar","role":"RCB","line":"defense"},{"name":"Baek Ji-woong","role":"LCB","line":"defense"},{"name":"Oh In-pyo","role":"LB","line":"defense"},{"name":"Alan Carius","role":"CM","line":"midfield"},{"name":"Yoon Seok-ju","role":"CM","line":"midfield"},{"name":"Park Chang-hwan","role":"CM","line":"midfield"},{"name":"Lee Ju-hyuk","role":"RF","line":"attack"},{"name":"Park Jae-yong","role":"ST","line":"attack"},{"name":"Euller","role":"LF","line":"attack"}]
 tags: [seoul-eland, pre-match-preview, scouting]
 ---
 
@@ -51,7 +51,7 @@ The lineup graphic is a best read, not a leaked team sheet. It starts from the a
 
 ### Why this shape
 
-- Start from the Round 19 4-3-3: Min Sung-jun; Bae Seo-jun, Osmar, Baek Ji-woong, Oh In-pyo; Alan Carius, Yun Seok-ju, Park Chang-hwan; Byun Kyung-jun, Kim Hyun, Euller. That is the most recent evidence and the anchor the prediction has to start from.
+- Start from the Round 19 4-3-3: Min Sung-jun; Bae Seo-jun, Osmar, Baek Ji-woong, Oh In-pyo; Alan Carius, Yoon Seok-ju, Park Chang-hwan; Byun Kyung-jun, Kim Hyun, Euller. That is the most recent evidence and the anchor the prediction has to start from.
 - Byun Kyung-jun comes out. He enlists the day after this fixture and was given a send-off in Round 19. Lee Ju-hyuk is the natural replacement wide, having crossed for Oh In-pyo's goal at Suwon FC in Round 18 and come on in Round 19.
 - Park Jae-yong replaces Kim Hyun centrally. He has scored in three of his last four appearances regardless of whether he started, leads the team's scoring by a distance, and came off the bench to score again in Round 19. Against the best defense Seoul will face this month, the leading scorer starts.
 - Carius stays in the midfield three rather than pushing up. It is where he played in Round 19 and where his deliveries created three goals.
@@ -64,7 +64,7 @@ The lineup graphic is a best read, not a leaked team sheet. It starts from the a
 - Alan Carius: Player of the Round, fully fit, undroppable.
 - Ahn Joo-wan: the seventeen-year-old record breaker is pushing for more minutes and is the obvious pace option from the bench now that Byun Kyung-jun has gone.
 - Osmar: thirty-seven years old and two full matches into a heavy stretch. Worth watching whether Kim Oh-kyu comes in to manage his load in a hostile away fixture.
-- Yun Seok-ju: cramped late at Suwon FC and took a knock in Round 19, but has started both.
+- Yoon Seok-ju: cramped late at Suwon FC and took a knock in Round 19, but has started both.
 
 ## Opponent Scouting Report
 
