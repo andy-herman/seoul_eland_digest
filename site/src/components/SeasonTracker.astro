@@ -110,10 +110,11 @@ const t = isPt
       miss: "errou",
       whatIfTitle: "E se?",
       whatIfIntro:
-        "Arraste para definir quantos pontos por jogo o Seoul E-Land conquista nas partidas restantes e veja onde a temporada termina.",
+        "Arraste para definir onde o Seoul E-Land termina a temporada, ponto a ponto, e veja o que isso exige das partidas restantes.",
+      whatIfTotal: "Total final de pontos",
       whatIfPpg: "Pontos por jogo restantes",
-      whatIfFinal: "Total final projetado",
       whatIfPosition: "Posição projetada",
+      whatIfNeededFrom: "pontos em",
       whatIfRemaining: "jogos restantes",
       raceTitle: "A briga pelo G5",
       raceIntro:
@@ -157,10 +158,11 @@ const t = isPt
       miss: "miss",
       whatIfTitle: "What if?",
       whatIfIntro:
-        "Drag to set how many points per game Seoul E-Land take from their remaining fixtures, and see where the season finishes.",
+        "Drag to set where Seoul E-Land finish the season, one point at a time, and see what that asks of the remaining fixtures.",
+      whatIfTotal: "Final points total",
       whatIfPpg: "Points per remaining game",
-      whatIfFinal: "Projected final total",
       whatIfPosition: "Projected finish",
+      whatIfNeededFrom: "points from",
       whatIfRemaining: "matches left",
       raceTitle: "The top-five race",
       raceIntro:
@@ -302,16 +304,17 @@ function ordinal(n: number) {
        data-rivals={JSON.stringify(rivalsForClient)} data-ordinal-style={isPt ? "pt" : "en"}>
     <p class="st-note">{t.whatIfIntro}</p>
     <div class="st-slider-row">
-      <label for="st-ppg">{t.whatIfPpg}</label>
-      <input type="range" id="st-ppg" min="0" max="3" step="0.1"
-             value={modelPpg.toFixed(1)} class="st-slider" />
-      <output id="st-ppg-out" class="st-slider-out">{modelPpg.toFixed(1)}</output>
+      <label for="st-total">{t.whatIfTotal}</label>
+      <input type="range" id="st-total" min={pointsNow} max={pointsNow + remainingCount * 3}
+             step="1" value={Math.round(pointsNow + modelPpg * remainingCount)} class="st-slider" />
+      <output id="st-total-out" class="st-slider-out">-</output>
     </div>
     <div class="st-whatif-results">
       <div class="st-card">
-        <p class="st-card-label">{t.whatIfFinal}</p>
-        <p class="st-card-value" id="st-final">-</p>
-        <p class="st-card-sub"><span id="st-remaining">{remainingCount}</span> {t.whatIfRemaining}</p>
+        <p class="st-card-label">{t.whatIfPpg}</p>
+        <p class="st-card-value" id="st-ppg">-</p>
+        <p class="st-card-sub"><span id="st-needed">-</span> {t.whatIfNeededFrom}
+          <span id="st-remaining">{remainingCount}</span> {t.whatIfRemaining}</p>
       </div>
       {hasRivals && (
         <div class="st-card">
@@ -366,9 +369,10 @@ function ordinal(n: number) {
 <script>
   const root = document.querySelector<HTMLElement>(".st-whatif");
   if (root) {
-    const slider = document.getElementById("st-ppg") as HTMLInputElement | null;
-    const out = document.getElementById("st-ppg-out");
-    const finalEl = document.getElementById("st-final");
+    const slider = document.getElementById("st-total") as HTMLInputElement | null;
+    const out = document.getElementById("st-total-out");
+    const ppgEl = document.getElementById("st-ppg");
+    const neededEl = document.getElementById("st-needed");
     const posEl = document.getElementById("st-position");
 
     const pointsNow = Number(root.dataset.pointsNow ?? 0);
@@ -390,12 +394,13 @@ function ordinal(n: number) {
 
     const render = () => {
       if (!slider) return;
-      const ppg = Number(slider.value);
-      const projected = pointsNow + ppg * remaining;
-      if (out) out.textContent = ppg.toFixed(1);
-      if (finalEl) finalEl.textContent = String(Math.round(projected));
+      const projected = Number(slider.value);
+      const needed = projected - pointsNow;
+      if (out) out.textContent = String(projected);
+      if (ppgEl) ppgEl.textContent = remaining ? (needed / remaining).toFixed(2) : "-";
+      if (neededEl) neededEl.textContent = String(needed);
       if (posEl && rivals.length) {
-        const above = rivals.filter((r) => r.projected > projected).length;
+        const above = rivals.filter((r) => Math.round(r.projected) > projected).length;
         posEl.textContent = ordinal(above + 1);
       }
     };
