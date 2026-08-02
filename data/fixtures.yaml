@@ -131,12 +131,16 @@ fixtures:
     date: 2026-07-24
     venue: home
     opponent: "Cheonan"
-    result: "TBD"
+    home_score: 4
+    away_score: 3
+    result: "W 4-3"
   - round: 20
     date: 2026-08-02
     venue: away
     opponent: "Busan IPark"
-    result: "TBD"
+    home_score: 1
+    away_score: 2
+    result: "W 2-1"
   - round: 21
     date: 2026-08-07
     venue: away

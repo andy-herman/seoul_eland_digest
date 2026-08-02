@@ -14,5 +14,6 @@ Full-back, used on the right of the back four in the 4-3-3 that Kim Do-gyun intr
 
 ## Mentions
 
+- [[2026-R20_Seoul_E-Land_Digest]] - Round 20, 2026-08-02
 - [[2026-R19_Seoul_E-Land_Digest]] - Round 19, 2026-07-24
 - [[2026-R18_Seoul_E-Land_Digest]] - Round 18, 2026-07-18

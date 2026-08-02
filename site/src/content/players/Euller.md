@@ -15,6 +15,7 @@ Brazilian forward and Seoul E-Land's MVP / talisman. Re-signed a three-year cont
 
 ## Mentions
 
+- [[2026-R20_Seoul_E-Land_Digest]] - Round 20, 2026-08-02 (switch of play that created the winner)
 - [[2026-R11_Seoul_E-Land_Digest]] - Round 11, 2026-05-09
 - [[2026-R10_Seoul_E-Land_Digest]] - Round 10, 2026-05-02
 - [[2026-R09_Seoul_E-Land_Digest]] - Round 9, 2026-04-25

@@ -11,6 +11,7 @@ tags: [player, k-league-2, seoul-e-land]
 
 ## Mentions
 
+- [[2026-R20_Seoul_E-Land_Digest]] - Round 20, 2026-08-02 (winner at Busan, dedicated it to Byun Kyung-jun)
 - [[2026-R10_Seoul_E-Land_Digest]] - Round 10, 2026-05-02
 - [[2026-R09_Seoul_E-Land_Digest]] - Round 9, 2026-04-25
 - [[2026-R07_Seoul_E-Land_Digest]] - Round 7, 2026-04-11

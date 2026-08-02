@@ -11,4 +11,5 @@ tags: [player, k-league-2, seoul-e-land]
 
 ## Mentions
 
+- [[2026-R20_Seoul_E-Land_Digest]] - Round 20, 2026-08-02 (headed the equaliser at Busan)
 - [[2026-R12_Seoul_E-Land_Digest]] - Round 12, 2026-05-16

@@ -31,7 +31,7 @@ Fan out across these, in tier order (full list with URLs in `sources.yaml`):
 - **Tier 1 outlets:** MoneyToday Sports, Sports Kyunghyang, Footballist, Seoul E-Land official site.
 - **Tier 2 outlets:** Sports Chosun, OSEN, Interfootball, Xports News, Sportalkorea, MK Sports, Yonhap.
 - **Namu wiki** season page as a cross-check index, never as a primary source.
-- **Tier 3 fan forums** (FM Korea, DC Inside E-Land gallery) only for sentiment color, clearly labeled as fan sentiment.
+- **Tier 3 fan forums** (FM Korea, DC Inside E-Land gallery) only for sentiment color, clearly labeled as fan sentiment. Every recap now carries a `## Fan Reaction` section built from these plus Naver comments and X; see CLAUDE_PLAYBOOK section 5. Never fabricate a quote, never name individual accounts.
 
 ## Query recipes
 
@@ -57,7 +57,7 @@ Preview mode (window = last 14 days):
 4. **Persist findings.** Write `research_dump/r{N}_deepresearch.md` (structured findings + source list). If article bodies were captured, also write `research_dump/r{N}_naver_deepresearch.json` as a list of `{round, source, title, url, body}` objects; `compile_brief.py` picks up any `r*_naver*.json` automatically.
 5. **Produce the deliverable.**
    - If the Azure pipeline is available (`.env` present, `az login` works): run the playbook sequence (`compile_brief.py`, then `regenerate_from_brief.py --round N` or `build_prematch_preview.py --round N`).
-   - Otherwise draft directly, matching the established formats exactly: digests follow `Digests/2026-R{NN}_Seoul_E-Land_Digest.md` (frontmatter, headline blockquote, The Round in One Paragraph, Match Report, Player Performances, News and Transfers, Tactical and Strategic Watch, Standings Snapshot, Looking Ahead, My Honest Read, sources footer); previews follow `Scouting Report/K League 2 2026/Pre-Match Previews/2026-R{NN}_<Opp>_Preview.md` (frontmatter incl. `forecast_probabilities` and `predicted_lineup` JSON, At a Glance table, squad news, Predicted XI basis, opponent scouting, keys, forecast, bottom line). Predicted XI always starts from the PREVIOUS round's actual XI.
+   - Otherwise draft directly, matching the established formats exactly: digests follow `Digests/2026-R{NN}_Seoul_E-Land_Digest.md` (frontmatter, headline blockquote, The Round in One Paragraph, Match Report, Player Performances, Fan Reaction, News and Transfers, Tactical and Strategic Watch, Standings Snapshot, Looking Ahead, My Honest Read, sources footer); previews follow `Scouting Report/K League 2 2026/Pre-Match Previews/2026-R{NN}_<Opp>_Preview.md` (frontmatter incl. `forecast_probabilities` and `predicted_lineup` JSON, At a Glance table, squad news, Predicted XI basis, opponent scouting, keys, forecast, bottom line). Predicted XI always starts from the PREVIOUS round's actual XI.
 6. **Housekeeping.** Update `Seoul_E-Land_Index.md` (prepend digest entry / add preview entry), `data/fixtures.yaml` and `site/src/data/matches.ts` (both, always together) if a result landed, and `data/team_corpus.yaml` `predicted_lineups` for a preview. Run `venv/Scripts/python.exe scripts/sweep_us_english.py` and `scripts/vault_audit.py` if the venv exists; otherwise grep the new files for em/en dashes manually.
 7. **Report.** Give the user: deliverable links, the headline, the 3-5 strongest sourced insights, and an honest list of what could not be verified online.
 

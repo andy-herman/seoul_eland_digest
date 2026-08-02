@@ -14,5 +14,6 @@ Full-back and wingback, comfortable on either flank. A former Suwon FC player. B
 
 ## Mentions
 
+- [[2026-R20_Seoul_E-Land_Digest]] - Round 20, 2026-08-02
 - [[2026-R19_Seoul_E-Land_Digest]] - Round 19, 2026-07-24
 - [[2026-R18_Seoul_E-Land_Digest]] - Round 18, 2026-07-18
