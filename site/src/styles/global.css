@@ -1042,8 +1042,8 @@ a {
   }
 
   .preview-player-role {
-    font-size: 0.55rem;
-    padding: 0.2rem 0.34rem;
+    font-size: 0.62rem;
+    padding: 0.2rem 0.32rem;
   }
 
   .preview-player-dot {
@@ -1053,12 +1053,43 @@ a {
 
   .preview-player-name {
     border-radius: 0.58rem;
-    font-size: 0.58rem;
-    padding: 0.3rem 0.24rem;
+    font-size: 0.68rem;
+    overflow-wrap: anywhere;
+    padding: 0.3rem 0.2rem;
   }
 }
 
 ::selection {
   background: color-mix(in srgb, var(--color-gold) 35%, transparent);
   color: #ffffff;
+}
+
+/* Horizontal scrollers: fade the edge that has more content behind it, so a
+   phone user can see the row is swipeable. The mask sits on the scrolling
+   element, so the surrounding chrome (nav pill border, card) stays crisp. */
+[data-scroll-fade][data-fade="right"] {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 2rem), transparent 100%);
+}
+
+[data-scroll-fade][data-fade="left"] {
+  -webkit-mask-image: linear-gradient(to right, transparent 0, #000 2rem);
+  mask-image: linear-gradient(to right, transparent 0, #000 2rem);
+}
+
+[data-scroll-fade][data-fade="both"] {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 2rem,
+    #000 calc(100% - 2rem),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 2rem,
+    #000 calc(100% - 2rem),
+    transparent 100%
+  );
 }

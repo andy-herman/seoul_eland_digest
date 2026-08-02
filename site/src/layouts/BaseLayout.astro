@@ -30,5 +30,34 @@ const locale = lang === "pt" ? "pt" : "en";
       <slot />
     </main>
     <Footer locale={locale} />
+    <script>
+      // Horizontal scrollers get an edge fade so it is visible on a phone that
+      // there is more content sideways. Also scrolls the active nav tab into
+      // view, which both reveals the current page and hints at the swipe.
+      document.querySelectorAll<HTMLElement>("[data-scroll-fade]").forEach((el) => {
+        const update = () => {
+          const max = el.scrollWidth - el.clientWidth;
+          if (max <= 2) {
+            el.removeAttribute("data-fade");
+            return;
+          }
+          const atLeft = el.scrollLeft > 2;
+          const atRight = el.scrollLeft < max - 2;
+          el.setAttribute("data-fade", atLeft && atRight ? "both" : atLeft ? "left" : "right");
+        };
+        el.addEventListener("scroll", update, { passive: true });
+        window.addEventListener("resize", update);
+
+        const active = el.querySelector<HTMLElement>("[aria-current='page']");
+        if (active) {
+          const a = active.getBoundingClientRect();
+          const e = el.getBoundingClientRect();
+          if (a.right > e.right - 8 || a.left < e.left + 8) {
+            el.scrollLeft += a.left - e.left - (e.width - a.width) / 2;
+          }
+        }
+        update();
+      });
+    </script>
   </body>
 </html>

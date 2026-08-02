@@ -227,7 +227,7 @@ function ordinal(n: number) {
   </div>
 
   <h3 class="st-h3">{t.chartTitle}</h3>
-  <div class="st-chart-wrap">
+  <div class="st-chart-wrap" data-scroll-fade>
     <svg viewBox={`0 0 ${chartW} ${chartH}`} class="st-chart" role="img"
          aria-label={`${t.chartTitle}: ${t.legendPredicted} ${predictedFinal}, ${t.legendActual} ${pointsNow}`}>
       {yTicks.map((v) => (
@@ -256,7 +256,7 @@ function ordinal(n: number) {
   <p class="st-note">{t.chartNote}</p>
 
   <h3 class="st-h3">{t.tableTitle}</h3>
-  <div class="st-table-wrap">
+  <div class="st-table-wrap" data-scroll-fade>
     <table class="st-table">
       <thead>
         <tr>
@@ -330,7 +330,7 @@ function ordinal(n: number) {
   {hasRivals ? (
     <>
       <p class="st-note">{t.raceIntro}</p>
-      <div class="st-table-wrap">
+      <div class="st-table-wrap" data-scroll-fade>
         <table class="st-table">
           <thead>
             <tr>
