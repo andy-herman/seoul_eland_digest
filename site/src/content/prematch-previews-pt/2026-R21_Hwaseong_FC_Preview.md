@@ -27,15 +27,17 @@ tags: [seoul-eland, pre-match-preview, scouting]
 | --- | --- |
 | Partida | 21ª rodada, 2026-08-07, 19h30, Hwaseong Sports Complex |
 | Mando para o Seoul | Fora |
-| Contexto do Seoul na tabela | 36 pontos em 19 jogos, 11-3-5, 36-25 (+11), dentro do G4 |
-| Contexto do adversário | 3º, 20 jogos, 37 pontos, 11-4-5, 34-22 (+12) |
+| Contexto do Seoul na tabela | 2º, 19 jogos, 36 pontos, 11-3-5, 36-25 (+11) |
+| Contexto do adversário | 4º, 19 jogos, 34 pontos, 10-4-5, 34-22 (+12) |
 | Confrontos em 2026 | 9ª rodada (2026-04-26): Hwaseong venceu por 2 a 1 no Mokdong |
 | Confrontos futuros em 2026 | Nenhum; este é o jogo de volta |
 | Leitura da projeção | Seoul 29%, empate 27%, Hwaseong 44% |
 
 ## Por Que Esta Partida Importa
 
-Esta é a segunda metade da dobradinha fora de casa que a prévia da temporada apontou como a semana mais difícil do calendário do Seoul E-Land, e chega com o topo da tabela mais apertado do que em qualquer momento do ano. O Seoul vem de vencer o segundo colocado Busan fora. O Hwaseong vem de aplicar cinco no Daegu, sua terceira vitória seguida na liga. Um ponto separa os dois clubes e ambos estão na discussão pelo acesso direto.
+Esta é a segunda metade da dobradinha fora de casa que a prévia da temporada apontou como a semana mais difícil do calendário do Seoul E-Land, e chega com o Seoul numa posição que não ocupou a temporada inteira. Vencer o Busan levou o time ao segundo lugar, empatado em 36 pontos com o próprio Busan e à frente no saldo, a um ponto do Suwon Samsung Bluewings. O Hwaseong é o quarto colocado com 34, depois de aplicar cinco no Daegu, sua terceira vitória seguida na liga. Dois pontos separam as equipes, e ambas estão na discussão pelo acesso direto.
+
+Há também um detalhe de calendário que faz esta partida importar mais do que a tabela sugere, e ele pertence aos mandantes. Das treze partidas que restam ao Hwaseong, **onze são fora de casa**. Este é um de apenas dois jogos em casa que eles ainda têm na temporada. Se pretendem somar pontos no Hwaseong Sports Complex, tem de ser agora, o que é um motivo forte para esperar que venham para cima do Seoul em vez de se fecharem.
 
 Há também conta a acertar. O Hwaseong venceu o Seoul por 2 a 1 no [[Mokdong Stadium]] na 9ª rodada, em abril, e o fez do jeito que virou sua assinatura: absorver, contra-atacar e deixar o Seoul sem ideias. Este é o jogo de volta e o último encontro marcado entre os dois na temporada.
 
@@ -67,7 +69,9 @@ A escalação é a melhor leitura possível, não um vazamento de súmula. Parte
 
 ## Relatório de Observação do Adversário
 
-O Hwaseong FC é a história desta divisão e não é obra do acaso. Em apenas sua segunda temporada profissional, sob comando de Cha Du-ri (차두리) no segundo ano de trabalho, ocupa o terceiro lugar com 37 pontos e acaba de vencer três partidas seguidas na liga, a mais recente uma goleada por 5 a 1 sobre o Daegu em que Leonard Pllana marcou quatro vezes sozinho.
+O Hwaseong FC é a história desta divisão e não é obra do acaso. Em apenas sua segunda temporada profissional, sob comando de Cha Du-ri (차두리) no segundo ano de trabalho, ocupa o quarto lugar com 34 pontos e acaba de vencer três partidas seguidas na liga, a mais recente uma goleada por 5 a 1 sobre o Daegu em que Leonard Pllana marcou quatro vezes sozinho.
+
+A ressalva que vale conhecer é estrutural. O calendário do Hwaseong foi pesadamente carregado de jogos em casa no início, catorze dos primeiros dezenove, e a conta chega agora: onze dos treze últimos são fora. Nosso próprio modelo de projeção, que roda todas as partidas restantes, os derruba do quarto para o quinto lugar no fim da temporada quase inteiramente por causa disso. O retrospecto deles é real, mas foi construído num lugar onde estão prestes a parar de jogar.
 
 A identidade de Cha tem apelido na imprensa coreana: 늪 축구, futebol de pântano. A ideia é exatamente o que parece. O Hwaseong se arma num 3-4-3 compacto, convida o adversário a subir, pressiona por gatilhos em vez de continuamente, e sai em velocidade no espaço que o rival deixou. É um sistema desenhado para fazer bons times de posse parecerem estéreis, e é a razão de um clube de segundo ano estar brigando pelo acesso.
 

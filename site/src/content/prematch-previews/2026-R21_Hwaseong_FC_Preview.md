@@ -27,15 +27,17 @@ tags: [seoul-eland, pre-match-preview, scouting]
 | --- | --- |
 | Fixture | Round 21, 2026-08-07, 19:30, Hwaseong Sports Complex |
 | Venue for Seoul | Away |
-| Seoul table context | 36 points from 19, 11-3-5, 36-25 (+11), inside the top four |
-| Opponent table context | 3rd, 20 played, 37 points, 11-4-5, 34-22 (+12) |
+| Seoul table context | 2nd, 19 played, 36 points, 11-3-5, 36-25 (+11) |
+| Opponent table context | 4th, 19 played, 34 points, 10-4-5, 34-22 (+12) |
 | Prior 2026 meetings | R9 (2026-04-26): Hwaseong won 2-1 at Mokdong |
 | Future 2026 meetings | None; this is the return fixture |
 | Forecast read | Seoul 29%, draw 27%, Hwaseong 44% |
 
 ## Why This Match Matters
 
-This is the second half of the away double the season preview flagged as the hardest week of Seoul E-Land's calendar, and it arrives with the top of the table tighter than at any point this year. Seoul come off beating second-placed Busan away. Hwaseong come off putting five past Daegu, their third straight league win. One point separates the two clubs and both are in the automatic-promotion argument.
+This is the second half of the away double the season preview flagged as the hardest week of Seoul E-Land's calendar, and it arrives with Seoul in a position they have not held all season. Beating Busan lifted them to second, level on 36 points with Busan and ahead on goal difference, one point behind Suwon Samsung Bluewings. Hwaseong sit fourth on 34 after putting five past Daegu, their third straight league win. Two points separate the sides, and both are in the automatic-promotion argument.
+
+There is also a scheduling detail that makes this match matter more than the table suggests, and it belongs to the hosts. Of Hwaseong's thirteen remaining fixtures, **eleven are away from home**. This is one of only two home matches they have left all season. If they are going to bank points at the Hwaseong Sports Complex, it has to be now, which is a strong reason to expect them to come out at Seoul rather than sit in.
 
 It is also unfinished business. Hwaseong beat Seoul 2-1 at [[Mokdong Stadium]] in Round 9 back in April, and did it in the manner that has become their signature: absorb, counter, and let Seoul run out of ideas. This is the return fixture and the last scheduled meeting of the season.
 
@@ -67,7 +69,9 @@ The lineup graphic is a best read, not a leaked team sheet. It starts from the a
 
 ## Opponent Scouting Report
 
-Hwaseong FC are the story of this division and they are not a fluke. In only their second professional season, under Cha Du-ri (차두리) in his second year in charge, they sit third on 37 points and have just won three consecutive league matches, the most recent a 5-1 demolition of Daegu in which Leonard Pllana scored four times on his own.
+Hwaseong FC are the story of this division and they are not a fluke. In only their second professional season, under Cha Du-ri (차두리) in his second year in charge, they sit fourth on 34 points and have just won three consecutive league matches, the most recent a 5-1 demolition of Daegu in which Leonard Pllana scored four times on his own.
+
+The caveat worth knowing is structural. Hwaseong's schedule has been heavily front-loaded with home matches, fourteen of their first nineteen, and the bill now comes due: eleven of their last thirteen are on the road. Our own projection model, which runs every remaining fixture, drops them from fourth to fifth by the end of the season almost entirely on that basis. Their record is real, but it has been built somewhere they are about to stop playing.
 
 Cha's identity has a nickname in the Korean press: 늪 축구, swamp football. The idea is exactly what it sounds like. Hwaseong set up in a compact 3-4-3, invite the opponent forward, press on triggers rather than continuously, and break at speed into the space the opposition has vacated. It is a system designed to make good possession sides look sterile, and it is the reason a second-year club is challenging for promotion.
 

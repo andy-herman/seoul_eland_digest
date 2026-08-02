@@ -136,11 +136,8 @@ export interface ClubRecord {
   lost: number;
   goalsFor: number;
   goalsAgainst: number;
-  /** Home and away splits, used for the home-advantage term. */
-  homePoints: number;
-  homePlayed: number;
-  awayPoints: number;
-  awayPlayed: number;
+  /** Show this club in the race table. Untracked clubs still supply a rating. */
+  tracked?: boolean;
 }
 
 export interface RivalFixture {
@@ -206,9 +203,13 @@ export interface ProjectedClub {
 }
 
 /**
- * Project every supplied club to the end of the season by running the
- * model over their remaining fixtures. Clubs not in `records` are treated
- * as league-average opposition so a partial rival list still projects.
+ * Project clubs to the end of the season by running the model over their
+ * remaining fixtures.
+ *
+ * `records` should contain every club in the division so that opponent
+ * ratings are real rather than assumed. Only clubs flagged `tracked` are
+ * returned, which is how the race table stays to the promotion contenders
+ * while still modelling their matches against the rest of the league.
  */
 export function projectSeason(
   records: ClubRecord[],
@@ -233,17 +234,14 @@ export function projectSeason(
 
   for (const fixture of rivalFixtures) {
     const forecast = forecastFixture(ratingOf(fixture.home), ratingOf(fixture.away));
-    if (bySlug.has(fixture.home)) {
-      expected.set(fixture.home, (expected.get(fixture.home) ?? 0) + forecast.homeExpectedPoints);
-      remaining.set(fixture.home, (remaining.get(fixture.home) ?? 0) + 1);
-    }
-    if (bySlug.has(fixture.away)) {
-      expected.set(fixture.away, (expected.get(fixture.away) ?? 0) + forecast.awayExpectedPoints);
-      remaining.set(fixture.away, (remaining.get(fixture.away) ?? 0) + 1);
-    }
+    expected.set(fixture.home, (expected.get(fixture.home) ?? 0) + forecast.homeExpectedPoints);
+    remaining.set(fixture.home, (remaining.get(fixture.home) ?? 0) + 1);
+    expected.set(fixture.away, (expected.get(fixture.away) ?? 0) + forecast.awayExpectedPoints);
+    remaining.set(fixture.away, (remaining.get(fixture.away) ?? 0) + 1);
   }
 
   return records
+    .filter((club) => club.tracked)
     .map((club) => {
       const expectedRemaining = expected.get(club.slug) ?? 0;
       return {
