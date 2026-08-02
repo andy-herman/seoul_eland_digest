@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import SeasonTracker from "../../components/SeasonTracker.astro";
+import { withBase } from "../../lib/paths";
+---
+
+<BaseLayout
+  title="Season Tracker"
+  description="Grading our published second round robin prediction against reality, round by round, and projecting the K League 2 promotion race to the final table."
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        Tracker
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        We called the whole second round robin in advance. This is the scoreboard on that call, updated every round, plus a fixture-by-fixture projection of the promotion race.
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/pt/tracker" code="PT" label="Português" ariaLabel="Ver o rastreador em português" />
+      </div>
+    </div>
+  </section>
+
+  <article class="editorial-shell preview-article mx-auto">
+    <SeasonTracker locale="en">
+      <div slot="method" class="tracker-method">
+        <p>
+          Two different things are on this page and they are deliberately kept apart.
+        </p>
+        <p>
+          <strong>The prediction</strong> is the round-by-round call published in the
+          <a href={withBase("/previews/2026-second-round-robin-playoff-run-in-preview")}>second round robin preview</a>
+          on July 12, before any of those matches were played. It said 9 wins, 4 draws and 3 losses, worth 31 points, which added to the 29 Seoul had at the time gave a projected final of 60. Those calls are frozen. They are what the accuracy score and the dashed line are grading, and they do not get quietly revised when a result goes the other way.
+        </p>
+        <p>
+          <strong>The projection</strong> is a model, not a prediction. Every club carries a rating equal to its points per game so far. The home side gets a bonus of 0.35 points per game, which is roughly what home advantage is worth in this division. The gap between the two ratings is converted into win, draw and loss probabilities, with the draw share shrinking as the gap widens, and each fixture returns an expected-points value. Running that over every remaining fixture gives the projected final totals in the race table. Because it is rebuilt from current form, it moves every week, and it will disagree with our published call more and more as the season goes on. That is the point.
+        </p>
+        <p>
+          Seoul E-Land's results are read directly from the same fixture file that drives the rest of this site, so the tracker cannot drift out of step with the match reports. Rival records are updated by hand after each round.
+        </p>
+      </div>
+    </SeasonTracker>
+  </article>
+</BaseLayout>
+
+<style is:global>
+  .tracker-method p {
+    margin: 0 0 0.85rem;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--color-editorial-muted);
+  }
+  .tracker-method strong { color: var(--color-navy); }
+  .tracker-method a { color: var(--color-blue); font-weight: 650; }
+</style>

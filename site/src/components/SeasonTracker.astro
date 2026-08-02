@@ -1,0 +1,512 @@
+---
+import {
+  buildTrackedRounds,
+  projectSeason,
+  pointsOf,
+  PREVIEW_BASELINE,
+  POINTS_FOR,
+  SEOUL_PREDICTIONS,
+  type Outcome,
+} from "../data/seasonTracker";
+import { CLUB_RECORDS, RIVAL_FIXTURES, STANDINGS_AS_OF } from "../data/seasonRivals";
+
+interface Props {
+  locale?: "en" | "pt";
+}
+const { locale = "en" } = Astro.props;
+const isPt = locale === "pt";
+
+const rounds = buildTrackedRounds();
+const played = rounds.filter((r) => r.actual);
+const hits = played.filter((r) => r.hit).length;
+const accuracy = played.length ? Math.round((hits / played.length) * 100) : 0;
+
+const predictedFinal =
+  PREVIEW_BASELINE.points +
+  SEOUL_PREDICTIONS.reduce((sum, p) => sum + POINTS_FOR[p.predicted], 0);
+
+const pointsNow =
+  played.length > 0 ? played[played.length - 1].actualCumulative! : PREVIEW_BASELINE.points;
+const predictedByNow =
+  played.length > 0 ? played[played.length - 1].predictedCumulative : PREVIEW_BASELINE.points;
+const versusPrediction = pointsNow - predictedByNow;
+const remainingCount = rounds.length - played.length;
+
+const hasRivals = CLUB_RECORDS.length > 0 && RIVAL_FIXTURES.length > 0;
+const projections = hasRivals ? projectSeason(CLUB_RECORDS, RIVAL_FIXTURES) : [];
+const seoulProjection = projections.find((p) => p.slug === "seoul-e-land");
+
+// Points-per-game the model currently implies for Seoul's remaining games.
+const modelPpg =
+  seoulProjection && seoulProjection.remaining > 0
+    ? seoulProjection.expectedRemaining / seoulProjection.remaining
+    : 1.6;
+
+// Rival projections excluding Seoul, for the client-side position calculation.
+const rivalsForClient = projections
+  .filter((p) => p.slug !== "seoul-e-land")
+  .map((p) => ({ name: p.name, projected: Number(p.projectedFinal.toFixed(2)) }));
+
+// ---- chart geometry (static, computed at build time) ----
+const chartW = 720;
+const chartH = 260;
+const padL = 44;
+const padR = 16;
+const padT = 16;
+const padB = 30;
+const allPoints = [
+  PREVIEW_BASELINE.points,
+  ...rounds.map((r) => r.predictedCumulative),
+  ...rounds.map((r) => r.actualCumulative ?? PREVIEW_BASELINE.points),
+];
+const yMin = Math.floor((Math.min(...allPoints) - 2) / 5) * 5;
+const yMax = Math.ceil((Math.max(...allPoints) + 2) / 5) * 5;
+const xFor = (i: number) =>
+  padL + (i / rounds.length) * (chartW - padL - padR);
+const yFor = (v: number) =>
+  padT + (1 - (v - yMin) / (yMax - yMin)) * (chartH - padT - padB);
+
+const predictedPath = [
+  `M ${xFor(0)} ${yFor(PREVIEW_BASELINE.points)}`,
+  ...rounds.map((r, i) => `L ${xFor(i + 1)} ${yFor(r.predictedCumulative)}`),
+].join(" ");
+
+const actualPath = [
+  `M ${xFor(0)} ${yFor(PREVIEW_BASELINE.points)}`,
+  ...played.map((r, i) => `L ${xFor(i + 1)} ${yFor(r.actualCumulative!)}`),
+].join(" ");
+
+const yTicks: number[] = [];
+for (let v = yMin; v <= yMax; v += 5) yTicks.push(v);
+
+const t = isPt
+  ? {
+      eyebrow: "Ferramenta ao vivo",
+      title: "Rastreador da Temporada",
+      intro:
+        "Em 12 de julho publicamos um palpite rodada a rodada para todo o segundo turno. Esta página compara aquele palpite com a realidade, rodada a rodada, e projeta onde a temporada termina.",
+      cardPredicted: "Previsão publicada",
+      cardPredictedSub: "total final projetado em 12/07",
+      cardNow: "Pontos agora",
+      cardNowSub: "vs previsão nesta altura",
+      cardAccuracy: "Acerto dos palpites",
+      cardAccuracySub: "resultados exatos acertados",
+      cardProjection: "Projeção do modelo",
+      cardProjectionSub: "pontos finais estimados hoje",
+      chartTitle: "Previsto vs real",
+      chartNote:
+        "As duas linhas partem dos 29 pontos que o Seoul tinha quando a prévia foi escrita. A linha cheia é o que aconteceu de verdade.",
+      legendPredicted: "Previsto",
+      legendActual: "Real",
+      tableTitle: "Rodada a rodada",
+      thRound: "Rd",
+      thMatch: "Partida",
+      thPredicted: "Palpite",
+      thActual: "Real",
+      thCall: "Aferição",
+      thRunning: "Acumulado",
+      pending: "a jogar",
+      hit: "acertou",
+      miss: "errou",
+      whatIfTitle: "E se?",
+      whatIfIntro:
+        "Arraste para definir quantos pontos por jogo o Seoul E-Land conquista nas partidas restantes e veja onde a temporada termina.",
+      whatIfPpg: "Pontos por jogo restantes",
+      whatIfFinal: "Total final projetado",
+      whatIfPosition: "Posição projetada",
+      whatIfRemaining: "jogos restantes",
+      raceTitle: "A briga pelo G5",
+      raceIntro:
+        "Projeção do modelo para os candidatos ao acesso, calculada partida a partida sobre o calendário restante de cada clube.",
+      thClub: "Clube",
+      thPlayed: "J",
+      thPoints: "Pts",
+      thRemaining: "Restam",
+      thProjected: "Projeção",
+      methodTitle: "Como isto é calculado",
+      soon: "Os dados dos rivais estão sendo compilados e entram aqui assim que confirmados.",
+      asOf: "Tabela atualizada até",
+    }
+  : {
+      eyebrow: "Live tool",
+      title: "Season Tracker",
+      intro:
+        "On July 12 we published a round-by-round call for the entire second round robin. This page grades that call against reality, round by round, and projects where the season ends up.",
+      cardPredicted: "Published prediction",
+      cardPredictedSub: "final total we projected on Jul 12",
+      cardNow: "Points now",
+      cardNowSub: "vs the prediction at this stage",
+      cardAccuracy: "Call accuracy",
+      cardAccuracySub: "exact results called correctly",
+      cardProjection: "Model projection",
+      cardProjectionSub: "estimated final points today",
+      chartTitle: "Predicted vs actual",
+      chartNote:
+        "Both lines start from the 29 points Seoul had when the preview was written. The solid line is what actually happened.",
+      legendPredicted: "Predicted",
+      legendActual: "Actual",
+      tableTitle: "Round by round",
+      thRound: "Rd",
+      thMatch: "Match",
+      thPredicted: "Called",
+      thActual: "Actual",
+      thCall: "Verdict",
+      thRunning: "Running",
+      pending: "to play",
+      hit: "hit",
+      miss: "miss",
+      whatIfTitle: "What if?",
+      whatIfIntro:
+        "Drag to set how many points per game Seoul E-Land take from their remaining fixtures, and see where the season finishes.",
+      whatIfPpg: "Points per remaining game",
+      whatIfFinal: "Projected final total",
+      whatIfPosition: "Projected finish",
+      whatIfRemaining: "matches left",
+      raceTitle: "The top-five race",
+      raceIntro:
+        "Model projection for the promotion contenders, calculated fixture by fixture across each club's remaining schedule.",
+      thClub: "Club",
+      thPlayed: "P",
+      thPoints: "Pts",
+      thRemaining: "Left",
+      thProjected: "Projected",
+      methodTitle: "How this is calculated",
+      soon: "Rival fixture data is being compiled and will appear here once confirmed.",
+      asOf: "Table current through",
+    };
+
+function outcomeLabel(o: Outcome) {
+  if (isPt) return o === "W" ? "V" : o === "D" ? "E" : "D";
+  return o;
+}
+function ordinal(n: number) {
+  if (isPt) return `${n}º`;
+  const s = ["th", "st", "nd", "rd"];
+  const v = n % 100;
+  return n + (s[(v - 20) % 10] || s[v] || s[0]);
+}
+---
+
+<section class="st" aria-label={t.title}>
+  <header class="st-head">
+    <p class="st-eyebrow">{t.eyebrow}</p>
+    <h2>{t.title}</h2>
+    <p class="st-intro">{t.intro}</p>
+  </header>
+
+  <div class="st-cards">
+    <div class="st-card">
+      <p class="st-card-label">{t.cardPredicted}</p>
+      <p class="st-card-value">{predictedFinal}</p>
+      <p class="st-card-sub">{t.cardPredictedSub}</p>
+    </div>
+    <div class="st-card">
+      <p class="st-card-label">{t.cardNow}</p>
+      <p class="st-card-value">
+        {pointsNow}
+        <span class={`st-delta ${versusPrediction >= 0 ? "st-up" : "st-down"}`}>
+          {versusPrediction >= 0 ? "+" : ""}{versusPrediction}
+        </span>
+      </p>
+      <p class="st-card-sub">{t.cardNowSub}</p>
+    </div>
+    <div class="st-card">
+      <p class="st-card-label">{t.cardAccuracy}</p>
+      <p class="st-card-value">{accuracy}<span class="st-unit">%</span></p>
+      <p class="st-card-sub">{hits}/{played.length} {t.cardAccuracySub}</p>
+    </div>
+    <div class="st-card st-card-accent">
+      <p class="st-card-label">{t.cardProjection}</p>
+      <p class="st-card-value">
+        {seoulProjection ? Math.round(seoulProjection.projectedFinal) : "-"}
+      </p>
+      <p class="st-card-sub">{t.cardProjectionSub}</p>
+    </div>
+  </div>
+
+  <h3 class="st-h3">{t.chartTitle}</h3>
+  <div class="st-chart-wrap">
+    <svg viewBox={`0 0 ${chartW} ${chartH}`} class="st-chart" role="img"
+         aria-label={`${t.chartTitle}: ${t.legendPredicted} ${predictedFinal}, ${t.legendActual} ${pointsNow}`}>
+      {yTicks.map((v) => (
+        <>
+          <line x1={padL} y1={yFor(v)} x2={chartW - padR} y2={yFor(v)} class="st-grid" />
+          <text x={padL - 8} y={yFor(v) + 4} class="st-axis" text-anchor="end">{v}</text>
+        </>
+      ))}
+      {rounds.map((r, i) => (
+        i % 2 === 0 ? (
+          <text x={xFor(i + 1)} y={chartH - 8} class="st-axis" text-anchor="middle">{r.round}</text>
+        ) : null
+      ))}
+      <path d={predictedPath} class="st-line-pred" />
+      <path d={actualPath} class="st-line-actual" />
+      {played.map((r, i) => (
+        <circle cx={xFor(i + 1)} cy={yFor(r.actualCumulative!)} r="4"
+                class={r.hit ? "st-dot-hit" : "st-dot-miss"} />
+      ))}
+    </svg>
+  </div>
+  <div class="st-legend">
+    <span class="st-legend-item"><span class="st-swatch st-swatch-pred"></span>{t.legendPredicted}</span>
+    <span class="st-legend-item"><span class="st-swatch st-swatch-actual"></span>{t.legendActual}</span>
+  </div>
+  <p class="st-note">{t.chartNote}</p>
+
+  <h3 class="st-h3">{t.tableTitle}</h3>
+  <div class="st-table-wrap">
+    <table class="st-table">
+      <thead>
+        <tr>
+          <th>{t.thRound}</th>
+          <th>{t.thMatch}</th>
+          <th>{t.thPredicted}</th>
+          <th>{t.thActual}</th>
+          <th>{t.thCall}</th>
+          <th>{t.thRunning}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rounds.map((r) => (
+          <tr class={r.actual ? "" : "st-row-pending"}>
+            <td class="st-num">{r.round}</td>
+            <td>
+              <span class="st-venue">{r.venue === "home" ? "H" : "A"}</span> {r.opponent}
+            </td>
+            <td><span class={`st-pill st-pill-${r.predicted}`}>{outcomeLabel(r.predicted)}</span></td>
+            <td>
+              {r.actual
+                ? <span class={`st-pill st-pill-${r.actual}`}>{outcomeLabel(r.actual)}</span>
+                : <span class="st-pending">{t.pending}</span>}
+            </td>
+            <td>
+              {r.hit === undefined
+                ? <span class="st-pending">-</span>
+                : r.hit
+                  ? <span class="st-verdict st-verdict-hit">{t.hit}</span>
+                  : <span class="st-verdict st-verdict-miss">{t.miss}</span>}
+            </td>
+            <td class="st-num">
+              {r.actualCumulative !== undefined
+                ? <><strong>{r.actualCumulative}</strong> <span class="st-muted">/ {r.predictedCumulative}</span></>
+                : <span class="st-muted">{r.predictedCumulative}</span>}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <h3 class="st-h3">{t.whatIfTitle}</h3>
+  <div class="st-whatif" data-points-now={pointsNow} data-remaining={remainingCount}
+       data-rivals={JSON.stringify(rivalsForClient)} data-ordinal-style={isPt ? "pt" : "en"}>
+    <p class="st-note">{t.whatIfIntro}</p>
+    <div class="st-slider-row">
+      <label for="st-ppg">{t.whatIfPpg}</label>
+      <input type="range" id="st-ppg" min="0" max="3" step="0.1"
+             value={modelPpg.toFixed(1)} class="st-slider" />
+      <output id="st-ppg-out" class="st-slider-out">{modelPpg.toFixed(1)}</output>
+    </div>
+    <div class="st-whatif-results">
+      <div class="st-card">
+        <p class="st-card-label">{t.whatIfFinal}</p>
+        <p class="st-card-value" id="st-final">-</p>
+        <p class="st-card-sub"><span id="st-remaining">{remainingCount}</span> {t.whatIfRemaining}</p>
+      </div>
+      {hasRivals && (
+        <div class="st-card">
+          <p class="st-card-label">{t.whatIfPosition}</p>
+          <p class="st-card-value" id="st-position">-</p>
+          <p class="st-card-sub">{t.raceTitle}</p>
+        </div>
+      )}
+    </div>
+  </div>
+
+  <h3 class="st-h3">{t.raceTitle}</h3>
+  {hasRivals ? (
+    <>
+      <p class="st-note">{t.raceIntro}</p>
+      <div class="st-table-wrap">
+        <table class="st-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>{t.thClub}</th>
+              <th>{t.thPlayed}</th>
+              <th>{t.thPoints}</th>
+              <th>{t.thRemaining}</th>
+              <th>{t.thProjected}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {projections.map((p, i) => (
+              <tr class={p.slug === "seoul-e-land" ? "st-row-seoul" : ""}>
+                <td class="st-num">{i + 1}</td>
+                <td>{p.name}</td>
+                <td class="st-num">{p.played}</td>
+                <td class="st-num">{p.points}</td>
+                <td class="st-num">{p.remaining}</td>
+                <td class="st-num"><strong>{Math.round(p.projectedFinal)}</strong></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="st-note">{t.asOf} {STANDINGS_AS_OF}.</p>
+    </>
+  ) : (
+    <p class="st-note">{t.soon}</p>
+  )}
+
+  <h3 class="st-h3">{t.methodTitle}</h3>
+  <slot name="method" />
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>(".st-whatif");
+  if (root) {
+    const slider = document.getElementById("st-ppg") as HTMLInputElement | null;
+    const out = document.getElementById("st-ppg-out");
+    const finalEl = document.getElementById("st-final");
+    const posEl = document.getElementById("st-position");
+
+    const pointsNow = Number(root.dataset.pointsNow ?? 0);
+    const remaining = Number(root.dataset.remaining ?? 0);
+    const isPt = root.dataset.ordinalStyle === "pt";
+    let rivals: { name: string; projected: number }[] = [];
+    try {
+      rivals = JSON.parse(root.dataset.rivals || "[]");
+    } catch {
+      rivals = [];
+    }
+
+    const ordinal = (n: number) => {
+      if (isPt) return `${n}º`;
+      const s = ["th", "st", "nd", "rd"];
+      const v = n % 100;
+      return n + (s[(v - 20) % 10] || s[v] || s[0]);
+    };
+
+    const render = () => {
+      if (!slider) return;
+      const ppg = Number(slider.value);
+      const projected = pointsNow + ppg * remaining;
+      if (out) out.textContent = ppg.toFixed(1);
+      if (finalEl) finalEl.textContent = String(Math.round(projected));
+      if (posEl && rivals.length) {
+        const above = rivals.filter((r) => r.projected > projected).length;
+        posEl.textContent = ordinal(above + 1);
+      }
+    };
+
+    slider?.addEventListener("input", render);
+    render();
+  }
+</script>
+
+<style>
+  .st { margin: 0 0 2rem; color: var(--color-editorial-ink); }
+  .st-head { margin-bottom: 1.5rem; }
+  .st-eyebrow {
+    margin: 0; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--color-gold);
+  }
+  .st-head h2 {
+    margin: 0.4rem 0 0.6rem; font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 900; color: var(--color-navy); border: 0; padding: 0;
+  }
+  .st-intro { margin: 0; font-size: 0.98rem; line-height: 1.6; color: var(--color-editorial-muted); }
+  .st-h3 {
+    margin: 2rem 0 0.85rem; font-size: 1.05rem; font-weight: 800;
+    color: var(--color-navy); border-top: 2px solid var(--color-gold); padding-top: 0.7rem;
+  }
+  .st-cards, .st-whatif-results {
+    display: grid; gap: 0.7rem;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  .st-card {
+    border: 1px solid #e7dac9; border-radius: 12px; background: #fff;
+    padding: 0.8rem 0.9rem;
+  }
+  .st-card-accent { border-color: var(--color-gold); background: color-mix(in srgb, var(--color-gold) 8%, #fff); }
+  .st-card-label {
+    margin: 0; font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--color-editorial-muted);
+  }
+  .st-card-value {
+    margin: 0.3rem 0 0.15rem; font-size: 1.9rem; font-weight: 900;
+    color: var(--color-navy); line-height: 1;
+  }
+  .st-unit { font-size: 1rem; font-weight: 800; }
+  .st-delta { font-size: 0.9rem; font-weight: 800; margin-left: 0.35rem; }
+  .st-up { color: #1d7a45; }
+  .st-down { color: #b3261e; }
+  .st-card-sub { margin: 0; font-size: 0.72rem; font-weight: 600; color: var(--color-editorial-muted); }
+  .st-chart-wrap { overflow-x: auto; margin-top: 0.4rem; }
+  .st-chart { width: 100%; min-width: 480px; height: auto; }
+  .st-grid { stroke: #e7dac9; stroke-width: 1; }
+  .st-axis { font-size: 10px; fill: var(--color-editorial-muted); font-weight: 700; }
+  .st-line-pred {
+    fill: none; stroke: var(--color-gold); stroke-width: 2.5;
+    stroke-dasharray: 6 4; stroke-linejoin: round;
+  }
+  .st-line-actual { fill: none; stroke: var(--color-blue); stroke-width: 3; stroke-linejoin: round; }
+  .st-dot-hit { fill: #1d7a45; }
+  .st-dot-miss { fill: #b3261e; }
+  .st-legend { display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap; }
+  .st-legend-item {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.78rem; font-weight: 700; color: var(--color-editorial-muted);
+  }
+  .st-swatch { width: 18px; height: 3px; border-radius: 2px; display: inline-block; }
+  .st-swatch-pred { background: var(--color-gold); }
+  .st-swatch-actual { background: var(--color-blue); }
+  .st-note { margin: 0.6rem 0 0; font-size: 0.85rem; line-height: 1.55; color: var(--color-editorial-muted); }
+  .st-table-wrap { overflow-x: auto; }
+  .st-table { width: 100%; min-width: 520px; border-collapse: collapse; font-size: 0.86rem; }
+  .st-table th, .st-table td {
+    border: 1px solid #e7dac9; padding: 0.5rem 0.6rem; text-align: left; vertical-align: middle;
+  }
+  .st-table th { background: #fff; color: var(--color-navy); font-weight: 850; font-size: 0.74rem;
+    text-transform: uppercase; letter-spacing: 0.06em; }
+  .st-num { text-align: right; font-variant-numeric: tabular-nums; }
+  .st-row-pending td { color: var(--color-editorial-muted); background: color-mix(in srgb, #e7dac9 18%, #fff); }
+  .st-row-seoul td { background: color-mix(in srgb, var(--color-gold) 14%, #fff); font-weight: 700; }
+  .st-venue {
+    display: inline-block; min-width: 1.1rem; font-size: 0.68rem; font-weight: 800;
+    color: var(--color-editorial-muted);
+  }
+  .st-pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 1.5rem; padding: 0.1rem 0.35rem; border-radius: 999px;
+    font-size: 0.72rem; font-weight: 900;
+  }
+  .st-pill-W { background: #dcf2e4; color: #14532d; }
+  .st-pill-D { background: #fdf1d6; color: #7a4d05; }
+  .st-pill-L { background: #fbe0de; color: #7f1d1d; }
+  .st-verdict { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+  .st-verdict-hit { color: #1d7a45; }
+  .st-verdict-miss { color: #b3261e; }
+  .st-pending, .st-muted { color: var(--color-editorial-muted); font-weight: 600; }
+  .st-whatif {
+    border: 1px solid #e7dac9; border-radius: 12px; background: #fff;
+    padding: 0.9rem 1rem 1rem;
+  }
+  .st-slider-row {
+    display: flex; align-items: center; gap: 0.75rem; margin: 0.8rem 0 1rem; flex-wrap: wrap;
+  }
+  .st-slider-row label {
+    font-size: 0.74rem; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--color-editorial-muted);
+  }
+  .st-slider { flex: 1 1 200px; accent-color: var(--color-gold); }
+  .st-slider-out {
+    min-width: 2.6rem; text-align: center; font-weight: 900; font-size: 1.05rem;
+    color: var(--color-navy); background: color-mix(in srgb, var(--color-gold) 16%, #fff);
+    border-radius: 8px; padding: 0.15rem 0.4rem;
+  }
+  @media (max-width: 640px) {
+    .st-cards, .st-whatif-results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+</style>

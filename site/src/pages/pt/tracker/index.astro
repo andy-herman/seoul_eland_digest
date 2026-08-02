@@ -1,0 +1,59 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TranslateButton from "../../../components/TranslateButton.astro";
+import SeasonTracker from "../../../components/SeasonTracker.astro";
+import { withBase } from "../../../lib/paths";
+---
+
+<BaseLayout
+  title="Rastreador da Temporada"
+  description="Comparando nossa previsão publicada do segundo turno com a realidade, rodada a rodada, e projetando a briga pelo acesso na K League 2 até a tabela final."
+  lang="pt"
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        Rastreador
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        Nós cravamos o segundo turno inteiro com antecedência. Este é o placar dessa aposta, atualizado a cada rodada, mais uma projeção partida a partida da briga pelo acesso.
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/tracker" code="EN" label="Inglês" ariaLabel="Ver o rastreador em inglês" />
+      </div>
+    </div>
+  </section>
+
+  <article class="editorial-shell preview-article mx-auto">
+    <SeasonTracker locale="pt">
+      <div slot="method" class="tracker-method">
+        <p>
+          Há duas coisas diferentes nesta página, e elas são mantidas separadas de propósito.
+        </p>
+        <p>
+          <strong>A previsão</strong> é o palpite rodada a rodada publicado na
+          <a href={withBase("/pt/previews/2026-second-round-robin-playoff-run-in-preview")}>prévia do segundo turno</a>
+          em 12 de julho, antes de qualquer uma daquelas partidas ser disputada. Ela dizia 9 vitórias, 4 empates e 3 derrotas, valendo 31 pontos, que somados aos 29 que o Seoul tinha na época davam um total final projetado de 60. Esses palpites estão congelados. São eles que o índice de acerto e a linha tracejada estão avaliando, e não são revisados em silêncio quando um resultado sai diferente.
+        </p>
+        <p>
+          <strong>A projeção</strong> é um modelo, não uma previsão. Cada clube carrega uma nota igual à sua média de pontos por jogo até aqui. O mandante ganha um bônus de 0,35 ponto por jogo, que é aproximadamente o valor do fator casa nesta divisão. A diferença entre as duas notas vira probabilidade de vitória, empate e derrota, com a fatia do empate encolhendo conforme a diferença aumenta, e cada partida devolve um valor de pontos esperados. Rodar isso sobre todas as partidas restantes gera os totais finais projetados na tabela da briga. Como é reconstruída a partir da forma atual, ela muda toda semana, e vai discordar cada vez mais do nosso palpite publicado conforme a temporada avança. É exatamente esse o objetivo.
+        </p>
+        <p>
+          Os resultados do Seoul E-Land são lidos diretamente do mesmo arquivo de calendário que alimenta o resto do site, então o rastreador não consegue sair de sincronia com os relatos das partidas. Os retrospectos dos rivais são atualizados manualmente a cada rodada.
+        </p>
+      </div>
+    </SeasonTracker>
+  </article>
+</BaseLayout>
+
+<style is:global>
+  .tracker-method p {
+    margin: 0 0 0.85rem;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--color-editorial-muted);
+  }
+  .tracker-method strong { color: var(--color-navy); }
+  .tracker-method a { color: var(--color-blue); font-weight: 650; }
+</style>
