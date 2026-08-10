@@ -24,38 +24,32 @@
 
 import type { ClubRecord, RivalFixture } from "./seasonTracker";
 
-export const STANDINGS_AS_OF = "Round 20 (2026-08-02)";
+export const STANDINGS_AS_OF = "Round 21 (2026-08-08)";
 
 export const CLUB_RECORDS: ClubRecord[] = [
   // Promotion contenders, shown in the race table.
-  { slug: "suwon-samsung", name: "Suwon Samsung Bluewings", played: 19, won: 11, drawn: 4, lost: 4, goalsFor: 28, goalsAgainst: 17, tracked: true },
-  { slug: "seoul-e-land", name: "Seoul E-Land", played: 19, won: 11, drawn: 3, lost: 5, goalsFor: 36, goalsAgainst: 25, tracked: true },
-  { slug: "busan-ipark", name: "Busan IPark", played: 19, won: 11, drawn: 3, lost: 5, goalsFor: 37, goalsAgainst: 27, tracked: true },
-  { slug: "hwaseong", name: "Hwaseong FC", played: 19, won: 10, drawn: 4, lost: 5, goalsFor: 34, goalsAgainst: 22, tracked: true },
-  { slug: "suwon-fc", name: "Suwon FC", played: 18, won: 9, drawn: 6, lost: 3, goalsFor: 38, goalsAgainst: 24, tracked: true },
-  { slug: "daegu", name: "Daegu FC", played: 19, won: 9, drawn: 5, lost: 5, goalsFor: 38, goalsAgainst: 30, tracked: true },
+  { slug: "suwon-samsung", name: "Suwon Samsung Bluewings", played: 20, won: 12, drawn: 4, lost: 4, goalsFor: 29, goalsAgainst: 17, tracked: true },
+  { slug: "seoul-e-land", name: "Seoul E-Land", played: 20, won: 11, drawn: 4, lost: 5, goalsFor: 36, goalsAgainst: 25, tracked: true },
+  { slug: "suwon-fc", name: "Suwon FC", played: 19, won: 10, drawn: 6, lost: 3, goalsFor: 39, goalsAgainst: 24, tracked: true },
+  { slug: "busan-ipark", name: "Busan IPark", played: 20, won: 11, drawn: 3, lost: 6, goalsFor: 37, goalsAgainst: 29, tracked: true },
+  { slug: "daegu", name: "Daegu FC", played: 20, won: 10, drawn: 5, lost: 5, goalsFor: 39, goalsAgainst: 30, tracked: true },
+  { slug: "hwaseong", name: "Hwaseong FC", played: 20, won: 10, drawn: 5, lost: 5, goalsFor: 34, goalsAgainst: 22, tracked: true },
 
   // Rest of the division. Ratings only; not shown in the race table.
-  { slug: "chungnam-asan", name: "Chungnam Asan", played: 19, won: 7, drawn: 6, lost: 6, goalsFor: 28, goalsAgainst: 23 },
-  { slug: "gimpo", name: "Gimpo FC", played: 19, won: 6, drawn: 9, lost: 4, goalsFor: 22, goalsAgainst: 21 },
-  { slug: "gyeongnam", name: "Gyeongnam FC", played: 19, won: 6, drawn: 7, lost: 6, goalsFor: 27, goalsAgainst: 27 },
-  { slug: "paju", name: "Paju Frontier", played: 19, won: 6, drawn: 3, lost: 10, goalsFor: 19, goalsAgainst: 24 },
-  { slug: "cheonan", name: "Cheonan City", played: 19, won: 4, drawn: 8, lost: 7, goalsFor: 24, goalsAgainst: 26 },
-  { slug: "seongnam", name: "Seongnam FC", played: 18, won: 4, drawn: 8, lost: 6, goalsFor: 17, goalsAgainst: 20 },
-  { slug: "yongin", name: "Yongin FC", played: 19, won: 3, drawn: 10, lost: 6, goalsFor: 23, goalsAgainst: 29 },
-  { slug: "cheongju", name: "Chungbuk Cheongju", played: 19, won: 2, drawn: 13, lost: 4, goalsFor: 23, goalsAgainst: 30 },
-  { slug: "ansan", name: "Ansan Greeners", played: 19, won: 5, drawn: 3, lost: 11, goalsFor: 20, goalsAgainst: 36 },
+  { slug: "gimpo", name: "Gimpo FC", played: 20, won: 7, drawn: 9, lost: 4, goalsFor: 25, goalsAgainst: 21 },
+  { slug: "chungnam-asan", name: "Chungnam Asan", played: 20, won: 7, drawn: 7, lost: 6, goalsFor: 29, goalsAgainst: 24 },
+  { slug: "gyeongnam", name: "Gyeongnam FC", played: 20, won: 6, drawn: 7, lost: 7, goalsFor: 27, goalsAgainst: 28 },
+  { slug: "seongnam", name: "Seongnam FC", played: 19, won: 5, drawn: 8, lost: 6, goalsFor: 20, goalsAgainst: 22 },
+  { slug: "yongin", name: "Yongin FC", played: 20, won: 4, drawn: 10, lost: 6, goalsFor: 25, goalsAgainst: 29 },
+  { slug: "paju", name: "Paju Frontier", played: 20, won: 6, drawn: 3, lost: 11, goalsFor: 19, goalsAgainst: 25 },
+  { slug: "cheonan", name: "Cheonan City", played: 20, won: 4, drawn: 8, lost: 8, goalsFor: 26, goalsAgainst: 29 },
+  { slug: "cheongju", name: "Chungbuk Cheongju", played: 20, won: 2, drawn: 13, lost: 5, goalsFor: 23, goalsAgainst: 33 },
+  { slug: "ansan", name: "Ansan Greeners", played: 20, won: 5, drawn: 4, lost: 11, goalsFor: 21, goalsAgainst: 37 },
   { slug: "jeonnam", name: "Jeonnam Dragons", played: 19, won: 2, drawn: 7, lost: 10, goalsFor: 21, goalsAgainst: 34 },
-  { slug: "gimhae", name: "Gimhae FC", played: 18, won: 2, drawn: 5, lost: 11, goalsFor: 16, goalsAgainst: 36 },
+  { slug: "gimhae", name: "Gimhae FC", played: 19, won: 2, drawn: 5, lost: 12, goalsFor: 16, goalsAgainst: 37 },
 ];
 
 export const RIVAL_FIXTURES: RivalFixture[] = [
-  // --- Round 21 ---
-  { round: 21, home: "hwaseong", away: "seoul-e-land" },
-  { round: 21, home: "suwon-samsung", away: "gimhae" },
-  { round: 21, home: "yongin", away: "busan-ipark" },
-  { round: 21, home: "paju", away: "suwon-fc" },
-  { round: 21, home: "gyeongnam", away: "daegu" },
   // --- Round 22 ---
   { round: 22, home: "suwon-samsung", away: "suwon-fc" },
   { round: 22, home: "busan-ipark", away: "hwaseong" },

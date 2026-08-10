@@ -16,7 +16,7 @@ tags: [seoul-eland, club-report, season-review, playoff-race]
 
 ## A Versão Curta
 
-O Seoul E-Land FC tem 37 pontos em 20 partidas, está invicto há cinco jogos e disputa o acesso em agosto pela primeira vez na história do clube. É também um time que perdeu mais partidas em casa do que fora, não consegue furar um adversário que se fecha atrás, e acabou de passar noventa minutos em Hwaseong sendo salvo pelo próprio goleiro.
+O Seoul E-Land FC tem 37 pontos em 20 partidas, está invicto há cinco jogos e é o vice-líder da K League 2 em agosto. É também um time que perdeu mais partidas em casa do que fora, não consegue furar um adversário que se fecha atrás, e acabou de passar noventa minutos em Hwaseong sendo salvo pelo próprio goleiro. Chegou ao segundo lugar, aliás, numa partida em que não marcou.
 
 Os dois parágrafos são verdadeiros. Este texto tenta explicar como.
 

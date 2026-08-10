@@ -16,7 +16,7 @@ tags: [seoul-eland, club-report, season-review, playoff-race]
 
 ## The Short Version
 
-Seoul E-Land FC have 37 points from 20 matches, they are unbeaten in five, and they are in the promotion conversation in August for the first time in the club's history. They are also a team that has lost more matches at home than away, cannot break down a side that sits in, and just spent ninety minutes at Hwaseong being rescued by their goalkeeper.
+Seoul E-Land FC have 37 points from 20 matches, they are unbeaten in five, and they are second in K League 2 in August. They are also a team that has lost more matches at home than away, cannot break down a side that sits in, and just spent ninety minutes at Hwaseong being rescued by their goalkeeper. They took second place, incidentally, in a match where they did not score.
 
 Both of those paragraphs are true. This is an attempt to explain how.
 

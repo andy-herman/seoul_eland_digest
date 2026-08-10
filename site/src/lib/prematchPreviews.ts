@@ -245,6 +245,16 @@ function safeHttpUrl(value: string) {
   }
 }
 
+// Headings that the forecast bar and predicted-XI graphic get injected under.
+// The Portuguese previews are authored with "Visão Geral", so leaving this at
+// just "panorama" silently dropped both graphics from every PT preview.
+const GLANCE_HEADINGS = new Set([
+  "at a glance",
+  "panorama",
+  "visão geral",
+  "visao geral",
+]);
+
 function inlineMarkdown(value: string) {
   let html = escapeHtml(value);
   html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
@@ -421,7 +431,7 @@ export function renderPreviewMarkdown(
         tableLines.push(lines[i].trim());
       }
       const normalizedHeading = currentHeading.toLowerCase();
-      const isAtAGlance = normalizedHeading === "at a glance" || normalizedHeading === "panorama";
+      const isAtAGlance = GLANCE_HEADINGS.has(normalizedHeading);
       html.push(renderTable(tableLines, { hideForecastRead: isAtAGlance && Boolean(preview?.forecast) }));
       if (isAtAGlance && !renderedGlanceVisuals) {
         if (preview?.forecast) {
