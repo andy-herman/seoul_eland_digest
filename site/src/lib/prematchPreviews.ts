@@ -1,5 +1,6 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
+import { withBase } from "./paths";
 
 type PreviewLocale = "en" | "pt";
 
@@ -254,6 +255,12 @@ function inlineMarkdown(value: string) {
       const safeUrl = safeHttpUrl(url);
       return safeUrl ? `<a href="${safeUrl}" target="_blank" rel="noopener noreferrer">${text}</a>` : text;
     },
+  );
+  // Site-relative links, e.g. [Tracker](/tracker). Kept separate from the
+  // external-link rule above so they stay in-tab and pick up the base path.
+  html = html.replace(
+    /\[([^\]]+)\]\((\/[A-Za-z0-9\-._~/]*)\)/g,
+    (_match, text: string, href: string) => `<a href="${escapeHtml(withBase(href))}">${text}</a>`,
   );
   html = html.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, "<span>$2</span>");
   html = html.replace(/\[\[([^\]]+)\]\]/g, "<span>$1</span>");
