@@ -85,7 +85,7 @@ Sete das últimas doze partidas são no estádio onde este time foi menos convin
 
 ### Osmar tem trinta e sete anos
 
-Tem sido excelente e jogou praticamente tudo. [[Kim Oh-kyu]] existe, é o capitão do clube e mal tem aparecido ultimamente. Em algum momento das próximas doze partidas, ou o Seoul administra essa carga de propósito, ou ela se administra sozinha num momento escolhido por ela.
+Tem sido excelente e jogou praticamente tudo. A cobertura é melhor do que parece: [[Kim Oh-kyu]], o capitão do clube, tem 20 jogos e 1.681 minutos próprios, empatado com [[Min Sung-jun]] no topo do elenco, e simplesmente é quem tem caído para o banco nesta sequência. Em algum momento das próximas doze partidas, ou o Seoul administra essa carga de propósito, ou ela se administra sozinha num momento escolhido por ela.
 
 ## A Parte Divertida
 

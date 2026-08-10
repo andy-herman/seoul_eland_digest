@@ -85,7 +85,7 @@ Seven of the last twelve matches are at the ground where this team has been leas
 
 ### Osmar is thirty-seven
 
-He has been outstanding and he has played almost everything. [[Kim Oh-kyu]] exists, is the club captain, and has barely featured lately. At some point in the next twelve matches, either Seoul manage that workload deliberately or it manages itself at a moment of its own choosing.
+He has been outstanding and he has played almost everything. The cover is better than it looks: [[Kim Oh-kyu]], the club captain, has 20 appearances and 1,681 minutes of his own, level with [[Min Sung-jun]] for the most in the squad, and has simply been the one dropping to the bench during this run. At some point in the next twelve matches, either Seoul manage that workload deliberately or it manages itself at a moment of its own choosing.
 
 ## The Fun Part
 

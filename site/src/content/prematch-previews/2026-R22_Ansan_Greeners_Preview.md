@@ -70,7 +70,7 @@ The lineup graphic is a best read, not a leaked team sheet. It takes the Round 2
 
 - **The Ahn Joo-wan question is the real one.** [[Ahn Joo-wan]] came off the bench at Hwaseong and was the only Seoul player all night who ran beyond the last defender. Against a team that will drop into a 5-3-2 and invite pressure, the case for starting him is not sentiment, it is the specific solution to the specific problem. Kim Do-gyun has preferred him as an impact substitute all season. Round 22 is the week to find out whether that changes.
 - [[Cho Jun-hyun]]: collision at Hwaseong, no update. If [[Park Chang-hwan]] is unavailable after all and [[Cho Jun-hyun]] is not fit, Seoul's midfield gets thin quickly.
-- Osmar: rest candidate. [[Kim Oh-kyu]] is the club captain and has barely played.
+- Osmar: rest candidate. [[Kim Oh-kyu]] is the club captain, has 20 appearances (level with [[Min Sung-jun]] for the most in the squad) and 1,681 minutes, and has been used from the bench through the recent run. He is the ready-made replacement, not a cold one.
 - [[Bae Seo-jun]]: withdrawn at half-time last time out. [[Kim Joo-hwan]] replaced him and is the ready-made alternative.
 
 ## Opponent Scouting Report

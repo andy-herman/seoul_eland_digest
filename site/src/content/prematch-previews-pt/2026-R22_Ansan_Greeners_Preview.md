@@ -70,7 +70,7 @@ A escalação é a melhor leitura possível, não um vazamento de súmula. Parte
 
 - **A questão Ahn Joo-wan é a de verdade.** [[Ahn Joo-wan]] entrou em Hwaseong e foi o único jogador do Seoul a noite inteira que atacou as costas do último defensor. Contra um time que vai baixar num 5-3-2 e convidar a pressão, o argumento para escalá-lo não é sentimental, é a solução específica para o problema específico. Kim Do-gyun o preferiu como jogador de impacto a temporada toda. A 22ª rodada é a semana de descobrir se isso muda.
 - [[Cho Jun-hyun]]: choque em Hwaseong, sem atualização. Se [[Park Chang-hwan]] no fim não estiver disponível e [[Cho Jun-hyun]] não estiver apto, o meio do Seoul fica curto rápido.
-- Osmar: candidato a descanso. [[Kim Oh-kyu]] é o capitão do clube e mal jogou.
+- Osmar: candidato a descanso. [[Kim Oh-kyu]] é o capitão do clube, tem 20 jogos (empatado com [[Min Sung-jun]] no topo do elenco) e 1.681 minutos, e vem sendo usado saindo do banco na sequência recente. É um substituto pronto, não um jogador sem ritmo.
 - [[Bae Seo-jun]]: substituído no intervalo na última partida. [[Kim Joo-hwan]] entrou no lugar e é a alternativa pronta.
 
 ## Relatório de Observação do Adversário

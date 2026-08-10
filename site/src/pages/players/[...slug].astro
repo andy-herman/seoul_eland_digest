@@ -4,6 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { getOfficialRosterWithPhotos, type OfficialPlayerWithPhoto } from "../../lib/officialRoster";
 import { withBase } from "../../lib/paths";
 import { fixtures, type MatchFixture } from "../../data/matches";
+import { getPlayerProfile } from "../../data/playerProfiles";
 
 export async function getStaticPaths() {
   const [players, notes] = await Promise.all([
@@ -70,6 +71,8 @@ const statCards = [
   { label: "Assists", value: stats.assists },
   { label: "Minutes", value: stats.minutes, sub: "including stoppage" },
 ].filter((card) => card.value != null);
+
+const profile = getPlayerProfile(player.slug);
 ---
 
 <BaseLayout
@@ -157,6 +160,17 @@ const statCards = [
             )}
           </div>
         )}
+      </section>
+    )}
+
+    {profile && (
+      <section class="mt-6" aria-label={`About ${player.englishName}`}>
+        <div class="rounded-[1.5rem] border p-6 sm:p-7" style="background-color: color-mix(in srgb, white 7%, transparent); border-color: color-mix(in srgb, var(--color-gold) 30%, var(--color-rule));">
+          <p class="text-xs font-black uppercase tracking-[0.2em]" style="color: var(--color-gold-light);">
+            The scouting note
+          </p>
+          <p class="mt-3 text-base leading-relaxed sm:text-lg">{profile}</p>
+        </div>
       </section>
     )}
 
