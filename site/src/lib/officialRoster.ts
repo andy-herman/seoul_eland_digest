@@ -22,15 +22,58 @@ type PlayerResponse = {
   data: OfficialPlayer[];
 };
 
+/** Season totals as published by the club on each player's own page. */
+export type OfficialPlayerStats = {
+  appearances?: number;
+  goals?: number;
+  assists?: number;
+  minutes?: number;
+  /** The season the club is reporting, e.g. 2026. */
+  season?: number;
+};
+
 export type OfficialPlayerWithPhoto = OfficialPlayer & {
   englishName: string;
   englishNationality: string;
   englishPosition: string;
   slug: string;
   photoUrl: string;
+  stats: OfficialPlayerStats;
 };
 
-async function getOfficialPhotoUrl(player: OfficialPlayer) {
+// The club labels the season block in Korean. Map the labels we care about;
+// unknown labels are ignored rather than guessed at.
+const STAT_LABELS: Record<string, keyof OfficialPlayerStats> = {
+  "출장경기수": "appearances",
+  "출장": "appearances",
+  "골": "goals",
+  "득점": "goals",
+  "도움": "assists",
+  "플레이 시간": "minutes",
+  "플레이시간": "minutes",
+};
+
+function parseStats(detailHtml: string): OfficialPlayerStats {
+  const stats: OfficialPlayerStats = {};
+
+  const season = detailHtml.match(/<h2>\s*(\d{4})\s*시즌\s*성적\s*<\/h2>/);
+  if (season) stats.season = Number(season[1]);
+
+  const block = detailHtml.match(/<ul class="stats-box">([\s\S]*?)<\/ul>/);
+  if (!block) return stats;
+
+  for (const item of block[1].matchAll(/<p>([\s\S]*?)<\/p>\s*<strong>([\s\S]*?)<\/strong>/g)) {
+    const label = item[1].replace(/<[^>]+>/g, "").trim();
+    const key = STAT_LABELS[label];
+    if (!key || key === "season") continue;
+    const value = Number(item[2].replace(/<[^>]+>/g, "").replace(/[^\d.-]/g, ""));
+    if (Number.isFinite(value)) stats[key] = value;
+  }
+
+  return stats;
+}
+
+async function getOfficialPlayerDetail(player: OfficialPlayer) {
   const detailResponse = await fetch(`https://www.seoulelandfc.com/team/player/${player.playerSeq}`, {
     headers: { "User-Agent": "Mozilla/5.0" },
   });
@@ -48,7 +91,10 @@ async function getOfficialPhotoUrl(player: OfficialPlayer) {
     throw new Error(`Official player page did not include a photo for ${player.korName}`);
   }
 
-  return photoMatch[1];
+  // Stats are best-effort: a player with no minutes has an empty block, and a
+  // layout change upstream should not take the whole build down over a photo
+  // that parsed fine.
+  return { photoUrl: photoMatch[1], stats: parseStats(detailHtml) };
 }
 
 export async function getOfficialRoster() {
@@ -75,13 +121,17 @@ export async function getOfficialRosterWithPhotos(): Promise<OfficialPlayerWithP
   const roster = await getOfficialRoster();
 
   return Promise.all(
-    roster.map(async (player) => ({
-      ...player,
-      englishName: getEnglishPlayerName(player.korName),
-      englishNationality: getEnglishNationality(player.nationality),
-      englishPosition: getEnglishPosition(player.position),
-      slug: getPlayerSlug(player.korName),
-      photoUrl: await getOfficialPhotoUrl(player),
-    })),
+    roster.map(async (player) => {
+      const detail = await getOfficialPlayerDetail(player);
+      return {
+        ...player,
+        englishName: getEnglishPlayerName(player.korName),
+        englishNationality: getEnglishNationality(player.nationality),
+        englishPosition: getEnglishPosition(player.position),
+        slug: getPlayerSlug(player.korName),
+        photoUrl: detail.photoUrl,
+        stats: detail.stats,
+      };
+    }),
   );
 }

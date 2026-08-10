@@ -46,6 +46,13 @@ const rosterWithPhotos = await getOfficialRosterWithPhotos();
               <p class="mt-1 text-sm font-mono uppercase tracking-wider" style="color: var(--color-gold);">
                 #{player.backNumber} · {player.englishPosition}
               </p>
+              {player.stats?.appearances != null && (
+                <p class="mt-2 text-sm font-black" style="color: var(--color-muted);">
+                  {player.stats.appearances} {player.stats.appearances === 1 ? "app" : "apps"}
+                  {(player.stats.goals ?? 0) > 0 && <> · {player.stats.goals}G</>}
+                  {(player.stats.assists ?? 0) > 0 && <> · {player.stats.assists}A</>}
+                </p>
+              )}
             </div>
           </div>
           <dl class="mt-4 grid grid-cols-3 gap-3 text-sm">
