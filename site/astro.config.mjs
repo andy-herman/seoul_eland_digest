@@ -4,7 +4,9 @@ import tailwindcss from "@tailwindcss/vite";
 import remarkWikiLink from "remark-wiki-link";
 import { visit } from "unist-util-visit";
 
-const site = process.env.SITE_URL ?? "https://example.com";
+// The production domain is the default so canonical URLs, OG tags, the sitemap
+// and the RSS feed come out right on Vercel builds, where SITE_URL is not set.
+const site = process.env.SITE_URL ?? "https://seoulelanddigest.vercel.app";
 const base = process.env.SITE_BASE?.trim() || "/";
 const linkBase = base === "/" ? "" : base.replace(/\/$/, "");
 

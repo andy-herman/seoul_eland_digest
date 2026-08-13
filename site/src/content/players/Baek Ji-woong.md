@@ -7,7 +7,6 @@ tags: [player, k-league-2, seoul-e-land]
 
 # Baek Ji-woong
 
-*Player note for [[Seoul E-Land FC]]. Auto-generated and grown over the season.*
 
 ## Mentions
 

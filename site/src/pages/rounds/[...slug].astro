@@ -27,6 +27,8 @@ const dateStr = entry.data.date.toLocaleDateString("en-US", {
 <BaseLayout
   title={`Round ${entry.data.round} — ${entry.data.opponent}`}
   description={`Seoul E-Land FC ${entry.data.result} ${entry.data.opponent}, ${dateStr}.`}
+  ogType="article"
+  publishedDate={entry.data.date.toISOString()}
 >
   <article class="mx-auto max-w-5xl">
     <MatchArticleHeader

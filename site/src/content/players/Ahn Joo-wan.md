@@ -7,11 +7,10 @@ tags: [player, k-league-2, seoul-e-land]
 
 # Ahn Joo-wan
 
-*Player note for [[Seoul E-Land FC]]. Auto-generated and grown over the season.*
 
 ## About
 
-Born 2009. Left-sided forward coming through Seoul E-Land's youth pipeline, a high-school national-team prospect. Names Vinicius Junior as his model and lists pace and finishing as his strengths.
+Born 2009. Left-sided forward coming through Seoul E-Land's youth pathway, a high-school national-team prospect. Names Vinicius Junior as his model and lists pace and finishing as his strengths.
 
 Holds two K League youth records, and both of them came against Cheonan City:
 

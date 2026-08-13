@@ -68,7 +68,7 @@ The lineup graphic is a best read, not a leaked team sheet. It starts from the a
 
 ## Opponent Scouting Report
 
-Busan IPark have led this division for most of the season and are built to attack. Cho Sung-hwan (조성환) moved them from a three-centre-back structure to a 4-4-2 for 2026 and produced the most potent attack in K League 2, with thirty-six goals in eighteen matches. They are also not airtight, having conceded twenty-five, and their goal difference of plus eleven is identical to Suwon Samsung's despite scoring eight more.
+Busan IPark have led this division for most of the season and are built to attack. Cho Sung-hwan (조성환) moved them from a three-center-back structure to a 4-4-2 for 2026 and produced the most potent attack in K League 2, with thirty-six goals in eighteen matches. They are also not airtight, having conceded twenty-five, and their goal difference of plus eleven is identical to Suwon Samsung's despite scoring eight more.
 
 The names for the match notes start with Cristian Renato, who is both joint-top scorer and the leading creator with roughly six goals and five assists. He is the player to cut off rather than merely mark, because Busan's attack runs through his supply as much as his finishing. Gabriel Honorio matches him for goals from a wide attacking role, Baek Ga-on has chipped in from the second line and scored in the cup, and Son Hwi and Gutemburg have both come off the bench to change matches recently.
 

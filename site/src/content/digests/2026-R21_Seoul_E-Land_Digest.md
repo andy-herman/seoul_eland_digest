@@ -35,7 +35,7 @@ The second half was Hwaseong's. Cha pushed his line up, sent Im Chan-yeol and Ki
 
 Kim Do-gyun made the double change on 62, and only half of it was a choice: [[Cho Jun-hyun]] had gone down in an aerial collision with Lee Jong-sung around the 53rd minute and did not last much longer, going off alongside [[Lee Ju-hyeok]] for [[Francisco Geraldes]] and [[Ahn Joo-wan]]. Lee Jong-sung did not make it out of the collision either and was withdrawn on 58. Euller followed for [[Kang Hyeon-je]], then [[Oh In-pyo]] for [[Kim Oh-kyu]] with eight minutes left. The captain was booked a minute after coming on, which is the sort of detail that tells you what the closing stages felt like. None of it produced a clear chance. [[Alan Carius]] hit one from distance that went wide, [[Kang Hyeon-je]] got to the byline once, and that was the sum of Seoul's second half.
 
-The closing stretch belonged to Kim Dae-hwan, who had run the right flank for ninety minutes and was still doing it at the end, and to a Hwaseong side who kept arriving in the box without ever finding the final pass. Jang Min-jun, a centre-back by trade, ended up in Seoul's penalty area heading a cross over the bar. The final whistle came with the scoreboard where it started, in front of 2,392 people who had sat through it in the heat. Both benches applauded. Neither looked satisfied.
+The closing stretch belonged to Kim Dae-hwan, who had run the right flank for ninety minutes and was still doing it at the end, and to a Hwaseong side who kept arriving in the box without ever finding the final pass. Jang Min-jun, a center-back by trade, ended up in Seoul's penalty area heading a cross over the bar. The final whistle came with the scoreboard where it started, in front of 2,392 people who had sat through it in the heat. Both benches applauded. Neither looked satisfied.
 
 ## Player Performances
 
@@ -52,7 +52,7 @@ Handed [[Park Chang-hwan]]'s shirt in the toughest away fixture on the schedule 
 The commentary opened by noting he is close to a double-double for the season and that this could be the night it landed. It was not. He got Seoul's best chance and put it over, took a decent free kick, and drifted for long stretches while Hwaseong doubled up on him. He was withdrawn for [[Kang Hyeon-je]] with twenty minutes left, which tells you how the night had gone. A quiet game from him is now genuinely unusual, which is its own kind of compliment.
 
 **[[Park Jae-yong]] (박재용):**
-Marked out of the match by Boinovic, who followed him everywhere and won more of the duels than he lost. Seoul's leading scorer had one meaningful touch, the header down for Euller's volley, and almost nothing else. Not every centre-forward performance is a failure when the service does not arrive, and tonight the service did not arrive.
+Marked out of the match by Boinovic, who followed him everywhere and won more of the duels than he lost. Seoul's leading scorer had one meaningful touch, the header down for Euller's volley, and almost nothing else. Not every center-forward performance is a failure when the service does not arrive, and tonight the service did not arrive.
 
 **[[Ahn Joo-wan]] (안주완):**
 Nearly half an hour off the bench and the clearest evidence yet that the teenager is ready for more than cameos. He ran in behind almost immediately, which is exactly the thing nobody else on the pitch was doing, and finished it calmly before the flag went up. He got into another shooting position from the flank later. Whether the ball crossed the line is not in the written record and the offside call makes it moot. The point stands anyway: the one Seoul player who attacked the space behind Hwaseong's line is the one who did not start.
@@ -75,7 +75,7 @@ Rather than characterise a mood we have not observed, we are leaving this sectio
 
 ## Tactical and Strategic Watch
 
-**The preview called ten of eleven, and the shape is arguable in our favour for once.** We predicted a 4-2-3-1 with [[Alan Carius]] behind [[Park Jae-yong]]. The stats providers logged a 4-3-3; the Korean broadcast described exactly the structure we called, with [[Alan Carius]] advanced off two holders. The personnel miss was [[Park Chang-hwan]], replaced by [[Cho Jun-hyun]]. After getting the shape flatly wrong in Round 18 and Round 20, we will take it.
+**The preview called ten of eleven, and the shape is arguable in our favor for once.** We predicted a 4-2-3-1 with [[Alan Carius]] behind [[Park Jae-yong]]. The stats providers logged a 4-3-3; the Korean broadcast described exactly the structure we called, with [[Alan Carius]] advanced off two holders. The personnel miss was [[Park Chang-hwan]], replaced by [[Cho Jun-hyun]]. After getting the shape flatly wrong in Round 18 and Round 20, we will take it.
 
 **Seoul do not have a plan B against a low block.** This is the third time this season a side has sat in, stayed compact and dared Seoul to break them down, and the third time Seoul have had the ball and no idea what to do with it. The commentary produced the best description of the problem anyone has managed: Seoul were making calls that nobody was picking up. The passes were there. The runs were not. [[Ahn Joo-wan]]'s twenty minutes were the exception that proved it, because the one time somebody ran in behind, Seoul created a goal.
 

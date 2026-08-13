@@ -1,0 +1,63 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import { withBase } from "../../lib/paths";
+
+const guides = (await getCollection("guides")).sort(
+  (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+---
+
+<BaseLayout
+  title="Seoul E-Land Guides"
+  description="Evergreen guides for Seoul E-Land FC fans: what the club is, how to watch K League 2 from abroad, the Mokdong matchday experience, and how promotion works."
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        Guides
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        New to Seoul E-Land or to Korean football? Start here: the club explained, how to watch from anywhere, what a Mokdong matchday looks like, and how the promotion race actually works.
+      </p>
+      <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+        {guides.length} guides
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/pt/guides" code="PT" label="Português" ariaLabel="Ler os guias em português" />
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="Guides" class="grid gap-4">
+    {guides.map((guide) => (
+      <a
+        href={withBase(`/guides/${guide.id.replace(/\.md$/, "")}`)}
+        class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6"
+        style="background: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));"
+      >
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="metadata-chip">{guide.data.category}</span>
+          <span class="metadata-chip">Updated {dateFormatter.format(guide.data.date)}</span>
+        </div>
+        <h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">
+          {guide.data.title}
+        </h2>
+        <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">
+          {guide.data.description}
+        </p>
+        <p class="mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          Read the guide →
+        </p>
+      </a>
+    ))}
+  </section>
+</BaseLayout>

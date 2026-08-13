@@ -78,7 +78,7 @@ Cha's identity has a nickname in the Korean press: 늪 축구, swamp football. T
 The names for the match notes:
 
 - **Leonard Pllana** is the danger. Four goals in a single match against Daegu, and he scored a penalty and assisted the winner against Seoul in Round 9. He is playing the best football of anyone in this fixture.
-- **Sava Petrov** was the leading scorer before Pllana's Daegu haul, a Serbian centre-forward on seven goals.
+- **Sava Petrov** was the leading scorer before Pllana's Daegu haul, a Serbian center-forward on seven goals.
 - **Aleksandar Vojnovic** anchors the back three and was described in the Korean coverage of Round 9 as the decisive factor in holding out Seoul's late pressure.
 - **Demethryus** scored the Round 9 winner against Seoul, arriving into the box on a counter from a Pllana pass.
 - **Jegal Jae-min** scored the other goal against Daegu.

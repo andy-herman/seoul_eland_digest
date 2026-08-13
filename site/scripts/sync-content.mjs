@@ -21,6 +21,8 @@ const SRC = {
   players: join(VAULT_BASE, "Players"),
   prematchPreviews: join(VAULT_BASE, "Scouting Report", "K League 2 2026", "Pre-Match Previews"),
   prematchPreviewsPt: join(VAULT_BASE, "Scouting Report", "K League 2 2026", "Pre-Match Previews-PT"),
+  guides: join(VAULT_BASE, "Guides"),
+  guidesPt: join(VAULT_BASE, "Guides-PT"),
 };
 
 const DEST = {
@@ -30,6 +32,8 @@ const DEST = {
   places: join(SITE_BASE, "places"),
   prematchPreviews: join(SITE_BASE, "prematch-previews"),
   prematchPreviewsPt: join(SITE_BASE, "prematch-previews-pt"),
+  guides: join(SITE_BASE, "guides"),
+  guidesPt: join(SITE_BASE, "guides-pt"),
 };
 
 function polishFanFacingCopy(content) {
@@ -124,6 +128,12 @@ async function main() {
 
   const previewPtCount = await copyTree(SRC.prematchPreviewsPt, DEST.prematchPreviewsPt, undefined, scrubPreviewForSite);
   console.log(`[sync] copied ${previewPtCount} Portuguese pre-match preview(s)`);
+
+  const guideCount = await copyTree(SRC.guides, DEST.guides, undefined, polishFanFacingCopy);
+  console.log(`[sync] copied ${guideCount} guide(s)`);
+
+  const guidePtCount = await copyTree(SRC.guidesPt, DEST.guidesPt, undefined, polishFanFacingCopy);
+  console.log(`[sync] copied ${guidePtCount} Portuguese guide(s)`);
 
   // Always seed empty content folders so Astro doesn't error if vault is empty.
   for (const dir of Object.values(DEST)) {

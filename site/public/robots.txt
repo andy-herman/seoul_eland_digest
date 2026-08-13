@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://seoulelanddigest.vercel.app/sitemap.xml

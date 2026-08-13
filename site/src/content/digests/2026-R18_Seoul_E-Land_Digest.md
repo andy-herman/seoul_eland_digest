@@ -25,7 +25,7 @@ For twenty-five minutes Seoul were excellent. [[Yoon Seok-ju]] struck the juncti
 
 Suwon FC, meanwhile, carried a specific threat. Frizzo forced a save from [[Min Sung-jun]] with an early left-footed effort from the edge, and Kim Jung-hwan (김정환) repeatedly used his pace down the right, once rescuing a ball that looked destined to run out of play and driving straight at the Seoul back line. Osmar answered at the other end with a curling left-footed attempt that Yang Han-bin gathered. Kim Do-yoon (김도윤) went into the book for a late tackle from behind on Euller, the sort of challenge that told you how much Suwon FC respected the danger.
 
-Five minutes of first-half stoppage time were signalled, and Suwon FC used them. Kim Do-yoon drove into the box and would not be shaken off, a shot was blocked, the follow-up scrambled, and Seoul's attempt to clear ended with the ball deflecting off [[Baek Ji-woong]] and into his own net. The commentary team hesitated over the attribution before settling on an own goal. It was the worst possible time to concede and the most avoidable way to do it: a clearance made while losing sight of the ball, in a box that Suwon FC had simply attacked harder.
+Five minutes of first-half stoppage time were signaled, and Suwon FC used them. Kim Do-yoon drove into the box and would not be shaken off, a shot was blocked, the follow-up scrambled, and Seoul's attempt to clear ended with the ball deflecting off [[Baek Ji-woong]] and into his own net. The commentary team hesitated over the attribution before settling on an own goal. It was the worst possible time to concede and the most avoidable way to do it: a clearance made while losing sight of the ball, in a box that Suwon FC had simply attacked harder.
 
 Whatever [[Kim Do-gyun]] said at the break worked. [[Oh In-pyo]] shifted to the right and Seoul threatened inside sixty seconds of the restart, Euller crossing for a header that cleared the bar. The equaliser came shortly after and it was, in the end, straightforward. [[Park Jae-yong]] laid the ball back into the middle of the box, Euller met it on his left foot from a central position, and the finish was never in doubt. Give Euller that angle and that foot and the match is a formality; it was his fifth goal of the season.
 
@@ -69,7 +69,7 @@ Suwon FC named an unchanged team from their Round 17 win, which had been their b
 
 The pattern that decided this match is the same one that has cost Seoul points all season: they defend leads badly in the final ten minutes. The Round 12 draw with Yongin, the late Gimhae concession at 2-0, and now a ninety-sixth-minute penalty. Every one of them came after Seoul had done the hard part.
 
-The more encouraging read is what happened between the fiftieth and seventieth minutes. Seoul scored twice in that window, from a cutback and a cross, with a wingback arriving unmarked. Against a side that specialises in owning the last half hour, Seoul owned the middle of the second half. The problem is that they then stopped playing, dropped deeper, and invited exactly the pressure that produced the penalty.
+The more encouraging read is what happened between the fiftieth and seventieth minutes. Seoul scored twice in that window, from a cutback and a cross, with a wingback arriving unmarked. Against a side that specializes in owning the last half hour, Seoul owned the middle of the second half. The problem is that they then stopped playing, dropped deeper, and invited exactly the pressure that produced the penalty.
 
 ## Standings Snapshot
 

@@ -91,7 +91,7 @@ He has been outstanding and he has played almost everything. The cover is better
 
 A few things about this club that have nothing to do with the table.
 
-**The Brazilian pipeline is real.** Euller, [[Alan Carius]] and [[Francisco Geraldes]] give Seoul one of the more entertaining foreign contingents in the division, which is why this site publishes a full Portuguese edition. There is a genuine Brazilian readership following a Korean second-division club, and that is a delightfully modern thing to exist.
+**The Brazilian pathway is real.** Euller, [[Alan Carius]] and [[Francisco Geraldes]] give Seoul one of the more entertaining foreign contingents in the division, which is why this site publishes a full Portuguese edition. There is a genuine Brazilian readership following a Korean second-division club, and that is a delightfully modern thing to exist.
 
 **Mokdong is small and it matters.** Seoul E-Land play in the shadow of FC Seoul, a club with roughly a hundred times the profile, in a city that has largely decided which team it supports. The crowds are modest. The away following at Busan for the biggest win of the season was a couple of thousand in a twelve-thousand-seat ground, and [[Park Jae-yong]] made a point of thanking them.
 

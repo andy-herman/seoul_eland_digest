@@ -32,6 +32,8 @@ const isSeason = preview.data.kind === "season";
   title={preview.title}
   description={preview.description}
   lang="pt"
+  ogType="article"
+  publishedDate={preview.data.date ? `${preview.data.date}T00:00:00Z` : undefined}
 >
   <article class="editorial-shell preview-article mx-auto">
     <header class="mb-8 border-b pb-6" style="border-color: #e7dac9;">

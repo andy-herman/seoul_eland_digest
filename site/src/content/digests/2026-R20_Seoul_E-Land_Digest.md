@@ -66,19 +66,19 @@ A note on this section, which is new to the digest from this round onward. It is
 
 This week it is thin, and honesty is better than padding. The match finished only hours before publication, and the Korean supporter platforms this section will normally draw on, the DC Inside Seoul E-Land gallery, FM Korea's football boards, and the comment threads under Naver Sports match pages, had not yet surfaced post-match discussion in any form we could retrieve. Nothing usable had been indexed. Rather than characterise a mood we have not actually observed, we are saying so.
 
-What can be reported is what happened in the ground. Seoul E-Land's away support travelled to Gudeok on a Sunday night for a fixture that finished with a comeback win, and [[Park Jae-yong]] made a point of thanking them by name in his post-match interview, singling out the fans who had come a long way. The attendance was 2,339 in a stadium that holds more than twelve thousand, so the visiting section was a small group who will remember it for a long time.
+What can be reported is what happened in the ground. Seoul E-Land's away support traveled to Gudeok on a Sunday night for a fixture that finished with a comeback win, and [[Park Jae-yong]] made a point of thanking them by name in his post-match interview, singling out the fans who had come a long way. The attendance was 2,339 in a stadium that holds more than twelve thousand, so the visiting section was a small group who will remember it for a long time.
 
 Expect the fuller picture to be about Byun Kyung-jun. A shaved head, a farewell substitute appearance, and the assist that won the match is the kind of image that travels without needing a caption, and it lands in a supporter culture that takes military-service farewells seriously. We will fold the actual reaction into the Round 21 digest once the boards catch up.
 
 ## News and Transfers
 
-Byun Kyung-jun is gone. He enlists tomorrow, travelling to the Nonsan training centre before joining Gimcheon Sangmu for an eighteen-month term as part of the second 2026 batch of military sports specialists. That he chose to play, and shaved his head to do it, tells you as much about the player as the assist does. Seoul lose the squad's most reliable pace outlet and, on the evidence of [[Park Jae-yong]]'s interview, a genuinely important dressing-room figure.
+Byun Kyung-jun is gone. He enlists tomorrow, traveling to the Nonsan training center before joining Gimcheon Sangmu for an eighteen-month term as part of the second 2026 batch of military sports specialists. That he chose to play, and shaved his head to do it, tells you as much about the player as the assist does. Seoul lose the squad's most reliable pace outlet and, on the evidence of [[Park Jae-yong]]'s interview, a genuinely important dressing-room figure.
 
 The other squad note is a happier one. [[Ahn Joo-wan]] came on again, one round after becoming the youngest goalscorer in K League history, and is now clearly in the rotation rather than being handed ceremonial minutes. With Byun Kyung-jun gone, the pace role from the bench is his to take.
 
 ## Tactical and Strategic Watch
 
-Three matches, three shapes: the 3-4-3 away at Suwon FC, the 4-3-3 at home to Cheonan, and now a 4-2-3-1 at Busan. [[Kim Do-gyun]] is not being indecisive, he is matching the shape to the fixture, and the version he picked here, a double pivot screening the back four with Carius given licence between the lines, was the right answer to a 3-4-3 that wanted to attack down the channels.
+Three matches, three shapes: the 3-4-3 away at Suwon FC, the 4-3-3 at home to Cheonan, and now a 4-2-3-1 at Busan. [[Kim Do-gyun]] is not being indecisive, he is matching the shape to the fixture, and the version he picked here, a double pivot screening the back four with Carius given license between the lines, was the right answer to a 3-4-3 that wanted to attack down the channels.
 
 The bigger point is the one this column has been hammering for two rounds. Seoul had conceded three goals from winning positions in the final fifteen minutes across Rounds 18 and 19. Here they went behind on the hour to a triple substitution, and instead of folding they scored twice and then saw the game out with a defensive change and a back five. The block from Osmar and the punch from [[Min Sung-jun]] in that six-yard-box scramble are the moments that separate this from the last two matches.
 

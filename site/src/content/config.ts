@@ -62,4 +62,23 @@ const koreanCupPt = defineCollection({
   schema: koreanCupSchema,
 });
 
-export const collections = { digests, digestsPt, players, places, koreanCup, koreanCupPt };
+const guideSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  date: z.coerce.date(),
+  category: z.string().default("guide"),
+  order: z.number().default(0),
+  tags: z.array(z.string()).default([]),
+});
+
+const guides = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/guides" }),
+  schema: guideSchema,
+});
+
+const guidesPt = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/guides-pt" }),
+  schema: guideSchema,
+});
+
+export const collections = { digests, digestsPt, players, places, koreanCup, koreanCupPt, guides, guidesPt };

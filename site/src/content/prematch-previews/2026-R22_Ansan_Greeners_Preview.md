@@ -37,7 +37,7 @@ tags: [seoul-eland, pre-match-preview, scouting]
 
 This is the fixture that decides what kind of promotion side Seoul E-Land are.
 
-The table says it is straightforward. Second against fifteenth, at home, against the joint-worst defence in the division. Seoul have taken 37 points from 20; Ansan have taken 19 from the same number and have conceded 37 goals, level with bottom-placed Gimhae. Ansan have also won five matches all season.
+The table says it is straightforward. Second against fifteenth, at home, against the joint-worst defense in the division. Seoul have taken 37 points from 20; Ansan have taken 19 from the same number and have conceded 37 goals, level with bottom-placed Gimhae. Ansan have also won five matches all season.
 
 The problem is that this is precisely the match Seoul have been losing points in. They have lost three times at [[Mokdong Stadium]] and twice on the road all year. They have just played out a goalless draw against a side that sat deep and dared them to find a way through, and failed to find one. Ansan will set up to do exactly the same thing, with less quality and more desperation.
 
@@ -63,8 +63,8 @@ The lineup graphic is a best read, not a leaked team sheet. It takes the Round 2
 
 - Start from the Round 21 structure: [[Min Sung-jun]]; [[Bae Seo-jun]], Osmar, [[Baek Ji-woong]], [[Oh In-pyo]]; [[Yoon Seok-ju]] and a partner; [[Lee Ju-hyeok]], [[Alan Carius]], Euller; [[Park Jae-yong]]. Called ten of eleven last time and the structure held.
 - [[Park Chang-hwan]] straight back in for [[Cho Jun-hyun]]. If the suspension reading is right he is available, and against a low block his forward passing is the single most valuable thing Seoul can add.
-- [[Alan Carius]] stays in the number ten role. Against a five-man defence, the space is between the lines rather than behind, and he is the player who occupies it.
-- Back four unchanged. Ansan have scored 21 goals in 20 matches; this is not the week to over-engineer the defence.
+- [[Alan Carius]] stays in the number ten role. Against a five-man defense, the space is between the lines rather than behind, and he is the player who occupies it.
+- Back four unchanged. Ansan have scored 21 goals in 20 matches; this is not the week to over-engineer the defense.
 
 ### Selection watch
 
@@ -77,13 +77,13 @@ The lineup graphic is a best read, not a leaked team sheet. It takes the Round 2
 
 Ansan Greeners are fifteenth, two points clear of the bottom three, and 2026 is the first season in which that gap actually means something: promotion and relegation with K3 is new this year, so the bottom of this division is no longer a formality.
 
-Choi Moon-sik (최문식) is in his first full season in charge, having been elevated from a technical director role late in 2025. His last game of that season was a 6-0 defeat to Seoul E-Land, which is worth remembering only because it tells you how far the club has had to travel. What he is attempting is unusual for a club with Ansan's budget: a possession-based approach the Korean press has labelled tiki-taka, played out of a 5-3-2.
+Choi Moon-sik (최문식) is in his first full season in charge, having been elevated from a technical director role late in 2025. His last game of that season was a 6-0 defeat to Seoul E-Land, which is worth remembering only because it tells you how far the club has had to travel. What he is attempting is unusual for a club with Ansan's budget: a possession-based approach the Korean press has labeled tiki-taka, played out of a 5-3-2.
 
 The results are exactly what you would expect from an ambitious idea and a limited squad. They beat Suwon Samsung Bluewings 2-1 in July, the first win over that club in their history, and then lost 5-0 to Gyeongnam a week later. Thirty-seven goals conceded in twenty matches is joint-worst in K League 2. They have scored 21, which is the third-lowest. They drew 1-1 away at Chungnam Asan in Round 21.
 
 **Machop Malual Chol (마촙 말루알 촐)** is the player for the match notes. A South Sudanese international who arrived from Atlanta United, he has three goals and four assists and is the closest thing this team has to a creator, which is unusual for a striker in a two-man front line. He scored the equaliser at Chungnam Asan. Cut him off and Ansan's route to goal narrows sharply.
 
-**Gabriel Lima (가브리엘 리마)** is the top scorer on five, the more technical of the two forwards. **Kim In-sung** arrived mid-season from Pohang Steelers in K League 1 and scored the winner against Suwon Samsung with a curled left-footed finish. **Cho Ji-hun (조지훈)**, the captain, is the centre-back the whole possession idea runs through; he completed 92 per cent of his passes across 36 appearances last season. **Milan Obradovic**, a Serbian holding midfielder signed from Qatar's second tier, screens in front of him, and **Tim Hartzell**, a Swedish defender, adds height.
+**Gabriel Lima (가브리엘 리마)** is the top scorer on five, the more technical of the two forwards. **Kim In-sung** arrived mid-season from Pohang Steelers in K League 1 and scored the winner against Suwon Samsung with a curled left-footed finish. **Cho Ji-hun (조지훈)**, the captain, is the center-back the whole possession idea runs through; he completed 92 per cent of his passes across 36 appearances last season. **Milan Obradovic**, a Serbian holding midfielder signed from Qatar's second tier, screens in front of him, and **Tim Hartzell**, a Swedish defender, adds height.
 
 One nice subplot: **Yeon Je-min** joined Ansan from Hwaseong this season and put through his own net in Round 21, while **Jang Min-jun** went the other way, Ansan to Hwaseong, and started against Seoul last week.
 
@@ -97,7 +97,7 @@ The matchup question is simple. Ansan concede goals at a rate of nearly two a ga
 
 ## Strategy That Can Work
 
-**Attack the width of a back five.** A 5-3-2 defends the centre well and the wide areas poorly, because the wing-backs have to choose. Euller and [[Lee Ju-hyeok]] getting isolated against a full-back with no cover is Seoul's most reliable route, and it is the one that produced the opener in April.
+**Attack the width of a back five.** A 5-3-2 defends the center well and the wide areas poorly, because the wing-backs have to choose. Euller and [[Lee Ju-hyeok]] getting isolated against a full-back with no cover is Seoul's most reliable route, and it is the one that produced the opener in April.
 
 **Get a runner beyond the line, early.** The Hwaseong match proved Seoul have no answer to a deep block when everybody comes to the ball. It also proved they have exactly one player who solves it. Whether [[Ahn Joo-wan]] starts or comes on at 0-0 around the hour, the shape needs somebody running the other way.
 
@@ -107,7 +107,7 @@ The matchup question is simple. Ansan concede goals at a rate of nearly two a ga
 
 ### 1. Patience without passivity
 
-Sideways possession is not pressure. The Hwaseong lesson was that Seoul can hold the ball for forty-five minutes and generate nothing. Ball into the box, cross from a wide overload, shot from the edge: the point is to make something happen rather than wait for a gap that a five-man defence will not offer.
+Sideways possession is not pressure. The Hwaseong lesson was that Seoul can hold the ball for forty-five minutes and generate nothing. Ball into the box, cross from a wide overload, shot from the edge: the point is to make something happen rather than wait for a gap that a five-man defense will not offer.
 
 ### 2. Cut the supply to Machop Chol
 
@@ -127,7 +127,7 @@ Seoul have lost three at Mokdong. A home crowd, a bad opponent and a scoreless h
 
 ## Forecast vs the Market
 
-The model gives Seoul 69 per cent, a draw 19 and Ansan 13, derived from each club's points per game across the completed Round 21 table plus the standard home adjustment. That is the largest favourite tag Seoul have carried in any preview this season.
+The model gives Seoul 69 per cent, a draw 19 and Ansan 13, derived from each club's points per game across the completed Round 21 table plus the standard home adjustment. That is the largest favorite tag Seoul have carried in any preview this season.
 
 It should be treated with a little suspicion. The model knows Ansan are bad and that Seoul are at home. It does not know that Seoul's specific weakness is opponents who sit deep, or that Ansan's whole approach under Choi Moon-sik is to keep the ball and stay compact. A 69 per cent read on a team that just failed to score against a low block is a number worth discounting slightly in your head.
 
