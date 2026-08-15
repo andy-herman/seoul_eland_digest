@@ -73,6 +73,15 @@ function parseStats(detailHtml: string): OfficialPlayerStats {
   return stats;
 }
 
+// The roster API leaves birthday null for every player, but each player's own
+// page carries it as 생년월일 in YYYY.MM.DD. Parse it there instead.
+function parseBirthday(detailHtml: string): string | undefined {
+  const match = detailHtml.match(/<h3>\s*생년월일\s*<\/h3>\s*<p>\s*(\d{4})[.\-/](\d{1,2})[.\-/](\d{1,2})\s*<\/p>/);
+  if (!match) return undefined;
+  const [, y, m, d] = match;
+  return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+}
+
 async function getOfficialPlayerDetail(player: OfficialPlayer) {
   const detailResponse = await fetch(`https://www.seoulelandfc.com/team/player/${player.playerSeq}`, {
     headers: { "User-Agent": "Mozilla/5.0" },
@@ -94,7 +103,11 @@ async function getOfficialPlayerDetail(player: OfficialPlayer) {
   // Stats are best-effort: a player with no minutes has an empty block, and a
   // layout change upstream should not take the whole build down over a photo
   // that parsed fine.
-  return { photoUrl: photoMatch[1], stats: parseStats(detailHtml) };
+  return {
+    photoUrl: photoMatch[1],
+    stats: parseStats(detailHtml),
+    birthday: parseBirthday(detailHtml),
+  };
 }
 
 export async function getOfficialRoster() {
@@ -125,6 +138,7 @@ export async function getOfficialRosterWithPhotos(): Promise<OfficialPlayerWithP
       const detail = await getOfficialPlayerDetail(player);
       return {
         ...player,
+        birthday: player.birthday ?? detail.birthday ?? null,
         englishName: getEnglishPlayerName(player.korName),
         englishNationality: getEnglishNationality(player.nationality),
         englishPosition: getEnglishPosition(player.position),
