@@ -16,8 +16,6 @@ const englishNavItems = [
   { href: "/korean-cup", label: "Korean Cup", mobileLabel: "Cup" },
   { href: "/guides", label: "Guides" },
   { href: "/players", label: "Squad" },
-  { href: "/support", label: "Support me", mobileLabel: "Support" },
-  { href: "/about", label: "About", hideOnNarrow: true },
 ];
 const navItems = isPortuguese
   ? [
@@ -28,8 +26,6 @@ const navItems = isPortuguese
       { href: "/pt/korean-cup", label: "Copa da Coreia", mobileLabel: "Copa" },
       { href: "/pt/guides", label: "Guias" },
       { href: "/players", label: "Elenco" },
-      { href: "/support", label: "Apoie" },
-      { href: "/about", label: "Sobre", hideOnNarrow: true },
     ]
   : englishNavItems;
 
@@ -59,11 +55,14 @@ function isActive(href: string) {
     </a>
 
     <div class="order-3 w-full min-w-0 rounded-full border p-0.5 sm:order-none sm:w-auto sm:p-1" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 18%, var(--color-rule));">
-    <nav class="flex min-w-0 snap-x items-center gap-0.5 overflow-x-auto text-[0.7rem] font-bold sm:gap-1 sm:text-sm" style="scrollbar-width: none;" data-scroll-fade>
+    <!-- Type and padding stay compact until lg. Bumping them at sm made the nav
+         overflow harder on a tablet than on a phone, and it keeps 44px tap
+         targets on touch-sized screens rather than shrinking them at 640px. -->
+    <nav class="flex min-w-0 snap-x items-center gap-0.5 overflow-x-auto text-[0.7rem] font-bold lg:gap-1 lg:text-sm" style="scrollbar-width: none;" data-scroll-fade>
       {navItems.map((item) => (
         <a
           href={withBase(item.href)}
-          class={`${item.hideOnNarrow ? "hidden min-[560px]:inline-flex" : "inline-flex"} min-h-11 shrink-0 snap-start items-center rounded-full px-2 py-1.5 no-underline transition-colors min-[380px]:px-2.5 sm:min-h-0 sm:px-4 sm:py-2 ${isActive(item.href) ? "bg-white shadow-sm" : "text-[var(--color-link)] hover:text-white"}`}
+          class={`inline-flex min-h-11 shrink-0 snap-start items-center rounded-full px-2 py-1.5 no-underline transition-colors min-[380px]:px-2.5 lg:min-h-0 lg:px-3.5 lg:py-2 ${isActive(item.href) ? "bg-white shadow-sm" : "text-[var(--color-link)] hover:text-white"}`}
           style={isActive(item.href) ? "color: var(--color-navy);" : undefined}
           aria-label={item.label}
           aria-current={isActive(item.href) ? "page" : undefined}
