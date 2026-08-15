@@ -41,12 +41,19 @@ function isActive(href: string) {
 ---
 
 <header class="sticky top-0 z-40 border-b backdrop-blur-xl" style="background-color: color-mix(in srgb, var(--color-navy-deep) 92%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));">
-  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-1.5 px-3 py-1.5 sm:flex-nowrap sm:gap-5 sm:px-6 sm:py-3">
+  <!-- The single-row switch waits for md. At sm the nav still wraps to its own
+       row, and letting the roomier gap and vertical padding arrive there made
+       the sticky header 135px tall. Horizontal padding still steps at sm so the
+       logo stays aligned with the main content column. -->
+  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-1.5 px-3 py-1.5 sm:px-6 md:flex-nowrap md:gap-5 md:py-3">
     <a href={withBase("/")} class="flex items-center gap-3 no-underline" aria-label="Seoul E-Land Digest home">
-      <span class="flex h-9 w-[4.6rem] items-center justify-center rounded-xl bg-white px-1.5 shadow-lg shadow-black/20 min-[380px]:h-10 min-[380px]:w-20 min-[380px]:px-2 sm:h-11 sm:w-24 sm:px-3">
+      <span class="flex h-9 w-[4.6rem] items-center justify-center rounded-xl bg-white px-1.5 shadow-lg shadow-black/20 min-[380px]:h-10 min-[380px]:w-20 min-[380px]:px-2 lg:h-11 lg:w-24 lg:px-3">
         <img src={withBase("/assets/logo-official.svg")} alt="Seoul E-Land FC" class="h-7 w-auto min-[380px]:h-8" />
       </span>
-      <span class="hidden sm:block leading-tight">
+      <!-- The wordmark used to appear at sm, the exact width where the nav also
+           starts sharing the row with the logo. Those two together were the
+           640px pinch. It waits for lg now, alongside the nav's own sizing. -->
+      <span class="hidden lg:block leading-tight">
         <span class="block text-sm font-black uppercase tracking-[0.18em]" style="color: var(--color-ink);">Digest</span>
         <span class="block text-[0.68rem] font-bold uppercase tracking-[0.2em]" style="color: var(--color-gold-light);">
           {isPortuguese ? "Publicação de torcida" : "Supporter publication"}
@@ -54,7 +61,7 @@ function isActive(href: string) {
       </span>
     </a>
 
-    <div class="order-3 w-full min-w-0 rounded-full border p-0.5 sm:order-none sm:w-auto sm:p-1" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 18%, var(--color-rule));">
+    <div class="order-3 w-full min-w-0 rounded-full border p-0.5 md:order-none md:w-auto md:p-1" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 18%, var(--color-rule));">
     <!-- Type and padding stay compact until lg. Bumping them at sm made the nav
          overflow harder on a tablet than on a phone, and it keeps 44px tap
          targets on touch-sized screens rather than shrinking them at 640px. -->
