@@ -15,11 +15,11 @@ tags: [k-league-2, seoul-e-land, round-digest]
 
 ## O Resumo da Rodada em um Parágrafo
 
-O Seoul E-Land venceu o Ansan Greeners por 3 a 1 no [[Mokdong Stadium]] e todos os gols foram de Euller, no primeiro hat-trick da carreira dele na K League. O começo não foi bom. O Ansan, décimo quinto e brigando contra o rebaixamento, marcou nos primeiros minutos com Machop Chol e por um tempo pareceu exatamente o problema de bloco baixo sobre o qual este site vem alertando há dois digests. Aí o Seoul executou um escanteio ensaiado e Euller colocou a bola no canto, e depois do intervalo ele bateu o goleiro mais duas vezes, uma de falta direta e outra da marca da cal. A vitória leva o Seoul a **40 pontos em 21 jogos**, mantém o segundo lugar e estende a invencibilidade para seis partidas. E responde, enfim, à pergunta que as últimas três prévias insistiam em fazer: este time consegue furar quem se fecha, desde que alguém coloque a bola na rede em bola parada.
+O Seoul E-Land venceu o Ansan Greeners por 3 a 1 no [[Mokdong Stadium]] e todos os gols foram de Euller, no primeiro hat-trick da carreira dele na K League. O começo não foi bom. O Ansan, décimo quinto e brigando contra o rebaixamento, marcou aos seis minutos com Machop Chol e por um tempo pareceu exatamente o problema de bloco baixo sobre o qual este site vem alertando há dois digests. Aí o Seoul executou um escanteio ensaiado aos 14 e Euller colocou a bola no canto, e depois do intervalo ele bateu o goleiro mais duas vezes, uma de falta direta e outra da marca da cal. A vitória leva o Seoul a **40 pontos em 21 jogos**, mantém o segundo lugar e estende a invencibilidade para seis partidas. E responde, enfim, à pergunta que as últimas três prévias insistiam em fazer: este time consegue furar quem se fecha, desde que alguém coloque a bola na rede em bola parada.
 
 ## Relato da Partida
 
-A noite começou com uma cerimônia em vez de uma bola rolando. [[Park Chang-hwan]] foi homenageado pela **100ª partida com a camisa do Seoul E-Land**, com a mãe e o irmão mais novo ao lado dele no gramado e uma camisa comemorativa trazendo seus gols, assistências e números de corrida. Ele chegou à marca ainda na 19ª rodada, contra o Cheonan, mas a homenagem precisou esperar, porque ele cumpriu suspensão por cartões na 21ª rodada. Isso também encerra algo que este site publicou como inferência na prévia da 22ª rodada: a ausência dele em Hwaseong foi acúmulo de amarelos, confirmado aqui em campo.
+A noite começou com uma cerimônia em vez de uma bola rolando. [[Park Chang-hwan]], vice-capitão do clube, foi homenageado pela **100ª partida com a camisa do Seoul E-Land**, com a mãe e o irmão mais novo ao lado dele no gramado e uma camisa comemorativa trazendo seus gols, assistências e números de corrida. Ele chegou à marca ainda na 19ª rodada, contra o Cheonan, mas a homenagem precisou esperar, porque ele cumpriu suspensão por cartões na 21ª rodada. Isso também encerra algo que este site publicou como inferência na prévia da 22ª rodada: a ausência dele em Hwaseong foi acúmulo de amarelos, confirmado aqui em campo.
 
 Kim Do-gyun fez quatro mudanças e o desenho era a parte interessante. [[Min Sung-jun]] começou atrás de [[Bae Seo-jun]], [[Kim Oh-kyu]], [[Baek Ji-woong]] e [[Oh In-pyo]], com **Osmar adiantado** ao meio-campo ao lado de [[Alan Carius]] e [[Park Chang-hwan]], e [[Ahn Joo-wan]], [[Kim Hyun]] e Euller à frente. A posição de Osmar é a chave: quando ele recua o time vira linha de três, quando ele sobe vira linha de quatro com um protetor. Alternou entre as duas a noite inteira.
 
@@ -39,7 +39,7 @@ O segundo gol foi só de Euller. Falta em posição central, sem desvio, sem con
 
 O terceiro veio da marca da cal, após Im Ji-min ser penalizado na área, e Euller bateu rasteiro e preciso junto à trave enquanto o goleiro escolhia o lado certo e ainda assim não alcançava. Hat-trick, o primeiro da carreira dele na K League.
 
-A última meia hora foi confortável de um jeito que o Mokdong não tem visto muito nesta temporada. [[Lee Ju-hyeok]] substituiu [[Ahn Joo-wan]] e apareceu bem de imediato. [[Park Chang-hwan]] levou amarelo por chegar atrasado em Lee Seung-bin quando o goleiro saía para pegar. Euller saiu ovacionado para a entrada de [[Yoon Seok-ju]]. O Ansan esvaziou o banco, cinco mudanças ao todo, e nunca ameaçou de verdade o segundo.
+A última meia hora foi confortável de um jeito que o Mokdong não tem visto muito nesta temporada. [[Lee Ju-hyeok]] substituiu [[Ahn Joo-wan]] e apareceu bem de imediato. [[Park Chang-hwan]] levou amarelo por chegar atrasado em Lee Seung-bin quando o goleiro saía para pegar. Euller saiu aos 84 minutos, ovacionado, para a entrada de [[Yoon Seok-ju]]. O Ansan esvaziou o banco, cinco mudanças ao todo, e nunca ameaçou de verdade o segundo.
 
 ## Atuação dos Jogadores
 
@@ -63,7 +63,11 @@ Merece ser citado do lado adversário. Duas defesas só no primeiro tempo mantiv
 
 ## Reação da Torcida
 
-Placeholder pending research pass.
+Nada aproveitável foi encontrado, de novo. Buscas na galeria do Seoul E-Land no DC Inside, no FM Korea, nos comentários do Naver Sports e no X não retornaram discussão pós-jogo indexada em até um dia do apito final.
+
+Já são duas rodadas seguidas, e vale ser honesto sobre o motivo em vez de encher linguiça: este é um clube de segunda divisão com públicos modestos, e as plataformas de torcida coreanas simplesmente não geram discussões rapidamente indexadas para a maioria das partidas dele. Quando geram, a reação entra. Um hat-trick em casa até pode render alguma coisa, e se aparecer antes da 23ª rodada entra naquele digest.
+
+O único fato observável de torcida: 3.510 pessoas no Mokdong, e Euller dedicando o hat-trick à esposa na arquibancada.
 
 ## Notícias e Transferências
 
@@ -96,8 +100,9 @@ E para quem foi: dedicou o hat-trick à **esposa, que estava no estádio**, e à
 - **Campanha após 21 partidas:** 12 vitórias, 4 empates, 5 derrotas, 40 pontos.
 - **Saldo de gols:** +13 (39 marcados, 26 sofridos).
 - **Forma recente:** V, E, V, V, E, V nas últimas seis partidas de liga. **Invicto há seis.**
-- **Cenário do acesso:** a confirmar com a tabela fechada da 22ª rodada.
-- **A noite de Euller:** primeiro hat-trick na K League, e três gols em três bolas paradas.
+- **Cenário do acesso:** **vice-líder, agora a um ponto do topo.** O Suwon Samsung Bluewings lidera com 41 após empatar o clássico de Suwon, o Seoul é o segundo com 40, o Daegu é o terceiro com 38 após vencer o Chungnam Asan, o Suwon FC é o quarto com 37 em 20 jogos e o melhor saldo da divisão, o Busan é o quinto com 37 após empate sem gols em Hwaseong, e o Hwaseong é o sexto com 36. A diferença para o primeiro era de três pontos antes desta rodada; agora é de um.
+- **Público:** 3.510 no [[Mokdong Stadium]].
+- **A noite de Euller:** oito gols na liga na temporada, quatro assistências, e três gols numa única partida em três bolas paradas.
 
 ## Olhando Para a Frente
 

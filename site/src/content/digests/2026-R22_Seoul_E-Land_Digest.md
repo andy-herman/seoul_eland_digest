@@ -15,11 +15,11 @@ tags: [k-league-2, seoul-e-land, round-digest]
 
 ## The Round in One Paragraph
 
-Seoul E-Land beat Ansan Greeners 3-1 at [[Mokdong Stadium]] and every goal belonged to Euller, whose hat-trick was the first of his K League career. It did not start well. Ansan, fifteenth and fighting relegation, scored inside the opening minutes through Machop Chol and for a while looked exactly like the awkward low-block problem this site has spent two digests warning about. Then Seoul worked a rehearsed corner and Euller placed it in, and after the interval he beat the goalkeeper twice more, once from a direct free kick and once from the spot. The win takes Seoul to **40 points from 21**, keeps them second, and extends the unbeaten run to six. It also, finally, answers the question the last three previews kept asking: this team can break down a side that sits in, provided somebody puts the ball in the net from a set piece.
+Seoul E-Land beat Ansan Greeners 3-1 at [[Mokdong Stadium]] and every goal belonged to Euller, whose hat-trick was the first of his K League career. It did not start well. Ansan, fifteenth and fighting relegation, scored inside six minutes through Machop Chol and for a while looked exactly like the awkward low-block problem this site has spent two digests warning about. Then Seoul worked a rehearsed corner on 14 and Euller placed it in, and after the interval he beat the goalkeeper twice more, once from a direct free kick and once from the spot. The win takes Seoul to **40 points from 21**, keeps them second, and extends the unbeaten run to six. It also, finally, answers the question the last three previews kept asking: this team can break down a side that sits in, provided somebody puts the ball in the net from a set piece.
 
 ## Match Report
 
-The night opened with a ceremony rather than a kickoff. [[Park Chang-hwan]] was presented for his **100th appearance in a Seoul E-Land shirt**, with his mother and younger sibling on the pitch beside him and a commemorative shirt carrying his goals, assists and running numbers. He actually reached the milestone back in Round 19 against Cheonan, but the presentation had to wait, because he served a yellow-card suspension in Round 21. That also settles something this site published as an inference in the Round 22 preview: his absence at Hwaseong was accumulated bookings, confirmed here on the pitch.
+The night opened with a ceremony rather than a kickoff. [[Park Chang-hwan]], the club's vice-captain, was presented for his **100th appearance in a Seoul E-Land shirt**, with his mother and younger sibling on the pitch beside him and a commemorative shirt carrying his goals, assists and running numbers. He actually reached the milestone back in Round 19 against Cheonan, but the presentation had to wait, because he served a yellow-card suspension in Round 21. That also settles something this site published as an inference in the Round 22 preview: his absence at Hwaseong was accumulated bookings, confirmed here on the pitch.
 
 Kim Do-gyun made four changes and the shape was the interesting part. [[Min Sung-jun]] started behind [[Bae Seo-jun]], [[Kim Oh-kyu]], [[Baek Ji-woong]] and [[Oh In-pyo]], with **Osmar pushed forward** into midfield alongside [[Alan Carius]] and [[Park Chang-hwan]], and [[Ahn Joo-wan]], [[Kim Hyun]] and Euller ahead of them. Osmar's position is the switch: when he drops the shape is a back three, when he steps up it is a back four with a screen. It flexed between the two all night.
 
@@ -39,7 +39,7 @@ The second goal was Euller alone. A free kick in a central position, no deflecti
 
 The third arrived from the penalty spot after Im Ji-min was penalised in the box, and Euller rolled it low and precisely inside the post while the goalkeeper guessed correctly and still could not reach it. Hat-trick, and the first of his K League career.
 
-The last half hour was comfortable in a way Mokdong has not often been this season. [[Lee Ju-hyeok]] replaced [[Ahn Joo-wan]] and immediately looked lively. [[Park Chang-hwan]] was booked for arriving late on Lee Seung-bin as the goalkeeper came to claim. Euller went off to an ovation for [[Yoon Seok-ju]]. Ansan emptied their bench, five changes in all, and never seriously threatened a second.
+The last half hour was comfortable in a way Mokdong has not often been this season. [[Lee Ju-hyeok]] replaced [[Ahn Joo-wan]] and immediately looked lively. [[Park Chang-hwan]] was booked for arriving late on Lee Seung-bin as the goalkeeper came to claim. Euller went off on 84 to an ovation, replaced by [[Yoon Seok-ju]]. Ansan emptied their bench, five changes in all, and never seriously threatened a second.
 
 ## Player Performances
 
@@ -63,7 +63,11 @@ Worth naming from the opposition. Two saves in the first half alone kept his sid
 
 ## Fan Reaction
 
-Placeholder pending research pass.
+Nothing usable was retrievable again. Searches of the DC Inside Seoul E-Land gallery, FM Korea, Naver Sports comments and X returned no indexed post-match discussion within a day of the whistle.
+
+That is now two rounds running, and it is worth being honest about why rather than padding: this is a second-division club with modest crowds, and the Korean fan platforms simply do not generate quickly indexed threads for most of its matches. When they do, the reaction goes in. A hat-trick at home might well produce some, and if it surfaces before Round 23 it will appear in that digest.
+
+The one observable fan fact: 3,510 through the gates at Mokdong, and Euller dedicating the hat-trick to his wife in the stand.
 
 ## News and Transfers
 
@@ -96,8 +100,9 @@ And on who it was for: he dedicated the hat-trick to **his wife, who was in the 
 - **Record after 21 matches:** 12 wins, 4 draws, 5 losses, 40 points.
 - **Goal difference:** +13 (39 scored, 26 conceded).
 - **Recent form:** W, D, W, W, D, W across the last six league fixtures. **Unbeaten in six.**
-- **Promotion picture:** to be confirmed against the completed Round 22 table.
-- **Euller's night:** first K League hat-trick, and three goals from three set pieces.
+- **Promotion picture:** **second, and now one point off the top.** Suwon Samsung Bluewings lead on 41 after drawing the Suwon derby, Seoul are second on 40, Daegu third on 38 after beating Chungnam Asan, Suwon FC fourth on 37 from 20 with the best goal difference in the division, Busan fifth on 37 after a goalless draw at Hwaseong, and Hwaseong sixth on 36. The gap to first was three points before this round; it is one now.
+- **Attendance:** 3,510 at [[Mokdong Stadium]].
+- **Euller's night:** eight league goals for the season, four assists, and three goals in one match from three set pieces.
 
 ## Looking Ahead
 
