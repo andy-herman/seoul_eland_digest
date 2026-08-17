@@ -73,6 +73,22 @@ const statCards = [
 ].filter((card) => card.value != null);
 
 const profile = getPlayerProfile(player.slug);
+
+// Back-of-the-card career table. Only shown when the club publishes more than
+// the current season, otherwise the season cards above already say it all.
+const career = player.career ?? [];
+const sum = (key: "appearances" | "goals" | "assists" | "minutes" | "yellowCards" | "redCards") =>
+  career.reduce((total, row) => total + (row[key] ?? 0), 0);
+const careerTotals = {
+  appearances: sum("appearances"),
+  goals: sum("goals"),
+  assists: sum("assists"),
+  minutes: sum("minutes"),
+  yellowCards: sum("yellowCards"),
+  redCards: sum("redCards"),
+};
+const showCareer = career.length > 1;
+const num = (value: number | undefined) => (value == null ? "-" : value.toLocaleString("en-US"));
 ---
 
 <BaseLayout
@@ -160,6 +176,57 @@ const profile = getPlayerProfile(player.slug);
             )}
           </div>
         )}
+      </section>
+    )}
+
+    {showCareer && (
+      <section class="mt-6" aria-label={`${player.englishName} career record`}>
+        <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <h2 class="text-2xl font-black uppercase tracking-tight">Career at Seoul E-Land</h2>
+          <p class="text-xs font-black uppercase tracking-[0.16em]" style="color: var(--color-muted);">
+            season by season
+          </p>
+        </div>
+        <div class="career-table-wrap mt-4 overflow-x-auto rounded-2xl border" style="border-color: var(--color-rule);" data-scroll-fade>
+          <table class="w-full border-collapse text-sm">
+            <thead>
+              <tr style="background-color: color-mix(in srgb, white 10%, transparent);">
+                <th class="px-3 py-2.5 text-left font-black uppercase tracking-[0.12em]">Season</th>
+                <th class="px-3 py-2.5 text-right font-black uppercase tracking-[0.12em]">Apps</th>
+                <th class="px-3 py-2.5 text-right font-black uppercase tracking-[0.12em]">G</th>
+                <th class="px-3 py-2.5 text-right font-black uppercase tracking-[0.12em]">A</th>
+                <th class="px-3 py-2.5 text-right font-black uppercase tracking-[0.12em]">Mins</th>
+                <th class="px-3 py-2.5 text-right font-black uppercase tracking-[0.12em]" title="Yellow cards">Y</th>
+                <th class="px-3 py-2.5 text-right font-black uppercase tracking-[0.12em]" title="Red cards">R</th>
+              </tr>
+            </thead>
+            <tbody>
+              {career.map((row) => (
+                <tr class="border-t" style="border-color: var(--color-rule);">
+                  <td class="px-3 py-2.5 font-black">{row.season}</td>
+                  <td class="px-3 py-2.5 text-right tabular-nums">{num(row.appearances)}</td>
+                  <td class="px-3 py-2.5 text-right tabular-nums font-black">{num(row.goals)}</td>
+                  <td class="px-3 py-2.5 text-right tabular-nums">{num(row.assists)}</td>
+                  <td class="px-3 py-2.5 text-right tabular-nums">{num(row.minutes)}</td>
+                  <td class="px-3 py-2.5 text-right tabular-nums">{num(row.yellowCards)}</td>
+                  <td class="px-3 py-2.5 text-right tabular-nums">{num(row.redCards)}</td>
+                </tr>
+              ))}
+              <tr class="border-t-2" style="border-color: color-mix(in srgb, var(--color-gold) 45%, var(--color-rule)); background-color: color-mix(in srgb, white 6%, transparent);">
+                <td class="px-3 py-2.5 font-black uppercase tracking-[0.1em]">Total</td>
+                <td class="px-3 py-2.5 text-right tabular-nums font-black">{careerTotals.appearances}</td>
+                <td class="px-3 py-2.5 text-right tabular-nums font-black">{careerTotals.goals}</td>
+                <td class="px-3 py-2.5 text-right tabular-nums font-black">{careerTotals.assists}</td>
+                <td class="px-3 py-2.5 text-right tabular-nums font-black">{careerTotals.minutes.toLocaleString("en-US")}</td>
+                <td class="px-3 py-2.5 text-right tabular-nums font-black">{careerTotals.yellowCards}</td>
+                <td class="px-3 py-2.5 text-right tabular-nums font-black">{careerTotals.redCards}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="mt-2 text-xs font-bold" style="color: var(--color-muted);">
+          Club record only, as published by Seoul E-Land. Minutes include stoppage time.
+        </p>
       </section>
     )}
 

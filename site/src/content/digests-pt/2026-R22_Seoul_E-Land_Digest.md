@@ -11,7 +11,7 @@ tags: [k-league-2, seoul-e-land, round-digest]
 
 # Digest da 22ª Rodada: Seoul E-Land FC x Ansan Greeners
 
-> *Euller marcou de escanteio ensaiado, de falta e de pênalti, colocou uma coroa na própria cabeça e dedicou tudo à esposa na arquibancada. O Seoul E-Land saiu atrás em casa e venceu assim mesmo, coisa que um mês atrás não conseguia fazer.*
+> *Euller marcou de escanteio ensaiado, de falta e de pênalti, ergueu uma coroa para Aquele que ele diz que a usa, e dedicou a noite à esposa na arquibancada. O Seoul E-Land saiu atrás em casa e venceu assim mesmo, coisa que um mês atrás não conseguia fazer.*
 
 ## O Resumo da Rodada em um Parágrafo
 
@@ -35,7 +35,7 @@ Entre aquilo e o intervalo, os dois goleiros justificaram o salário. Tim Hartze
 
 Kim Do-gyun não esperou. [[Park Jae-yong]] e [[Son Hyuk-chan]] entraram no intervalo, o artilheiro e um defensor que joga pelo lado, uma substituição que diz *vamos ganhar isto* e não *vamos administrar isto*.
 
-O segundo gol foi só de Euller. Falta em posição central, sem desvio, sem confusão: bateu no ponto exato que havia escolhido e a bola entrou sem tocar em ninguém. Ele disse depois que é para isso que serve o trabalho de bola parada, mirar dentro da meta para valer mesmo sem tocar em ninguém, e que a mesma coisa já havia acontecido numa partida anterior em casa. **Aí ele se coroou**, um gesto com as duas mãos que teria um significado explicado mais tarde.
+O segundo gol foi só de Euller. Falta em posição central, sem desvio, sem confusão: bateu no ponto exato que havia escolhido e a bola entrou sem tocar em ninguém. Ele disse depois que é para isso que serve o trabalho de bola parada, mirar dentro da meta para valer mesmo sem tocar em ninguém, e que a mesma coisa já havia acontecido numa partida anterior em casa. **Aí ele fez o gesto da coroa**, as duas mãos erguidas acima da cabeça. A transmissão leu aquilo como Euller se coroando. Ele corrigiu depois, e a correção é a melhor história: a coroa não é dele.
 
 O terceiro veio da marca da cal, após Im Ji-min ser penalizado na área, e Euller bateu rasteiro e preciso junto à trave enquanto o goleiro escolhia o lado certo e ainda assim não alcançava. Hat-trick, o primeiro da carreira dele na K League.
 
@@ -77,7 +77,7 @@ Sobre a vitória: os três pontos, disse ele, levam o Seoul ao segundo lugar, e 
 
 Sobre a falta, e esta é a parte taticamente útil: *"a gente sempre tenta acertar na direção do gol"*. Ele explicou que, quando o elenco treina bola parada, a intenção é colocar a bola dentro da meta mesmo que não toque em ninguém, que exatamente isso já tinha acontecido numa partida anterior em casa, e que ficou feliz porque a bola não bateu em ninguém no caminho. O gol não foi o acaso de um desvio que nunca veio; foi o resultado pretendido.
 
-Sobre a comemoração da coroa: *"Jesus é o meu rei"*. Disse que a história dele é baseada no Senhor e que dá glória a Deus, porque sabe que não resolve nada sozinho.
+Sobre a comemoração da coroa, e vale registrar direito porque foi amplamente lida ao contrário: a coroa **não** é Euller se coroando. *"Jesus é o meu rei"*, disse ele. O gesto aponta a coroa para cima, não para dentro. Acrescentou que a história dele é baseada no Senhor e que dá glória a Deus, porque sabe que não consegue nada disso sozinho.
 
 E para quem foi: dedicou o hat-trick à **esposa, que estava no estádio**, e à família que assistia em casa.
 

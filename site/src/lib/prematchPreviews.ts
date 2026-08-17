@@ -100,7 +100,16 @@ function descriptionFromBody(body: string) {
     .split(/\r?\n/)
     .map((line) => line.trim())
     .find((line) => line && !line.startsWith("#") && !line.startsWith(">") && !line.startsWith("|"));
-  return paragraph?.replace(/\*\*/g, "").slice(0, 180) || "Pre-match notes, matchup keys, and what to watch before kickoff.";
+  // The description feeds meta, OG tags and JSON-LD, so strip the markdown
+  // rather than shipping link and emphasis syntax into search results.
+  const plain = paragraph
+    ?.replace(/\[([^\]]+)\]\([^)]*\)/g, "$1") // links keep their text
+    .replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, "$2") // aliased wikilinks
+    .replace(/\[\[([^\]]+)\]\]/g, "$1")
+    .replace(/\*\*|\*|`/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return plain?.slice(0, 180) || "Pre-match notes, matchup keys, and what to watch before kickoff.";
 }
 
 function parseJsonField<T>(data: Record<string, string>, key: string): T | undefined {

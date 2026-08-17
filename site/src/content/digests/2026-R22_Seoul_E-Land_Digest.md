@@ -11,7 +11,7 @@ tags: [k-league-2, seoul-e-land, round-digest]
 
 # Round 22 Digest: Seoul E-Land FC vs Ansan Greeners
 
-> *Euller scored a worked corner, a free kick and a penalty, put a crown on his own head, and dedicated it to his wife in the stand. Seoul E-Land went behind at home and won anyway, which is the thing they could not do a month ago.*
+> *Euller scored a worked corner, a free kick and a penalty, raised a crown to the man he says wears it, and dedicated the night to his wife in the stand. Seoul E-Land went behind at home and won anyway, which is the thing they could not do a month ago.*
 
 ## The Round in One Paragraph
 
@@ -35,7 +35,7 @@ Between then and the interval both goalkeepers earned their money. Tim Hartzell 
 
 Kim Do-gyun did not wait. [[Park Jae-yong]] and [[Son Hyuk-chan]] came on at the break, the leading scorer and a defender who can play wide, which is a substitution that says *we are winning this* rather than *we are managing this*.
 
-The second goal was Euller alone. A free kick in a central position, no deflection, no scramble: he struck it to the exact spot he had picked and it went in off nobody at all. He said afterwards that this is what the set-piece work is for, aiming inside the frame so it counts even when it does not touch anybody, and that the same thing had happened in a previous home match. **He then crowned himself**, a two-handed gesture that turned out to have a meaning he explained later.
+The second goal was Euller alone. A free kick in a central position, no deflection, no scramble: he struck it to the exact spot he had picked and it went in off nobody at all. He said afterwards that this is what the set-piece work is for, aiming inside the frame so it counts even when it does not touch anybody, and that the same thing had happened in a previous home match. **He then made the crown gesture**, two hands lifted above his head. The broadcast read it as Euller crowning himself. He corrected that afterwards, and the correction is the better story: the crown is not his.
 
 The third arrived from the penalty spot after Im Ji-min was penalised in the box, and Euller rolled it low and precisely inside the post while the goalkeeper guessed correctly and still could not reach it. Hat-trick, and the first of his K League career.
 
@@ -77,7 +77,7 @@ On the win: the three points, he said, take Seoul into second place, and it was 
 
 On the free kick, and this is the useful part tactically: *"a gente sempre tenta acertar na direção do gol"*, we always try to hit it towards the goal. He explained that when the squad works on set pieces they aim to put the ball inside the frame even if it touches nobody, that exactly this had happened in a previous home match, and that he was happy the ball did not hit anyone on the way in. The goal was not a fluke of a deflection that never came; it was the intended outcome.
 
-On the crown celebration: *"Jesus é o meu rei"*, Jesus is my king. He said his story is built on faith and that he gives the glory to God, because he knows he cannot do any of it alone.
+On the crown celebration, and this is worth getting right because it was widely read the other way: the crown is **not** Euller crowning himself. *"Jesus é o meu rei"*, he said. Jesus is my king. The gesture points the crown upward, not inward. He added that his story is built on the Lord and that he gives the glory to God, because he knows he cannot do any of this alone.
 
 And on who it was for: he dedicated the hat-trick to **his wife, who was in the ground**, and to his family watching at home.
 

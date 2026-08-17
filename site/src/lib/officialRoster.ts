@@ -28,9 +28,14 @@ export type OfficialPlayerStats = {
   goals?: number;
   assists?: number;
   minutes?: number;
+  yellowCards?: number;
+  redCards?: number;
   /** The season the club is reporting, e.g. 2026. */
   season?: number;
 };
+
+/** One row of the career table, oldest season last. */
+export type OfficialSeasonRow = OfficialPlayerStats & { season: number };
 
 export type OfficialPlayerWithPhoto = OfficialPlayer & {
   englishName: string;
@@ -39,37 +44,70 @@ export type OfficialPlayerWithPhoto = OfficialPlayer & {
   slug: string;
   photoUrl: string;
   stats: OfficialPlayerStats;
+  /** Season-by-season club record, newest first. Empty if the page has none. */
+  career: OfficialSeasonRow[];
 };
 
 // The club labels the season block in Korean. Map the labels we care about;
 // unknown labels are ignored rather than guessed at.
 const STAT_LABELS: Record<string, keyof OfficialPlayerStats> = {
   "출장경기수": "appearances",
+  "출장경기 수": "appearances",
   "출장": "appearances",
   "골": "goals",
   "득점": "goals",
   "도움": "assists",
   "플레이 시간": "minutes",
   "플레이시간": "minutes",
+  "엘로 카드": "yellowCards",
+  "옐로 카드": "yellowCards",
+  "경고": "yellowCards",
+  "레드 카드": "redCards",
+  "퇴장": "redCards",
 };
 
-function parseStats(detailHtml: string): OfficialPlayerStats {
-  const stats: OfficialPlayerStats = {};
-
-  const season = detailHtml.match(/<h2>\s*(\d{4})\s*시즌\s*성적\s*<\/h2>/);
-  if (season) stats.season = Number(season[1]);
-
-  const block = detailHtml.match(/<ul class="stats-box">([\s\S]*?)<\/ul>/);
-  if (!block) return stats;
-
-  for (const item of block[1].matchAll(/<p>([\s\S]*?)<\/p>\s*<strong>([\s\S]*?)<\/strong>/g)) {
+function readStatPairs(html: string): Partial<OfficialPlayerStats> {
+  const stats: Partial<OfficialPlayerStats> = {};
+  for (const item of html.matchAll(/<p>([\s\S]*?)<\/p>\s*<strong>([\s\S]*?)<\/strong>/g)) {
     const label = item[1].replace(/<[^>]+>/g, "").trim();
     const key = STAT_LABELS[label];
     if (!key || key === "season") continue;
     const value = Number(item[2].replace(/<[^>]+>/g, "").replace(/[^\d.-]/g, ""));
     if (Number.isFinite(value)) stats[key] = value;
   }
+  return stats;
+}
 
+/**
+ * The club renders one hidden block per season, `record-ul-YYYY`. That is the
+ * richer source: it carries cards, which the visible summary box does not, and
+ * it goes back several seasons, which is what makes a career table possible.
+ */
+function parseCareer(detailHtml: string): OfficialSeasonRow[] {
+  const rows: OfficialSeasonRow[] = [];
+  for (const block of detailHtml.matchAll(
+    /<ul class="record-box record-ul" id="record-ul-(\d{4})"[^>]*>([\s\S]*?)<\/ul>/g,
+  )) {
+    const season = Number(block[1]);
+    const stats = readStatPairs(block[2]);
+    if (Object.keys(stats).length === 0) continue;
+    rows.push({ season, ...stats });
+  }
+  return rows.sort((a, b) => b.season - a.season);
+}
+
+function parseStats(detailHtml: string, career: OfficialSeasonRow[]): OfficialPlayerStats {
+  const seasonMatch = detailHtml.match(/<h2>\s*(\d{4})\s*시즌\s*성적\s*<\/h2>/);
+  const season = seasonMatch ? Number(seasonMatch[1]) : career[0]?.season;
+
+  // Prefer the career row for that season: it carries cards, the summary box
+  // does not. Fall back to the visible summary box if the career block is gone.
+  const fromCareer = career.find((row) => row.season === season);
+  if (fromCareer) return fromCareer;
+
+  const block = detailHtml.match(/<ul class="stats-box">([\s\S]*?)<\/ul>/);
+  const stats: OfficialPlayerStats = block ? readStatPairs(block[1]) : {};
+  if (season) stats.season = season;
   return stats;
 }
 
@@ -103,10 +141,12 @@ async function getOfficialPlayerDetail(player: OfficialPlayer) {
   // Stats are best-effort: a player with no minutes has an empty block, and a
   // layout change upstream should not take the whole build down over a photo
   // that parsed fine.
+  const career = parseCareer(detailHtml);
   return {
     photoUrl: photoMatch[1],
-    stats: parseStats(detailHtml),
+    stats: parseStats(detailHtml, career),
     birthday: parseBirthday(detailHtml),
+    career,
   };
 }
 
@@ -145,6 +185,7 @@ export async function getOfficialRosterWithPhotos(): Promise<OfficialPlayerWithP
         slug: getPlayerSlug(player.korName),
         photoUrl: detail.photoUrl,
         stats: detail.stats,
+        career: detail.career,
       };
     }),
   );
