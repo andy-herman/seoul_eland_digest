@@ -152,7 +152,9 @@ fixtures:
     date: 2026-08-16
     venue: home
     opponent: "Ansan Greeners"
-    result: "TBD"
+    home_score: 3
+    away_score: 1
+    result: "W 3-1"
   - round: 23
     date: 2026-08-23
     venue: home
