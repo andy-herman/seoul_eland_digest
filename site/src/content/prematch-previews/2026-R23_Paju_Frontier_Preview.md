@@ -51,6 +51,16 @@ In that context a home fixture against tenth is not a routine three points, it i
 
 **Byun Kyung-jun is gone**, and it matters specifically here: he scored twice in the reverse fixture at Paju.
 
+**A centre-back appears to have signed, and the club has not said so yet.** Caio Marcelo (카이오 마르셀로), the Brazilian centre-back who spent 2024 and 2025 at Daegu FC, is listed as a Seoul E-Land player wearing number 38 on Namu wiki, the Korean reference that fan editors keep closest to announcements. He is **not** in the club's own squad API, not on the K League site, not on Transfermarkt, and no Korean outlet has reported it. Treat it as likely but unannounced. The summer window closes on August 19.
+
+If it is real it is a serious addition. He is 191cm, left-footed, made fifty K League appearances for Daegu with six goals, and was picked for the 2025 K League All-Star team. A Daegu feature in 2024 had him leading the squad in ground duels, aerial duels, clearances and interceptions. He came to Korea through Hwaseong in K3, went to Vila Nova in Brazil this January when his Daegu contract expired, and would be returning after half a season away.
+
+Seoul need it. **Bae Jin-woo, the first-choice right-back, left for Gwangju FC on July 1**, along with the striker John Iredale, and no defender has come in since. Osmar being pushed into midfield in Round 22 is only sustainable if somebody else can play centre-back.
+
+One correction to how he is often described: he has no senior international caps. He is an import, not an international.
+
+**No, [[Francisco Geraldes]] has not been reported as leaving.** We checked Korean, English and Portuguese sources plus the transfer trackers, and there is nothing: no request, no talks, no interested club. He has ten appearances and 454 minutes this season, three yellow cards, no goals or assists, and came on for the injured [[Cho Jun-hyun]] at Hwaseong. If something is happening it has not surfaced anywhere, and the window shuts on August 19.
+
 ## Predicted XI Basis and Fitness Watch
 
 The lineup graphic is a best read, not a leaked team sheet. It keeps the eleven that won 3-1.

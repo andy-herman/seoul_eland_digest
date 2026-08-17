@@ -51,6 +51,16 @@ Nesse contexto, um jogo em casa contra o décimo não são três pontos de rotin
 
 **Byun Kyung-jun não está mais**, e aqui isso pesa de forma específica: ele marcou duas vezes no jogo de ida em Paju.
 
+**Um zagueiro aparentemente assinou, e o clube ainda não anunciou.** Caio Marcelo (카이오 마르셀로), o zagueiro brasileiro que passou 2024 e 2025 no Daegu FC, aparece como jogador do Seoul E-Land com a camisa 38 no Namu wiki, a referência coreana que os editores mantêm mais próxima dos anúncios. Ele **não** está na API de elenco do próprio clube, nem no site da K League, nem no Transfermarkt, e nenhum veículo coreano noticiou. Trate como provável, mas não anunciado. A janela de verão fecha em 19 de agosto.
+
+Se for verdade, é um reforço sério. Tem 191cm, é canhoto, fez cinquenta partidas na K League pelo Daegu com seis gols, e foi escolhido para o time All-Star da K League em 2025. Uma reportagem do Daegu em 2024 o colocava como líder do elenco em duelos no chão, duelos aéreos, cortes e interceptações. Chegou à Coreia pelo Hwaseong, na K3, foi para o Vila Nova no Brasil em janeiro quando o contrato com o Daegu venceu, e estaria voltando depois de meia temporada fora.
+
+O Seoul precisa. **Bae Jin-woo, o lateral-direito titular, saiu para o Gwangju FC em 1º de julho**, junto com o atacante John Iredale, e nenhum defensor chegou desde então. Adiantar Osmar ao meio na 22ª rodada só se sustenta se outra pessoa puder jogar como zagueiro.
+
+Uma correção sobre como ele costuma ser descrito: não tem convocações pela seleção principal. É um estrangeiro, não um internacional.
+
+**Não, [[Francisco Geraldes]] não foi noticiado como quem está de saída.** Checamos fontes coreanas, inglesas e portuguesas, além dos rastreadores de transferências, e não há nada: nenhum pedido, nenhuma conversa, nenhum clube interessado. Ele tem dez partidas e 454 minutos na temporada, três amarelos, nenhum gol ou assistência, e entrou no lugar do lesionado [[Cho Jun-hyun]] em Hwaseong. Se algo está acontecendo, não apareceu em lugar nenhum, e a janela fecha em 19 de agosto.
+
 ## Base da Escalação Provável e Observatório de Lesões
 
 A escalação é a melhor leitura possível, não um vazamento de súmula. Mantém os onze que venceram por 3 a 1.
