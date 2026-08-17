@@ -6,7 +6,7 @@ status: "draft"
 season: "2026"
 league: "K League 2"
 label: "Chasing K1"
-round_range: "Updated after Round 22"
+round_range: "23-34"
 date: "2026-08-17"
 opponent: ""
 tags: [seoul-eland, promotion-race, weekly, playoff-race]
@@ -14,7 +14,7 @@ tags: [seoul-eland, promotion-race, weekly, playoff-race]
 
 # Chasing K1: The Promotion Race, Week by Week
 
-Updated every round. This is the race, not the club. For Seoul E-Land themselves, see the [State of the Club](/previews/2026-state-of-the-club-august) report.
+Refreshed after every round. For Seoul E-Land themselves rather than the race around them, see the [State of the Club](/previews/2026-state-of-the-club-august) report, and the [Tracker](/tracker) grades our own July prediction week by week.
 
 ## Where It Stands After Round 22
 

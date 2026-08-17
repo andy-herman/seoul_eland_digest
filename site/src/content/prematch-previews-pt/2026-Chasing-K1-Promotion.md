@@ -6,7 +6,7 @@ status: "draft"
 season: "2026"
 league: "K League 2"
 label: "Rumo à K1"
-round_range: "Atualizado após a 22ª rodada"
+round_range: "23-34"
 date: "2026-08-17"
 opponent: ""
 tags: [seoul-eland, promotion-race, weekly, playoff-race]
@@ -14,7 +14,7 @@ tags: [seoul-eland, promotion-race, weekly, playoff-race]
 
 # Rumo à K1: a Briga pelo Acesso, Semana a Semana
 
-Atualizado a cada rodada. Aqui o assunto é a disputa, não o clube. Para o Seoul E-Land em si, veja o [Panorama do Clube](/pt/previews/2026-state-of-the-club-august).
+Atualizado depois de cada rodada. Para o Seoul E-Land em si, e não a disputa ao redor dele, veja o [Panorama do Clube](/pt/previews/2026-state-of-the-club-august), e o [Rastreador](/pt/tracker) afere o nosso próprio palpite de julho semana a semana.
 
 ## Como Está Depois da 22ª Rodada
 
