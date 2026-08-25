@@ -50,7 +50,7 @@ Perderam três vezes no [[Mokdong Stadium]] e apenas duas como visitantes em tod
 
 ### Euller virou o melhor estrangeiro da história do clube
 
-Euller chegou do Marítimo em janeiro de 2025 sem nenhuma bagagem no futebol coreano. Hoje soma 20 gols e 15 assistências pelo clube, todos com a camisa do Seoul E-Land, e alcançou a marca de 50 partidas marcando justamente naquele jogo. Oito desses gols saíram nesta temporada, incluindo o primeiro hat-trick da carreira dele na K League, contra o Ansan na 22ª rodada. Quando disse que queria ser lembrado na história do clube, soou como o tipo de frase que todo reforço estrangeiro diz. Já não soa mais assim.
+Euller chegou do Marítimo em janeiro de 2025 sem nenhuma bagagem no futebol coreano. Hoje soma 15 gols e 15 assistências na K League, todos com a camisa do Seoul E-Land, e alcançou a marca de 50 partidas marcando justamente naquele jogo. Está perto de um duplo-duplo na temporada. Quando disse que queria ser lembrado na história do clube, soou como o tipo de frase que todo reforço estrangeiro diz. Já não soa mais assim.
 
 ### A espinha dorsal sustenta
 

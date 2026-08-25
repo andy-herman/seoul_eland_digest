@@ -159,7 +159,9 @@ fixtures:
     date: 2026-08-23
     venue: home
     opponent: "Paju Frontier"
-    result: "TBD"
+    home_score: 1
+    away_score: 1
+    result: "D 1-1"
   - round: 24
     date: 2026-08-29
     venue: away

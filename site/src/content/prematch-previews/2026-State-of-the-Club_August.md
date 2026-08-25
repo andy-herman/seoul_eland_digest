@@ -50,7 +50,7 @@ They have lost three times at [[Mokdong Stadium]] and twice on the road all seas
 
 ### Euller has become the best import in the club's history
 
-Euller arrived from Marítimo in January 2025 with no Korean football behind him. He now has 20 goals and 15 assists for the club, every single one of them in a Seoul E-Land shirt, and he reached the 50-appearance mark by scoring in the game itself. Eight of those goals have come this season, including the first hat-trick of his K League career against Ansan in Round 22. When he said he wanted to be remembered in the club's history, it read like the sort of thing every foreign signing says. It has stopped reading that way.
+Euller arrived from Marítimo in January 2025 with no Korean football behind him. He now has 15 goals and 15 assists in K League play, every single one of them in a Seoul E-Land shirt, and he reached the 50-appearance mark by scoring in the game itself. He is closing on a double-double for the season. When he said he wanted to be remembered in the club's history, it read like the sort of thing every foreign signing says. It has stopped reading that way.
 
 ### The spine holds
 
@@ -91,7 +91,7 @@ He has been outstanding and he has played almost everything. The cover is better
 
 A few things about this club that have nothing to do with the table.
 
-**The Brazilian pipeline is real.** Euller, [[Alan Carius]] and [[Francisco Geraldes]] give Seoul one of the more entertaining foreign contingents in the division, which is why this site publishes a full Portuguese edition. There is a genuine Brazilian readership following a Korean second-division club, and that is a delightfully modern thing to exist.
+**The Brazilian pathway is real.** Euller, [[Alan Carius]] and [[Francisco Geraldes]] give Seoul one of the more entertaining foreign contingents in the division, which is why this site publishes a full Portuguese edition. There is a genuine Brazilian readership following a Korean second-division club, and that is a delightfully modern thing to exist.
 
 **Mokdong is small and it matters.** Seoul E-Land play in the shadow of FC Seoul, a club with roughly a hundred times the profile, in a city that has largely decided which team it supports. The crowds are modest. The away following at Busan for the biggest win of the season was a couple of thousand in a twelve-thousand-seat ground, and [[Park Jae-yong]] made a point of thanking them.
 
