@@ -47,15 +47,15 @@ In that context a home fixture against tenth is not a routine three points, it i
 
 **Euller is in the best form of his Seoul career.** Eight league goals and four assists, three of those goals in one night, and the first hat-trick of his K League career behind him.
 
-**Osmar is being managed, not rested.** Round 22 moved him from centre-back into the deepest midfield role with [[Kim Oh-kyu]] coming into the back four. At thirty-seven that is a smarter answer to the workload question than dropping him.
+**Osmar is being managed, not rested.** Round 22 moved him from center-back into the deepest midfield role with [[Kim Oh-kyu]] coming into the back four. At thirty-seven that is a smarter answer to the workload question than dropping him.
 
 **Byun Kyung-jun is gone**, and it matters specifically here: he scored twice in the reverse fixture at Paju.
 
-**A centre-back appears to have signed, and the club has not said so yet.** Caio Marcelo (카이오 마르셀로), the Brazilian centre-back who spent 2024 and 2025 at Daegu FC, is listed as a Seoul E-Land player wearing number 38 on Namu wiki, the Korean reference that fan editors keep closest to announcements. He is **not** in the club's own squad API, not on the K League site, not on Transfermarkt, and no Korean outlet has reported it. Treat it as likely but unannounced. The summer window closes on August 19.
+**A center-back appears to have signed, and the club has not said so yet.** Caio Marcelo (카이오 마르셀로), the Brazilian center-back who spent 2024 and 2025 at Daegu FC, is listed as a Seoul E-Land player wearing number 38 on Namu wiki, the Korean reference that fan editors keep closest to announcements. He is **not** in the club's own squad API, not on the K League site, not on Transfermarkt, and no Korean outlet has reported it. Treat it as likely but unannounced. The summer window closes on August 19.
 
 If it is real it is a serious addition. He is 191cm, left-footed, made fifty K League appearances for Daegu with six goals, and was picked for the 2025 K League All-Star team. A Daegu feature in 2024 had him leading the squad in ground duels, aerial duels, clearances and interceptions. He came to Korea through Hwaseong in K3, went to Vila Nova in Brazil this January when his Daegu contract expired, and would be returning after half a season away.
 
-Seoul need it. **Bae Jin-woo, the first-choice right-back, left for Gwangju FC on July 1**, along with the striker John Iredale, and no defender has come in since. Osmar being pushed into midfield in Round 22 is only sustainable if somebody else can play centre-back.
+Seoul need it. **Bae Jin-woo, the first-choice right-back, left for Gwangju FC on July 1**, along with the striker John Iredale, and no defender has come in since. Osmar being pushed into midfield in Round 22 is only sustainable if somebody else can play center-back.
 
 One correction to how he is often described: he has no senior international caps. He is an import, not an international.
 
@@ -68,7 +68,7 @@ The lineup graphic is a best read, not a leaked team sheet. It keeps the eleven 
 ### Why this shape
 
 - The Round 22 side won and the structure worked. [[Min Sung-jun]]; [[Bae Seo-jun]], [[Kim Oh-kyu]], [[Baek Ji-woong]], [[Oh In-pyo]]; Osmar, [[Alan Carius]], [[Park Chang-hwan]]; [[Ahn Joo-wan]], [[Kim Hyun]], Euller.
-- **Osmar stays in midfield.** Against another deep block, his passing is more useful in front of the defence than behind it, and it keeps his minutes manageable.
+- **Osmar stays in midfield.** Against another deep block, his passing is more useful in front of the defense than behind it, and it keeps his minutes manageable.
 - **[[Ahn Joo-wan]] keeps the start.** He earned it, he forced the best save of the Ansan match, and the problem he was picked to solve is the same problem Paju will pose.
 - Back four unchanged. Paju have scored 21 in 21.
 
@@ -118,7 +118,7 @@ Kim Do-gyun's own read on that match was that Seoul conceded early and that the 
 
 Two of the last three home matches have begun with Seoul conceding or being second best for twenty minutes. Tenth-placed opposition and a promotion race one point tight is the wrong week for another slow start.
 
-### 2. Give Ahn Joo-wan the same licence
+### 2. Give Ahn Joo-wan the same license
 
 He started against a low block and immediately produced the best chance of the half. If Paju sit deeper than Nus would like, that run is again the most valuable thing Seoul have.
 
@@ -129,8 +129,8 @@ Euller has scored eight and set up four. That is wonderful and it is also a depe
 ## Things to Watch
 
 - **Does [[Ahn Joo-wan]] keep the shirt** after his first start.
-- **Osmar's role.** Midfield again, or back into defence.
-- **[[Park Jae-yong]] or [[Kim Hyun]]** at centre-forward.
+- **Osmar's role.** Midfield again, or back into defense.
+- **[[Park Jae-yong]] or [[Kim Hyun]]** at center-forward.
 - **Borja Baston against [[Kim Oh-kyu]]**, the most interesting individual matchup on the pitch.
 - **Whether Seoul score first**, for once.
 
