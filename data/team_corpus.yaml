@@ -262,6 +262,37 @@ teams:
               note: "Yellow card in the Round 16 flashpoint with Bruno Costa. Starts, but discipline is part of the assignment."
             - player: "Osmar"
               note: "Scored against Suwon FC in Round 6 from a set piece; minutes managed all season. If fit, a set-piece weapon in both boxes."
+        - round: 26
+          opponent_id: suwon-bluewings
+          label: "Predicted Seoul XI"
+          formation: "4-3-3"
+          team_name: "Seoul E-Land"
+          note: "Predicted from the Round 25 XI that won 2-0 at Cheongju, kept intact for the top-of-the-table match at Mokdong. Official team sheet may differ at kickoff."
+          starters:
+            - { name: "Min Sung-jun", role: "GK", line: "goalkeeper" }
+            - { name: "Oh In-pyo", role: "RB", line: "defense" }
+            - { name: "Osmar", role: "RCB", line: "defense" }
+            - { name: "Baek Ji-woong", role: "LCB", line: "defense" }
+            - { name: "Bae Seo-jun", role: "LB", line: "defense" }
+            - { name: "Yoon Seok-ju", role: "CM", line: "midfield" }
+            - { name: "Park Chang-hwan", role: "CM", line: "midfield" }
+            - { name: "Alan Carius", role: "CM", line: "midfield" }
+            - { name: "Ahn Joo-wan", role: "RF", line: "attack" }
+            - { name: "Park Jae-yong", role: "ST", line: "attack" }
+            - { name: "Euller", role: "LF", line: "attack" }
+          basis:
+            - "Start from the Round 25 XI at Cheongju (W 2-0): Min Sung-jun; Bae Seo-jun, Osmar, Baek Ji-woong, Oh In-pyo; Alan Carius, Yoon Seok-ju, Park Chang-hwan; Ahn Joo-wan, Park Jae-yong, Euller. A 2-0 away win with a clean sheet and the youngest brace in K League history is not a team sheet a manager changes for a title decider."
+            - "Osmar back at center-back and Kim Oh-kyu on the bench mirrors the Round 25 selection; Caio Marcelo remains an alternative if the manager wants height against Suwon Samsung's set pieces."
+            - "Ahn Joo-wan keeps the start on the right after his brace; Lee Ju-hyeok and Kim Hyun are the first attacking changes."
+          selection_watch:
+            - player: "Park Chang-hwan"
+              note: "Booked at Cheongju and on a card count worth checking before kickoff; a suspension would bring Cho Jun-hyun or Osmar into midfield."
+            - player: "Euller"
+              note: "Withdrawn at Seongnam in Round 24 after a fall, then started and created both goals at Cheongju. Fit and central to the plan."
+            - player: "Caio Marcelo"
+              note: "Debuted at Seongnam in Round 24; bench at Cheongju. Height option against Suwon Samsung's aerial threat."
+            - player: "Kim Oh-kyu"
+              note: "Captain rotated out at Cheongju after starting Seongnam; the Osmar and Baek Ji-woong pairing kept a clean sheet, so he may stay on the bench."
     collection_plan:
       priority_queries: ["서울이랜드 김도균", "서울이랜드 전술", "서울이랜드 부상", "서울이랜드 경기 리뷰"]
       data_to_collect: ["lineups", "formations", "injuries", "manager quotes", "set-piece details", "substitution patterns"]

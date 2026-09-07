@@ -50,7 +50,7 @@ They have lost three times at [[Mokdong Stadium]] and twice on the road all seas
 
 ### Euller has become the best import in the club's history
 
-Euller arrived from Marítimo in January 2025 with no Korean football behind him. He now has 15 goals and 15 assists in K League play, every single one of them in a Seoul E-Land shirt, and he reached the 50-appearance mark by scoring in the game itself. He is closing on a double-double for the season. When he said he wanted to be remembered in the club's history, it read like the sort of thing every foreign signing says. It has stopped reading that way.
+Euller arrived from Marítimo in January 2025 with no Korean football behind him. He now has 20 goals and 15 assists for the club, every single one of them in a Seoul E-Land shirt, and he reached the 50-appearance mark by scoring in the game itself. Eight of those goals have come this season, including the first hat-trick of his K League career against Ansan in Round 22. When he said he wanted to be remembered in the club's history, it read like the sort of thing every foreign signing says. It has stopped reading that way.
 
 ### The spine holds
 
