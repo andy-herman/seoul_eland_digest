@@ -75,10 +75,12 @@ export const PREVIEW_BASELINE = {
  * Like the July set, these are frozen the moment they are published and
  * graded on their own line. They never overwrite the July calls.
  *
- * Each entry carries two things: the CALL (most likely outcome, graded as a
- * hit or miss) and the model's EXPECTED POINTS for that round. The revised
- * running line and the card use expected points, because a call sheet of
- * eight "most likely" results does not add up to a season projection.
+ * The calls form a coherent predicted record (4W 3D 1L = 15 points), built
+ * like the July sheet: the model's expected record first, then each result
+ * placed where it is most likely. Eight independent "most likely" results
+ * would all be wins and would read 69 points against an expected 60, which
+ * is not a prediction anyone believes. Each entry also carries the model's
+ * W/D/L probabilities and expected points for that round.
  */
 export const REVISED_PUBLISHED_ON = "2026-09-07";
 
@@ -90,17 +92,17 @@ export const REVISED_BASELINE = {
 } as const;
 
 export const SEOUL_REVISED_PREDICTIONS: PublishedPrediction[] = [
-  { round: 26, opponent: "Suwon Bluewings", venue: "home", predicted: "W", probabilities: { W: 0.38, D: 0.32, L: 0.31 }, expectedPoints: 1.45 },
-  { round: 27, opponent: "Daegu", venue: "home", predicted: "W", probabilities: { W: 0.47, D: 0.30, L: 0.23 }, expectedPoints: 1.71 },
+  { round: 26, opponent: "Suwon Bluewings", venue: "home", predicted: "D", probabilities: { W: 0.38, D: 0.32, L: 0.31 }, expectedPoints: 1.45 },
+  { round: 27, opponent: "Daegu", venue: "home", predicted: "D", probabilities: { W: 0.47, D: 0.30, L: 0.23 }, expectedPoints: 1.71 },
   { round: 28, opponent: "Gimpo Citizen", venue: "away", predicted: "W", probabilities: { W: 0.54, D: 0.28, L: 0.19 }, expectedPoints: 1.89 },
   { round: 29, opponent: "Gimhae FC", venue: "home", predicted: "W", probabilities: { W: 0.83, D: 0.13, L: 0.04 }, expectedPoints: 2.61 },
-  { round: 31, opponent: "Yongin", venue: "away", predicted: "W", probabilities: { W: 0.43, D: 0.28, L: 0.28 }, expectedPoints: 1.59 },
+  { round: 31, opponent: "Yongin", venue: "away", predicted: "L", probabilities: { W: 0.43, D: 0.28, L: 0.28 }, expectedPoints: 1.59 },
   { round: 32, opponent: "Jeonnam Dragons", venue: "home", predicted: "W", probabilities: { W: 0.68, D: 0.21, L: 0.11 }, expectedPoints: 2.25 },
   { round: 33, opponent: "Chungnam Asan", venue: "home", predicted: "W", probabilities: { W: 0.59, D: 0.26, L: 0.15 }, expectedPoints: 2.03 },
-  { round: 34, opponent: "Gyeongnam", venue: "away", predicted: "W", probabilities: { W: 0.43, D: 0.32, L: 0.25 }, expectedPoints: 1.61 },
+  { round: 34, opponent: "Gyeongnam", venue: "away", predicted: "D", probabilities: { W: 0.43, D: 0.32, L: 0.25 }, expectedPoints: 1.61 },
 ];
 
-/** The simulation's expected final total (mean of 20000 runs), not the sum of the calls. */
+/** The simulation's expected final total (mean of 20000 runs). The sheet above sums to the same number: 45 + 15. */
 export const REVISED_PROJECTED_FINAL = 60.1;
 export const REVISED_P_TOP2 = 0.37;
 
@@ -127,7 +129,7 @@ export interface TrackedRound {
   hit?: boolean;
   /** The September revised call, only for rounds after REVISED_BASELINE. */
   revised?: Outcome;
-  /** R25 baseline plus the simulation's cumulative expected points (not the sum of calls). */
+  /** Cumulative points if every revised call came true, from the R25 baseline. */
   revisedCumulative?: number;
   revisedHit?: boolean;
   /** Simulation probability of the revised call itself (0..1). */
@@ -160,7 +162,7 @@ export function buildTrackedRounds(): TrackedRound[] {
       stillPlayed = false;
     }
     if (revisedCall) {
-      revisedTotal += revisedCall.expectedPoints ?? POINTS_FOR[revisedCall.predicted];
+      revisedTotal += POINTS_FOR[revisedCall.predicted];
     }
 
     return {
@@ -175,7 +177,7 @@ export function buildTrackedRounds(): TrackedRound[] {
       actualCumulative: actual ? actualTotal : undefined,
       hit: actual ? actual === prediction.predicted : undefined,
       revised: revisedCall?.predicted,
-      revisedCumulative: revisedCall ? Math.round(revisedTotal * 10) / 10 : undefined,
+      revisedCumulative: revisedCall ? revisedTotal : undefined,
       revisedHit: revisedCall && actual ? actual === revisedCall.predicted : undefined,
       revisedConfidence: revisedCall?.probabilities?.[revisedCall.predicted],
     };

@@ -23,7 +23,7 @@ So we rebuilt the forecast from scratch. This time it is not one analyst's gut c
 - Seoul E-Land are projected to finish on 60 points, almost exactly what July said, but by a completely different route: fewer losses, more draws, and a much harder opening two weeks than the model expected in July.
 - The chance of an automatic promotion place (top two) is 37 percent. The chance of finishing in the top six is effectively 100 percent. The most likely single finishing position is third, at 43 percent.
 - Suwon Samsung are the title favorite at 60 percent. Suwon FC, not Seoul, are the favorite for the second automatic spot at 43 percent, because six of their nine remaining matches are at home, where they have not lost all season.
-- The model calls a Seoul win in all eight remaining matches, but only two of those calls are confident (Gimhae, Jeonnam). Three are close to a coin flip, starting with Saturday against Suwon Samsung.
+- The predicted record for the last eight is 4 wins, 3 draws and 1 loss: wins against Gimpo, Gimhae, Jeonnam and Chungnam Asan, draws with Suwon Samsung, Daegu and Gyeongnam, and a loss at Yongin. Seoul are the more likely winner in every single match, but eight favorites do not all win, and a sheet that said they would (69 points) would not be a prediction anyone believes.
 - The playoff line is live. Busan hold sixth only 46 percent of the time. Chungnam Asan and Gimpo, both seven points back with a game in hand, take the last playoff place in roughly one simulation in five between them.
 
 ## How the July calls have held up
@@ -58,30 +58,32 @@ Every adjustment is a multiplier of at most 15 percent on expected goals, and ev
 
 ## The eight remaining matches
 
-The "call" is the most likely outcome. Where the win and loss probabilities are within six points of each other we would call a draw instead, and none of the eight met that threshold, though three came close.
+Two things are shown for each match and they are not the same. The probabilities are the model's odds for that match on its own. The "predicted" column is the call that goes on the tracker, and it is built the way the July sheet was: the model's expected record first (4.4 wins, 2.1 draws, 1.5 losses, which rounds to 4-3-1 and 15 points), then each result placed in the match where it is most likely. That is why the tracker sheet does not simply read eight wins even though Seoul are the likelier winner in all eight. Expected goals are Seoul first, opponent second.
 
-| Round | Date | Fixture | Win | Draw | Loss | Call | Likely score | July call | Expected points |
-|---|---|---|---|---|---|---|---|---|---|
-| 26 | Sat Sep 12, 16:30 | Suwon Samsung (H) | 38% | 32% | 31% | Win | 1-0 | Draw | 1.45 |
-| 27 | Sat Sep 19, 19:00 | Daegu (H) | 47% | 30% | 23% | Win | 1-0 | Win | 1.71 |
-| 28 | Fri Oct 9, 16:30 | Gimpo (A) | 54% | 28% | 19% | Win | 1-0 | Win | 1.89 |
-| 29 | Sun Oct 18, 14:00 | Gimhae (H) | 83% | 13% | 4% | Win | 2-0 | Win | 2.61 |
-| 31 | Sat Oct 31, 14:00 | Yongin (A) | 43% | 28% | 28% | Win | 1-0 | Draw | 1.59 |
-| 32 | Sat Nov 7, 16:30 | Jeonnam (H) | 68% | 21% | 11% | Win | 2-0 | Win | 2.25 |
-| 33 | Sun Nov 22, 16:30 | Chungnam Asan (H) | 59% | 26% | 15% | Win | 1-0 | Win | 2.03 |
-| 34 | Sun Nov 29, TBD | Gyeongnam (A) | 43% | 32% | 25% | Win | 1-0 | Win | 1.61 |
+| Round | Date | Fixture | Win | Draw | Loss | Predicted | Expected goals | Clean sheet | July call | Expected points |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 26 | Sat Sep 12, 16:30 | Suwon Samsung (H) | 38% | 32% | 31% | Draw | 1.2 - 1.1 | 35% | Draw | 1.45 |
+| 27 | Sat Sep 19, 19:00 | Daegu (H) | 47% | 30% | 23% | Draw | 1.4 - 0.9 | 41% | Win | 1.71 |
+| 28 | Fri Oct 9, 16:30 | Gimpo (A) | 54% | 28% | 19% | Win | 1.6 - 0.8 | 44% | Win | 1.89 |
+| 29 | Sun Oct 18, 14:00 | Gimhae (H) | 83% | 13% | 4% | Win | 2.6 - 0.5 | 63% | Win | 2.61 |
+| 31 | Sat Oct 31, 14:00 | Yongin (A) | 43% | 28% | 28% | Loss | 1.4 - 1.1 | 32% | Draw | 1.59 |
+| 32 | Sat Nov 7, 16:30 | Jeonnam (H) | 68% | 21% | 11% | Win | 2.1 - 0.8 | 47% | Win | 2.25 |
+| 33 | Sun Nov 22, 16:30 | Chungnam Asan (H) | 59% | 26% | 15% | Win | 1.7 - 0.7 | 49% | Win | 2.03 |
+| 34 | Sun Nov 29, TBD | Gyeongnam (A) | 43% | 32% | 25% | Draw | 1.2 - 0.9 | 41% | Win | 1.61 |
 
-The expected points add up to 15.1, which on top of 45 gives the 60-point projection. Note that the calls themselves add up to 24 points and 69. That is the difference between "the single most likely result in each match" and "what you should expect over eight matches", and it is why the tracker's revised line follows expected points, not the calls.
+The predicted sheet is worth 15 points, the expected points add up to 15.1, and both land on 60. The three draws sit in the three matches the model treats as coin flips (win and loss within 10 points of each other), and the one loss goes to the away trip where the loss probability is highest among the rest. The July sheet, for comparison, had Seoul on 24 points from these same eight matches (six wins, one draw, one loss at Gimpo). The new sheet is nine points more cautious about the same fixtures, almost entirely because of what has happened to Suwon FC, Yongin and the two Suwon clubs since July.
+
+On clean sheets, since every fan wants eight: the model expects about three and a half in these eight matches, and the chance of shutting out all eight opponents is roughly one in 800. The most likely shutouts are Gimhae (63 percent), Chungnam Asan and Jeonnam (both under 50). Both teams score in a little under half of the simulated matches, most often at Yongin.
 
 ### Round 26, Suwon Samsung at home: the coin flip
 
-The biggest match in the club's history is also the one the model is least sure about. Seoul's edge is small and comes almost entirely from circumstances: Suwon lost Ko Seung-beom and Bruno Silva to injuries in the first half hour on Sunday, and Lee Jung-hyo said afterward that he expects both to miss this match. Their starting goalkeeper, Kim Jun-hong, left for the Asian Games on Sunday, so reserve Kim Min-jun, who kept a clean sheet against Chungnam Asan after three months out, is the likely starter. Against that, Suwon have won three straight, are eight unbeaten, and now have Luis, who has 12 league goals this season and scored nine of his ten Gimpo goals after the 75th minute. Seoul have won two of three against Suwon at Mokdong and Kim Do-gyun's record against them is four wins in six. The model lands at 38 percent Seoul, 32 draw, 31 Suwon. We call the win because that is the most likely single result, and because Seoul's home record against this opponent is real, but nobody should read 38 percent as confidence. The July call was a draw. Both calls will be graded.
+The biggest match in the club's history is also the one the model is least sure about. Seoul's edge is small and comes almost entirely from circumstances: Suwon lost Ko Seung-beom and Bruno Silva to injuries in the first half hour on Sunday, and Lee Jung-hyo said afterward that he expects both to miss this match. Their starting goalkeeper, Kim Jun-hong, left for the Asian Games on Sunday, so reserve Kim Min-jun, who kept a clean sheet against Chungnam Asan after three months out, is the likely starter. Against that, Suwon have won three straight, are eight unbeaten, and now have Luis, who has 12 league goals this season and scored nine of his ten Gimpo goals after the 75th minute. Seoul have won two of three against Suwon at Mokdong and Kim Do-gyun's record against them is four wins in six. The model lands at 38 percent Seoul, 32 draw, 31 Suwon. Seoul are the narrow favorite on the day, but this is the closest of the eight, and in a 4-3-1 sheet it is the first place a draw belongs. Predicted: draw, the same as July. If Seoul do win it, the whole projection moves: a home win here lifts the top-two chance from 37 to about 45 percent on its own.
 
 One card note: Park Chang-hwan is on seven yellows, one away from his next ban, and Baek Ji-woong is on four, one away from his first. Neither is suspended for Saturday, but a booking for either on Saturday costs Seoul a starter against Daegu the following week.
 
 ### Round 27, Daegu at home
 
-Daegu's numbers under Choi Sung-yong are very good (9 wins, 5 draws, 2 losses since he took over), but the last five have produced four goals, and the reason is specific: Edgar, their top scorer with eight, has a calf injury with no return date, and the attack has become a one-man Cesinha show, with the local press pointing out that Daegu have not won a match in which the 36-year-old did not register a goal or assist. Hwang Jae-won, their right wing-back, was sent off for kicking an opponent at Paju and will miss at least Round 26; whether the disciplinary committee extends the ban into this match is not yet known. Seoul won 3-1 at Daegu in March. Model: 47-30-23, call Win, same as July.
+Daegu's numbers under Choi Sung-yong are very good (9 wins, 5 draws, 2 losses since he took over), but the last five have produced four goals, and the reason is specific: Edgar, their top scorer with eight, has a calf injury with no return date, and the attack has become a one-man Cesinha show, with the local press pointing out that Daegu have not won a match in which the 36-year-old did not register a goal or assist. Hwang Jae-won, their right wing-back, was sent off for kicking an opponent at Paju and will miss at least Round 26; whether the disciplinary committee extends the ban into this match is not yet known. Seoul won 3-1 at Daegu in March. Model: 47-30-23, Seoul the clear favorite. Predicted: draw, where July said win. This is the call most likely to look too cautious in hindsight, and it is a draw in the sheet only because Daegu are the second-best side Seoul face and the model has to put its three draws somewhere. A Seoul win here is the single most likely result.
 
 ### Round 28, Gimpo away: the Hangul Day trip
 
@@ -93,7 +95,7 @@ The nearest thing to a banker. Gimhae are 17th on 13 points, have never won a ho
 
 ### Round 31, Yongin away
 
-Yongin are the match the model changed its mind on the most. In July we called a draw against a side that draws 11 of 23, and their home record (2 wins, 6 draws, 4 losses) supports that. But Yongin have quietly become a different team since the summer window: 2 wins, 2 draws and 1 loss since August 1, 9 scored and 5 conceded, with Vitinho, a Brazilian winger signed from the Maltese league, scoring in consecutive matches. Two things push the other way. Goalkeeper Hwang Sung-min was hurt in a collision on September 5 and his status is unreported, and by October 31 Yongin will be a mid-table club with an eighth-place target and little else. Seoul drew 2-2 with them in May. Model: 43-28-28, which is closer to a coin flip than the call suggests. Call Win, July said Draw.
+Yongin are the match the model changed its mind on the most. In July we called a draw against a side that draws 11 of 23, and their home record (2 wins, 6 draws, 4 losses) supports that. But Yongin have quietly become a different team since the summer window: 2 wins, 2 draws and 1 loss since August 1, 9 scored and 5 conceded, with Vitinho, a Brazilian winger signed from the Maltese league, scoring in consecutive matches. Two things push the other way. Goalkeeper Hwang Sung-min was hurt in a collision on September 5 and his status is unreported, and by October 31 Yongin will be a mid-table club with an eighth-place target and little else. Seoul drew 2-2 with them in May. Model: 43-28-28. Predicted: loss, where July said draw. Yongin is the one match in the sheet where the predicted result is not even the model's second choice, and that needs explaining. The sheet has to carry one loss, because 1.5 expected losses over eight matches do not become zero. Of the four matches that are not clear Seoul wins, this is the away trip with the highest loss probability after Suwon Samsung, and Suwon at home is the better place for a draw. The honest one-line version: Seoul should win at Yongin more often than not, but if they are going to drop all three points anywhere in this run, the model thinks it is here or at Mokdong against Suwon.
 
 ### Round 32, Jeonnam at home
 
@@ -105,7 +107,7 @@ Asan beat Seoul 3-0 in May, the worst afternoon of the season, but that was unde
 
 ### Round 34, Gyeongnam away: the final day
 
-Gyeongnam are two teams. At Changwon they have taken 20 of their 30 points and won four of their last six; away from it they draw almost everything. Kim Hyun-o, an 18-year-old U-20 World Cup alumnus, has six goals in his last nine. Seoul are unbeaten in the last five meetings (4 wins, 1 draw) and Gyeongnam have scored twice in those five. By November 29 Gyeongnam should be safe and out of the playoff race, while Seoul may have promotion or a playoff seed on the line. Kickoff time is not yet set. Model: 43-32-25, the third of the coin flips. Call Win, same as July.
+Gyeongnam are two teams. At Changwon they have taken 20 of their 30 points and won four of their last six; away from it they draw almost everything. Kim Hyun-o, an 18-year-old U-20 World Cup alumnus, has six goals in his last nine. Seoul are unbeaten in the last five meetings (4 wins, 1 draw) and Gyeongnam have scored twice in those five. By November 29 Gyeongnam should be safe and out of the playoff race, while Seoul may have promotion or a playoff seed on the line. Kickoff time is not yet set. Model: 43-32-25, the third of the coin flips, and the draw probability is the highest of the eight. Predicted: draw, where July said win.
 
 ## Who is going up, and who is going to the playoffs
 
@@ -148,7 +150,7 @@ The practical translation: automatic promotion is a six-wins-from-eight proposit
 
 ## What could break this
 
-- **Cards.** Park Chang-hwan (7 yellows) and Baek Ji-woong (4) are the two Seoul players closest to a ban. Kim Oh-kyu, Park Jae-yong, Gabriel and Son Hyuk-chan are on three. The model does not predict bookings, so a suspension for the Daegu match would move that call toward a draw.
+- **Cards.** Park Chang-hwan (7 yellows) and Baek Ji-woong (4) are the two Seoul players closest to a ban. Kim Oh-kyu, Park Jae-yong, Gabriel and Son Hyuk-chan are on three. The model does not predict bookings, so a suspension for the Daegu match would push that draw call toward a loss.
 - **Concussions and unknown injuries.** Frizzo's status at Suwon FC and the Ko Seung-beom and Bruno Silva injuries at Suwon Samsung were all reported without a diagnosis or timeline. We adjusted only for the next match in each case.
 - **Motivation cuts both ways.** Dead-rubber sides sometimes play free. Asan beat Seoul 2-1 at Mokdong in November 2024 with nothing to play for.
 - **Yellow-card data.** Seoul's and Suwon FC's card counts come from a third-party statistics site, not from the K League's own record, which did not render. The direction is right; the exact counts could be off by one.
@@ -156,6 +158,6 @@ The practical translation: automatic promotion is a six-wins-from-eight proposit
 
 ## On the record
 
-The July calls stand and continue to be graded. The eight calls above are frozen as of September 7 and go on the Season Tracker as a second line, with the model's probability shown next to each one. When the season ends we will publish how many each set got right, and how far each projected total missed by. If the honest answer in December is that a points-per-game model from July did as well as 20,000 simulations from September, we will say so.
+The July calls stand and continue to be graded. The eight predicted results above are frozen as of September 7 and go on the Season Tracker as a second line, with the model's probability for that result shown next to each one. When the season ends we will publish how many each set got right, and how far each projected total missed by. If the honest answer in December is that a points-per-game model from July did as well as 20,000 simulations from September, we will say so.
 
 The simulation code, the adjustments and the reasons behind each of them are in the project repository. Behind the numbers sit eleven research dossiers, one per opponent and contender, built over the weekend from Korean match reports, club sites, league records and the K League competition rules. That is the increase in research we promised. Whether it produces an increase in accuracy is now up to the players.

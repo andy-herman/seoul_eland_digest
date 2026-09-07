@@ -23,7 +23,7 @@ Então refizemos a previsão do zero. Desta vez não é o palpite de um analista
 - O Seoul E-Land é projetado para terminar com 60 pontos, quase exatamente o que julho disse, mas por um caminho completamente diferente: menos derrotas, mais empates e duas semanas iniciais muito mais duras do que o modelo esperava em julho.
 - A chance de uma vaga de acesso direto (top 2) é de 37 por cento. A chance de terminar no top 6 é, na prática, de 100 por cento. A posição final mais provável é a terceira, com 43 por cento.
 - O Suwon Samsung é o favorito ao título com 60 por cento. O Suwon FC, e não o Seoul, é o favorito à segunda vaga direta com 43 por cento, porque seis de seus nove jogos restantes são em casa, onde não perdeu na temporada.
-- O modelo aponta vitória do Seoul nos oito jogos restantes, mas apenas dois desses palpites são confiantes (Gimhae, Jeonnam). Três são quase cara ou coroa, começando por sábado contra o Suwon Samsung.
+- O retrospecto previsto para os oito últimos jogos é de 4 vitórias, 3 empates e 1 derrota: vitórias contra Gimpo, Gimhae, Jeonnam e Chungnam Asan, empates com Suwon Samsung, Daegu e Gyeongnam, e uma derrota em Yongin. O Seoul é o favorito em cada jogo isoladamente, mas oito favoritos não vencem todos, e uma planilha que dissesse isso (69 pontos) não seria uma previsão em que alguém acredita.
 - A linha dos playoffs está viva. O Busan segura o sexto lugar em apenas 46 por cento das simulações. Chungnam Asan e Gimpo, ambos sete pontos atrás com um jogo a menos, ficam com a última vaga em cerca de uma simulação em cinco, somados.
 
 ## Como os palpites de julho se sustentaram
@@ -58,30 +58,32 @@ Cada ajuste é um multiplicador de no máximo 15 por cento sobre os gols esperad
 
 ## Os oito jogos restantes
 
-O "palpite" é o resultado mais provável. Quando as probabilidades de vitória e derrota ficam a menos de seis pontos uma da outra, chamaríamos empate; nenhum dos oito atingiu esse limite, embora três tenham chegado perto.
+Duas coisas aparecem para cada jogo e não são a mesma coisa. As probabilidades são as chances do modelo para aquele jogo isolado. A coluna "previsto" é o palpite que vai para o rastreador, construído como a planilha de julho: primeiro o retrospecto esperado pelo modelo (4,4 vitórias, 2,1 empates, 1,5 derrota, que arredonda para 4-3-1 e 15 pontos), depois cada resultado colocado no jogo em que é mais provável. É por isso que a planilha do rastreador não traz simplesmente oito vitórias, embora o Seoul seja o favorito nos oito. Gols esperados: Seoul primeiro, adversário depois.
 
-| Rodada | Data | Jogo | Vitória | Empate | Derrota | Palpite | Placar provável | Palpite de julho | Pontos esperados |
-|---|---|---|---|---|---|---|---|---|---|
-| 26 | Sáb 12 set, 16:30 | Suwon Samsung (C) | 38% | 32% | 31% | Vitória | 1-0 | Empate | 1,45 |
-| 27 | Sáb 19 set, 19:00 | Daegu (C) | 47% | 30% | 23% | Vitória | 1-0 | Vitória | 1,71 |
-| 28 | Sex 9 out, 16:30 | Gimpo (F) | 54% | 28% | 19% | Vitória | 1-0 | Vitória | 1,89 |
-| 29 | Dom 18 out, 14:00 | Gimhae (C) | 83% | 13% | 4% | Vitória | 2-0 | Vitória | 2,61 |
-| 31 | Sáb 31 out, 14:00 | Yongin (F) | 43% | 28% | 28% | Vitória | 1-0 | Empate | 1,59 |
-| 32 | Sáb 7 nov, 16:30 | Jeonnam (C) | 68% | 21% | 11% | Vitória | 2-0 | Vitória | 2,25 |
-| 33 | Dom 22 nov, 16:30 | Chungnam Asan (C) | 59% | 26% | 15% | Vitória | 1-0 | Vitória | 2,03 |
-| 34 | Dom 29 nov, a definir | Gyeongnam (F) | 43% | 32% | 25% | Vitória | 1-0 | Vitória | 1,61 |
+| Rodada | Data | Jogo | Vitória | Empate | Derrota | Previsto | Gols esperados | Sem sofrer gol | Palpite de julho | Pontos esperados |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 26 | Sáb 12 set, 16:30 | Suwon Samsung (C) | 38% | 32% | 31% | Empate | 1,2 - 1,1 | 35% | Empate | 1,45 |
+| 27 | Sáb 19 set, 19:00 | Daegu (C) | 47% | 30% | 23% | Empate | 1,4 - 0,9 | 41% | Vitória | 1,71 |
+| 28 | Sex 9 out, 16:30 | Gimpo (F) | 54% | 28% | 19% | Vitória | 1,6 - 0,8 | 44% | Vitória | 1,89 |
+| 29 | Dom 18 out, 14:00 | Gimhae (C) | 83% | 13% | 4% | Vitória | 2,6 - 0,5 | 63% | Vitória | 2,61 |
+| 31 | Sáb 31 out, 14:00 | Yongin (F) | 43% | 28% | 28% | Derrota | 1,4 - 1,1 | 32% | Empate | 1,59 |
+| 32 | Sáb 7 nov, 16:30 | Jeonnam (C) | 68% | 21% | 11% | Vitória | 2,1 - 0,8 | 47% | Vitória | 2,25 |
+| 33 | Dom 22 nov, 16:30 | Chungnam Asan (C) | 59% | 26% | 15% | Vitória | 1,7 - 0,7 | 49% | Vitória | 2,03 |
+| 34 | Dom 29 nov, a definir | Gyeongnam (F) | 43% | 32% | 25% | Empate | 1,2 - 0,9 | 41% | Vitória | 1,61 |
 
-Os pontos esperados somam 15,1, o que sobre 45 dá a projeção de 60 pontos. Note que os palpites em si somam 24 pontos e 69. Essa é a diferença entre "o resultado isolado mais provável em cada jogo" e "o que se deve esperar ao longo de oito jogos", e é por isso que a linha revisada do rastreador segue os pontos esperados, não os palpites.
+A planilha prevista vale 15 pontos, os pontos esperados somam 15,1, e ambos chegam a 60. Os três empates ficam nos três jogos que o modelo trata como cara ou coroa (vitória e derrota a menos de 10 pontos uma da outra), e a única derrota vai para a viagem em que a probabilidade de derrota é a maior entre os demais. A planilha de julho, para comparar, dava ao Seoul 24 pontos nesses mesmos oito jogos (seis vitórias, um empate, uma derrota em Gimpo). A nova planilha é nove pontos mais cautelosa sobre os mesmos jogos, quase inteiramente por causa do que aconteceu com Suwon FC, Yongin e os dois Suwon desde julho.
+
+Sobre jogos sem sofrer gol, já que todo torcedor quer oito: o modelo espera cerca de três e meio nesses oito jogos, e a chance de zerar os oito adversários é de aproximadamente uma em 800. Os mais prováveis são Gimhae (63 por cento), Chungnam Asan e Jeonnam (ambos abaixo de 50). Ambos os times marcam em um pouco menos da metade dos jogos simulados, com mais frequência em Yongin.
 
 ### Rodada 26, Suwon Samsung em casa: o cara ou coroa
 
-O maior jogo da história do clube é também aquele sobre o qual o modelo tem menos certeza. A vantagem do Seoul é pequena e vem quase toda das circunstâncias: o Suwon perdeu Ko Seung-beom e Bruno Silva por lesão na primeira meia hora de domingo, e Lee Jung-hyo disse depois que espera ambos fora deste jogo. O goleiro titular, Kim Jun-hong, viajou para os Jogos Asiáticos no domingo, então o reserva Kim Min-jun, que não sofreu gols contra o Chungnam Asan depois de três meses parado, deve começar. Do outro lado, o Suwon venceu três seguidas, está há oito sem perder e agora tem Luis, com 12 gols na liga nesta temporada e nove de seus dez gols pelo Gimpo marcados depois dos 75 minutos. O Seoul venceu dois de três contra o Suwon em Mokdong e o retrospecto de Kim Do-gyun contra eles é de quatro vitórias em seis. O modelo chega a 38 por cento Seoul, 32 empate, 31 Suwon. Chamamos a vitória porque é o resultado isolado mais provável e porque o retrospecto caseiro do Seoul contra este adversário é real, mas ninguém deve ler 38 por cento como confiança. O palpite de julho foi empate. Os dois serão avaliados.
+O maior jogo da história do clube é também aquele sobre o qual o modelo tem menos certeza. A vantagem do Seoul é pequena e vem quase toda das circunstâncias: o Suwon perdeu Ko Seung-beom e Bruno Silva por lesão na primeira meia hora de domingo, e Lee Jung-hyo disse depois que espera ambos fora deste jogo. O goleiro titular, Kim Jun-hong, viajou para os Jogos Asiáticos no domingo, então o reserva Kim Min-jun, que não sofreu gols contra o Chungnam Asan depois de três meses parado, deve começar. Do outro lado, o Suwon venceu três seguidas, está há oito sem perder e agora tem Luis, com 12 gols na liga nesta temporada e nove de seus dez gols pelo Gimpo marcados depois dos 75 minutos. O Seoul venceu dois de três contra o Suwon em Mokdong e o retrospecto de Kim Do-gyun contra eles é de quatro vitórias em seis. O modelo chega a 38 por cento Seoul, 32 empate, 31 Suwon. O Seoul é o favorito por pouco no dia, mas este é o jogo mais apertado dos oito, e numa planilha 4-3-1 é o primeiro lugar em que um empate cabe. Previsto: empate, o mesmo de julho. Se o Seoul vencer, toda a projeção se move: uma vitória em casa aqui eleva a chance de top 2 de 37 para cerca de 45 por cento por si só.
 
 Uma nota sobre cartões: Park Chang-hwan está com sete amarelos, a um da próxima suspensão, e Baek Ji-woong com quatro, a um da primeira. Nenhum está suspenso para sábado, mas um cartão para qualquer um deles custa ao Seoul um titular contra o Daegu na semana seguinte.
 
 ### Rodada 27, Daegu em casa
 
-Os números do Daegu sob Choi Sung-yong são muito bons (9 vitórias, 5 empates, 2 derrotas desde que assumiu), mas os últimos cinco jogos produziram quatro gols, e o motivo é específico: Edgar, artilheiro do time com oito, tem uma lesão na panturrilha sem data de retorno, e o ataque virou um show solo de Cesinha, com a imprensa local apontando que o Daegu não venceu nenhum jogo em que o veterano de 36 anos não marcou ou deu assistência. Hwang Jae-won, ala direito, foi expulso por chutar um adversário em Paju e perde ao menos a rodada 26; se a comissão disciplinar estende a suspensão a este jogo ainda não se sabe. O Seoul venceu por 3-1 em Daegu em março. Modelo: 47-30-23, palpite Vitória, igual a julho.
+Os números do Daegu sob Choi Sung-yong são muito bons (9 vitórias, 5 empates, 2 derrotas desde que assumiu), mas os últimos cinco jogos produziram quatro gols, e o motivo é específico: Edgar, artilheiro do time com oito, tem uma lesão na panturrilha sem data de retorno, e o ataque virou um show solo de Cesinha, com a imprensa local apontando que o Daegu não venceu nenhum jogo em que o veterano de 36 anos não marcou ou deu assistência. Hwang Jae-won, ala direito, foi expulso por chutar um adversário em Paju e perde ao menos a rodada 26; se a comissão disciplinar estende a suspensão a este jogo ainda não se sabe. O Seoul venceu por 3-1 em Daegu em março. Modelo: 47-30-23, Seoul favorito claro. Previsto: empate, onde julho disse vitória. É o palpite com mais chance de parecer cauteloso demais em retrospecto, e só é empate na planilha porque o Daegu é o segundo melhor time que o Seoul enfrenta e o modelo precisa colocar seus três empates em algum lugar. Uma vitória do Seoul aqui é o resultado isolado mais provável.
 
 ### Rodada 28, Gimpo fora: a viagem do Dia do Hangul
 
@@ -93,7 +95,7 @@ O mais próximo de uma certeza. O Gimhae é o 17º com 13 pontos, nunca venceu e
 
 ### Rodada 31, Yongin fora
 
-O Yongin é o jogo em que o modelo mais mudou de ideia. Em julho chamamos empate contra um time que empata 11 de 23, e seu retrospecto em casa (2 vitórias, 6 empates, 4 derrotas) sustenta isso. Mas o Yongin virou silenciosamente outro time desde a janela: 2 vitórias, 2 empates e 1 derrota desde 1º de agosto, 9 gols marcados e 5 sofridos, com Vitinho, ponta brasileiro contratado da liga maltesa, marcando em jogos consecutivos. Duas coisas empurram na outra direção. O goleiro Hwang Sung-min se machucou em um choque em 5 de setembro e seu estado não foi divulgado, e em 31 de outubro o Yongin será um clube de meio de tabela com uma meta de oitavo lugar e pouco mais. O Seoul empatou em 2-2 com eles em maio. Modelo: 43-28-28, mais perto de cara ou coroa do que o palpite sugere. Palpite Vitória, julho disse Empate.
+O Yongin é o jogo em que o modelo mais mudou de ideia. Em julho chamamos empate contra um time que empata 11 de 23, e seu retrospecto em casa (2 vitórias, 6 empates, 4 derrotas) sustenta isso. Mas o Yongin virou silenciosamente outro time desde a janela: 2 vitórias, 2 empates e 1 derrota desde 1º de agosto, 9 gols marcados e 5 sofridos, com Vitinho, ponta brasileiro contratado da liga maltesa, marcando em jogos consecutivos. Duas coisas empurram na outra direção. O goleiro Hwang Sung-min se machucou em um choque em 5 de setembro e seu estado não foi divulgado, e em 31 de outubro o Yongin será um clube de meio de tabela com uma meta de oitavo lugar e pouco mais. O Seoul empatou em 2-2 com eles em maio. Modelo: 43-28-28. Previsto: derrota, onde julho disse empate. Yongin é o único jogo da planilha em que o resultado previsto não é nem a segunda opção do modelo, e isso precisa de explicação. A planilha tem de carregar uma derrota, porque 1,5 derrota esperada em oito jogos não vira zero. Dos quatro jogos que não são vitórias claras do Seoul, esta é a viagem com a maior probabilidade de derrota depois do Suwon Samsung, e o Suwon em casa é o melhor lugar para um empate. A versão honesta em uma linha: o Seoul deve vencer em Yongin mais vezes do que não, mas se for perder os três pontos em algum lugar desta reta, o modelo acha que é aqui ou em Mokdong contra o Suwon.
 
 ### Rodada 32, Jeonnam em casa
 
@@ -105,7 +107,7 @@ O Asan venceu o Seoul por 3-0 em maio, a pior tarde da temporada, mas foi sob um
 
 ### Rodada 34, Gyeongnam fora: a última rodada
 
-O Gyeongnam é dois times. Em Changwon somou 20 de seus 30 pontos e venceu quatro dos últimos seis; fora, empata quase tudo. Kim Hyun-o, de 18 anos, ex-Mundial Sub-20, tem seis gols nos últimos nove jogos. O Seoul não perde há cinco confrontos (4 vitórias, 1 empate) e o Gyeongnam marcou duas vezes nesses cinco. Em 29 de novembro o Gyeongnam deve estar seguro e fora da briga por playoffs, enquanto o Seoul pode ter o acesso ou a posição nos playoffs em jogo. O horário ainda não foi definido. Modelo: 43-32-25, o terceiro dos cara ou coroa. Palpite Vitória, igual a julho.
+O Gyeongnam é dois times. Em Changwon somou 20 de seus 30 pontos e venceu quatro dos últimos seis; fora, empata quase tudo. Kim Hyun-o, de 18 anos, ex-Mundial Sub-20, tem seis gols nos últimos nove jogos. O Seoul não perde há cinco confrontos (4 vitórias, 1 empate) e o Gyeongnam marcou duas vezes nesses cinco. Em 29 de novembro o Gyeongnam deve estar seguro e fora da briga por playoffs, enquanto o Seoul pode ter o acesso ou a posição nos playoffs em jogo. O horário ainda não foi definido. Modelo: 43-32-25, o terceiro dos cara ou coroa, e a probabilidade de empate é a maior dos oito. Previsto: empate, onde julho disse vitória.
 
 ## Quem sobe, e quem vai aos playoffs
 
@@ -148,7 +150,7 @@ Na prática: o acesso direto é uma proposta de seis vitórias em oito, e os doi
 
 ## O que pode quebrar isso
 
-- **Cartões.** Park Chang-hwan (7 amarelos) e Baek Ji-woong (4) são os jogadores do Seoul mais perto de uma suspensão. Kim Oh-kyu, Park Jae-yong, Gabriel e Son Hyuk-chan estão com três. O modelo não prevê cartões, então uma suspensão para o jogo contra o Daegu moveria aquele palpite em direção ao empate.
+- **Cartões.** Park Chang-hwan (7 amarelos) e Baek Ji-woong (4) são os jogadores do Seoul mais perto de uma suspensão. Kim Oh-kyu, Park Jae-yong, Gabriel e Son Hyuk-chan estão com três. O modelo não prevê cartões, então uma suspensão para o jogo contra o Daegu empurraria aquele empate previsto em direção à derrota.
 - **Concussões e lesões sem detalhes.** O estado de Frizzo no Suwon FC e as lesões de Ko Seung-beom e Bruno Silva no Suwon Samsung foram divulgados sem diagnóstico ou prazo. Ajustamos apenas para o próximo jogo em cada caso.
 - **Motivação corta dos dois lados.** Times sem nada em jogo às vezes jogam soltos. O Asan venceu o Seoul por 2-1 em Mokdong em novembro de 2024 sem nada a disputar.
 - **Dados de cartões.** As contagens do Seoul e do Suwon FC vêm de um site de estatísticas de terceiros, não do registro da própria K League, que não carregou. A direção está certa; a contagem exata pode errar por um.
@@ -156,6 +158,6 @@ Na prática: o acesso direto é uma proposta de seis vitórias em oito, e os doi
 
 ## Registrado
 
-Os palpites de julho permanecem e continuam sendo avaliados. Os oito palpites acima estão congelados a partir de 7 de setembro e entram no Rastreador da Temporada como uma segunda linha, com a probabilidade do modelo ao lado de cada um. Quando a temporada acabar, publicaremos quantos cada conjunto acertou e por quanto cada projeção final errou. Se a resposta honesta em dezembro for que um modelo de pontos por jogo de julho foi tão bom quanto 20.000 simulações de setembro, diremos isso.
+Os palpites de julho permanecem e continuam sendo avaliados. Os oito resultados previstos acima estão congelados a partir de 7 de setembro e entram no Rastreador da Temporada como uma segunda linha, com a probabilidade do modelo para aquele resultado ao lado de cada um. Quando a temporada acabar, publicaremos quantos cada conjunto acertou e por quanto cada projeção final errou. Se a resposta honesta em dezembro for que um modelo de pontos por jogo de julho foi tão bom quanto 20.000 simulações de setembro, diremos isso.
 
 O código da simulação, os ajustes e os motivos de cada um estão no repositório do projeto. Por trás dos números há onze dossiês de pesquisa, um por adversário e concorrente, construídos ao longo do fim de semana a partir de relatos coreanos de partidas, sites dos clubes, registros da liga e o regulamento da K League. Esse é o aumento de pesquisa que prometemos. Se ele produz um aumento de precisão, agora depende dos jogadores.

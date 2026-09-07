@@ -6,7 +6,7 @@ import {
   PREVIEW_BASELINE,
   POINTS_FOR,
   SEOUL_PREDICTIONS,
-  REVISED_PROJECTED_FINAL,
+  SEOUL_REVISED_PREDICTIONS,
   REVISED_BASELINE,
   REVISED_PUBLISHED_ON,
   type Outcome,
@@ -39,7 +39,9 @@ const remainingCount = rounds.length - played.length;
 const revisedRounds = rounds.filter((r) => r.revised);
 const revisedPlayed = revisedRounds.filter((r) => r.actual);
 const revisedHits = revisedPlayed.filter((r) => r.revisedHit).length;
-const revisedFinal = Math.round(REVISED_PROJECTED_FINAL);
+const revisedFinal =
+  REVISED_BASELINE.points +
+  SEOUL_REVISED_PREDICTIONS.reduce((sum, p) => sum + POINTS_FOR[p.predicted], 0);
 // Index in `rounds` of the last round before the revised set begins (R25).
 const revisedStartIndex = rounds.findIndex((r) => r.round === REVISED_BASELINE.round);
 
@@ -123,7 +125,7 @@ const t = isPt
       legendActual: "Real",
       legendRevised: "Revisado (07/09)",
       cardRevised: "Previsão revisada",
-      cardRevisedSub: "total final projetado em 07/09, via simulação",
+      cardRevisedSub: "palpite 4V 3E 1D de 07/09, via simulação",
       revisedAccuracy: "acertos da revisão",
       tableTitle: "Rodada a rodada",
       thRound: "Rd",
@@ -176,7 +178,7 @@ const t = isPt
       legendActual: "Actual",
       legendRevised: "Revised (Sep 7)",
       cardRevised: "Revised prediction",
-      cardRevisedSub: "final total we projected on Sep 7, by simulation",
+      cardRevisedSub: "4W 3D 1L sheet we called on Sep 7, by simulation",
       revisedAccuracy: "revised calls correct",
       tableTitle: "Round by round",
       thRound: "Rd",
@@ -353,7 +355,7 @@ function ordinal(n: number) {
                 ? <><strong>{r.actualCumulative}</strong> <span class="st-muted">/ {r.predictedCumulative}</span></>
                 : <span class="st-muted">{r.predictedCumulative}</span>}
               {r.revisedCumulative !== undefined && (
-                <span class="st-revised-num"> / {Math.round(r.revisedCumulative)}</span>
+                <span class="st-revised-num"> / {r.revisedCumulative}</span>
               )}
             </td>
           </tr>

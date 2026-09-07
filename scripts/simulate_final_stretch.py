@@ -281,16 +281,36 @@ def sample_score(lh: float, la: float):
             return h, a
 
 
-DRAW_TOLERANCE = 0.06   # if win and loss probabilities are within this, the honest call is a draw
+def coherent_sheet(per_match: dict) -> dict:
+    """
+    Published call sheet. Eight independent "most likely" results do not add up
+    to a season projection (eight favorites' wins would read 69 points against an
+    expected 60), so the sheet is built the way the July preview was: a predicted
+    RECORD first, then each result placed where it is most likely.
 
-
-def call_for(tally) -> str:
-    """Published call: most likely outcome, except a near coin-flip is called a draw."""
-    p = {o: tally[o] / N_SIMS for o in "WDL"}
-    call = max("WDL", key=lambda o: p[o])
-    if call != "D" and abs(p["W"] - p["L"]) < DRAW_TOLERANCE:
-        return "D"
-    return call
+    Composition: wins = expected wins rounded; draws chosen so the sheet's total
+    equals the model's expected points; losses fill the rest. Within that
+    composition, the assignment with the highest joint probability wins.
+    """
+    import itertools
+    rounds = list(per_match)
+    n = len(rounds)
+    target = round(sum(per_match[r]["exp_pts"] for r in rounds))
+    wins = round(sum(per_match[r]["W"] for r in rounds))
+    draws = target - 3 * wins
+    losses = n - wins - draws
+    if draws < 0 or losses < 0:
+        wins, draws, losses = None, None, None  # fall back to points-only constraint
+    best = None
+    for combo in itertools.product("WDL", repeat=n):
+        if sum({"W": 3, "D": 1, "L": 0}[c] for c in combo) != target:
+            continue
+        if wins is not None and (combo.count("W"), combo.count("D"), combo.count("L")) != (wins, draws, losses):
+            continue
+        ll = sum(math.log(max(per_match[r][c], 1e-9)) for r, c in zip(rounds, combo))
+        if best is None or ll > best[0]:
+            best = (ll, combo)
+    return dict(zip(rounds, best[1]))
 
 
 def outcome_for(slug, home, away, h, a):
@@ -310,24 +330,37 @@ def main():
         lh, la = expected_goals(rnd, home, away)
         tally = Counter()
         scores = Counter()
+        clean = 0
+        btts = 0
         for _ in range(N_SIMS):
             h, a = sample_score(lh, la)
             tally[outcome_for(seoul, home, away, h, a)] += 1
             scores[(h, a)] += 1
-        call = call_for(tally)
-        # most likely score consistent with the published call (a 1-1 under a "W" call reads wrong)
-        best = max(
-            (sc for sc in scores if outcome_for(seoul, home, away, *sc) == call),
-            key=lambda sc: scores[sc],
-        )
+            opp_goals = a if home == seoul else h
+            own_goals = h if home == seoul else a
+            clean += opp_goals == 0
+            btts += opp_goals > 0 and own_goals > 0
         per_match[rnd] = {
             "home": home, "away": away, "xg_home": round(lh, 2), "xg_away": round(la, 2),
             "W": tally["W"] / N_SIMS, "D": tally["D"] / N_SIMS, "L": tally["L"] / N_SIMS,
-            "likely_score": f"{best[0]}-{best[1]}",
-            "call": call,
+            "most_likely": max("WDL", key=lambda o: tally[o]),
+            "xg_seoul": round(lh if home == seoul else la, 2),
+            "xg_opp": round(la if home == seoul else lh, 2),
+            "p_clean_sheet": clean / N_SIMS,
+            "p_btts": btts / N_SIMS,
             "exp_pts": (3 * tally["W"] + tally["D"]) / N_SIMS,
             "why": ADJUSTMENTS.get((rnd, home, away), {}).get("why", ""),
+            "_scores": scores,
         }
+
+    sheet = coherent_sheet(per_match)
+    for rnd, m in per_match.items():
+        call = sheet[rnd]
+        scores = m.pop("_scores")
+        best = max((sc for sc in scores if outcome_for(seoul, m["home"], m["away"], *sc) == call),
+                   key=lambda sc: scores[sc])
+        m["call"] = call
+        m["likely_score"] = f"{best[0]}-{best[1]}"
 
     # Season simulation for the contenders
     base_pts = {s: TABLE[s][1] * 3 + TABLE[s][2] for s in TABLE}
@@ -386,7 +419,8 @@ def main():
         venue = "H" if m["home"] == seoul else "A"
         opp = NAMES[m["away"] if venue == "H" else m["home"]]
         print(f"  R{rnd} {venue} {opp:16} xG {m['xg_home']:.2f}-{m['xg_away']:.2f}  "
-              f"W {m['W']:.0%} D {m['D']:.0%} L {m['L']:.0%}  call {m['call']}  likely {m['likely_score']}  xPts {m['exp_pts']:.2f}")
+              f"W {m['W']:.0%} D {m['D']:.0%} L {m['L']:.0%}  likeliest {m['most_likely']}  call {m['call']}  "
+              f"xG {m['xg_seoul']:.2f}-{m['xg_opp']:.2f}  CS {m['p_clean_sheet']:.0%}  xPts {m['exp_pts']:.2f}")
     print(f"\nSeoul expected final {out['seoul_expected_final']} (median {out['seoul_median_final']}), "
           f"P(1st) {out['seoul_p_first']:.1%}, P(top2) {out['seoul_p_top2']:.1%}, P(top6) {out['seoul_p_top6']:.1%}")
     print("\nContenders and chasers:")
