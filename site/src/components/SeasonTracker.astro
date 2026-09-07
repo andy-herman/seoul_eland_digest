@@ -6,6 +6,9 @@ import {
   PREVIEW_BASELINE,
   POINTS_FOR,
   SEOUL_PREDICTIONS,
+  REVISED_PROJECTED_FINAL,
+  REVISED_BASELINE,
+  REVISED_PUBLISHED_ON,
   type Outcome,
 } from "../data/seasonTracker";
 import { CLUB_RECORDS, RIVAL_FIXTURES, STANDINGS_AS_OF } from "../data/seasonRivals";
@@ -31,6 +34,14 @@ const predictedByNow =
   played.length > 0 ? played[played.length - 1].predictedCumulative : PREVIEW_BASELINE.points;
 const versusPrediction = pointsNow - predictedByNow;
 const remainingCount = rounds.length - played.length;
+
+// The September revised calls: a second frozen line, graded on its own.
+const revisedRounds = rounds.filter((r) => r.revised);
+const revisedPlayed = revisedRounds.filter((r) => r.actual);
+const revisedHits = revisedPlayed.filter((r) => r.revisedHit).length;
+const revisedFinal = Math.round(REVISED_PROJECTED_FINAL);
+// Index in `rounds` of the last round before the revised set begins (R25).
+const revisedStartIndex = rounds.findIndex((r) => r.round === REVISED_BASELINE.round);
 
 const hasRivals = CLUB_RECORDS.length > 0 && RIVAL_FIXTURES.length > 0;
 const projections = hasRivals ? projectSeason(CLUB_RECORDS, RIVAL_FIXTURES) : [];
@@ -58,6 +69,7 @@ const allPoints = [
   PREVIEW_BASELINE.points,
   ...rounds.map((r) => r.predictedCumulative),
   ...rounds.map((r) => r.actualCumulative ?? PREVIEW_BASELINE.points),
+  ...rounds.map((r) => r.revisedCumulative ?? PREVIEW_BASELINE.points),
 ];
 const yMin = Math.floor((Math.min(...allPoints) - 2) / 5) * 5;
 const yMax = Math.ceil((Math.max(...allPoints) + 2) / 5) * 5;
@@ -76,6 +88,17 @@ const actualPath = [
   ...played.map((r, i) => `L ${xFor(i + 1)} ${yFor(r.actualCumulative!)}`),
 ].join(" ");
 
+// Revised line: starts at the R25 actual point and follows the September calls.
+const revisedPath =
+  revisedStartIndex >= 0
+    ? [
+        `M ${xFor(revisedStartIndex + 1)} ${yFor(REVISED_BASELINE.points)}`,
+        ...rounds
+          .map((r, i) => (r.revisedCumulative !== undefined ? `L ${xFor(i + 1)} ${yFor(r.revisedCumulative)}` : null))
+          .filter((seg): seg is string => Boolean(seg)),
+      ].join(" ")
+    : "";
+
 const yTicks: number[] = [];
 for (let v = yMin; v <= yMax; v += 5) yTicks.push(v);
 
@@ -84,7 +107,7 @@ const t = isPt
       eyebrow: "Ferramenta ao vivo",
       title: "Rastreador da Temporada",
       intro:
-        "Em 12 de julho publicamos um palpite rodada a rodada para todo o segundo turno. Esta página compara aquele palpite com a realidade, rodada a rodada, e projeta onde a temporada termina.",
+        "Em 12 de julho publicamos um palpite rodada a rodada para todo o segundo turno. Em 7 de setembro, após a 25ª rodada, publicamos um segundo conjunto de palpites gerado por simulação para as oito rodadas restantes. Esta página compara ambos com a realidade, rodada a rodada, e projeta onde a temporada termina. Nenhum dos dois é alterado depois de publicado.",
       cardPredicted: "Previsão publicada",
       cardPredictedSub: "total final projetado em 12/07",
       cardNow: "Pontos agora",
@@ -96,12 +119,17 @@ const t = isPt
       chartTitle: "Previsto vs real",
       chartNote:
         "As duas linhas partem dos 29 pontos que o Seoul tinha quando a prévia foi escrita. A linha cheia é o que aconteceu de verdade.",
-      legendPredicted: "Previsto",
+      legendPredicted: "Previsto (12/07)",
       legendActual: "Real",
+      legendRevised: "Revisado (07/09)",
+      cardRevised: "Previsão revisada",
+      cardRevisedSub: "total final projetado em 07/09, via simulação",
+      revisedAccuracy: "acertos da revisão",
       tableTitle: "Rodada a rodada",
       thRound: "Rd",
       thMatch: "Partida",
-      thPredicted: "Palpite",
+      thPredicted: "Palpite (jul)",
+      thRevised: "Revisado (set)",
       thActual: "Real",
       thCall: "Aferição",
       thRunning: "Acumulado",
@@ -132,7 +160,7 @@ const t = isPt
       eyebrow: "Live tool",
       title: "Season Tracker",
       intro:
-        "On July 12 we published a round-by-round call for the entire second round robin. This page grades that call against reality, round by round, and projects where the season ends up.",
+        "On July 12 we published a round-by-round call for the entire second round robin. On September 7, after Round 25, we published a second, simulation-based set of calls for the eight rounds left. This page grades both against reality, round by round, and projects where the season ends up. Neither set changes once published.",
       cardPredicted: "Published prediction",
       cardPredictedSub: "final total we projected on Jul 12",
       cardNow: "Points now",
@@ -144,12 +172,17 @@ const t = isPt
       chartTitle: "Predicted vs actual",
       chartNote:
         "Both lines start from the 29 points Seoul had when the preview was written. The solid line is what actually happened.",
-      legendPredicted: "Predicted",
+      legendPredicted: "Predicted (Jul 12)",
       legendActual: "Actual",
+      legendRevised: "Revised (Sep 7)",
+      cardRevised: "Revised prediction",
+      cardRevisedSub: "final total we projected on Sep 7, by simulation",
+      revisedAccuracy: "revised calls correct",
       tableTitle: "Round by round",
       thRound: "Rd",
       thMatch: "Match",
-      thPredicted: "Called",
+      thPredicted: "Called (Jul)",
+      thRevised: "Revised (Sep)",
       thActual: "Actual",
       thCall: "Verdict",
       thRunning: "Running",
@@ -217,6 +250,15 @@ function ordinal(n: number) {
       <p class="st-card-value">{accuracy}<span class="st-unit">%</span></p>
       <p class="st-card-sub">{hits}/{played.length} {t.cardAccuracySub}</p>
     </div>
+    <div class="st-card st-card-revised">
+      <p class="st-card-label">{t.cardRevised}</p>
+      <p class="st-card-value">{revisedFinal}</p>
+      <p class="st-card-sub">
+        {revisedPlayed.length > 0
+          ? `${revisedHits}/${revisedPlayed.length} ${t.revisedAccuracy}`
+          : t.cardRevisedSub}
+      </p>
+    </div>
     <div class="st-card st-card-accent">
       <p class="st-card-label">{t.cardProjection}</p>
       <p class="st-card-value">
@@ -242,6 +284,7 @@ function ordinal(n: number) {
         ) : null
       ))}
       <path d={predictedPath} class="st-line-pred" />
+      {revisedPath && <path d={revisedPath} class="st-line-revised" />}
       <path d={actualPath} class="st-line-actual" />
       {played.map((r, i) => (
         <circle cx={xFor(i + 1)} cy={yFor(r.actualCumulative!)} r="4"
@@ -251,6 +294,7 @@ function ordinal(n: number) {
   </div>
   <div class="st-legend">
     <span class="st-legend-item"><span class="st-swatch st-swatch-pred"></span>{t.legendPredicted}</span>
+    <span class="st-legend-item"><span class="st-swatch st-swatch-revised"></span>{t.legendRevised}</span>
     <span class="st-legend-item"><span class="st-swatch st-swatch-actual"></span>{t.legendActual}</span>
   </div>
   <p class="st-note">{t.chartNote}</p>
@@ -263,6 +307,7 @@ function ordinal(n: number) {
           <th>{t.thRound}</th>
           <th>{t.thMatch}</th>
           <th>{t.thPredicted}</th>
+          <th>{t.thRevised}</th>
           <th>{t.thActual}</th>
           <th>{t.thCall}</th>
           <th>{t.thRunning}</th>
@@ -276,6 +321,21 @@ function ordinal(n: number) {
               <span class="st-venue">{r.venue === "home" ? "H" : "A"}</span> {r.opponent}
             </td>
             <td><span class={`st-pill st-pill-${r.predicted}`}>{outcomeLabel(r.predicted)}</span></td>
+            <td>
+              {r.revised
+                ? <>
+                    <span class={`st-pill st-pill-${r.revised}`}>{outcomeLabel(r.revised)}</span>
+                    {r.revisedConfidence !== undefined && (
+                      <span class="st-muted st-conf">{Math.round(r.revisedConfidence * 100)}%</span>
+                    )}
+                    {r.revisedHit !== undefined && (
+                      <span class={`st-verdict st-verdict-mini ${r.revisedHit ? "st-verdict-hit" : "st-verdict-miss"}`}>
+                        {r.revisedHit ? t.hit : t.miss}
+                      </span>
+                    )}
+                  </>
+                : <span class="st-pending">-</span>}
+            </td>
             <td>
               {r.actual
                 ? <span class={`st-pill st-pill-${r.actual}`}>{outcomeLabel(r.actual)}</span>
@@ -292,6 +352,9 @@ function ordinal(n: number) {
               {r.actualCumulative !== undefined
                 ? <><strong>{r.actualCumulative}</strong> <span class="st-muted">/ {r.predictedCumulative}</span></>
                 : <span class="st-muted">{r.predictedCumulative}</span>}
+              {r.revisedCumulative !== undefined && (
+                <span class="st-revised-num"> / {Math.round(r.revisedCumulative)}</span>
+              )}
             </td>
           </tr>
         ))}
@@ -457,6 +520,15 @@ function ordinal(n: number) {
     stroke-dasharray: 6 4; stroke-linejoin: round;
   }
   .st-line-actual { fill: none; stroke: var(--color-blue); stroke-width: 3; stroke-linejoin: round; }
+  .st-line-revised {
+    fill: none; stroke: #1d7a45; stroke-width: 2.5;
+    stroke-dasharray: 2 4; stroke-linejoin: round;
+  }
+  .st-swatch-revised { background: #1d7a45; }
+  .st-card-revised { border-color: #1d7a45; background: color-mix(in srgb, #1d7a45 6%, #fff); }
+  .st-revised-num { color: #1d7a45; font-weight: 800; }
+  .st-conf { font-size: 0.72rem; margin-left: 0.3rem; }
+  .st-verdict-mini { display: block; margin-top: 0.15rem; font-size: 0.6rem; }
   .st-dot-hit { fill: #1d7a45; }
   .st-dot-miss { fill: #b3261e; }
   .st-legend { display: flex; gap: 1rem; margin-top: 0.5rem; flex-wrap: wrap; }

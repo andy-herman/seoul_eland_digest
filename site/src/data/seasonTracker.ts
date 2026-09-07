@@ -24,6 +24,10 @@ export interface PublishedPrediction {
   opponent: string;
   venue: "home" | "away";
   predicted: Outcome;
+  /** Simulation probabilities behind a revised call (September set only). */
+  probabilities?: { W: number; D: number; L: number };
+  /** Expected points from the simulation, used for the revised running line. */
+  expectedPoints?: number;
 }
 
 /**
@@ -63,6 +67,43 @@ export const PREVIEW_BASELINE = {
   goalsAgainst: 19,
 } as const;
 
+/**
+ * REVISED PREDICTIONS. A second, separate set of calls published on
+ * 2026-09-07 in "Final Stretch Revisited: New Predictions Based on AI
+ * Simulations", after Round 25. Built from a Monte Carlo model fed with
+ * form, home/away splits, head-to-head, availability and card counts.
+ * Like the July set, these are frozen the moment they are published and
+ * graded on their own line. They never overwrite the July calls.
+ *
+ * Each entry carries two things: the CALL (most likely outcome, graded as a
+ * hit or miss) and the model's EXPECTED POINTS for that round. The revised
+ * running line and the card use expected points, because a call sheet of
+ * eight "most likely" results does not add up to a season projection.
+ */
+export const REVISED_PUBLISHED_ON = "2026-09-07";
+
+/** Seoul E-Land's record when the revised calls were published (after R25). */
+export const REVISED_BASELINE = {
+  round: 25,
+  played: 24,
+  points: 45,
+} as const;
+
+export const SEOUL_REVISED_PREDICTIONS: PublishedPrediction[] = [
+  { round: 26, opponent: "Suwon Bluewings", venue: "home", predicted: "W", probabilities: { W: 0.38, D: 0.32, L: 0.31 }, expectedPoints: 1.45 },
+  { round: 27, opponent: "Daegu", venue: "home", predicted: "W", probabilities: { W: 0.47, D: 0.30, L: 0.23 }, expectedPoints: 1.71 },
+  { round: 28, opponent: "Gimpo Citizen", venue: "away", predicted: "W", probabilities: { W: 0.54, D: 0.28, L: 0.19 }, expectedPoints: 1.89 },
+  { round: 29, opponent: "Gimhae FC", venue: "home", predicted: "W", probabilities: { W: 0.83, D: 0.13, L: 0.04 }, expectedPoints: 2.61 },
+  { round: 31, opponent: "Yongin", venue: "away", predicted: "W", probabilities: { W: 0.43, D: 0.28, L: 0.28 }, expectedPoints: 1.59 },
+  { round: 32, opponent: "Jeonnam Dragons", venue: "home", predicted: "W", probabilities: { W: 0.68, D: 0.21, L: 0.11 }, expectedPoints: 2.25 },
+  { round: 33, opponent: "Chungnam Asan", venue: "home", predicted: "W", probabilities: { W: 0.59, D: 0.26, L: 0.15 }, expectedPoints: 2.03 },
+  { round: 34, opponent: "Gyeongnam", venue: "away", predicted: "W", probabilities: { W: 0.43, D: 0.32, L: 0.25 }, expectedPoints: 1.61 },
+];
+
+/** The simulation's expected final total (mean of 20000 runs), not the sum of the calls. */
+export const REVISED_PROJECTED_FINAL = 60.1;
+export const REVISED_P_TOP2 = 0.37;
+
 export const POINTS_FOR: Record<Outcome, number> = { W: 3, D: 1, L: 0 };
 
 /** Derive the actual outcome of a played Seoul fixture. */
@@ -84,28 +125,42 @@ export interface TrackedRound {
   /** Cumulative points actually banked, only defined once played. */
   actualCumulative?: number;
   hit?: boolean;
+  /** The September revised call, only for rounds after REVISED_BASELINE. */
+  revised?: Outcome;
+  /** R25 baseline plus the simulation's cumulative expected points (not the sum of calls). */
+  revisedCumulative?: number;
+  revisedHit?: boolean;
+  /** Simulation probability of the revised call itself (0..1). */
+  revisedConfidence?: number;
 }
 
 /**
  * Join our published predictions to the real results in matches.ts.
  * Both cumulative lines start from the preview baseline of 29 points so
- * the chart compares like with like.
+ * the chart compares like with like. The revised line starts from the
+ * actual 45 points Seoul had after Round 25.
  */
 export function buildTrackedRounds(): TrackedRound[] {
   const byRound = new Map(fixtures.map((f) => [f.round, f]));
+  const revisedByRound = new Map(SEOUL_REVISED_PREDICTIONS.map((p) => [p.round, p]));
   let predictedTotal = PREVIEW_BASELINE.points;
   let actualTotal = PREVIEW_BASELINE.points;
+  let revisedTotal = REVISED_BASELINE.points;
   let stillPlayed = true;
 
   return SEOUL_PREDICTIONS.map((prediction) => {
     const fixture = byRound.get(prediction.round);
     const actual = fixture ? outcomeOf(fixture) : undefined;
+    const revisedCall = revisedByRound.get(prediction.round);
 
     predictedTotal += POINTS_FOR[prediction.predicted];
     if (actual && stillPlayed) {
       actualTotal += POINTS_FOR[actual];
     } else {
       stillPlayed = false;
+    }
+    if (revisedCall) {
+      revisedTotal += revisedCall.expectedPoints ?? POINTS_FOR[revisedCall.predicted];
     }
 
     return {
@@ -119,6 +174,10 @@ export function buildTrackedRounds(): TrackedRound[] {
       predictedCumulative: predictedTotal,
       actualCumulative: actual ? actualTotal : undefined,
       hit: actual ? actual === prediction.predicted : undefined,
+      revised: revisedCall?.predicted,
+      revisedCumulative: revisedCall ? Math.round(revisedTotal * 10) / 10 : undefined,
+      revisedHit: revisedCall && actual ? actual === revisedCall.predicted : undefined,
+      revisedConfidence: revisedCall?.probabilities?.[revisedCall.predicted],
     };
   });
 }
