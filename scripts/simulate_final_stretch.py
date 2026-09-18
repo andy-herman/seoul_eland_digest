@@ -45,26 +45,26 @@ AWAY_GOALS = 1.21
 RHO = -0.10                 # Dixon-Coles low-score correlation
 
 # ---------------------------------------------------------------------------
-# Post-Round 25 table (triple-verified). slug: (P, W, D, L, GF, GA)
+# Post-Round 26 table (ko + en wikipedia, 2026-09-13, point totals confirmed in press). slug: (P, W, D, L, GF, GA)
 # ---------------------------------------------------------------------------
 TABLE = {
-    "suwon-samsung": (24, 15, 5, 4, 38, 20),
-    "seoul-e-land":  (24, 13, 6, 5, 43, 28),
-    "suwon-fc":      (23, 12, 8, 3, 46, 28),
-    "daegu":         (24, 12, 7, 5, 44, 32),
-    "hwaseong":      (24, 11, 7, 6, 37, 25),
-    "busan-ipark":   (24, 11, 5, 8, 39, 33),
-    "chungnam-asan": (23, 8, 7, 8, 31, 29),
-    "gimpo":         (23, 7, 10, 6, 28, 28),
-    "gyeongnam":     (23, 7, 9, 7, 30, 30),
-    "seongnam":      (23, 7, 9, 7, 26, 27),
-    "yongin":        (23, 5, 11, 7, 30, 32),
-    "paju":          (24, 7, 5, 12, 22, 28),
-    "cheongju":      (24, 3, 14, 7, 27, 39),
-    "cheonan":       (24, 4, 10, 10, 28, 33),
-    "ansan":         (24, 6, 4, 14, 25, 44),
-    "jeonnam":       (23, 4, 8, 11, 26, 38),
-    "gimhae":        (23, 2, 7, 14, 19, 45),
+    "suwon-samsung": (25, 16, 5, 4, 39, 20),
+    "seoul-e-land": (25, 13, 6, 6, 43, 29),
+    "suwon-fc": (24, 12, 9, 3, 47, 29),
+    "daegu": (25, 13, 7, 5, 47, 33),
+    "hwaseong": (25, 12, 7, 6, 39, 25),
+    "busan-ipark": (25, 12, 5, 8, 41, 33),
+    "chungnam-asan": (24, 8, 7, 9, 31, 30),
+    "gimpo": (24, 7, 11, 6, 30, 30),
+    "gyeongnam": (24, 8, 9, 7, 31, 30),
+    "seongnam": (24, 7, 9, 8, 26, 28),
+    "yongin": (24, 5, 11, 8, 31, 35),
+    "paju": (24, 7, 5, 12, 22, 28),
+    "cheongju": (25, 4, 14, 7, 28, 39),
+    "cheonan": (25, 4, 11, 10, 29, 34),
+    "ansan": (25, 6, 4, 15, 25, 46),
+    "jeonnam": (24, 4, 9, 11, 28, 40),
+    "gimhae": (24, 2, 7, 15, 19, 47),
 }
 NAMES = {
     "suwon-samsung": "Suwon Samsung", "seoul-e-land": "Seoul E-Land", "suwon-fc": "Suwon FC",
@@ -84,27 +84,25 @@ RANKED = CONTENDERS + CHASERS
 # Filled from the final-stretch research dossiers. Defaults to season rate.
 # ---------------------------------------------------------------------------
 LAST5 = {
-    # slug: (GF5, GA5)  from research_dump/final_stretch/*.md (post-R25)
-    "seoul-e-land": (7, 3),     # 0-0 Hwaseong, 3-1 Ansan, 1-1 Paju, 1-1 Seongnam, 2-0 Cheongju
-    "suwon-samsung": (10, 4),   # 1-0 Gimhae, 2-2 Suwon FC, 1-0 Cheonan, 4-1 Gimpo, 2-0 Asan
-    "daegu": (4, 2),            # 3 clean sheets in 5, 0.8 scored per game since Edgar's injury
+    # slug: (GF5, GA5)  last five league matches through Round 26 (2026-09-13)
+    "seoul-e-land": (7, 4),     # 3-1 Ansan, 1-1 Paju, 1-1 Seongnam, 2-0 Cheongju, 0-1 Suwon Samsung
+    "suwon-samsung": (10, 3),   # 2-2 Suwon FC, 1-0 Cheonan, 4-1 Gimpo, 2-0 Asan, 1-0 at Seoul
+    "daegu": (8, 3),            # 2-0 Asan, 1-1 Busan, 2-1 Ansan, 0-0 Paju, 3-1 Yongin; six unbeaten
+    "suwon-fc": (8, 5),         # 2-2 Suwon Samsung, 2-0 Gimhae, 2-1 Busan, 1-1 Yongin, 1-1 Cheonan
+    "hwaseong": (5, 3),         # 0-0 Busan, 0-1 Jeonnam, 2-1 Cheongju, 1-1 Cheonan, 2-0 at Ansan
+    "busan-ipark": (4, 4),      # 0-0 Hwaseong, 1-1 Daegu, 1-2 Suwon FC, 0-1 Ansan, 2-0 Gimhae
     "gimhae": (3, 9),
-    "yongin": (9, 5),           # 2W 2D 1L since Aug 1, Vitinho bedded in
-    "gyeongnam": (4, 4),        # 1W 3D 1L, Kim Hyun-o 3 of the 4
-    "jeonnam": (6, 6),          # 1-2 Paju, 1-2 Cheongju, 1-0 Hwaseong, 1-0 Cheonan, 2-2 Gimhae
-    "gimpo": (7, 8),            # 1-1, 3-0, 1-1, 1-4, 1-2; defense leaking since Luis and Kim Kyul left
-    "chungnam-asan": (5, 6),    # 2-0, 1-1, 0-2, 2-1, 0-2
-    "hwaseong": (3, 3),         # 0-0 Seoul, 0-0 Busan, 0-1 Jeonnam, 2-1 Cheongju, 1-1 Cheonan
-    "suwon-fc": (8, 5),         # 1-0 Paju, 2-2 Suwon Samsung, 2-0 Gimhae, 2-1 Busan, 1-1 Yongin
-    "busan-ipark": (2, 6),      # 0-2 Yongin, 0-0 Hwaseong, 1-1 Daegu, 1-2 Suwon FC, 0-1 Ansan
+    "yongin": (8, 8),           # 1-3 at Daegu ends the 2-2-1 run
+    "gyeongnam": (4, 3),        # 1-0 Seongnam, back-to-back wins
+    "jeonnam": (7, 6),          # 2-2 Gimpo; 13 without a win but four unbeaten
+    "gimpo": (8, 9),            # 2-2 at Jeonnam
+    "chungnam-asan": (3, 7),    # 0-1 Cheongju; ten behind sixth
 }
 
 # ---------------------------------------------------------------------------
 # Remaining fixtures involving a contender (mirrors site/src/data/seasonRivals.ts)
 # ---------------------------------------------------------------------------
 FIXTURES = [
-    (26, "seoul-e-land", "suwon-samsung"), (26, "busan-ipark", "gimhae"), (26, "ansan", "hwaseong"),
-    (26, "suwon-fc", "cheonan"), (26, "daegu", "yongin"),
     (27, "seoul-e-land", "daegu"), (27, "gimpo", "busan-ipark"), (27, "seongnam", "hwaseong"),
     (27, "jeonnam", "suwon-fc"),
     (28, "suwon-fc", "hwaseong"), (28, "gimpo", "seoul-e-land"), (28, "suwon-samsung", "ansan"),
@@ -122,9 +120,9 @@ FIXTURES = [
     (34, "gyeongnam", "seoul-e-land"), (34, "jeonnam", "suwon-samsung"), (34, "chungnam-asan", "busan-ipark"),
     (34, "gimpo", "hwaseong"), (34, "suwon-fc", "cheongju"), (34, "cheonan", "daegu"),
     # chaser-only fixtures (Chungnam Asan and Gimpo), from their dossiers
-    (26, "chungnam-asan", "cheongju"), (27, "chungnam-asan", "cheonan"), (28, "gimhae", "chungnam-asan"),
+    (27, "chungnam-asan", "cheonan"), (28, "gimhae", "chungnam-asan"),
     (29, "gyeongnam", "chungnam-asan"), (31, "chungnam-asan", "gimpo"), (32, "paju", "chungnam-asan"),
-    (26, "jeonnam", "gimpo"), (29, "gimpo", "paju"), (30, "gimpo", "gimhae"), (32, "gimpo", "ansan"),
+    (29, "gimpo", "paju"), (30, "gimpo", "gimhae"), (32, "gimpo", "ansan"),
 ]
 
 # ---------------------------------------------------------------------------
@@ -135,14 +133,11 @@ FIXTURES = [
 # ---------------------------------------------------------------------------
 ADJUSTMENTS: dict[tuple, dict] = {
     # ---- Seoul E-Land fixtures ----
-    (26, "seoul-e-land", "suwon-samsung"): {
-        "away_att": 0.94, "away_def": 1.05, "home_att": 1.02,
-        "why": "Suwon without Ko Seung-beom and Bruno Silva (Lee Jung-hyo: next match doubtful) and "
-               "starting GK Kim Jun-hong at the Asian Games; Seoul 2-1 at Mokdong in this fixture."},
     (27, "seoul-e-land", "daegu"): {
-        "away_def": 1.02,
-        "why": "Edgar (8 goals) out with a calf injury, no return date (club-level factor); Hwang Jae-won's "
-               "R25 red may extend past R26; Seoul won 3-1 at Daegu in March."},
+        "home_att": 0.96, "away_att": 0.96,
+        "why": "Park Chang-hwan suspended (8th yellow); Daegu have Kim Dae-woo and Hwang Jae-won back from bans "
+               "but Edgar and Kim Hyung-jin remain injured, and they have not won away to a current top-six side "
+               "this season (L D D L). Seoul won 3-1 at Daegu in March."},
     (28, "gimpo", "seoul-e-land"): {
         "home_att": 0.90, "home_def": 1.06,
         "why": "Gimpo have one home win in nine (0.89 ppg at Solteo vs 1.64 away); Seoul unbeaten in the "
@@ -168,29 +163,27 @@ ADJUSTMENTS: dict[tuple, dict] = {
         "why": "Gyeongnam take 20 of 30 points at Changwon (4W 1D 1L last six at home) but should be safe "
                "and out of the race; Seoul unbeaten in five meetings, Gyeongnam 2 goals in those five."},
     # ---- rival fixtures ----
-    (26, "suwon-fc", "cheonan"): {"home_att": 0.92, "home_def": 0.94,
-                                  "why": "Frizzo (13 goals) doubtful after losing consciousness in a Sep 5 collision; "
-                                         "Suwon FC concede 0.9 per game at home (6W 4D 0L)."},
-    (28, "suwon-fc", "hwaseong"): {"home_def": 0.94, "why": "Suwon FC home defense (9 conceded in 10)."},
+    (28, "suwon-fc", "hwaseong"): {"home_def": 0.94, "home_att": 0.94,
+                                   "why": "Suwon FC home defense (9 conceded in 10); Frizzo doubtful on the one-month timeline."},
     (30, "suwon-fc", "chungnam-asan"): {"home_def": 0.94, "away_att": 0.90,
                                         "why": "Suwon FC home defense; Asan away attack (0.91 per game)."},
     (31, "suwon-fc", "ansan"): {"home_def": 0.94, "why": "Suwon FC home defense."},
     (32, "suwon-fc", "gyeongnam"): {"home_def": 0.94, "why": "Suwon FC home defense."},
     (34, "suwon-fc", "cheongju"): {"home_def": 0.94, "why": "Suwon FC home defense; possible final-day decider."},
-    (26, "daegu", "yongin"): {"home_att": 0.97, "why": "Hwang Jae-won suspended (R25 red)."},
     (27, "gimpo", "busan-ipark"): {"home_att": 0.92, "home_def": 1.05, "why": "Gimpo home weakness."},
     (33, "gimpo", "suwon-fc"): {"home_att": 0.92, "home_def": 1.05, "why": "Gimpo home weakness."},
     (34, "gimpo", "hwaseong"): {"home_att": 0.92, "home_def": 1.05, "why": "Gimpo home weakness."},
     (32, "gimhae", "hwaseong"): {"home_att": 0.92, "home_def": 1.08,
                                  "why": "Gimhae have never won a home league match (0W 3D 8L, 26 conceded in 11)."},
     (29, "busan-ipark", "jeonnam"): {"away_def": 1.06, "why": "Jeonnam away defense (2.0 conceded per game)."},
-    (27, "jeonnam", "suwon-fc"): {"home_def": 0.93, "why": "Jeonnam concede 1.1 per game at Gwangyang vs 1.65 overall."},
+    (27, "jeonnam", "suwon-fc"): {"home_def": 0.93, "away_att": 0.92,
+                                  "why": "Jeonnam concede 1.1 per game at Gwangyang; Suwon FC without Frizzo (concussion, "
+                                         "about a month) and with Park Kun-ha likely banned from the bench."},
     (30, "jeonnam", "daegu"): {"home_def": 0.93, "why": "Jeonnam home defense."},
     (34, "jeonnam", "suwon-samsung"): {"home_def": 0.93, "why": "Jeonnam home defense; possible title decider for Suwon."},
     (34, "chungnam-asan", "busan-ipark"): {"home_att": 1.10, "why": "Asan score 1.75 per game at home (6W 4D 2L)."},
     (31, "gyeongnam", "hwaseong"): {"home_att": 1.06, "home_def": 0.96, "why": "Gyeongnam home strength."},
     # chaser fixtures
-    (26, "chungnam-asan", "cheongju"): {"home_att": 1.10, "why": "Asan home attack."},
     (27, "chungnam-asan", "cheonan"): {"home_att": 1.10, "why": "Asan home attack."},
     (28, "gimhae", "chungnam-asan"): {"home_att": 0.92, "home_def": 1.08, "away_att": 0.90,
                                      "why": "Gimhae home record; Asan away attack."},
@@ -198,7 +191,6 @@ ADJUSTMENTS: dict[tuple, dict] = {
                                         "why": "Gyeongnam home strength; Asan away attack."},
     (31, "chungnam-asan", "gimpo"): {"home_att": 1.10, "why": "Asan home attack."},
     (32, "paju", "chungnam-asan"): {"away_att": 0.90, "why": "Asan away attack."},
-    (26, "jeonnam", "gimpo"): {"home_def": 0.93, "why": "Jeonnam home defense."},
     (29, "gimpo", "paju"): {"home_att": 0.92, "home_def": 1.05, "why": "Gimpo home weakness."},
     (30, "gimpo", "gimhae"): {"home_att": 0.92, "home_def": 1.05, "why": "Gimpo home weakness."},
     (32, "gimpo", "ansan"): {"home_att": 0.92, "home_def": 1.05, "why": "Gimpo home weakness."},
@@ -207,15 +199,16 @@ ADJUSTMENTS: dict[tuple, dict] = {
 # Club-level multipliers for the rest of the season (e.g. no home games left).
 CLUB_ADJUST = {
     # slug: {"att": 1.0, "def": 1.0, "why": "..."}
-    "daegu": {"att": 0.95, "why": "Edgar (top scorer, 8) out with a calf injury and no return date; attack "
-                                  "leans on 36-year-old Cesinha, 0.8 goals per game in the last five."},
-    "gimpo": {"att": 0.93, "why": "Luis (10 of their 26 goals) sold to Suwon Samsung on Aug 20; no replacement signed."},
+    "daegu": {"att": 0.97, "why": "Edgar (8 goals) still out with a calf injury and no return date, but Deckers and "
+                                  "Seraphim carried the attack in Round 26 (3-1), so the discount is smaller than before."},
+    "gimpo": {"att": 0.93, "why": "Luis (10 of their goals) sold to Suwon Samsung on Aug 20; no replacement signed."},
     "hwaseong": {"att": 0.94, "why": "Hwaseong Sports Complex closed for renovation from September: all remaining "
-                                     "fixtures away (home 1.81 ppg, away 1.38 ppg, 1.13 goals per away game), and no "
-                                     "home training base during the works."},
-    "busan-ipark": {"att": 0.94, "why": "Eight league games without a win since Jul 18 (2D 6L, 4 scored in 8); "
-                                        "summer window did not deliver the reinforcements Cho Sung-hwan asked for; "
-                                        "supporters in open protest."},
+                                     "fixtures away (home 1.81 ppg, away 1.38 ppg), no home training base."},
+    "busan-ipark": {"att": 0.92, "why": "Top scorer Christian (8) banned 15 matches for drunk driving (Sep 10 committee), "
+                                        "Kim Chan hamstring, Lee Ho-jin at U-20 qualifiers; the eight-match winless run "
+                                        "ended against bottom club Gimhae."},
+    "suwon-samsung": {"att": 0.97, "why": "Ko Seung-beom (fascia) and Bruno Silva (adductor) out with no return date; "
+                                          "GK Kim Jun-hong at the Asian Games to Oct 4."},
 }
 
 
@@ -288,19 +281,20 @@ def coherent_sheet(per_match: dict) -> dict:
     expected 60), so the sheet is built the way the July preview was: a predicted
     RECORD first, then each result placed where it is most likely.
 
-    Composition: wins = expected wins rounded; draws chosen so the sheet's total
-    equals the model's expected points; losses fill the rest. Within that
+    Composition: of every (W, D, L) record whose points equal the model's
+    expected points, the one closest to the expected record. Within that
     composition, the assignment with the highest joint probability wins.
     """
     import itertools
     rounds = list(per_match)
     n = len(rounds)
     target = round(sum(per_match[r]["exp_pts"] for r in rounds))
-    wins = round(sum(per_match[r]["W"] for r in rounds))
-    draws = target - 3 * wins
-    losses = n - wins - draws
-    if draws < 0 or losses < 0:
-        wins, draws, losses = None, None, None  # fall back to points-only constraint
+    exp_w = sum(per_match[r]["W"] for r in rounds)
+    exp_d = sum(per_match[r]["D"] for r in rounds)
+    exp_l = sum(per_match[r]["L"] for r in rounds)
+    # composition: among all (W, D, L) that hit the target, the one closest to the expected record
+    comps = [(w, d, n - w - d) for w in range(n + 1) for d in range(n + 1 - w) if 3 * w + d == target]
+    wins, draws, losses = min(comps, key=lambda c: (c[0] - exp_w) ** 2 + (c[1] - exp_d) ** 2 + (c[2] - exp_l) ** 2)
     best = None
     for combo in itertools.product("WDL", repeat=n):
         if sum({"W": 3, "D": 1, "L": 0}[c] for c in combo) != target:

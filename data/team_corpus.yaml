@@ -293,6 +293,37 @@ teams:
               note: "Debuted at Seongnam in Round 24; bench at Cheongju. Height option against Suwon Samsung's aerial threat."
             - player: "Kim Oh-kyu"
               note: "Captain rotated out at Cheongju after starting Seongnam; the Osmar and Baek Ji-woong pairing kept a clean sheet, so he may stay on the bench."
+        - round: 27
+          opponent_id: daegu
+          label: "Predicted Seoul XI"
+          formation: "4-3-3"
+          team_name: "Seoul E-Land"
+          note: "The Round 26 eleven minus the suspended Park Chang-hwan, with Cho Jun-hyun into midfield. Baek Ji-woong went off injured on 78 minutes against Suwon; Kim Oh-kyu is the alternative. Official team sheet may differ at kickoff."
+          starters:
+            - { name: "Min Sung-jun", role: "GK", line: "goalkeeper" }
+            - { name: "Oh In-pyo", role: "RB", line: "defense" }
+            - { name: "Osmar", role: "RCB", line: "defense" }
+            - { name: "Baek Ji-woong", role: "LCB", line: "defense" }
+            - { name: "Bae Seo-jun", role: "LB", line: "defense" }
+            - { name: "Yoon Seok-ju", role: "CM", line: "midfield" }
+            - { name: "Cho Jun-hyun", role: "CM", line: "midfield" }
+            - { name: "Alan Carius", role: "CM", line: "midfield" }
+            - { name: "Euller", role: "RF", line: "attack" }
+            - { name: "Park Jae-yong", role: "ST", line: "attack" }
+            - { name: "Ahn Joo-wan", role: "LF", line: "attack" }
+          basis:
+            - "Start from the Round 26 XI against Suwon Samsung (L 0-1): Min Sung-jun; Oh In-pyo, Baek Ji-woong, Osmar, Bae Seo-jun; Park Chang-hwan, Yoon Seok-ju, Alan Carius; Euller, Park Jae-yong, Ahn Joo-wan."
+            - "Park Chang-hwan is suspended on his eighth yellow card; Cho Jun-hyun is the only natural central midfielder left, and keeping Osmar at center-back matters against Deckers in the air."
+            - "Ahn Joo-wan keeps the start after a halftime withdrawal that was about composure, not fitness; Gabriel and Kim Hyun are the first changes."
+          selection_watch:
+            - player: "Baek Ji-woong"
+              note: "Left the Suwon match injured on 78 minutes; no update published. Kim Oh-kyu returns if he is not fit."
+            - player: "Cho Jun-hyun"
+              note: "Late substitute in three of the last four; first start in a match of this weight."
+            - player: "Caio Marcelo"
+              note: "Former Daegu player (50 apps, 2024-25); bench role with a late job likely."
+            - player: "Kim Oh-kyu"
+              note: "Booked in stoppage time against Suwon, on four yellows; a card here costs the Gimpo match."
     collection_plan:
       priority_queries: ["서울이랜드 김도균", "서울이랜드 전술", "서울이랜드 부상", "서울이랜드 경기 리뷰"]
       data_to_collect: ["lineups", "formations", "injuries", "manager quotes", "set-piece details", "substitution patterns"]

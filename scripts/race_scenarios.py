@@ -27,9 +27,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
 import simulate_final_stretch as m  # noqa: E402
 
-random.seed(20260908)
+random.seed(20260918)
 N = 20000
-TOP3 = ["suwon-samsung", "seoul-e-land", "suwon-fc"]
+TOP3 = ["suwon-samsung", "daegu", "suwon-fc", "seoul-e-land"]  # the four clubs in the race for two after Round 26
 SEOUL = "seoul-e-land"
 
 base_pts = {s: m.TABLE[s][1] * 3 + m.TABLE[s][2] for s in m.TABLE}
@@ -106,11 +106,12 @@ for r in runs:
 
 # Suwon FC final points distribution and Seoul's too
 sfc_dist = Counter(r["pts"]["suwon-fc"] for r in runs)
+daegu_dist = Counter(r["pts"]["daegu"] for r in runs)
 seoul_dist = Counter(r["pts"][SEOUL] for r in runs)
 ssb_dist = Counter(r["pts"]["suwon-samsung"] for r in runs)
 
 # Round 26 branch
-r26 = (26, "seoul-e-land", "suwon-samsung")
+r26 = (27, "seoul-e-land", "daegu")
 branch = defaultdict(lambda: Counter())
 for r in runs:
     h, a = r["results"][r26]
@@ -121,12 +122,13 @@ for r in runs:
     c["seoul_first"] += r["order"][0] == SEOUL
     c["ssb_first"] += r["order"][0] == "suwon-samsung"
     c["sfc_top2"] += top2(r, "suwon-fc")
+    c["daegu_top2"] += top2(r, "daegu")
 
 # Swing analysis: for each rival fixture, P(Seoul top2 | rival wins) vs P(Seoul top2 | rival fails to win)
 swing = []
 for f in m.FIXTURES:
     rnd, home, away = f
-    for rival in ("suwon-samsung", "suwon-fc"):
+    for rival in ("suwon-samsung", "suwon-fc", "daegu"):
         if rival not in (home, away):
             continue
         won = [0, 0]; notwon = [0, 0]
@@ -176,14 +178,14 @@ level_ssb = sum(1 for r in runs if r["pts"][SEOUL] == r["pts"]["suwon-samsung"])
 pairs = Counter(tuple(sorted(r["order"][:2])) for r in runs)
 
 # Seoul win-out scenario and other point targets
-winout = [r for r in runs if r["pts"][SEOUL] >= 69]
+winout = [r for r in runs if r["pts"][SEOUL] >= 66]  # 45 + 21
 p_top2_given = {k: round(v[1] / v[0], 3) for k, v in sorted(by_seoul_pts.items()) if v[0] >= 50}
 # minimum Seoul total that reached top2 in >=95% of runs
 safe = next((k for k, v in sorted(p_top2_given.items()) if v >= 0.95), None)
 coinflip = min(p_top2_given, key=lambda k: abs(p_top2_given[k] - 0.5))
 
 # Suwon FC: probability they drop at least X points across nine games (max 27)
-sfc_dropped = Counter(71 - r["pts"]["suwon-fc"] for r in runs)  # 44 + 27 = 71
+sfc_dropped = Counter(69 - r["pts"]["suwon-fc"] for r in runs)  # 45 + 24 = 69
 
 out = {
     "n_sims": N,
@@ -194,6 +196,8 @@ out = {
     "seoul_safe_total_95": safe, "seoul_coinflip_total": coinflip,
     "seoul_top2_by_sfc_band": {k: {"share": v[0] / N, "p": v[1] / v[0]} for k, v in by_sfc_band.items()},
     "sfc_points_dist": {str(k): v / N for k, v in sorted(sfc_dist.items())},
+    "daegu_points_dist": {str(k): v / N for k, v in sorted(daegu_dist.items())},
+    "daegu_p_at_most": {str(t): sum(v for k, v in daegu_dist.items() if k <= t) / N for t in (55, 57, 58, 59, 60, 61, 62)},
     "seoul_points_dist": {str(k): v / N for k, v in sorted(seoul_dist.items())},
     "ssb_points_dist": {str(k): v / N for k, v in sorted(ssb_dist.items())},
     "sfc_p_at_most": {str(t): sum(v for k, v in sfc_dist.items() if k <= t) / N for t in (57, 58, 59, 60, 61, 62, 63)},
@@ -219,7 +223,7 @@ print("\nP(Seoul top2 | Seoul pts):", out["seoul_top2_by_seoul_pts"])
 print("95% safe total:", safe, " coin-flip total:", coinflip)
 print("P(Seoul top2 | SFC band):", {k: (round(v['share'], 3), round(v['p'], 3)) for k, v in out["seoul_top2_by_sfc_band"].items()})
 print("P(SFC <= t):", {k: round(v, 3) for k, v in out["sfc_p_at_most"].items()})
-print("R26 branch:", {k: {kk: round(vv, 3) for kk, vv in v.items()} for k, v in out["r26_branch"].items()})
+print("R27 branch:", {k: {kk: round(vv, 3) for kk, vv in v.items()} for k, v in out["r26_branch"].items()})
 print("\nTop rival swings:")
 for s in swing[:8]:
     print(f"  R{s['round']} {s['fixture']:32} rival {s['rival']:14} P(win) {s['p_rival_win']:.0%}  Seoul top2 if win {s['seoul_top2_if_rival_wins']:.0%} / if not {s['seoul_top2_if_not']:.0%}  swing {s['swing']:.0%}")

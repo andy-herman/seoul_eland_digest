@@ -6,93 +6,79 @@ status: "draft"
 season: "2026"
 league: "K League 2"
 label: "Chasing K1"
-round_range: "26-34"
-date: "2026-09-07"
+round_range: "27-34"
+date: "2026-09-18"
 opponent: ""
 tags: [seoul-eland, promotion-race, weekly, playoff-race]
 ---
 
 # Chasing K1: The Promotion Race, Week by Week
 
-Refreshed after every round. For Seoul E-Land themselves rather than the race around them, see the [State of the Club](/previews/2026-state-of-the-club-august) report, and the [Tracker](/tracker) grades our own July prediction week by week.
+Refreshed after every round. For Seoul E-Land themselves rather than the race around them, see the [State of the Club](/previews/2026-state-of-the-club-august) report, and the [Tracker](/tracker) grades our July and September predictions week by week. The full updated projection after Round 26 is in [Outlook After Round 26](/previews/2026-outlook-after-round-26).
 
-## Where It Stands After Round 25
+## Where It Stands After Round 26
 
-| # | Club | P | Pts | Remaining | Home left | Away left | vs top six | Model |
-|---|---|---|---|---|---|---|---|---|
-| 1 | Suwon Samsung Bluewings | 24 | 50 | 8 | 4 | 4 | 3 | 65 |
-| 2 | **Seoul E-Land** | 24 | **45** | 8 | 5 | 3 | 2 | **60** |
-| 3 | Suwon FC | 23 | 44 | 9 | 6 | 3 | 1 | 62 |
-| 4 | Daegu FC | 24 | 43 | 8 | 4 | 4 | 2 | 57 |
-| 5 | Hwaseong FC | 24 | 40 | 8 | 0 | 8 | 2 | 51 |
-| 6 | Busan IPark | 24 | 38 | 8 | 4 | 4 | 0 | 52 |
+| # | Club | P | Pts | GF | Remaining | Home left | Away left | vs top six | Model |
+|---|---|---|---|---|---|---|---|---|---|
+| 1 | Suwon Samsung Bluewings | 25 | 53 | 39 | 7 | 4 | 3 | 2 | 67 |
+| 2 | Daegu FC | 25 | 46 | 47 | 7 | 3 | 4 | 2 | 58 |
+| 3 | Suwon FC | 24 | 45 | 47 | 8 | 5 | 3 | 1 | 61 |
+| 4 | **Seoul E-Land** | 25 | **45** | 43 | 7 | 4 | 3 | 1 | **58** |
+| 5 | Hwaseong FC | 25 | 43 | 39 | 7 | 0 | 7 | 2 | 54 |
+| 6 | Busan IPark | 25 | 41 | 41 | 7 | 4 | 3 | 0 | 52 |
 
-Two clubs go up automatically. The model still has Seoul third, but the gap to the projected second place has narrowed from three points to two, and the fixture that can flip it is on Saturday.
+Two clubs go up automatically. The leaders are effectively there: the model gives Suwon Samsung an 85 percent chance of the title and a 97 percent chance of the top two. The second place is a three-way fight between Daegu, Suwon FC and Seoul, and the model has Suwon FC as the favorite for it at 47 percent, Daegu 20, Seoul 19.
 
-## What Changed Over Two Rounds
+Seoul are fourth on goals scored: level with Suwon FC on 45 but four goals behind on the first tiebreaker, and Suwon FC have a game in hand.
 
-This edition covers two rounds, and they pulled in opposite directions.
+## What Changed in Round 26
 
-**Round 24 was the bad week.** Seoul drew 1-1 at Seongnam, conceding to a goalmouth scramble and needing Gabriel's 83rd-minute header to rescue a point, while everyone around them won: Suwon Samsung put four past Gimpo in front of 7,525, Suwon FC beat Busan for a tenth straight match unbeaten, Daegu won at Ansan on a Cesinha brace, and Hwaseong beat Cheongju in their last home game of the season. For one week Seoul were fourth, level on 42 with Daegu and behind them on the goals-scored tiebreaker.
+Everything, in the wrong direction. Seoul lost 0-1 at home to the leaders in front of a club league-record 11,077, conceding to a corner routine on nine minutes and then putting 18 shots and 11 corners into a reserve goalkeeper without scoring. The nine-match unbeaten run is over. Around them:
 
-**Round 25 was the good one.** [[Ahn Joo-wan]] scored twice before halftime at Cheongju, the youngest brace in K League history, and Seoul won 2-0 for Kim Do-gyun's 100th career win and a ninth straight match unbeaten. Around them the rivals blinked: Suwon FC drew at Yongin, Daegu drew 0-0 at Paju, Hwaseong drew at Cheonan, and Busan lost at home to Ansan for an eighth winless match in all competitions. Only Suwon Samsung kept pace, beating Chungnam Asan 2-0 to become the first club to 50 points.
+- **Daegu** beat Yongin 3-1 with Deckers scoring twice and Seraphim off the bench, their sixth match unbeaten, and moved to second on 46.
+- **Suwon FC** drew 1-1 at home with Cheonan, who played the last 40 minutes with ten men. They were without Frizzo, their 13-goal top scorer, who is out for about a month with a concussion, and manager Park Kun-ha was sent off in the dugout. Two points dropped, but the draw was still enough to move above Seoul on goals.
+- **Hwaseong** won 2-0 at Ansan in the first of their nine straight away matches, Plana from the spot and Ilyutchenko in stoppage time. Plana was named Player of the Round with 11 goals and 9 assists.
+- **Busan** beat bottom club Gimhae 2-0 to end an eight-match winless run, five days after the league banned their top scorer Christian for 15 matches for drunk driving.
 
-Net effect: Seoul are back to second, five points behind the leaders and one ahead of Suwon FC, who still have a game in hand. The model has closed the projected gap between Seoul and Suwon FC to two points.
+Net effect: Seoul went from second to fourth in 26 hours, the projected gap to second place went from two points against them to three, and the model's top-two probability for Seoul fell from 37 percent to 21.
 
-## The Fixture Lists Are Not Equal, and It Is Not Close
+## The Fixture Lists, Updated
 
-**Hwaseong FC have no home games left. None.** All eight remaining are away, and they have already dropped points at Jeonnam and Cheonan in the first three weeks of the gauntlet. The model has them sixth and the arithmetic has them as the contender most likely to fall out of the playoff places, not into the top two.
+**Suwon Samsung sit out Round 27** and then face Ansan, Hwaseong and Yongin at home, Seongnam, Daegu and Jeonnam away. Two of their seven are against top-six sides. The model has them dropping about five points in seven matches.
 
-**Suwon FC have six home matches from nine and the game in hand.** That is still the friendliest run-in in the table and the reason the model keeps them above Seoul. Two things have changed, though: they have drawn nine of twenty-three, the draw at Yongin cost them two points they could not afford, and their one remaining contender fixture is Hwaseong at home in Round 28. Their route is entirely about beating the bottom half, and they have started drawing with it.
+**Daegu have the hardest run-in of the three chasers.** Mokdong on Saturday, then Suwon Samsung at home in Round 31, plus trips to Jeonnam, Seongnam and Cheonan, with Cheongju and Gimhae at home. Three of seven at home. They have not beaten a current top-six side away all season.
 
-**Seoul E-Land's run-in has tilted homeward: five of eight at Mokdong**, including both contender fixtures, back to back, starting Saturday. Five home matches at a ground where Seoul have lost three times this season is either the advantage the calendar owes them or the exact problem it keeps exposing.
+**Suwon FC still have the friendliest calendar and it just got harder to use.** Five of their remaining eight are at home, where they are unbeaten, and the only top-six opponent left is Hwaseong. But Frizzo's absence covers at least Jeonnam away on Saturday and probably Hwaseong on October 9, and they have now drawn ten of 24. Their model projection dropped from 62 to 61.
 
-## The Five Matches That Decide It
+**Seoul E-Land: four of seven at home, one top-six opponent left, and it is Saturday.** After Daegu the run-in is Gimpo away, Gimhae and Jeonnam at home, Yongin away, Chungnam Asan at home, Gyeongnam away. Five of the six are against clubs currently ninth or lower. The calendar is not the problem. The problem is that the clubs above Seoul have calendars just as soft.
 
-Suwon FC beat Busan in Round 24, so five contender fixtures remain:
+**Hwaseong** are at Seongnam on Sunday, then Suwon FC, Suwon Samsung, Paju, Gyeongnam, Gimhae and Gimpo, all away. The model has them fifth and in the playoffs 99 percent of the time.
 
-| Round | Fixture |
-|---|---|
-| **26** | **Seoul E-Land v Suwon Samsung Bluewings** (Sat Sep 12, Mokdong) |
-| **27** | **Seoul E-Land v Daegu FC** (Sat Sep 19, Mokdong) |
-| 28 | Suwon FC v Hwaseong FC |
-| 29 | Suwon Samsung v Hwaseong FC |
-| 31 | Daegu v Suwon Samsung |
+## The Matches That Decide It
 
-Seoul are in the first two, at home, eight days apart, and then never play a top-six side again. Suwon Samsung are in three, Suwon FC in one. This is the whole reason the model's Suwon FC projection is fragile: they have the easiest path on paper and no direct way to hurt anyone above them, while Seoul can take points off both of the clubs currently projected around them without leaving Yangcheon-gu.
+Three fixtures between the top six remain, plus the one on Saturday that matters most:
 
-The stakes of Saturday, in points: a Seoul win makes the gap two with seven to play and Suwon Samsung still facing Hwaseong and Daegu. A draw keeps it five. A defeat makes it eight, and the top spot is functionally gone, leaving Seoul to fight Suwon FC for second with the worse fixture list.
+| Round | Date | Fixture | Why it matters |
+|---|---|---|---|
+| **27** | **Sat Sep 19** | **Seoul E-Land v Daegu** | The last match in which Seoul can take points directly off a rival for second |
+| 28 | Fri Oct 9 | Suwon FC v Hwaseong | Suwon FC's only remaining top-six fixture; Frizzo doubtful |
+| 29 | Sun Oct 18 | Suwon Samsung v Hwaseong | Title arithmetic |
+| 31 | Sun Nov 1 | Daegu v Suwon Samsung | Daegu's last chance to hurt the leaders; a Suwon Samsung win here likely seals the title |
+
+The model's read on Saturday: Seoul 41 percent, draw 29, Daegu 30. A Seoul win lifts their top-two chance to 35 percent and drops Daegu's to 11. A Daegu win puts Daegu at 42 percent and Seoul at 7.
 
 ## What Seoul Actually Need
 
-Seoul are averaging 1.88 points per game. Sustaining that over the last eight lands at 60, which is exactly what the model projects, and which the model also says is third. So the honest target is not "keep it up." It is beat the projection by two or three points, and there are only two places to do that: Saturday and the Saturday after.
+Seoul are averaging 1.80 points per game. Sustaining that over seven lands at 58, which is what the model projects, and which the model says is fourth more often than third. The honest target is 62: at that total Seoul finish in the top two 57 percent of the time, and at 64 it is 83 percent. Sixty-two is 17 points from seven matches, or five wins and two draws.
 
-The model's Suwon Samsung projection of 65 assumes 2.08 points per game against a run-in that includes three contender fixtures. Beat them once and their projection drops below 63; Seoul's rises above 62. That single result is worth more to the race than any other ninety minutes left in the season, for either club.
-
-The [Tracker](/tracker) has the round-by-round grading of our July prediction. It called Round 24 a draw and got it right; it called Round 25 a loss and Seoul won, which is the second time this month the team has beaten the prediction on the good side.
+The other half of the equation is Suwon FC. For 60 Seoul points to be enough for second, Suwon FC need to finish on 59 or fewer, which means dropping 10 of their remaining 24 points. The model gives that 35 percent. Their next three, Jeonnam away without Frizzo, Hwaseong at home, Seongnam away, are where those points would be dropped if they are going to be.
 
 ## The Case For and Against Each Rival
 
-**Suwon Samsung Bluewings (50).** The best defense in the division, 20 conceded in 24, three straight wins, eight unbeaten, and the only club to have kept pace with every result around them. The case against: their remaining eight include three contender fixtures and a visit to Mokdong first, and Korean media are already framing their season as a redemption arc after failing to get promoted in 2024 and 2025. That is pressure this club has not handled well twice.
+**Suwon Samsung Bluewings (53).** Twenty goals conceded in 25, four straight wins, nine unbeaten, and they just won at Mokdong without two starters and their first-choice goalkeeper. The case against is thin: Ko Seung-beom and Bruno Silva are out until October, Kim Jun-hong is at the Asian Games until October 4, and Daegu away in November is the one match left that can bite. Lee Jung-hyo said the win at Seoul was the moment his team stopped feeling chased.
 
-**Suwon FC (44, one game in hand).** Eleven unbeaten, a club record, and the friendliest calendar. But nine draws in twenty-three is a habit, not an accident, and they just extended it against Yongin. If they keep drawing with the bottom half, the game in hand is worth one point, not three.
+**Daegu FC (46).** Six unbeaten, 8 scored and 3 conceded in the last five, Kim Dae-woo and Hwang Jae-won back from bans, Deckers with three in two. The case against: Edgar and Kim Hyung-jin are still out, Cesinha is 36 and the attack still runs through him, and their away record against the top six this season is two draws and two defeats including a 1-5. Saturday is their first away match against a top-six side under Choi Sung-yong with the full midfield available.
 
-**Daegu FC (43).** Cesinha's brace at Ansan and a goalless draw at Paju sums them up: dangerous when the veterans deliver, toothless when they do not. A trip to Mokdong on the 19th and a home date with the leaders in Round 31 are two chances to shape the race and two chances to be shaped by it.
+**Suwon FC (45, one game in hand).** Twelve unbeaten, unbeaten at home, five of eight at home, goals-scored tiebreak in their pocket. The case against has grown: no Frizzo for a month, a manager watching the next match from the stands, ten draws in 24, and five regulars one yellow card from a ban. They have taken two points from their last two matches against the 11th and 14th-placed clubs.
 
-**Hwaseong FC (40).** Zero home matches left. Two draws and a defeat in the first three away legs. The football was the story of the summer; the calendar is the story of the autumn.
-
-**Busan IPark (38).** Eight winless in all competitions, lost at home to fifteenth-placed Ansan, no contender fixtures left to make up ground directly. The model has them above Hwaseong only because they get to sleep in their own beds four more times.
-
-## What to Watch Next Round
-
-**Saturday, September 12, 16:30, Mokdong Stadium: Seoul E-Land v Suwon Samsung Bluewings.** The biggest match in this club's history, and this column has a full piece on why. The model makes Seoul narrow favorites at home, 39% to 32% with 29% for the draw, which is a polite way of saying it is a coin with a slight lean.
-
-Elsewhere: Suwon FC host eleven-winless Cheonan on Sunday, Daegu host Yongin, Hwaseong travel to Ansan, and Busan host bottom-placed Gimhae. Paju have the bye.
-
-The best possible weekend for Seoul: win, and watch Cheonan or Yongin steal a point. The acceptable weekend: draw, and hope the same. Anything else and the conversation shifts to second place.
-
-## Method
-
-Positions and records are the completed Round 25 table, cross-checked against three independent sources with arithmetic integrity checks. Remaining fixtures and venues are validated against the K League's own published schedule, so the home and away splits above are the real ones rather than an assumption. Projections come from the same fixture-by-fixture model that drives the [Tracker](/tracker): each club is rated on points per game, home advantage is a fixed adjustment, and every remaining match is simulated to an expected-points value.
-
-The model does not know about injuries, suspensions, form streaks or the weather. It is a baseline to argue with, not a forecast to trust.
+**Hwaseong FC (43) and Busan (41).** Both are playoff clubs, not automatic-promotion clubs; the model gives them a combined 1.6 percent chance of the top two. Hwaseong's nine-match road trip started with a win. Busan's winless run ended against the worst team in the league and their best striker is banned for the rest of the season.

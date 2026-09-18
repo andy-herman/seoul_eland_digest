@@ -180,7 +180,9 @@ fixtures:
     date: 2026-09-12
     venue: home
     opponent: "Suwon Bluewings"
-    result: "TBD"
+    home_score: 0
+    away_score: 1
+    result: "L 0-1"
   - round: 27
     date: 2026-09-19
     venue: home
