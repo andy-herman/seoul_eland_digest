@@ -111,11 +111,13 @@ seoul_dist = Counter(r["pts"][SEOUL] for r in runs)
 ssb_dist = Counter(r["pts"]["suwon-samsung"] for r in runs)
 
 # Round 26 branch
-r26 = (27, "seoul-e-land", "daegu")
+r26 = (28, "gimpo", "seoul-e-land")  # next Seoul fixture; "W" below means a Seoul win
 branch = defaultdict(lambda: Counter())
 for r in runs:
     h, a = r["results"][r26]
-    key = "W" if h > a else "D" if h == a else "L"
+    seoul_home = r26[1] == SEOUL
+    sg, og = (h, a) if seoul_home else (a, h)
+    key = "W" if sg > og else "D" if sg == og else "L"
     c = branch[key]
     c["n"] += 1
     c["seoul_top2"] += top2(r, SEOUL)
@@ -178,14 +180,14 @@ level_ssb = sum(1 for r in runs if r["pts"][SEOUL] == r["pts"]["suwon-samsung"])
 pairs = Counter(tuple(sorted(r["order"][:2])) for r in runs)
 
 # Seoul win-out scenario and other point targets
-winout = [r for r in runs if r["pts"][SEOUL] >= 66]  # 45 + 21
+winout = [r for r in runs if r["pts"][SEOUL] >= 66]  # 48 + 18
 p_top2_given = {k: round(v[1] / v[0], 3) for k, v in sorted(by_seoul_pts.items()) if v[0] >= 50}
 # minimum Seoul total that reached top2 in >=95% of runs
 safe = next((k for k, v in sorted(p_top2_given.items()) if v >= 0.95), None)
 coinflip = min(p_top2_given, key=lambda k: abs(p_top2_given[k] - 0.5))
 
 # Suwon FC: probability they drop at least X points across nine games (max 27)
-sfc_dropped = Counter(69 - r["pts"]["suwon-fc"] for r in runs)  # 45 + 24 = 69
+sfc_dropped = Counter(69 - r["pts"]["suwon-fc"] for r in runs)  # 48 + 21 = 69
 
 out = {
     "n_sims": N,
@@ -223,7 +225,7 @@ print("\nP(Seoul top2 | Seoul pts):", out["seoul_top2_by_seoul_pts"])
 print("95% safe total:", safe, " coin-flip total:", coinflip)
 print("P(Seoul top2 | SFC band):", {k: (round(v['share'], 3), round(v['p'], 3)) for k, v in out["seoul_top2_by_sfc_band"].items()})
 print("P(SFC <= t):", {k: round(v, 3) for k, v in out["sfc_p_at_most"].items()})
-print("R27 branch:", {k: {kk: round(vv, 3) for kk, vv in v.items()} for k, v in out["r26_branch"].items()})
+print("Next-match branch:", {k: {kk: round(vv, 3) for kk, vv in v.items()} for k, v in out["r26_branch"].items()})
 print("\nTop rival swings:")
 for s in swing[:8]:
     print(f"  R{s['round']} {s['fixture']:32} rival {s['rival']:14} P(win) {s['p_rival_win']:.0%}  Seoul top2 if win {s['seoul_top2_if_rival_wins']:.0%} / if not {s['seoul_top2_if_not']:.0%}  swing {s['swing']:.0%}")
