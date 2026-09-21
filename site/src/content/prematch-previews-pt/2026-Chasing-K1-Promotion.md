@@ -16,7 +16,7 @@ tags: [seoul-eland, promotion-race, weekly, playoff-race]
 
 Atualizado após cada rodada. Para o Seoul E-Land em si, e não a corrida ao redor, veja o relatório [Estado do Clube](/pt/previews/2026-state-of-the-club-august), e o [Rastreador](/pt/tracker) avalia nossas previsões de julho e setembro semana a semana. A atualização do modelo após a 26ª rodada está em [Panorama Após a 26ª Rodada](/pt/previews/2026-outlook-after-round-26); os números abaixo foram rodados de novo após os resultados de sábado da 27ª rodada.
 
-## Onde Está Após a 27ª Rodada (jogos de sábado)
+## Onde Está Após a 27ª Rodada
 
 | # | Clube | J | Pts | GP | Restantes | Em casa | Fora | vs top 6 | Modelo |
 |---|---|---|---|---|---|---|---|---|---|
@@ -24,10 +24,10 @@ Atualizado após cada rodada. Para o Seoul E-Land em si, e não a corrida ao red
 | 2 | Suwon FC | 25 | 48 | 50 | 7 | 5 | 2 | 1 | 63 |
 | 3 | **Seoul E-Land** | 26 | **48** | 45 | 6 | 3 | 3 | 0 | **60** |
 | 4 | Daegu FC | 26 | 46 | 48 | 6 | 3 | 3 | 1 | 57 |
-| 5 | Hwaseong FC | 25 | 43 | 39 | 7 | 0 | 7 | 2 | 53 |
+| 5 | Hwaseong FC | 26 | 44 | 41 | 6 | 0 | 6 | 2 | 52 |
 | 6 | Busan IPark | 26 | 41 | 41 | 6 | 3 | 3 | 0 | 50 |
 
-O Hwaseong joga em Seongnam no domingo à noite; os outros jogos de domingo não envolvem ninguém desta tabela. O Suwon Samsung folgou. O Suwon FC está acima do Seoul nos gols marcados, o primeiro critério de desempate, por cinco.
+O Hwaseong empatou em 2-2 em Seongnam no domingo, gols de Ilyutchenko e Lee Rae-jun, e segue em quinto. O Suwon Samsung folgou. O Suwon FC está acima do Seoul nos gols marcados, o primeiro critério de desempate, por cinco.
 
 Dois clubes sobem diretamente. O Suwon Samsung tem 80 por cento para o título e 96 por cento para o top 2. A segunda vaga é agora uma corrida de dois entre Suwon FC e Seoul: o modelo coloca o Suwon FC com 76 por cento de top 2 e o Seoul com 23, com a chance do Daegu caindo de 23 para 6 por cento em uma noite em Mokdong.
 

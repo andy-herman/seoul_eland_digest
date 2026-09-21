@@ -16,7 +16,7 @@ tags: [seoul-eland, promotion-race, weekly, playoff-race]
 
 Refreshed after every round. For Seoul E-Land themselves rather than the race around them, see the [State of the Club](/previews/2026-state-of-the-club-august) report, and the [Tracker](/tracker) grades our July and September predictions week by week. The model refresh after Round 26 is in [Outlook After Round 26](/previews/2026-outlook-after-round-26); the numbers below are rerun again after Saturday's Round 27 results.
 
-## Where It Stands After Round 27 (Saturday matches)
+## Where It Stands After Round 27
 
 | # | Club | P | Pts | GF | Remaining | Home left | Away left | vs top six | Model |
 |---|---|---|---|---|---|---|---|---|---|
@@ -24,10 +24,10 @@ Refreshed after every round. For Seoul E-Land themselves rather than the race ar
 | 2 | Suwon FC | 25 | 48 | 50 | 7 | 5 | 2 | 1 | 63 |
 | 3 | **Seoul E-Land** | 26 | **48** | 45 | 6 | 3 | 3 | 0 | **60** |
 | 4 | Daegu FC | 26 | 46 | 48 | 6 | 3 | 3 | 1 | 57 |
-| 5 | Hwaseong FC | 25 | 43 | 39 | 7 | 0 | 7 | 2 | 53 |
+| 5 | Hwaseong FC | 26 | 44 | 41 | 6 | 0 | 6 | 2 | 52 |
 | 6 | Busan IPark | 26 | 41 | 41 | 6 | 3 | 3 | 0 | 50 |
 
-Hwaseong play at Seongnam on Sunday evening; the other Sunday matches involve nobody in this table. Suwon Samsung had the bye. Suwon FC are above Seoul on goals scored, the first tiebreaker, by five.
+Hwaseong drew 2-2 at Seongnam on Sunday, Ilyutchenko and Lee Rae-jun scoring, to stay fifth. Suwon Samsung had the bye. Suwon FC are above Seoul on goals scored, the first tiebreaker, by five.
 
 Two clubs go up automatically. Suwon Samsung are 80 percent for the title and 96 percent for the top two. The second place is now a two-horse race between Suwon FC and Seoul: the model has Suwon FC at 76 percent for the top two and Seoul at 23, with Daegu's chance falling from 23 to 6 percent in one evening at Mokdong.
 

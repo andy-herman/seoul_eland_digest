@@ -45,26 +45,26 @@ AWAY_GOALS = 1.21
 RHO = -0.10                 # Dixon-Coles low-score correlation
 
 # ---------------------------------------------------------------------------
-# Table after Round 27 Saturday matches (en/ko wikipedia 2026-09-19); Sunday R27 fixtures still to play. slug: (P, W, D, L, GF, GA)
+# Table after Round 27 (en/ko wikipedia, 2026-09-20). slug: (P, W, D, L, GF, GA)
 # ---------------------------------------------------------------------------
 TABLE = {
     "suwon-samsung": (25, 16, 5, 4, 39, 20),
     "seoul-e-land": (26, 14, 6, 6, 45, 30),
     "suwon-fc": (25, 13, 9, 3, 50, 29),
     "daegu": (26, 13, 7, 6, 48, 35),
-    "hwaseong": (25, 12, 7, 6, 39, 25),
+    "hwaseong": (26, 12, 8, 6, 41, 27),
     "busan-ipark": (26, 12, 5, 9, 41, 34),
     "chungnam-asan": (25, 9, 7, 9, 34, 31),
     "gimpo": (25, 8, 11, 6, 31, 30),
-    "gyeongnam": (24, 8, 9, 7, 31, 30),
-    "seongnam": (24, 7, 9, 8, 26, 28),
-    "yongin": (24, 5, 11, 8, 31, 35),
-    "paju": (24, 7, 5, 12, 22, 28),
-    "cheongju": (25, 4, 14, 7, 28, 39),
+    "gyeongnam": (25, 8, 10, 7, 31, 30),
+    "seongnam": (25, 7, 10, 8, 28, 30),
+    "yongin": (25, 5, 12, 8, 31, 35),
+    "paju": (25, 8, 5, 12, 24, 28),
+    "cheongju": (26, 5, 14, 7, 31, 41),
     "cheonan": (26, 4, 11, 11, 30, 37),
-    "ansan": (25, 6, 4, 15, 25, 46),
+    "ansan": (26, 6, 4, 16, 27, 49),
     "jeonnam": (25, 4, 9, 12, 28, 43),
-    "gimhae": (24, 2, 7, 15, 19, 47),
+    "gimhae": (25, 2, 7, 16, 19, 49),
 }
 NAMES = {
     "suwon-samsung": "Suwon Samsung", "seoul-e-land": "Seoul E-Land", "suwon-fc": "Suwon FC",
@@ -89,11 +89,11 @@ LAST5 = {
     "suwon-samsung": (10, 3),   # 2-2 Suwon FC, 1-0 Cheonan, 4-1 Gimpo, 2-0 Asan, 1-0 at Seoul
     "daegu": (7, 4),            # 1-1 Busan, 2-1 Ansan, 0-0 Paju, 3-1 Yongin, 1-2 at Seoul
     "suwon-fc": (9, 3),         # 2-0 Gimhae, 2-1 Busan, 1-1 Yongin, 1-1 Cheonan, 3-0 at Jeonnam
-    "hwaseong": (5, 3),         # 0-0 Busan, 0-1 Jeonnam, 2-1 Cheongju, 1-1 Cheonan, 2-0 at Ansan
+    "hwaseong": (7, 5),         # 0-1 Jeonnam, 2-1 Cheongju, 1-1 Cheonan, 2-0 Ansan, 2-2 Seongnam
     "busan-ipark": (4, 4),      # 1-1 Daegu, 1-2 Suwon FC, 0-1 Ansan, 2-0 Gimhae, 0-1 at Gimpo
-    "gimhae": (3, 9),
-    "yongin": (8, 8),           # 1-3 at Daegu ends the 2-2-1 run
-    "gyeongnam": (4, 3),        # 1-0 Seongnam, back-to-back wins
+    "gimhae": (2, 8),           # 0-2 Busan, 0-2 Paju
+    "yongin": (5, 6),           # 1-3 Daegu then 0-0 Gyeongnam
+    "gyeongnam": (4, 2),        # 1-0 Seongnam, 0-0 Yongin; five unbeaten
     "jeonnam": (6, 7),          # 2-2 Gimpo then 0-3 Suwon FC
     "gimpo": (6, 6),            # 1-1, 1-4, 1-2, 2-2, 1-0 Busan
     "chungnam-asan": (6, 5),    # 3-1 Cheonan
@@ -103,7 +103,7 @@ LAST5 = {
 # Remaining fixtures involving a contender (mirrors site/src/data/seasonRivals.ts)
 # ---------------------------------------------------------------------------
 FIXTURES = [
-    (27, "seongnam", "hwaseong"),
+    
     (28, "suwon-fc", "hwaseong"), (28, "gimpo", "seoul-e-land"), (28, "suwon-samsung", "ansan"),
     (28, "paju", "busan-ipark"),
     (29, "suwon-samsung", "hwaseong"), (29, "seoul-e-land", "gimhae"), (29, "busan-ipark", "jeonnam"),

@@ -324,6 +324,35 @@ teams:
               note: "Former Daegu player (50 apps, 2024-25); bench role with a late job likely."
             - player: "Kim Oh-kyu"
               note: "Booked in stoppage time against Suwon, on four yellows; a card here costs the Gimpo match."
+        - round: 28
+          opponent_id: gimpo-fc
+          label: "Predicted Seoul XI"
+          formation: "4-3-3"
+          team_name: "Seoul E-Land"
+          note: "Park Chang-hwan back from suspension into the default 4-3-3; Cho Jun-hyun keeps a midfield place after his goal against Daegu, Ahn Joo-wan back on the wing. Official team sheet may differ at kickoff."
+          starters:
+            - { name: "Min Sung-jun", role: "GK", line: "goalkeeper" }
+            - { name: "Oh In-pyo", role: "RB", line: "defense" }
+            - { name: "Osmar", role: "RCB", line: "defense" }
+            - { name: "Baek Ji-woong", role: "LCB", line: "defense" }
+            - { name: "Bae Seo-jun", role: "LB", line: "defense" }
+            - { name: "Park Chang-hwan", role: "CM", line: "midfield" }
+            - { name: "Cho Jun-hyun", role: "CM", line: "midfield" }
+            - { name: "Alan Carius", role: "CM", line: "midfield" }
+            - { name: "Euller", role: "RF", line: "attack" }
+            - { name: "Park Jae-yong", role: "ST", line: "attack" }
+            - { name: "Ahn Joo-wan", role: "LF", line: "attack" }
+          basis:
+            - "Round 27 was a 3-4-3 built around Park Chang-hwan's absence; with the captain back and Gimpo a deep-sitting side, the 4-3-3 used since July is the default."
+            - "Cho Jun-hyun scored his first professional goal against Daegu and is a coin flip with Yoon Seok-ju for the third midfield place."
+            - "Ahn Joo-wan was the most dangerous player in the second half against Daegu after starting on the bench."
+          selection_watch:
+            - player: "Yoon Seok-ju"
+              note: "Started every big match since the summer; may keep his place over Cho Jun-hyun."
+            - player: "Lee Ju-hyeok"
+              note: "Started on the left against Daegu, withdrawn at halftime as planned; alternative to Ahn Joo-wan."
+            - player: "Caio Marcelo"
+              note: "Started in the back three against his old club; first defensive change if the manager reverts to a back four."
     collection_plan:
       priority_queries: ["서울이랜드 김도균", "서울이랜드 전술", "서울이랜드 부상", "서울이랜드 경기 리뷰"]
       data_to_collect: ["lineups", "formations", "injuries", "manager quotes", "set-piece details", "substitution patterns"]
