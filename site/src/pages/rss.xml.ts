@@ -57,7 +57,16 @@ export async function GET(context: APIContext) {
     category: "guide",
   }));
 
-  const items = [...digestItems, ...previewItems, ...guideItems].sort(
+  const articles = await getCollection("articles");
+  const articleItems: FeedItem[] = articles.map((article) => ({
+    title: article.data.title,
+    link: `${site}/articles/${article.id.replace(/\.md$/, "")}`,
+    pubDate: article.data.date,
+    description: article.data.description,
+    category: "article",
+  }));
+
+  const items = [...digestItems, ...previewItems, ...guideItems, ...articleItems].sort(
     (a, b) => b.pubDate.getTime() - a.pubDate.getTime(),
   );
 

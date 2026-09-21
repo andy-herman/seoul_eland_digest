@@ -23,6 +23,8 @@ const SRC = {
   prematchPreviewsPt: join(VAULT_BASE, "Scouting Report", "K League 2 2026", "Pre-Match Previews-PT"),
   guides: join(VAULT_BASE, "Guides"),
   guidesPt: join(VAULT_BASE, "Guides-PT"),
+  articles: join(VAULT_BASE, "Articles"),
+  articlesPt: join(VAULT_BASE, "Articles-PT"),
 };
 
 const DEST = {
@@ -34,6 +36,8 @@ const DEST = {
   prematchPreviewsPt: join(SITE_BASE, "prematch-previews-pt"),
   guides: join(SITE_BASE, "guides"),
   guidesPt: join(SITE_BASE, "guides-pt"),
+  articles: join(SITE_BASE, "articles"),
+  articlesPt: join(SITE_BASE, "articles-pt"),
 };
 
 function polishFanFacingCopy(content) {
@@ -134,6 +138,12 @@ async function main() {
 
   const guidePtCount = await copyTree(SRC.guidesPt, DEST.guidesPt, undefined, polishFanFacingCopy);
   console.log(`[sync] copied ${guidePtCount} Portuguese guide(s)`);
+
+  const articleCount = await copyTree(SRC.articles, DEST.articles, undefined, polishFanFacingCopy);
+  console.log(`[sync] copied ${articleCount} article(s)`);
+
+  const articlePtCount = await copyTree(SRC.articlesPt, DEST.articlesPt, undefined, polishFanFacingCopy);
+  console.log(`[sync] copied ${articlePtCount} Portuguese article(s)`);
 
   // Always seed empty content folders so Astro doesn't error if vault is empty.
   for (const dir of Object.values(DEST)) {

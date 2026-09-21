@@ -81,4 +81,28 @@ const guidesPt = defineCollection({
   schema: guideSchema,
 });
 
-export const collections = { digests, digestsPt, players, places, koreanCup, koreanCupPt, guides, guidesPt };
+const articleSchema = z.object({
+  title: z.string(),
+  description: z.string(),
+  date: z.coerce.date(),
+  /** Series the piece belongs to, e.g. "Season Review" or "Chasing K1 Weekly". */
+  series: z.string().default("Feature"),
+  /** Roster slug of the featured player; renders the squad card at the top. */
+  player: z.string().optional(),
+  /** Short label shown on the card and list, e.g. "Part 1". */
+  part: z.string().optional(),
+  order: z.number().default(0),
+  tags: z.array(z.string()).default([]),
+});
+
+const articles = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/articles" }),
+  schema: articleSchema,
+});
+
+const articlesPt = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/articles-pt" }),
+  schema: articleSchema,
+});
+
+export const collections = { digests, digestsPt, players, places, koreanCup, koreanCupPt, guides, guidesPt, articles, articlesPt };

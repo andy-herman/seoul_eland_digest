@@ -14,7 +14,7 @@ tags: [seoul-eland, promotion-race, weekly, playoff-race]
 
 # Chasing K1: The Promotion Race, Week by Week
 
-Refreshed after every round. For Seoul E-Land themselves rather than the race around them, see the [State of the Club](/previews/2026-state-of-the-club-august) report, and the [Tracker](/tracker) grades our July and September predictions week by week. The model refresh after Round 26 is in [Outlook After Round 26](/previews/2026-outlook-after-round-26); the numbers below are rerun again after Saturday's Round 27 results.
+Refreshed after every round. For Seoul E-Land themselves rather than the race around them, see the [State of the Club](/previews/2026-state-of-the-club-august) report, and the [Tracker](/tracker) grades our July and September predictions week by week. The model refresh after Round 26 is in [Outlook After Round 26](/previews/2026-outlook-after-round-26); the numbers below are rerun after the complete Round 27. From this week there is also a [weekly letter](/articles/2026-chasing-k1-weekly-01) on the Articles tab that tracks the rivals' fixtures round by round and how each week moves Seoul's chance of second.
 
 ## Where It Stands After Round 27
 

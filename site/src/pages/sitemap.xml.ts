@@ -14,6 +14,7 @@ const STATIC_PATHS = [
   "/tracker",
   "/korean-cup",
   "/guides",
+  "/articles",
   "/players",
   "/support",
   "/about",
@@ -23,6 +24,7 @@ const STATIC_PATHS = [
   "/pt/tracker",
   "/pt/korean-cup",
   "/pt/guides",
+  "/pt/articles",
 ];
 
 export async function GET(context: APIContext) {
@@ -53,6 +55,14 @@ export async function GET(context: APIContext) {
   const guidesPt = await getCollection("guidesPt");
   for (const guide of guidesPt) {
     paths.push(`/pt/guides/${guide.id.replace(/\.md$/, "")}`);
+  }
+  const articles = await getCollection("articles");
+  for (const article of articles) {
+    paths.push(`/articles/${article.id.replace(/\.md$/, "")}`);
+  }
+  const articlesPt = await getCollection("articlesPt");
+  for (const article of articlesPt) {
+    paths.push(`/pt/articles/${article.id.replace(/\.md$/, "")}`);
   }
 
   const places = await getCollection("places");

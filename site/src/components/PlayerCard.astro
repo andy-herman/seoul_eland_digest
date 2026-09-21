@@ -1,0 +1,117 @@
+---
+// The "baseball card" for a featured player: photo panel, name, number,
+// position, nationality, and the club's published season line. Data comes
+// from the same official roster feed the Squad page uses, so the article and
+// the roster never disagree.
+import type { OfficialPlayerWithPhoto } from "../lib/officialRoster";
+import { withBase } from "../lib/paths";
+import { fixtures, type MatchFixture } from "../data/matches";
+
+interface Props {
+  player: OfficialPlayerWithPhoto;
+  lang?: "en" | "pt";
+}
+
+const { player, lang = "en" } = Astro.props;
+const t =
+  lang === "pt"
+    ? {
+        eyebrow: "Cartão do jogador",
+        season: "temporada",
+        apps: "Jogos",
+        of: "de",
+        goals: "Gols",
+        assists: "Assist.",
+        minutes: "Minutos",
+        yellows: "Amarelos",
+        height: "Altura",
+        weight: "Peso",
+        born: "Nascimento",
+        squad: "Ver no elenco",
+        official: "K League 2 · números oficiais do clube",
+      }
+    : {
+        eyebrow: "Player card",
+        season: "season",
+        apps: "Apps",
+        of: "of",
+        goals: "Goals",
+        assists: "Assists",
+        minutes: "Minutes",
+        yellows: "Yellows",
+        height: "Height",
+        weight: "Weight",
+        born: "Born",
+        squad: "Squad profile",
+        official: "K League 2 · official club figures",
+      };
+
+const stats = player.stats ?? {};
+const teamMatches = fixtures.filter((m: MatchFixture) => m.result && m.result !== "TBD").length;
+const birthday = player.birthday
+  ? new Date(player.birthday).toLocaleDateString(lang === "pt" ? "pt-BR" : "en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      timeZone: "UTC",
+    })
+  : undefined;
+
+const line = [
+  { label: t.apps, value: stats.appearances, sub: teamMatches ? `${t.of} ${teamMatches}` : undefined },
+  { label: t.goals, value: stats.goals },
+  { label: t.assists, value: stats.assists },
+  { label: t.minutes, value: stats.minutes },
+  { label: t.yellows, value: stats.yellowCards },
+].filter((c) => c.value != null);
+---
+
+<aside class="player-card supporter-panel overflow-hidden rounded-[1.5rem]" aria-label={`${player.englishName} ${t.eyebrow}`}>
+  <div class="grid gap-0 sm:grid-cols-[0.8fr_1.2fr]">
+    <div class="relative min-h-64 overflow-hidden sm:min-h-full" style="background: linear-gradient(145deg, var(--color-blue) 0%, var(--color-navy-deep) 76%);">
+      <div class="absolute left-4 top-4 text-7xl font-black leading-none opacity-25" style="color: var(--color-gold);">
+        {player.backNumber}
+      </div>
+      <img
+        src={player.photoUrl}
+        alt={`${player.englishName}`}
+        class="absolute bottom-0 right-0 h-full w-full object-contain object-bottom"
+        loading="lazy"
+      />
+    </div>
+    <div class="p-5 sm:p-6">
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h2 class="mt-2 text-3xl font-black uppercase tracking-tight sm:text-4xl">{player.englishName}</h2>
+      <p class="mt-1 text-lg font-bold" style="color: var(--color-gold-light);">{player.korName}</p>
+      <div class="mt-3 flex flex-wrap gap-2">
+        <span class="metadata-chip">#{player.backNumber}</span>
+        <span class="metadata-chip">{player.englishPosition}</span>
+        <span class="metadata-chip">{player.englishNationality}</span>
+      </div>
+      <dl class="mt-4 grid grid-cols-3 gap-2 text-xs">
+        <div><dt class="font-black uppercase tracking-[0.14em]" style="color: var(--color-muted);">{t.height}</dt><dd class="mt-1 text-base font-black">{player.height ? `${player.height}cm` : "—"}</dd></div>
+        <div><dt class="font-black uppercase tracking-[0.14em]" style="color: var(--color-muted);">{t.weight}</dt><dd class="mt-1 text-base font-black">{player.weight ? `${player.weight}kg` : "—"}</dd></div>
+        <div><dt class="font-black uppercase tracking-[0.14em]" style="color: var(--color-muted);">{t.born}</dt><dd class="mt-1 text-base font-black">{birthday ?? "—"}</dd></div>
+      </dl>
+      {line.length > 0 && (
+        <>
+          <p class="mt-5 text-[0.65rem] font-black uppercase tracking-[0.16em]" style="color: var(--color-muted);">
+            {stats.season ?? new Date().getFullYear()} {t.season} · {t.official}
+          </p>
+          <dl class="mt-2 grid grid-cols-3 gap-2 sm:grid-cols-5">
+            {line.map((c) => (
+              <div class="rounded-xl border p-2.5 text-center" style="background-color: color-mix(in srgb, white 8%, transparent); border-color: var(--color-rule);">
+                <dt class="text-[0.6rem] font-black uppercase tracking-[0.12em]" style="color: var(--color-muted);">{c.label}</dt>
+                <dd class="mt-1 text-2xl font-black leading-none">{c.value}</dd>
+                {c.sub && <p class="mt-1 text-[0.6rem] font-bold" style="color: var(--color-muted);">{c.sub}</p>}
+              </div>
+            ))}
+          </dl>
+        </>
+      )}
+      <a href={withBase(`/players/${player.slug}`)} class="mt-4 inline-block text-xs font-black uppercase tracking-[0.14em] no-underline" style="color: var(--color-gold-light);">
+        {t.squad} →
+      </a>
+    </div>
+  </div>
+</aside>

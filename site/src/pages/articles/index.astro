@@ -1,0 +1,82 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import { withBase } from "../../lib/paths";
+
+const articles = (await getCollection("articles")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime() || a.data.order - b.data.order,
+);
+
+// Group by series so the reader can follow a run of pieces (a player-by-player
+// season review, the weekly promotion-race letter) without hunting.
+const seriesOrder: string[] = [];
+const bySeries = new Map<string, typeof articles>();
+for (const article of articles) {
+  const key = article.data.series;
+  if (!bySeries.has(key)) {
+    bySeries.set(key, []);
+    seriesOrder.push(key);
+  }
+  bySeries.get(key)!.push(article);
+}
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+---
+
+<BaseLayout
+  title="Seoul E-Land Articles"
+  description="Longer reads on Seoul E-Land FC: player-by-player season reviews, the weekly Chasing K1 letter on the promotion race, and features."
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        Articles
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        The longer reads. A player-by-player review of the 2026 season, one man at a time. The weekly Chasing K1 letter on who the rivals play and what it does to Seoul's chance of second. Features when a story needs the room.
+      </p>
+      <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+        {articles.length} {articles.length === 1 ? "article" : "articles"}
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/pt/articles" code="PT" label="Português" ariaLabel="Ler os artigos em português" />
+      </div>
+    </div>
+  </section>
+
+  {seriesOrder.map((series) => (
+    <section aria-label={series} class="mb-10">
+      <h2 class="mb-4 text-xs font-black uppercase tracking-[0.2em]" style="color: var(--color-gold-light);">{series}</h2>
+      <div class="grid gap-4">
+        {bySeries.get(series)!.map((article) => (
+          <a
+            href={withBase(`/articles/${article.id.replace(/\.md$/, "")}`)}
+            class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6"
+            style="background: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));"
+          >
+            <div class="flex flex-wrap items-center gap-2">
+              {article.data.part && <span class="metadata-chip">{article.data.part}</span>}
+              <span class="metadata-chip">{dateFormatter.format(article.data.date)}</span>
+            </div>
+            <h3 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">
+              {article.data.title}
+            </h3>
+            <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">
+              {article.data.description}
+            </p>
+            <p class="mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+              Read →
+            </p>
+          </a>
+        ))}
+      </div>
+    </section>
+  ))}
+</BaseLayout>
