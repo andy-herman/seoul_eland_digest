@@ -16,6 +16,7 @@ const englishNavItems = [
   { href: "/korean-cup", label: "Korean Cup", mobileLabel: "Cup" },
   { href: "/guides", label: "Guides" },
   { href: "/articles", label: "Articles" },
+  { href: "/articles/season-review", label: "Season Review", mobileLabel: "Grades" },
   { href: "/players", label: "Squad" },
 ];
 const navItems = isPortuguese
@@ -27,11 +28,16 @@ const navItems = isPortuguese
       { href: "/pt/korean-cup", label: "Copa da Coreia", mobileLabel: "Copa" },
       { href: "/pt/guides", label: "Guias" },
       { href: "/pt/articles", label: "Artigos" },
+      { href: "/pt/articles/season-review", label: "Avaliação", mobileLabel: "Notas" },
       { href: "/players", label: "Elenco" },
     ]
   : englishNavItems;
 
 function isActive(href: string) {
+  // The hub lives under /articles, so the Articles tab must not light up for it.
+  if (href === "/articles" || href === "/pt/articles") {
+    return pathname.startsWith(href) && !pathname.startsWith(`${href}/season-review`);
+  }
   if (href === "/") {
     return pathname === "/" || pathname.startsWith("/rounds");
   }
