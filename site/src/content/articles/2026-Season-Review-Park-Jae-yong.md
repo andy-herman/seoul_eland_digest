@@ -42,7 +42,7 @@ How the ten went in: two headers, one knee, one calf, one left foot, five right 
 
 **He makes Euller better.** Both of his assists to Euller, at Gimhae and at Suwon FC, were the same move: take the ball with his back to goal, lay it into the space Euller runs onto, get out of the way. The header he knocked down for Euller's volley at Hwaseong was the same move without the goal. The winner against Daegu came the other way around, Euller carrying, Baek Ji-woong passing, Park finishing, and Park's first act afterward was to find Baek and promise him drinks for the rest of the season. He plays like someone who knows the goals are a shared product.
 
-**He is an impact substitute as well as a starter.** Five of his 25 appearances came off the bench, three of them at halftime, and he scored in two of them (Gimhae, Cheonan) and assisted in a third (Ansan). Kim Do-gyun has benched him for Kim Hyun three times this season; each time the attack sharpened when he came on. That is not a criticism of the manager. It is a description of a striker who is more dangerous against a tired defense than a fresh one, which is worth knowing with six matches left against sides with nothing to play for.
+**He is an impact substitute as well as a starter.** Five of his 25 appearances came off the bench, three of them at halftime, and he scored in two of them (Gimhae, Cheonan) and assisted in a third (Ansan). Kim Do-gyun has started Kim Hyun ahead of him six times this season, and when Park came on the attack usually sharpened. That is not a criticism of the manager. It is a description of a striker who is more dangerous against a tired defense than a fresh one, which is worth knowing with six matches left against sides with nothing to play for.
 
 **He works.** Kim Do-gyun's assessment in April was that he is "lacking as a striker in some ways, but has the work rate, the fight and the goals, and a good attitude." Seventy aerial duels won and 18 fouls committed is a center-forward who contests everything. His own account of the move from Jeonbuk is that he wanted to play, felt the club wanted him, and chose a permanent transfer over a loan because he thought Seoul could go up. He has said the pressure is real and that living up to it is "my job."
 
@@ -86,11 +86,11 @@ The best Korean striker in the division by output, on a side that is not built t
 | 8 | Ansan (A) | W 2-0 | Sub | | 1 | Return pass for Byun Kyung-jun |
 | 9 | Hwaseong (H) | L 1-2 | Start | 1 | | Left-foot first-time finish |
 | 10 | Gimpo (H) | W 2-1 | Start | | | |
-| 11 | Chungnam Asan (A) | L 0-3 | Did not play | | | |
+| 11 | Chungnam Asan (A) | L 0-3 | Start | | | Replaced by Kim Hyun on 63 |
 | 12 | Yongin (H) | D 2-2 | Sub, halftime | | | |
 | 13 | Seongnam (H) | W 3-1 | Start | 1 | | Off the calf; Smile School celebration |
 | 14 | Jeonnam (A) | W 1-0 | Start | | | |
-| 15 | Chungbuk Cheongju (H) | L 1-2 | Start | | | |
+| 15 | Chungbuk Cheongju (H) | L 1-2 | Unused substitute | | | Kim Hyun started and scored |
 | 16 | Gimhae (A) | W 3-1 | Sub | 1 | 1 | Rebound goal, lay-off for Euller |
 | 18 | Suwon FC (A) | D 2-2 | Start | | 1 | Lay-off for Euller's equalizer |
 | 19 | Cheonan (H) | W 4-3 | Sub, halftime | 1 | | Right foot from Carius's delivery |
@@ -103,4 +103,4 @@ The best Korean striker in the division by output, on a side that is not built t
 | 26 | Suwon Samsung (H) | L 0-1 | Start | | | Header saved, header off the post |
 | 27 | Daegu (H) | W 2-1 | Start | 1 | | Winner in his 100th K League match; Round MVP |
 
-Statistics from the K League record and the club site, with match detail from the season's digests and Korean match reports. One correction to earlier digests: the official assist on his Hwaseong goal was Byun Kyung-jun's, not Euller's. Part 3 follows.
+Statistics from the K League record and the club site, with match detail from the season's digests and Korean match reports. One correction to earlier digests: the official assist on his Hwaseong goal was Byun Kyung-jun's, not Euller's. This log was corrected on September 22: he started Round 11 and was an unused substitute in Round 15, not the other way around. Part 3 follows.

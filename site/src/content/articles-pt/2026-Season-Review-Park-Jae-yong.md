@@ -42,7 +42,7 @@ Como os dez entraram: duas cabeçadas, um joelho, uma panturrilha, um pé esquer
 
 **Ele torna Euller melhor.** Suas duas assistências para Euller, em Gimhae e no Suwon FC, foram a mesma jogada: receber de costas para o gol, rolar para o espaço em que Euller chega, sair do caminho. A cabeçada que ele ajeitou para o voleio de Euller em Hwaseong foi a mesma jogada sem o gol. O gol da vitória contra o Daegu veio no sentido inverso, Euller conduzindo, Baek Ji-woong passando, Park concluindo, e o primeiro gesto de Park depois foi procurar Baek e prometer bebidas pelo resto da temporada. Ele joga como quem sabe que os gols são um produto compartilhado.
 
-**Ele é reserva de impacto tanto quanto titular.** Cinco de suas 25 aparições vieram do banco, três delas no intervalo, e ele marcou em duas (Gimhae, Cheonan) e deu assistência numa terceira (Ansan). Kim Do-gyun o deixou no banco em favor de Kim Hyun três vezes nesta temporada; em cada uma delas o ataque ficou mais afiado quando ele entrou. Não é crítica ao treinador. É a descrição de um centroavante mais perigoso contra uma defesa cansada do que contra uma descansada, o que vale saber com seis jogos restantes contra times sem nada a disputar.
+**Ele é reserva de impacto tanto quanto titular.** Cinco de suas 25 aparições vieram do banco, três delas no intervalo, e ele marcou em duas (Gimhae, Cheonan) e deu assistência numa terceira (Ansan). Kim Do-gyun escalou Kim Hyun como titular no lugar dele seis vezes nesta temporada, e quando Park entrou o ataque em geral ficou mais afiado. Não é crítica ao treinador. É a descrição de um centroavante mais perigoso contra uma defesa cansada do que contra uma descansada, o que vale saber com seis jogos restantes contra times sem nada a disputar.
 
 **Ele trabalha.** A avaliação de Kim Do-gyun em abril foi de que ele "tem carências como centroavante em alguns aspectos, mas tem volume de jogo, combatividade e gols, e boa atitude". Setenta duelos aéreos vencidos e 18 faltas cometidas é um centroavante que disputa tudo. O relato dele mesmo sobre a saída do Jeonbuk é que queria jogar, sentiu que o clube o queria, e escolheu transferência definitiva em vez de empréstimo porque achou que o Seoul podia subir. Disse que a pressão é real e que corresponder a ela é "o meu trabalho".
 
@@ -86,11 +86,11 @@ O melhor centroavante coreano da divisão em produção, num time que não foi m
 | 8 | Ansan (F) | V 2-0 | Reserva | | 1 | Tabela para Byun Kyung-jun |
 | 9 | Hwaseong (C) | D 1-2 | Titular | 1 | | De primeira, de esquerda |
 | 10 | Gimpo (C) | V 2-1 | Titular | | | |
-| 11 | Chungnam Asan (F) | D 0-3 | Não jogou | | | |
+| 11 | Chungnam Asan (F) | D 0-3 | Titular | | | Substituído por Kim Hyun aos 63 |
 | 12 | Yongin (C) | E 2-2 | Reserva, intervalo | | | |
 | 13 | Seongnam (C) | V 3-1 | Titular | 1 | | Na panturrilha; comemoração da Smile School |
 | 14 | Jeonnam (F) | V 1-0 | Titular | | | |
-| 15 | Chungbuk Cheongju (C) | D 1-2 | Titular | | | |
+| 15 | Chungbuk Cheongju (C) | D 1-2 | Reserva não utilizado | | | Kim Hyun começou e marcou |
 | 16 | Gimhae (F) | V 3-1 | Reserva | 1 | 1 | Gol de rebote, assistência para Euller |
 | 18 | Suwon FC (F) | E 2-2 | Titular | | 1 | Toque para o empate de Euller |
 | 19 | Cheonan (C) | V 4-3 | Reserva, intervalo | 1 | | De direita após passe de Carius |
@@ -103,4 +103,4 @@ O melhor centroavante coreano da divisão em produção, num time que não foi m
 | 26 | Suwon Samsung (C) | D 0-1 | Titular | | | Cabeçada defendida, cabeçada na trave |
 | 27 | Daegu (C) | V 2-1 | Titular | 1 | | Gol da vitória na centésima partida na K League; melhor da rodada |
 
-Estatísticas do registro da K League e do site do clube, com detalhes de jogo dos digests da temporada e dos relatos coreanos. Uma correção a digests anteriores: a assistência oficial em seu gol contra o Hwaseong foi de Byun Kyung-jun, não de Euller. A Parte 3 vem em seguida.
+Estatísticas do registro da K League e do site do clube, com detalhes de jogo dos digests da temporada e dos relatos coreanos. Uma correção a digests anteriores: a assistência oficial em seu gol contra o Hwaseong foi de Byun Kyung-jun, não de Euller. Este registro foi corrigido em 22 de setembro: ele começou a 11ª rodada como titular e ficou no banco sem entrar na 15ª, e não o contrário. A Parte 3 vem em seguida.

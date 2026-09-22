@@ -20,13 +20,21 @@ export async function getStaticPaths() {
       entry,
       hasPortuguese: ptIds.has(entry.id),
       player: entry.data.player ? roster.find((p) => p.slug === entry.data.player) : undefined,
+      series: articles
+        .filter((a) => a.data.series === entry.data.series)
+        .sort((a, b) => a.data.order - b.data.order || a.data.date.getTime() - b.data.date.getTime())
+        .map((a) => ({ slug: a.id.replace(/\.md$/, ""), title: a.data.title, part: a.data.part, player: a.data.player })),
     },
   }));
 }
 
-const { entry, hasPortuguese, player } = Astro.props;
+const { entry, hasPortuguese, player, series } = Astro.props;
 const { Content } = await render(entry);
 const slug = entry.id.replace(/\.md$/, "");
+const seriesIndex = series.findIndex((s) => s.slug === slug);
+const prevPart = seriesIndex > 0 ? series[seriesIndex - 1] : undefined;
+const nextPart = seriesIndex >= 0 && seriesIndex < series.length - 1 ? series[seriesIndex + 1] : undefined;
+const shortTitle = (t: string) => t.replace(/^[^:]*:\s*/, "");
 
 const dateStr = entry.data.date.toLocaleDateString("en-US", {
   year: "numeric",
@@ -75,6 +83,36 @@ const dateStr = entry.data.date.toLocaleDateString("en-US", {
     <div class="prose-eland digest-body preview-body">
       <Content />
     </div>
+    {entry.data.part && series.length > 1 && (
+      <nav class="series-nav mt-12 border-t pt-6" style="border-color: #e7dac9;" aria-label="In this series">
+        <div class="grid gap-3 sm:grid-cols-2">
+          {prevPart ? (
+            <a href={withBase(`/articles/${prevPart.slug}`)} class="block rounded-xl border p-4 no-underline" style="border-color: #e7dac9; background: #fff;">
+              <span class="block text-xs font-black uppercase tracking-[0.14em]" style="color: var(--color-gold);">← Previous{prevPart.part ? ` · ${prevPart.part}` : ""}</span>
+              <span class="mt-1 block text-sm font-bold leading-snug" style="color: var(--color-navy);">{shortTitle(prevPart.title)}</span>
+            </a>
+          ) : <span />}
+          {nextPart && (
+            <a href={withBase(`/articles/${nextPart.slug}`)} class="block rounded-xl border p-4 text-right no-underline" style="border-color: #e7dac9; background: #fff;">
+              <span class="block text-xs font-black uppercase tracking-[0.14em]" style="color: var(--color-gold);">Next{nextPart.part ? ` · ${nextPart.part}` : ""} →</span>
+              <span class="mt-1 block text-sm font-bold leading-snug" style="color: var(--color-navy);">{shortTitle(nextPart.title)}</span>
+            </a>
+          )}
+        </div>
+        <details class="mt-4">
+          <summary class="cursor-pointer text-xs font-black uppercase tracking-[0.14em]" style="color: var(--color-editorial-muted);">In this series: {series.length}</summary>
+          <ol class="mt-3 grid gap-1 text-sm sm:grid-cols-2" style="color: var(--color-navy);">
+            {series.map((s) => (
+              <li>
+                {s.slug === slug
+                  ? <strong>{s.part ? `${s.part}. ` : ""}{shortTitle(s.title).split(",")[0]}</strong>
+                  : <a href={withBase(`/articles/${s.slug}`)} style="color: var(--color-navy);">{s.part ? `${s.part}. ` : ""}{shortTitle(s.title).split(",")[0]}</a>}
+              </li>
+            ))}
+          </ol>
+        </details>
+      </nav>
+    )}
   </article>
 
   <nav class="mx-auto mt-10 max-w-5xl border-t pt-6" style="border-color: var(--color-rule);">

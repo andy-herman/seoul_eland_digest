@@ -47,7 +47,7 @@ The model has this as the second-easiest of Seoul's six on paper, behind Gimhae,
 
 **Nobody is reported injured.** The Daegu match produced no injury news; [[Lee Ju-hyeok]]'s halftime withdrawal was the planned fitness change Kim Do-gyun had announced beforehand. Three weeks of rest should clear anything minor.
 
-**Cards.** [[Cho Jun-hyun]], [[Son Hyuk-chan]] and [[Alan Carius]] were booked against Daegu. No published count puts any Seoul player one card from a ban for this match, but the club's card totals are not reliably public, so treat Baek Ji-woong and Kim Oh-kyu, both on four by our earlier count, as the two to watch.
+**Cards.** Three Seoul players are one yellow from a one-match ban: [[Baek Ji-woong]] (booked against Ansan, Yongin, Cheonan and Paju), [[Kim Oh-kyu]] (Gimpo, Hwaseong, Paju and Suwon Samsung) and [[Son Hyuk-chan]], whose booking against Daegu was his fourth. A fifth yellow at Gimpo would rule any of them out of Gimhae on October 18, and the count carries into the playoffs. [[Park Chang-hwan]] is on eight, three clear of his next ban at eleven.
 
 **No call-ups.** Seoul have nobody at the Asian Games and no senior internationals, so the break is a full three weeks of training for the whole squad. Kim Do-gyun said the priority is goals, specifically from the substitutes.
 

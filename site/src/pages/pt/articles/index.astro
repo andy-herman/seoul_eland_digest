@@ -5,7 +5,7 @@ import TranslateButton from "../../../components/TranslateButton.astro";
 import { withBase } from "../../../lib/paths";
 
 const articles = (await getCollection("articlesPt")).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime() || a.data.order - b.data.order,
+  (a, b) => b.data.date.getTime() - a.data.date.getTime() || b.data.order - a.data.order,
 );
 
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", {

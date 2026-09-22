@@ -47,7 +47,7 @@ O modelo coloca este como o segundo jogo mais fácil dos seis no papel, atrás d
 
 **Ninguém foi reportado como lesionado.** O jogo contra o Daegu não produziu notícia de lesão; a saída de [[Lee Ju-hyeok]] no intervalo foi a troca física que Kim Do-gyun anunciara antes. Três semanas de descanso devem resolver qualquer coisa menor.
 
-**Cartões.** [[Cho Jun-hyun]], [[Son Hyuk-chan]] e [[Alan Carius]] foram amarelados contra o Daegu. Nenhuma contagem publicada coloca um jogador do Seoul a um cartão da suspensão para este jogo, mas os totais do clube não são públicos de forma confiável, então Baek Ji-woong e Kim Oh-kyu, ambos com quatro pela nossa contagem anterior, são os dois a observar.
+**Cartões.** Três jogadores do Seoul estão a um amarelo de uma suspensão de um jogo: [[Baek Ji-woong]] (amarelado contra Ansan, Yongin, Cheonan e Paju), [[Kim Oh-kyu]] (Gimpo, Hwaseong, Paju e Suwon Samsung) e [[Son Hyuk-chan]], cujo amarelo contra o Daegu foi o quarto. Um quinto amarelo em Gimpo tiraria qualquer um deles do jogo contra o Gimhae em 18 de outubro, e a contagem segue para os playoffs. [[Park Chang-hwan]] está com oito, a três da próxima suspensão, no décimo primeiro.
 
 **Sem convocações.** O Seoul não tem ninguém nos Jogos Asiáticos nem na seleção principal, então a pausa são três semanas completas de treino para o elenco inteiro. Kim Do-gyun disse que a prioridade são os gols, especificamente dos reservas.
 
