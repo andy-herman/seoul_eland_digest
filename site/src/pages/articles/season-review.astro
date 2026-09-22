@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SeasonReviewHub from "../../components/SeasonReviewHub.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import { withBase } from "../../lib/paths";
+---
+
+<BaseLayout
+  title="2026 Season Review: Every Player"
+  description="Every Seoul E-Land player with ten or more league appearances in 2026: player card, official season line, grade through Round 27 and a full review of what went well, what keeps going wrong, and what he brings to the run-in."
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Season Review · 2026</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">The Squad, Graded</h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        One review for every player with ten or more league appearances, written with six matches left. Each card carries the club's official season line and the grade from the review. Tap a card for what he has done well, where the same mistakes repeat, and what his strengths mean for the run-in.
+      </p>
+      <div class="mt-5 flex flex-wrap items-center gap-2">
+        <span class="metadata-chip">Grades through Round 27</span>
+        <TranslateButton href="/pt/articles/season-review" code="PT" label="Português" ariaLabel="Ver esta página em português" />
+      </div>
+    </div>
+  </section>
+
+  <SeasonReviewHub lang="en" />
+
+  <nav class="mx-auto mt-4 max-w-5xl border-t pt-6" style="border-color: var(--color-rule);">
+    <a href={withBase("/articles")} class="text-sm font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">← All articles</a>
+  </nav>
+</BaseLayout>

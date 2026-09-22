@@ -15,6 +15,7 @@ const STATIC_PATHS = [
   "/korean-cup",
   "/guides",
   "/articles",
+  "/articles/season-review",
   "/players",
   "/support",
   "/about",
@@ -25,6 +26,7 @@ const STATIC_PATHS = [
   "/pt/korean-cup",
   "/pt/guides",
   "/pt/articles",
+  "/pt/articles/season-review",
 ];
 
 export async function GET(context: APIContext) {

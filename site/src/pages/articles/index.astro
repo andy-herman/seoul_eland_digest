@@ -38,6 +38,13 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
     </div>
   </section>
 
+  <a href={withBase("/articles/season-review")} class="group mb-6 block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6" style="background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-blue) 100%); border-color: color-mix(in srgb, var(--color-gold) 40%, var(--color-rule));">
+    <p class="eyebrow">Season Review · 2026</p>
+    <h2 class="mt-2 text-2xl font-black uppercase tracking-tight sm:text-3xl">The squad, graded</h2>
+    <p class="mt-2 max-w-2xl text-sm leading-6" style="color: var(--color-link);">Every player with ten or more league appearances on one page: photo, number, official season line and the grade from his review.</p>
+    <span class="mt-3 inline-block text-xs font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">See all the player cards →</span>
+  </a>
+
   <section aria-label="Articles" class="grid gap-4">
     {articles.map((article) => (
       <a

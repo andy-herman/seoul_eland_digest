@@ -1,0 +1,31 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeasonReviewHub from "../../../components/SeasonReviewHub.astro";
+import TranslateButton from "../../../components/TranslateButton.astro";
+import { withBase } from "../../../lib/paths";
+---
+
+<BaseLayout
+  title="Avaliação da Temporada 2026: Todo o Elenco"
+  description="Todos os jogadores do Seoul E-Land com dez ou mais jogos de liga em 2026: cartão do jogador, números oficiais da temporada, nota até a 27ª rodada e a avaliação completa do que deu certo, do que continua dando errado e do que ele traz para a reta final."
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Avaliação da Temporada · 2026</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">O Elenco, com Nota</h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        Uma avaliação para cada jogador com dez ou mais jogos de liga, escrita com seis rodadas pela frente. Cada cartão traz os números oficiais do clube e a nota da avaliação. Toque num cartão para ver o que ele fez bem, onde os mesmos erros se repetem e o que suas forças significam para a reta final.
+      </p>
+      <div class="mt-5 flex flex-wrap items-center gap-2">
+        <span class="metadata-chip">Notas até a 27ª rodada</span>
+        <TranslateButton href="/articles/season-review" code="EN" label="English" ariaLabel="View this page in English" />
+      </div>
+    </div>
+  </section>
+
+  <SeasonReviewHub lang="pt" />
+
+  <nav class="mx-auto mt-4 max-w-5xl border-t pt-6" style="border-color: var(--color-rule);">
+    <a href={withBase("/pt/articles")} class="text-sm font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">← Todos os artigos</a>
+  </nav>
+</BaseLayout>
