@@ -112,6 +112,20 @@ a {
   text-transform: uppercase;
 }
 
+/* The player card is a dark panel that can sit inside the light editorial shell;
+   keep its own text white regardless of the surrounding ink color. */
+.editorial-shell .player-card,
+.editorial-shell .player-card :where(h2, p, dd, a, span) {
+  color: #fff;
+}
+.editorial-shell .player-card :where(dt) {
+  color: var(--color-muted);
+}
+.editorial-shell .player-card .eyebrow,
+.editorial-shell .player-card a {
+  color: var(--color-gold-light);
+}
+
 .editorial-shell {
   border: 1px solid #eadfce;
   border-radius: 1.75rem;
