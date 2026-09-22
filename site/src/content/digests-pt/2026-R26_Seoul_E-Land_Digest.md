@@ -32,7 +32,7 @@ Gabriel entrou no lugar de Carius aos 69, cortou para dentro pela esquerda e chu
 ## Desempenhos Individuais
 
 **[[Min Sung-jun]] (민성준):**
-Uma tarde de contradições. Uma das seis ou sete melhores defesas de sua temporada, o voo para parar Luis no primeiro tempo, e a defesa que forçou o gol anulado. Também o tiro de meta errado aos 19 que deu a Luis um chute livre, e um primeiro tempo que seu treinador descreveu, sem citá-lo, como começando com erros na saída de bola do goleiro. Dois jogos seguidos sem sofrer gol antes deste, um gol sofrido, e o gol não foi culpa dele. A saída de bola foi.
+Uma tarde de contradições. Uma das seis ou sete melhores defesas de sua temporada, o voo para parar Luis no primeiro tempo, e a defesa que forçou o gol anulado. Também o tiro de meta errado aos 19 que deu a Luis um chute livre, e um primeiro tempo que seu treinador descreveu, sem citá-lo, como começando com erros na saída de bola do goleiro. Uma partida sem sofrer gol em Cheongju antes desta, um gol sofrido, e o gol não foi culpa dele. A saída de bola foi.
 
 **[[Park Jae-yong]] (박재용):**
 Nove gols e nenhum desde agosto. A cabeçada na trave aos 56 foi a melhor chance criada pelo Seoul e ele fez tudo certo nela. Também virou o centro da matéria de meio de semana do Sports Chosun sobre cansaço no ataque. Disse ao FourFourTwo antes do jogo contra o Daegu que a partida é "como uma guerra" e que a pressão agora é "um luxo que não podemos ter". Sábado será sua centésima partida na K League.

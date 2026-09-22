@@ -10,12 +10,12 @@ tags: [player, k-league-2, seoul-e-land]
 
 ## About
 
-Born 2009. Left-sided forward coming through Seoul E-Land's youth pathway, a high-school national-team prospect. Names Vinicius Junior as his model and lists pace and finishing as his strengths.
+Born 2009. Left-sided forward, a high-school national-team prospect. Came through Suwon Samsung's academy (Maetan High School) until 2025, then moved to Sinpyeong High School before joining Seoul E-Land in March 2026. Names Vinicius Junior as his model and lists pace and finishing as his strengths.
 
 Holds two K League youth records, and both of them came against Cheonan City:
 
 - **Youngest appearance in K League 2 history.** Made his professional debut at 16 years, 11 months, 7 days in Round 4 (away vs Cheonan, 2026-03-21), coming on in the second half.
-- **Youngest goalscorer in K League history.** Scored his first K League goal in Round 19 (home vs Cheonan, 2026-07-24) at 17 years, 3 months, 10 days, breaking Park Seung-soo's mark of 17 years, 3 months, 13 days (Suwon Samsung, 2024) by three days. Came off the bench on 64 minutes, read a counter, and curled a first-time finish from a Park Chang-hwan pass to make it 3-1. Born 2009-04-14. His father, Ahn Seong-nam, is a Seoul E-Land assistant manager.
+- **Youngest goalscorer in K League history.** Scored his first K League goal in Round 19 (home vs Cheonan, 2026-07-24) at 17 years, 3 months, 10 days, breaking Park Seung-soo's mark of 17 years, 3 months, 13 days (Suwon Samsung, 2024) by three days. Came off the bench on 53 minutes and scored on 64, reading a counter and curling a first-time finish from a Park Chang-hwan pass to make it 3-1. Born 2009-04-14. His father, Ahn Seong-nam, is a Seoul E-Land assistant manager.
 
 ## Mentions
 

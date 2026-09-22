@@ -5,7 +5,7 @@ created: 2026-08-01
 tags: [player, k-league-2, seoul-e-land]
 ---
 
-# Yun Seok-ju (윤석주)
+# Yoon Seok-ju (윤석주)
 
 
 ## About

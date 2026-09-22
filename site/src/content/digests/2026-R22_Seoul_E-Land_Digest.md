@@ -21,7 +21,7 @@ Seoul E-Land beat Ansan Greeners 3-1 at [[Mokdong Stadium]] and every goal belon
 
 The night opened with a ceremony rather than a kickoff. [[Park Chang-hwan]], the club's vice-captain, was presented for his **100th appearance in a Seoul E-Land shirt**, with his mother and younger sibling on the pitch beside him and a commemorative shirt carrying his goals, assists and running numbers. He actually reached the milestone back in Round 19 against Cheonan, but the presentation had to wait, because he served a yellow-card suspension in Round 21. That also settles something this site published as an inference in the Round 22 preview: his absence at Hwaseong was accumulated bookings, confirmed here on the pitch.
 
-Kim Do-gyun made four changes and the shape was the interesting part. [[Min Sung-jun]] started behind [[Bae Seo-jun]], [[Kim Oh-kyu]], [[Baek Ji-woong]] and [[Oh In-pyo]], with **Osmar pushed forward** into midfield alongside [[Alan Carius]] and [[Park Chang-hwan]], and [[Ahn Joo-wan]], [[Kim Hyun]] and Euller ahead of them. Osmar's position is the switch: when he drops the shape is a back three, when he steps up it is a back four with a screen. It flexed between the two all night.
+Kim Do-gyun made four changes and the shape was the interesting part. [[Min Sung-jun]] started behind [[Bae Seo-jun]], [[Kim Oh-kyu]], [[Baek Ji-woong]] and [[Oh In-pyo]], with **Osmar pushed forward** into midfield alongside [[Alan Carius]] and [[Park Chang-hwan]], and [[Ahn Joo-wan]], [[Kim Hyun]] and Euller ahead of them. Osmar's position is the switch: when he drops the shape is a back three, when he steps up it is a back four with a screen. It did not last the half: Kim Do-gyun swapped Osmar and [[Baek Ji-woong]] before the interval, sending Osmar back into the defensive line.
 
 The headline selection was [[Ahn Joo-wan]], handed his **first career start**. Our preview called that the single most informative team-sheet decision of the run-in, and Kim Do-gyun made it.
 
@@ -53,7 +53,7 @@ Played his hundredth match for the club on the night it was marked, drew the fre
 First career start, and he justified the argument for it inside twenty minutes. The cross-shot that forced Lee Seung-bin into the save of the match came from him, from an angle where most players cross. He did not score and it does not matter: the seventeen-year-old was picked because this team needed someone to attack the space behind and around a deep defense, and he did it from the first whistle.
 
 **Osmar (오스마르):**
-Deployed as the deepest midfielder rather than a center-back, which let [[Kim Oh-kyu]] come in beside [[Baek Ji-woong]] and gave Seoul a body in the space Ansan wanted to play through. He also produced one of the reads of the night, taking a shorter line than the runner and getting to a through ball first. At thirty-seven, being moved into midfield to manage his legs is a sensible piece of squad management, and it worked.
+Started as the deepest midfielder rather than a center-back, which let [[Kim Oh-kyu]] come in beside [[Baek Ji-woong]]. He also produced one of the reads of the night, taking a shorter line than the runner and getting to a through ball first. The midfield role itself did not hold: Kim Do-gyun said afterwards that Osmar in midfield had not worked, and swapped him with [[Baek Ji-woong]] during the first half. At thirty-eight, moving him forward to manage his legs was a sensible idea on paper, and it was abandoned inside forty-five minutes.
 
 **[[Min Sung-jun]] (민성준):**
 Beaten by a good finish and otherwise untroubled, with one excellent stop from Lima that an offside flag made academic. Quiet nights are the goalkeeping equivalent of a clean sheet.
@@ -91,7 +91,7 @@ And on who it was for: he dedicated the hat-trick to **his wife, who was in the 
 
 **Ahn Joo-wan started and the shape looked different.** The preview argued that starting him was the specific solution to the specific problem rather than sentiment. He forced the best save of the game inside the first half. Whether it holds against Paju is the next question, but the selection itself is a change in how this team attacks a deep line.
 
-**Osmar in midfield is the workload answer.** We have been asking since Round 18 how Seoul manage a thirty-seven-year-old playing everything. Moving him forward and bringing [[Kim Oh-kyu]] into the back four is more elegant than resting him, and it puts his passing in the part of the pitch where a low block has to be unpicked.
+**Osmar in midfield was the workload experiment, and it did not work.** We have been asking since Round 18 how Seoul manage a thirty-eight-year-old playing everything. Moving him forward and bringing [[Kim Oh-kyu]] into the back four was more elegant than resting him, but Kim Do-gyun said afterwards it had not worked and swapped Osmar with [[Baek Ji-woong]] during the first half. The workload question is still open.
 
 **The preview graded honestly: seven of eleven.** We called [[Min Sung-jun]], [[Bae Seo-jun]], [[Baek Ji-woong]], [[Oh In-pyo]], [[Park Chang-hwan]], [[Alan Carius]] and Euller, and we had Osmar starting although in defense rather than midfield. We missed [[Kim Oh-kyu]], [[Kim Hyun]] and [[Ahn Joo-wan]] coming in, and we had [[Yoon Seok-ju]], [[Lee Ju-hyeok]] and [[Park Jae-yong]] starting when all three began on the bench. The result call was right.
 

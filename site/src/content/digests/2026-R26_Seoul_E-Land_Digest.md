@@ -32,7 +32,7 @@ Gabriel came on for Carius on 69, cut inside from the left and shot into the sid
 ## Player Performances
 
 **[[Min Sung-jun]] (민성준):**
-A contradiction of an afternoon. One of the six or seven best saves of his season, the dive to keep out Luis in the first half, and the stop that forced the disallowed goal. Also the miskicked goal kick on 19 that gave Luis a free shot, and a first half his manager described, without naming him, as beginning with errors from the goalkeeper's build-up. Two clean sheets in a row before this, one goal conceded, and the goal was not his fault. The build-up was.
+A contradiction of an afternoon. One of the six or seven best saves of his season, the dive to keep out Luis in the first half, and the stop that forced the disallowed goal. Also the miskicked goal kick on 19 that gave Luis a free shot, and a first half his manager described, without naming him, as beginning with errors from the goalkeeper's build-up. A clean sheet at Cheongju before this, one goal conceded, and the goal was not his fault. The build-up was.
 
 **[[Park Jae-yong]] (박재용):**
 Nine goals and none since August. The header off the post on 56 was the best chance Seoul created and he did everything right with it. He also became the focal point of Sports Chosun's midweek piece on fatigue in the front line. He told FourFourTwo before the Daegu match that the game is "like a war" and that the pressure is now "a luxury we cannot afford." Saturday will be his 100th K League appearance.

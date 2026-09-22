@@ -43,7 +43,7 @@ O modelo coloca este como o segundo jogo mais fácil dos seis no papel, atrás d
 
 ## Notícias do Elenco do Seoul E-Land
 
-**[[Park Chang-hwan]] está de volta.** Sua suspensão de um jogo pelo oitavo amarelo foi cumprida contra o Daegu. O capitão retorna a um meio-campo que se virou sem ele, um problema mais agradável do que o de duas semanas atrás.
+**[[Park Chang-hwan]] está de volta.** Sua suspensão de um jogo pelo oitavo amarelo foi cumprida contra o Daegu. Ele retorna a um meio-campo que se virou sem ele, um problema mais agradável do que o de duas semanas atrás.
 
 **Ninguém foi reportado como lesionado.** O jogo contra o Daegu não produziu notícia de lesão; a saída de [[Lee Ju-hyeok]] no intervalo foi a troca física que Kim Do-gyun anunciara antes. Três semanas de descanso devem resolver qualquer coisa menor.
 

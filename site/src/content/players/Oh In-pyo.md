@@ -10,7 +10,7 @@ tags: [player, k-league-2, seoul-e-land]
 
 ## About
 
-Full-back and wingback, comfortable on either flank. A former Suwon FC player. Broke out as a scoring threat in the second half of 2026, heading home in Round 16 at Gimhae and again in Round 18 at his old club, arriving unmarked from deep on both.
+Primarily a right back who can also play wingback or on the left. A former Suwon FC player. Broke out as a scoring threat in the second half of 2026, finishing into an empty net in stoppage time in Round 16 at Gimhae and heading home in Round 18 at his old club, arriving unmarked from deep.
 
 ## Mentions
 

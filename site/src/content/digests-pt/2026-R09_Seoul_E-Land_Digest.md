@@ -25,7 +25,7 @@ O gol inicial do Hwaseong, pênalti de Plana, forçou o E-Land a um ritmo descon
 
 O segundo gol do Hwaseong, marcado por Demetrius aos 75 minutos, foi uma acusação contundente à incapacidade do E-Land de acompanhar corredores vindos de trás. O passe em profundidade de Plana pegou as linhas fora de posição, e Demetrius finalizou com calma na área, seu primeiro gol na campanha. A sequência lembrou problemas repetidos do E-Land: meio-campo distante demais, linha de três plana demais e reação lenta.
 
-O retorno de Euller importou, encontrando espaços entre linhas e enfim conectando jogadas ofensivas. Cinco minutos depois de ficar atrás por 2 a 0, veio o gol, com Park Jae-yong (박재용) finalizando de esquerda após uma boa tabela curta de Euller dentro da área. A assistência foi de Euller, não de Byun Kyung-jun, apesar de alguma confusão em relatos iniciais. Ainda assim, um gol vindo de pressão prolongada não bastou para salvar a partida nem mascarar os problemas táticos da tarde.
+O retorno de Euller importou, encontrando espaços entre linhas e enfim conectando jogadas ofensivas. Cinco minutos depois de ficar atrás por 2 a 0, veio o gol, com Park Jae-yong (박재용) finalizando de esquerda de primeira depois que Byun Kyung-jun escorou de cabeça o cruzamento de Euller na área. A assistência oficial foi de Byun. Ainda assim, um gol vindo de pressão prolongada não bastou para salvar a partida nem mascarar os problemas táticos da tarde.
 
 Na reta final, o E-Land empurrou jogadores para frente, mas mostrou pouca calma no último terço. O goleiro do Hwaseong, Kim Seung-geon (김승건), recebeu amarelo por reclamação, mas os visitantes administraram bem o estado do jogo e fecharam uma vitória merecida. A derrota sugere que a pontuação atual e a sequência de vitórias do E-Land não escondem a necessidade de trabalho defensivo e de uma identidade ofensiva mais clara contra adversários disciplinados de meio de tabela.
 
@@ -33,13 +33,13 @@ Na reta final, o E-Land empurrou jogadores para frente, mas mostrou pouca calma 
 
 **Park Jae-yong (박재용):** Mais uma vez, Park liderou a frente com presença e movimentação que o tornaram o pivô central do clube. O gol no fim foi tecnicamente limpo, mas o mais importante é sua consistência: ele já marcou em seis rodadas nesta temporada. Ainda assim, por mais gols que faça, o jogo mostrou suas limitações quando recebe pouco serviço nas zonas centrais.
 
-**Euller (에울레르):** A entrada do brasileiro no intervalo mudou a face ofensiva. A assistência para o gol de Park reforçou seu valor, conectando jogo e adicionando criatividade. O retorno de lesão dá ao E-Land versatilidade muito necessária, seja pela esquerda, como falso nove ou em uma função híbrida de meio.
+**Euller (에울레르):** A entrada do brasileiro no intervalo mudou a face ofensiva. O cruzamento para o gol de Park reforçou seu valor, conectando jogo e adicionando criatividade. O retorno de lesão dá ao E-Land versatilidade muito necessária, seja pela esquerda, como falso nove ou em uma função híbrida de meio.
 
-**Baek Ji-woong (백지웅):** Chamado a participar de uma defesa em constante ajuste, Baek voltou a mostrar adaptabilidade. O adolescente jogou todos os minutos, mas teve dificuldades em alguns momentos para organizar a linha e acompanhar os corredores do Hwaseong. O talento é claro, mas, com o E-Land brigando pelo acesso, essas dores de crescimento precisam ser tratadas.
+**Baek Ji-woong (백지웅):** Chamado a participar de uma defesa em constante ajuste, Baek voltou a mostrar adaptabilidade. Aos 21 anos, ele ficou 61 minutos em campo e teve dificuldades em alguns momentos para organizar a linha e acompanhar os corredores do Hwaseong. O talento é claro, mas, com o E-Land brigando pelo acesso, essas dores de crescimento precisam ser tratadas.
 
 **Min Sung-jun (민성준):** Sofreu dois gols nos quais pouco poderia fazer; o pênalti foi bem batido, e a finalização de Demetrius saiu fora de alcance. Ainda assim, o ex-Best XI do Incheon comanda bem sua área e segue como peça importante, mesmo sem conseguir entregar o quinto jogo sem sofrer gols aqui.
 
-**Byun Kyung-jun (변경준):** Teve impacto como substituto, acrescentando energia e tornando-se ameaça. Embora não tenha recebido a assistência como alguns veículos afirmaram, participou dos ataques finais. Seu papel como opção de impacto pode ser crucial nas próximas semanas, especialmente com a saída para o Gimcheon Sangmu prevista para agosto.
+**Byun Kyung-jun (변경준):** Teve impacto como substituto, acrescentando energia e tornando-se ameaça. Escorou de cabeça o cruzamento de Euller para o gol de Park, ficando com a assistência, e participou dos ataques finais. Seu papel como opção de impacto pode ser crucial nas próximas semanas, especialmente com a saída para o Gimcheon Sangmu prevista para agosto.
 
 ## Notícias e transferências
 

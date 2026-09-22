@@ -40,7 +40,7 @@ Three goals in the season now, all of them from a 17-year-old, and the two here 
 One assist, the disallowed near-assist on 8, the delivery on the corner that led to the second, and 79 minutes of running Cheongju's left side. His manager took him off with a title decider eight days away; the broadcast noted that every Seoul chance of note had come off his boot. In the R23 digest we called his left foot the most valuable weapon in the squad. Nothing since has changed that.
 
 **Osmar (오스마르):**
-Back at center-back after two weeks as the holding midfielder, and involved in the second goal from an attacking corner. At 37 he has now played every minute of a three-match, thirteen-day stretch. The clean sheet, Seoul's first since Hwaseong in early August, was built on him and [[Baek Ji-woong]] winning the aerial duels García kept asking of them.
+Back at center-back after a full match as the holding midfielder at Seongnam, and involved in the second goal from an attacking corner. At 38 he has now played every minute of a three-match, thirteen-day stretch. The clean sheet, Seoul's first since Hwaseong in early August, was built on him and [[Baek Ji-woong]] winning the aerial duels García kept asking of them.
 
 **[[Min Sung-jun]] (민성준):**
 Redemption after the corner he did not reach at Seongnam. Two headers from García, one over the bar under pressure, one caught cleanly, and a first clean sheet in four matches. The broadcast made a point of praising his decisiveness on crosses, which was a fair thing to notice after last week.
@@ -49,7 +49,7 @@ Redemption after the corner he did not reach at Seongnam. Two headers from Garc�
 Two weeks after being named in the press room for the Paju error, he was restored at center-back and was immaculate: a first-half tackle that stopped García at the top of the box, calm distribution, no fuss. The manager's public criticism and the player's answer to it are now a closed loop, at least for this week.
 
 **[[Alan Carius]] (까리우스):**
-The offside on 8 cost him a goal by a stride. After that he was the midfield's engine, pressing, carrying, and taking the ball into the corners late. Withdrawn on 87 with a booking to his name from the tackle that earned it. Available for Saturday.
+The offside on 8 cost him a goal by a stride. After that he was the midfield's engine, pressing, carrying, and taking the ball into the corners late. Withdrawn on 87 without a booking. Available for Saturday.
 
 ## Fan Reaction
 

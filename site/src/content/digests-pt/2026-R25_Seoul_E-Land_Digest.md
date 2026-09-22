@@ -40,7 +40,7 @@ Três gols na temporada agora, todos de um jogador de 17 anos, e os dois desta n
 Uma assistência, a quase assistência anulada aos 8, o passe no escanteio que gerou o segundo gol e 79 minutos correndo pela esquerda do Cheongju. Seu treinador o tirou com uma decisão de título a oito dias; a transmissão notou que toda chance relevante do Seoul havia saído do pé dele. No digest da 23ª rodada chamamos seu pé esquerdo de arma mais valiosa do elenco. Nada mudou.
 
 **Osmar (오스마르):**
-De volta à zaga depois de duas semanas como volante, e envolvido no segundo gol a partir de um escanteio ofensivo. Aos 37, jogou todos os minutos de uma sequência de três jogos em treze dias. A defesa sem gols sofridos, a primeira do Seoul desde Hwaseong, no início de agosto, foi construída sobre ele e [[Baek Ji-woong]] vencendo os duelos aéreos que García não parou de exigir.
+De volta à zaga depois de uma partida inteira como volante em Seongnam, e envolvido no segundo gol a partir de um escanteio ofensivo. Aos 38, jogou todos os minutos de uma sequência de três jogos em treze dias. A defesa sem gols sofridos, a primeira do Seoul desde Hwaseong, no início de agosto, foi construída sobre ele e [[Baek Ji-woong]] vencendo os duelos aéreos que García não parou de exigir.
 
 **[[Min Sung-jun]] (민성준):**
 Redenção depois do escanteio que não alcançou em Seongnam. Duas cabeçadas de García, uma por cima sob pressão, outra segurada com limpeza, e a primeira partida sem sofrer gol em quatro. A transmissão fez questão de elogiar sua decisão nos cruzamentos, o que era justo notar depois da semana anterior.
@@ -49,7 +49,7 @@ Redenção depois do escanteio que não alcançou em Seongnam. Duas cabeçadas d
 Duas semanas depois de ser citado na sala de imprensa pelo erro contra o Paju, foi devolvido à zaga e esteve impecável: um carrinho no primeiro tempo que parou García na entrada da área, distribuição calma, nenhum drama. A crítica pública do treinador e a resposta do jogador formam agora um ciclo fechado, ao menos por esta semana.
 
 **[[Alan Carius]] (까리우스):**
-O impedimento aos 8 lhe custou um gol por um passo. Depois disso foi o motor do meio-campo, pressionando, conduzindo e levando a bola aos cantos no fim. Saiu aos 42 do segundo tempo com um amarelo pelo carrinho que o mereceu. Disponível para o sábado.
+O impedimento aos 8 lhe custou um gol por um passo. Depois disso foi o motor do meio-campo, pressionando, conduzindo e levando a bola aos cantos no fim. Saiu aos 42 do segundo tempo sem ter recebido cartão. Disponível para o sábado.
 
 ## Reação da Torcida
 

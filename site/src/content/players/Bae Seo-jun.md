@@ -10,7 +10,7 @@ tags: [player, k-league-2, seoul-e-land]
 
 ## About
 
-Full-back, used on the right of the back four in the 4-3-3 that Kim Do-gyun introduced for the second half of 2026.
+Left back, used on the left of the back four in the 4-3-3 that Kim Do-gyun introduced for the second half of 2026.
 
 ## Mentions
 

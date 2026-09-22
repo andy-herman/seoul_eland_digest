@@ -43,7 +43,7 @@ The model has this as the second-easiest of Seoul's six on paper, behind Gimhae,
 
 ## Seoul E-Land Squad News
 
-**[[Park Chang-hwan]] is back.** His one-match ban for the eighth yellow was served against Daegu. The captain returns to a midfield that coped without him, which is a nicer problem than the one Seoul had a fortnight ago.
+**[[Park Chang-hwan]] is back.** His one-match ban for the eighth yellow was served against Daegu. He returns to a midfield that coped without him, which is a nicer problem than the one Seoul had a fortnight ago.
 
 **Nobody is reported injured.** The Daegu match produced no injury news; [[Lee Ju-hyeok]]'s halftime withdrawal was the planned fitness change Kim Do-gyun had announced beforehand. Three weeks of rest should clear anything minor.
 

@@ -24,7 +24,7 @@ Logo no início, a fragilidade defensiva do E-Land ficou exposta. O primeiro gol
 
 O ataque demorou a engrenar, mas cresceu em transições rápidas. Euller foi o responsável por dar vida à equipe, como costuma acontecer quando está inteiro. O empate veio após mais uma confusão na área depois de escanteio: [[Park Chang-hwan]] recuperou a bola e Euller, oportunista, marcou de perto. Fica clara a dependência do time por bolas paradas e lances de insistência para marcar gols. Só que o embalo logo foi freado. O Yongin, aproveitando o desgaste físico e uma nova desatenção após uma sequência de substituições, retomou a vantagem com Seok Hyun-jun, que entrou no segundo tempo e pegou o rebote sem resistência.
 
-Nos minutos finais, o E-Land jogou todas as fichas, promovendo várias substituições de uma vez: Geraldes no lugar de Seo Jin-seok, Byun Kyung-jun por Kang Hyun-je, além de Iredale e Cariús. Teve esperança, e polêmica, quando um gol contra de Nobo, goleiro do Yongin, parecia dar o empate aos mandantes, mas o VAR anulou de forma correta por toque de mão de Park Jae-yong no lance. Mesmo assim, o E-Land não desanimou: buscou novamente o empate em bola parada, Euller subiu mais alto e o jovem [[Baek Ji-woong]] aproveitou o rebote para estufar as redes nos acréscimos. Não foi bonito, não foi controlado, mas mostrou personalidade e capacidade de buscar pontos mesmo em atuações abaixo do ideal.
+Nos minutos finais, o E-Land jogou todas as fichas, promovendo várias substituições de uma vez: Geraldes no lugar de Seo Jin-seok, Byun Kyung-jun por Kang Hyeon-je, além de Iredale e Cariús. Teve esperança, e polêmica, quando um gol contra de Nobo, goleiro do Yongin, parecia dar o empate aos mandantes, mas o VAR anulou de forma correta por toque de mão de Park Jae-yong no lance. Mesmo assim, o E-Land não desanimou: buscou novamente o empate em bola parada, Euller subiu mais alto e o jovem [[Baek Ji-woong]] aproveitou o rebote para estufar as redes nos acréscimos. Não foi bonito, não foi controlado, mas mostrou personalidade e capacidade de buscar pontos mesmo em atuações abaixo do ideal.
 
 O emocional se perdeu no fim, com dois cartões amarelos por reclamação denunciando uma equipe que ainda sente demais quando as coisas não vão bem. Apesar do discurso de maturidade, o padrão de levar gols bobos, especialmente nos minutos finais, continua rondando. [[Kim Do-gyun]] certamente deve ter gastado seu pós-jogo tentando entender não só os acertos isolados, mas por que a estrutura, que parece sólida no quadro, segue vazando na prática.
 
@@ -39,7 +39,7 @@ Mais uma vez, foi o fator de desequilíbrio. O time muda de postura com ele em c
 **Park Chang-hwan (박창환):**  
 Fez uma partida incansável no meio-campo. Recuperou e deu o passe para o gol de Euller, mas mostrou brechas fora da bola, demorando para recompor nas transições e contribuindo pouco para proteção da defesa após perda de posse. Ainda assim, é exemplo da evolução técnica deste núcleo do E-Land.
 
-**Kim Oh-kyu (김호규):**  
+**Kim Oh-kyu (김오규):**  
 Veterano da defesa, Kim mantém a cabeça no lugar nas situações de pressão, mas ficou devendo na cobertura das jogadas quebradas. Sua liderança sem a bola ajudou, especialmente quando o Yongin pressionou em busca da vitória, mas fez parte do grupo que não conseguiu bloquear ataques rápidos pelo centro.
 
 **Min Sung-jun:**  
@@ -57,7 +57,7 @@ Fora das quatro linhas, a parceria do E-Land com a Wawabuja, empresa do setor de
 
 ## O Que Vem Por Aí
 
-O próximo desafio é contra o Seongnam FC, novamente em casa. O E-Land vai precisar mostrar mais solidez defensiva e controlar melhor o ritmo no meio-campo se quiser seguir no grupo dos playoffs. A rotação vai pesar com o calendário apertado em maio e a suspensão de Lee Ju-hyuk.
+O próximo desafio é contra o Seongnam FC, novamente em casa. O E-Land vai precisar mostrar mais solidez defensiva e controlar melhor o ritmo no meio-campo se quiser seguir no grupo dos playoffs. A rotação vai pesar com o calendário apertado em maio e a suspensão de Lee Ju-hyeok.
 
 ## Leitura Honesta
 
