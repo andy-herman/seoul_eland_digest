@@ -1,22 +1,14 @@
 ---
-type: "feature"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Feature"
-round_range: "Rounds 26-34"
-date: "2026-09-08"
-opponent: ""
+title: "Best Case, Worst Case: The Five Seasons Seoul E-Land Could Still Have"
+description: "Twenty thousand simulated finishes to the 2026 season produce a Seoul E-Land final total anywhere from 51 to 69 points and a finishing position anywhere from first to sixth. Most of those seasons look alike: about 60 points,..."
+date: 2026-09-08
+series: "Promotion Race"
+order: 4
 tags: [seoul-eland, feature, promotion-race, simulation, scenarios]
 ---
-
-# Best Case, Worst Case: The Five Seasons Seoul E-Land Could Still Have
-
 Twenty thousand simulated finishes to the 2026 season produce a Seoul E-Land final total anywhere from 51 to 69 points and a finishing position anywhere from first to sixth. Most of those seasons look alike: about 60 points, third place, a home playoff semifinal. But the tails are where supporters live, so this piece walks through the season from the top down, from the one-in-200 ceiling to the one-in-300 floor, with the model's probability attached to each and a description of what each one would actually have to look like on the pitch.
 
-The model is the one described in [Final Stretch Revisited](/previews/2026-final-stretch-revisited); the race arithmetic against the two Suwon clubs is in [The Race for Two](/previews/2026-race-for-two). Everything here is as of September 7, before Saturday's match against Suwon Samsung.
+The model is the one described in [Final Stretch Revisited](/articles/2026-final-stretch-revisited); the race arithmetic against the two Suwon clubs is in [The Race for Two](/articles/2026-race-for-two). Everything here is as of September 7, before Saturday's match against Suwon Samsung.
 
 ## The five seasons at a glance
 

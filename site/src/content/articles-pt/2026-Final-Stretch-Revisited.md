@@ -1,19 +1,11 @@
 ---
-type: "feature"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Especial"
-round_range: "Rodadas 26-34"
-date: "2026-09-07"
-opponent: ""
+title: "Reta Final Revisitada: Novas Previsões Baseadas em Simulações de IA"
+description: "Em 12 de julho, com o Seoul E-Land em quinto com 29 pontos, publicamos um palpite rodada a rodada para todo o segundo turno e prometemos avaliá-lo em público. Oito rodadas depois, a nota é quatro acertos em oito, e o clube..."
+date: 2026-09-07
+series: "Corrida pelo Acesso"
+order: 2
 tags: [seoul-eland, feature, promotion-race, predictions, simulation]
 ---
-
-# Reta Final Revisitada: Novas Previsões Baseadas em Simulações de IA
-
 Em 12 de julho, com o Seoul E-Land em quinto com 29 pontos, publicamos um palpite rodada a rodada para todo o segundo turno e prometemos avaliá-lo em público. Oito rodadas depois, a nota é quatro acertos em oito, e o clube está melhor do que dissemos: 45 pontos, segundo lugar, 16 pontos somados nessas oito partidas contra os 13 que previmos. É um bom problema, mas ainda é um problema, porque a planilha de julho foi escrita antes de o time de Kim Do-gyun emendar nove jogos sem perder, antes de o Suwon Samsung contratar Luis, antes de o Hwaseong perder o estádio e antes de o Busan parar de vencer.
 
 Então refizemos a previsão do zero. Desta vez não é o palpite de um analista por rodada. É uma simulação, rodada 20.000 vezes, alimentada com tudo o que conseguimos verificar sobre os oito jogos restantes do Seoul e sobre todos os outros clubes do top 8. Os palpites de julho continuam no [Rastreador da Temporada](/pt/tracker) exatamente como publicados e seguem sendo avaliados. Os novos palpites abaixo entram no mesmo rastreador como uma segunda linha, avaliada separadamente e congelada a partir de hoje.

@@ -1,20 +1,12 @@
 ---
-type: "feature"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Especial"
-round_range: "Rodadas 27-34"
-date: "2026-09-18"
-opponent: ""
+title: "Panorama Após a 26ª Rodada: O Que Uma Derrota Fez com a Temporada"
+description: "Onze dias atrás este site publicou três textos construídos sobre uma simulação de 20.000 rodadas do resto da temporada: as previsões revisadas, a corrida por duas vagas e o melhor e o pior caso. Esses textos estão congelados..."
+date: 2026-09-18
+series: "Corrida pelo Acesso"
+order: 5
 tags: [seoul-eland, feature, promotion-race, simulation, scenarios]
 ---
-
-# Panorama Após a 26ª Rodada: O Que Uma Derrota Fez com a Temporada
-
-Onze dias atrás este site publicou três textos construídos sobre uma simulação de 20.000 rodadas do resto da temporada: as [previsões revisadas](/pt/previews/2026-final-stretch-revisited), a [corrida por duas vagas](/pt/previews/2026-race-for-two) e o [melhor e o pior caso](/pt/previews/2026-best-case-worst-case). Esses textos estão congelados como publicados, e os palpites neles estão sendo avaliados no [Rastreador](/pt/tracker). Esta é a primeira atualização do modelo por baixo deles, rodado de novo com todos os resultados da 26ª rodada na divisão e com tudo o que se soube desde então: a suspensão de Park Chang-hwan, o mês de Frizzo fora, a suspensão de Christian, o retorno de Hwang Jae-won. É mais curto que os originais porque a maior parte do que eles diziam continua valendo. O que mudou foi o número no topo.
+Onze dias atrás este site publicou três textos construídos sobre uma simulação de 20.000 rodadas do resto da temporada: as [previsões revisadas](/pt/articles/2026-final-stretch-revisited), a [corrida por duas vagas](/pt/articles/2026-race-for-two) e o [melhor e o pior caso](/pt/articles/2026-best-case-worst-case). Esses textos estão congelados como publicados, e os palpites neles estão sendo avaliados no [Rastreador](/pt/tracker). Esta é a primeira atualização do modelo por baixo deles, rodado de novo com todos os resultados da 26ª rodada na divisão e com tudo o que se soube desde então: a suspensão de Park Chang-hwan, o mês de Frizzo fora, a suspensão de Christian, o retorno de Hwang Jae-won. É mais curto que os originais porque a maior parte do que eles diziam continua valendo. O que mudou foi o número no topo.
 
 ## Os números principais, antes e agora
 

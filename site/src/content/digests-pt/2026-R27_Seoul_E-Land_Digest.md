@@ -102,7 +102,7 @@ Após os jogos de sábado da 27ª rodada (os quatro de domingo ainda a jogar; Su
 
 Suwon FC e Suwon Samsung não têm mais folga e jogam todas as sete rodadas restantes; o Seoul tem seis jogos mais a folga da 30ª rodada; o Daegu tem seis mais a folga da 28ª.
 
-O [Rastreador](/pt/tracker) marca esta rodada como acerto do palpite de julho (vitória) e erro da simulação de setembro (empate). O modelo, rodado de novo com os resultados de sábado, projeta o Seoul com 60 pontos e dá 23 por cento de chance de top 2, Suwon FC 76 por cento, Daegu 6. Números completos em [Rumo à K1](/pt/previews/2026-chasing-k1-promotion).
+O [Rastreador](/pt/tracker) marca esta rodada como acerto do palpite de julho (vitória) e erro da simulação de setembro (empate). O modelo, rodado de novo com os resultados de sábado, projeta o Seoul com 60 pontos e dá 23 por cento de chance de top 2, Suwon FC 76 por cento, Daegu 6. Números completos em [Rumo à K1](/pt/articles/2026-chasing-k1-promotion).
 
 ## Olhando Adiante
 

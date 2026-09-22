@@ -1,19 +1,11 @@
 ---
-type: "season-preview"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Second round robin"
-round_range: "R18-R34"
-date: "2026-07-18"
-opponent: ""
+title: "Second Round Robin Preview: The Playoff Run-In"
+description: "The first round robin is done and the table has settled. After sixteen games, Seoul E-Land sit fifth on 29 points, a 9-2-5 record with a plus-nine goal difference. That is a promotion-playoff position, but it is the most..."
+date: 2026-07-18
+series: "Season Preview"
+order: 1
 tags: [seoul-eland, season-preview, playoff-race]
 ---
-
-# Second Round Robin Preview: The Playoff Run-In
-
 > *Seoul E-Land go into the second round robin exactly where a promotion project wants to be and nowhere near safe. Fifth of seventeen, inside the playoff line, one bad month from outside it. Here is what the run-in demands, the strategy that gets it done, and a round-by-round call on where it ends.*
 
 ## Where We Stand

@@ -1,19 +1,11 @@
 ---
-type: "feature"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Feature"
-round_range: "Round 26"
-date: "2026-09-07"
-opponent: ""
+title: "The Biggest Match in Seoul E-Land's History Is on Saturday"
+description: "Seoul E-Land FC have played roughly 400 league matches since they were founded. None of them has mattered as much as the one at Mokdong Stadium at 16:30 on Saturday, September 12, against Suwon Samsung Bluewings. This is an..."
+date: 2026-09-07
+series: "Feature"
+order: 2
 tags: [seoul-eland, feature, promotion-race, suwon-samsung]
 ---
-
-# The Biggest Match in Seoul E-Land's History Is on Saturday
-
 Seoul E-Land FC have played roughly 400 league matches since they were founded. None of them has mattered as much as the one at [[Mokdong Stadium]] at 16:30 on Saturday, September 12, against Suwon Samsung Bluewings. This is an attempt to explain why, for the supporter who feels it and the neutral who is wondering whether to come.
 
 ## The short version

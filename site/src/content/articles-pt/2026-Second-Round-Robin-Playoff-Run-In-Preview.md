@@ -1,19 +1,11 @@
 ---
-type: "season-preview"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Segundo turno"
-round_range: "R18-R34"
-date: "2026-07-18"
-opponent: ""
+title: "Prévia do Segundo Turno: A Reta Rumo aos Playoffs"
+description: "O primeiro turno acabou e a tabela se acomodou. Depois de dezesseis jogos, o Seoul E-Land está em quinto com 29 pontos, uma campanha de 9-2-5 e saldo de mais nove. É uma posição de playoff de acesso, mas a mais instável do..."
+date: 2026-07-18
+series: "Prévia da Temporada"
+order: 1
 tags: [seoul-eland, season-preview, playoff-race]
 ---
-
-# Prévia do Segundo Turno: A Reta Rumo aos Playoffs
-
 > *O Seoul E-Land começa o segundo turno exatamente onde um projeto de acesso quer estar, e nem de longe seguro. Quinto entre dezessete, dentro da zona de playoff, a um mês ruim de ficar de fora. Aqui está o que a reta final exige, a estratégia que resolve, e um palpite rodada a rodada de onde isso termina.*
 
 ## Onde Estamos

@@ -1,19 +1,11 @@
 ---
-type: "club-report"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Panorama do clube"
-round_range: "Após a 21ª rodada"
-date: "2026-08-09"
-opponent: ""
+title: "Panorama do Clube: o Seoul E-Land Depois de Vinte Partidas"
+description: "O Seoul E-Land FC tem 37 pontos em 20 partidas, está invicto há cinco jogos e é o vice-líder da K League 2 em agosto. É também um time que perdeu mais partidas em casa do que fora, não consegue furar um adversário que se fecha..."
+date: 2026-08-09
+series: "Especial"
+order: 1
 tags: [seoul-eland, club-report, season-review, playoff-race]
 ---
-
-# Panorama do Clube: o Seoul E-Land Depois de Vinte Partidas
-
 ## A Versão Curta
 
 O Seoul E-Land FC tem 37 pontos em 20 partidas, está invicto há cinco jogos e é o vice-líder da K League 2 em agosto. É também um time que perdeu mais partidas em casa do que fora, não consegue furar um adversário que se fecha atrás, e acabou de passar noventa minutos em Hwaseong sendo salvo pelo próprio goleiro. Chegou ao segundo lugar, aliás, numa partida em que não marcou.

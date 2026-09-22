@@ -1,20 +1,12 @@
 ---
-type: "feature"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Feature"
-round_range: "Rounds 27-34"
-date: "2026-09-18"
-opponent: ""
+title: "Outlook After Round 26: What One Defeat Did to the Season"
+description: "Eleven days ago this site published three pieces built on a 20,000-run simulation of the rest of the season: the revised predictions, the race for two, and the best and worst cases. Those pieces are frozen as published, and..."
+date: 2026-09-18
+series: "Promotion Race"
+order: 5
 tags: [seoul-eland, feature, promotion-race, simulation, scenarios]
 ---
-
-# Outlook After Round 26: What One Defeat Did to the Season
-
-Eleven days ago this site published three pieces built on a 20,000-run simulation of the rest of the season: the [revised predictions](/previews/2026-final-stretch-revisited), the [race for two](/previews/2026-race-for-two), and the [best and worst cases](/previews/2026-best-case-worst-case). Those pieces are frozen as published, and the calls in them are being graded on the [Tracker](/tracker). This is the first refresh of the underlying model, rerun with every Round 26 result across the division and everything learned since: Park Chang-hwan's suspension, Frizzo's month out, Christian's ban, Hwang Jae-won's return. It is shorter than the originals because most of what they said still holds. What changed is the number at the top.
+Eleven days ago this site published three pieces built on a 20,000-run simulation of the rest of the season: the [revised predictions](/articles/2026-final-stretch-revisited), the [race for two](/articles/2026-race-for-two), and the [best and worst cases](/articles/2026-best-case-worst-case). Those pieces are frozen as published, and the calls in them are being graded on the [Tracker](/tracker). This is the first refresh of the underlying model, rerun with every Round 26 result across the division and everything learned since: Park Chang-hwan's suspension, Frizzo's month out, Christian's ban, Hwang Jae-won's return. It is shorter than the originals because most of what they said still holds. What changed is the number at the top.
 
 ## The headline numbers, then and now
 

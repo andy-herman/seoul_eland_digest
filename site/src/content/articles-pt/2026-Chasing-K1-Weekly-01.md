@@ -8,7 +8,7 @@ order: 1
 tags: [seoul-eland, promotion-race, weekly, suwon-samsung, suwon-fc, daegu, hwaseong]
 ---
 
-Esta é a primeira de uma carta semanal que vai até o fim da temporada. Cada edição faz as mesmas quatro coisas: dá o único número que importa (a chance do Seoul de uma vaga de acesso direto), mostra como ele se moveu desde a edição anterior, percorre o que Suwon Samsung, Suwon FC, Daegu e Hwaseong jogam na rodada seguinte e o que o modelo espera deles, e depois olha uma semana mais adiante. A página [Rumo à K1](/pt/previews/2026-chasing-k1-promotion) na aba de prévias segue como o resumo corrente; isto aqui é o diário.
+Esta é a primeira de uma carta semanal que vai até o fim da temporada. Cada edição faz as mesmas quatro coisas: dá o único número que importa (a chance do Seoul de uma vaga de acesso direto), mostra como ele se moveu desde a edição anterior, percorre o que Suwon Samsung, Suwon FC, Daegu e Hwaseong jogam na rodada seguinte e o que o modelo espera deles, e depois olha uma semana mais adiante. A página [Rumo à K1](/pt/articles/2026-chasing-k1-promotion) na aba Artigos segue como o resumo corrente; isto aqui é o diário.
 
 ## O número desta semana
 

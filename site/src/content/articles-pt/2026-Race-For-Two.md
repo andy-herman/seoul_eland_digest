@@ -1,22 +1,14 @@
 ---
-type: "feature"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Especial"
-round_range: "Rodadas 26-34"
-date: "2026-09-08"
-opponent: ""
+title: "A Corrida por Duas Vagas: Suwon Samsung, Suwon FC e Seoul E-Land, Cenário por Cenário"
+description: "Dois clubes sobem diretamente nesta temporada. Três estão na conversa: Suwon Samsung com 50 pontos, Seoul E-Land com 45, Suwon FC com 44 e um jogo a menos. O Daegu, com 43, está vivo em teoria e fica com uma das duas vagas em..."
+date: 2026-09-08
+series: "Corrida pelo Acesso"
+order: 3
 tags: [seoul-eland, feature, promotion-race, suwon-samsung, suwon-fc, simulation]
 ---
-
-# A Corrida por Duas Vagas: Suwon Samsung, Suwon FC e Seoul E-Land, Cenário por Cenário
-
 Dois clubes sobem diretamente nesta temporada. Três estão na conversa: Suwon Samsung com 50 pontos, Seoul E-Land com 45, Suwon FC com 44 e um jogo a menos. O Daegu, com 43, está vivo em teoria e fica com uma das duas vagas em cerca de 7 por cento das simulações, mas a corrida é essencialmente de três, e a parte de confronto direto já terminou, exceto por um jogo: Suwon Samsung em Mokdong no sábado. Depois disso, ninguém do top 3 enfrenta outro do top 3. A corrida será decidida por quem deixa pontos contra os outros catorze clubes.
 
-Este texto pega a mesma simulação de 20.000 rodadas por trás de [Reta Final Revisitada](/pt/previews/2026-final-stretch-revisited) e faz a ela as perguntas que um torcedor do Seoul realmente faz. Quanto o Seoul precisa somar? O que tem de acontecer com o Suwon FC? Quais jogos deles devemos acompanhar? Quanto o sábado muda? Todas as probabilidades são do modelo; todas são condicionadas à informação disponível em 7 de setembro.
+Este texto pega a mesma simulação de 20.000 rodadas por trás de [Reta Final Revisitada](/pt/articles/2026-final-stretch-revisited) e faz a ela as perguntas que um torcedor do Seoul realmente faz. Quanto o Seoul precisa somar? O que tem de acontecer com o Suwon FC? Quais jogos deles devemos acompanhar? Quanto o sábado muda? Todas as probabilidades são do modelo; todas são condicionadas à informação disponível em 7 de setembro.
 
 ## A versão curta
 

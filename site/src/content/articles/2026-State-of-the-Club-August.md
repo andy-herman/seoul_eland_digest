@@ -1,19 +1,11 @@
 ---
-type: "club-report"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "State of the club"
-round_range: "After Round 21"
-date: "2026-08-09"
-opponent: ""
+title: "State of the Club: Seoul E-Land After Twenty Matches"
+description: "Seoul E-Land FC have 37 points from 20 matches, they are unbeaten in five, and they are second in K League 2 in August. They are also a team that has lost more matches at home than away, cannot break down a side that sits in,..."
+date: 2026-08-09
+series: "Feature"
+order: 1
 tags: [seoul-eland, club-report, season-review, playoff-race]
 ---
-
-# State of the Club: Seoul E-Land After Twenty Matches
-
 ## The Short Version
 
 Seoul E-Land FC have 37 points from 20 matches, they are unbeaten in five, and they are second in K League 2 in August. They are also a team that has lost more matches at home than away, cannot break down a side that sits in, and just spent ninety minutes at Hwaseong being rescued by their goalkeeper. They took second place, incidentally, in a match where they did not score.

@@ -8,17 +8,6 @@ const articles = (await getCollection("articlesPt")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime() || a.data.order - b.data.order,
 );
 
-const seriesOrder: string[] = [];
-const bySeries = new Map<string, typeof articles>();
-for (const article of articles) {
-  const key = article.data.series;
-  if (!bySeries.has(key)) {
-    bySeries.set(key, []);
-    seriesOrder.push(key);
-  }
-  bySeries.get(key)!.push(article);
-}
-
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
   day: "numeric",
   month: "short",
@@ -50,32 +39,28 @@ const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
     </div>
   </section>
 
-  {seriesOrder.map((series) => (
-    <section aria-label={series} class="mb-10">
-      <h2 class="mb-4 text-xs font-black uppercase tracking-[0.2em]" style="color: var(--color-gold-light);">{series}</h2>
-      <div class="grid gap-4">
-        {bySeries.get(series)!.map((article) => (
-          <a
-            href={withBase(`/pt/articles/${article.id.replace(/\.md$/, "")}`)}
-            class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6"
-            style="background: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));"
-          >
-            <div class="flex flex-wrap items-center gap-2">
-              {article.data.part && <span class="metadata-chip">{article.data.part}</span>}
-              <span class="metadata-chip">{dateFormatter.format(article.data.date)}</span>
-            </div>
-            <h3 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">
-              {article.data.title}
-            </h3>
-            <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">
-              {article.data.description}
-            </p>
-            <p class="mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
-              Ler →
-            </p>
-          </a>
-        ))}
-      </div>
-    </section>
-  ))}
+  <section aria-label="Articles" class="grid gap-4">
+    {articles.map((article) => (
+      <a
+        href={withBase(`/pt/articles/${article.id.replace(/\.md$/, "")}`)}
+        class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6"
+        style="background: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));"
+      >
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="metadata-chip">{article.data.series}</span>
+          {article.data.part && <span class="metadata-chip">{article.data.part}</span>}
+          <span class="metadata-chip">{dateFormatter.format(article.data.date)}</span>
+        </div>
+        <h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">
+          {article.data.title}
+        </h2>
+        <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">
+          {article.data.description}
+        </p>
+        <p class="mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          Ler →
+        </p>
+      </a>
+    ))}
+  </section>
 </BaseLayout>

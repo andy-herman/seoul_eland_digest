@@ -102,7 +102,7 @@ After Saturday's Round 27 matches (Sunday's four still to play; Suwon Samsung on
 
 Suwon FC and Suwon Samsung have no bye left and play all seven remaining rounds; Seoul have six matches plus the Round 30 bye; Daegu have six plus the Round 28 bye.
 
-The [Tracker](/tracker) grades this round as a hit for the July call (win) and a miss for the September simulation (draw). The model, rerun with Saturday's results, projects Seoul to 60 points and gives them a 23 percent chance of the top two, Suwon FC 76 percent, Daegu 6. Full numbers in [Chasing K1](/previews/2026-chasing-k1-promotion).
+The [Tracker](/tracker) grades this round as a hit for the July call (win) and a miss for the September simulation (draw). The model, rerun with Saturday's results, projects Seoul to 60 points and gives them a 23 percent chance of the top two, Suwon FC 76 percent, Daegu 6. Full numbers in [Chasing K1](/articles/2026-chasing-k1-promotion).
 
 ## Looking Ahead
 

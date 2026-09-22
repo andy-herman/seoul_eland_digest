@@ -1,22 +1,14 @@
 ---
-type: "feature"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Feature"
-round_range: "Rounds 26-34"
-date: "2026-09-08"
-opponent: ""
+title: "The Race for Two: Suwon Samsung, Suwon FC and Seoul E-Land, Scenario by Scenario"
+description: "Two clubs go up automatically this season. Three are in the conversation: Suwon Samsung on 50 points, Seoul E-Land on 45, Suwon FC on 44 with a game in hand. Daegu on 43 are alive in theory and take one of the two places in..."
+date: 2026-09-08
+series: "Promotion Race"
+order: 3
 tags: [seoul-eland, feature, promotion-race, suwon-samsung, suwon-fc, simulation]
 ---
-
-# The Race for Two: Suwon Samsung, Suwon FC and Seoul E-Land, Scenario by Scenario
-
 Two clubs go up automatically this season. Three are in the conversation: Suwon Samsung on 50 points, Seoul E-Land on 45, Suwon FC on 44 with a game in hand. Daegu on 43 are alive in theory and take one of the two places in about 7 percent of simulations, but the race is essentially three-way, and the head-to-head part of it is already over except for one match: Suwon Samsung at Mokdong on Saturday. After that, nobody in the top three plays anybody else again. The race will be decided by who drops points against the other fourteen clubs.
 
-This piece takes the same 20,000-run simulation behind [Final Stretch Revisited](/previews/2026-final-stretch-revisited) and asks it the questions a Seoul supporter actually asks. What does Seoul's total need to be? What has to happen to Suwon FC? Which of their matches should we be watching? How much does Saturday change? All probabilities are the model's; all of them are conditional on the information available on September 7.
+This piece takes the same 20,000-run simulation behind [Final Stretch Revisited](/articles/2026-final-stretch-revisited) and asks it the questions a Seoul supporter actually asks. What does Seoul's total need to be? What has to happen to Suwon FC? Which of their matches should we be watching? How much does Saturday change? All probabilities are the model's; all of them are conditional on the information available on September 7.
 
 ## The short version
 

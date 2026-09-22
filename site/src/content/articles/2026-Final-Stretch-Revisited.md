@@ -1,19 +1,11 @@
 ---
-type: "feature"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Feature"
-round_range: "Rounds 26-34"
-date: "2026-09-07"
-opponent: ""
+title: "Final Stretch Revisited: New Predictions Based on AI Simulations"
+description: "On July 12, with Seoul E-Land fifth on 29 points, we published a round-by-round call for the entire second half of the season and promised to grade it in public. Eight rounds later the grade is four hits from eight, and the..."
+date: 2026-09-07
+series: "Promotion Race"
+order: 2
 tags: [seoul-eland, feature, promotion-race, predictions, simulation]
 ---
-
-# Final Stretch Revisited: New Predictions Based on AI Simulations
-
 On July 12, with Seoul E-Land fifth on 29 points, we published a round-by-round call for the entire second half of the season and promised to grade it in public. Eight rounds later the grade is four hits from eight, and the club is doing better than we said: 45 points, second place, 16 points banked from those eight matches against the 13 we called. That is a good problem to have, but it is still a problem, because the July sheet was written before Kim Do-gyun's side went nine unbeaten, before Suwon Samsung bought Luis, before Hwaseong lost their stadium and before Busan stopped winning altogether.
 
 So we rebuilt the forecast from scratch. This time it is not one analyst's gut call per round. It is a simulation, run 20,000 times, fed with everything we could verify about the eight remaining Seoul matches and about every other club in the top eight. The July calls stay on the [Season Tracker](/tracker) exactly as published and keep being graded. The new calls below go on the same tracker as a second, separately graded line, frozen from today.

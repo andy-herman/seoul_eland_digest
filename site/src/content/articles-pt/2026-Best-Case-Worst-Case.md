@@ -1,22 +1,14 @@
 ---
-type: "feature"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Especial"
-round_range: "Rodadas 26-34"
-date: "2026-09-08"
-opponent: ""
+title: "Melhor Caso, Pior Caso: As Cinco Temporadas Que o Seoul E-Land Ainda Pode Ter"
+description: "Vinte mil finais simulados da temporada 2026 produzem um total final do Seoul E-Land entre 51 e 69 pontos e uma posição final entre a primeira e a sexta. A maioria dessas temporadas se parece: cerca de 60 pontos, terceiro..."
+date: 2026-09-08
+series: "Corrida pelo Acesso"
+order: 4
 tags: [seoul-eland, feature, promotion-race, simulation, scenarios]
 ---
-
-# Melhor Caso, Pior Caso: As Cinco Temporadas Que o Seoul E-Land Ainda Pode Ter
-
 Vinte mil finais simulados da temporada 2026 produzem um total final do Seoul E-Land entre 51 e 69 pontos e uma posição final entre a primeira e a sexta. A maioria dessas temporadas se parece: cerca de 60 pontos, terceiro lugar, uma semifinal de playoff em casa. Mas é nas pontas que o torcedor vive, então este texto percorre a temporada de cima para baixo, do teto de uma em 200 ao piso de uma em 300, com a probabilidade do modelo ao lado de cada uma e uma descrição de como cada uma teria de ser dentro de campo.
 
-O modelo é o descrito em [Reta Final Revisitada](/pt/previews/2026-final-stretch-revisited); a aritmética da corrida contra os dois clubes de Suwon está em [A Corrida por Duas Vagas](/pt/previews/2026-race-for-two). Tudo aqui vale para 7 de setembro, antes do jogo de sábado contra o Suwon Samsung.
+O modelo é o descrito em [Reta Final Revisitada](/pt/articles/2026-final-stretch-revisited); a aritmética da corrida contra os dois clubes de Suwon está em [A Corrida por Duas Vagas](/pt/articles/2026-race-for-two). Tudo aqui vale para 7 de setembro, antes do jogo de sábado contra o Suwon Samsung.
 
 ## As cinco temporadas em resumo
 

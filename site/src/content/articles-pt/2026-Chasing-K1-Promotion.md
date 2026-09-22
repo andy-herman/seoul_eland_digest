@@ -1,20 +1,12 @@
 ---
-type: "promotion-watch"
-scope: "season-preview"
-kind: "season"
-status: "draft"
-season: "2026"
-league: "K League 2"
-label: "Rumo à K1"
-round_range: "28-34"
-date: "2026-09-20"
-opponent: ""
+title: "Rumo à K1: A Corrida pelo Acesso, Semana a Semana"
+description: "Atualizado após cada rodada. Para o Seoul E-Land em si, e não a corrida ao redor, veja o relatório Estado do Clube, e o Rastreador avalia nossas previsões de julho e setembro semana a semana. A atualização do modelo após a 26ª..."
+date: 2026-09-20
+series: "Rumo à K1"
+order: 0
 tags: [seoul-eland, promotion-race, weekly, playoff-race]
 ---
-
-# Rumo à K1: A Corrida pelo Acesso, Semana a Semana
-
-Atualizado após cada rodada. Para o Seoul E-Land em si, e não a corrida ao redor, veja o relatório [Estado do Clube](/pt/previews/2026-state-of-the-club-august), e o [Rastreador](/pt/tracker) avalia nossas previsões de julho e setembro semana a semana. A atualização do modelo após a 26ª rodada está em [Panorama Após a 26ª Rodada](/pt/previews/2026-outlook-after-round-26); os números abaixo foram rodados de novo após a 27ª rodada completa. A partir desta semana há também uma [carta semanal](/pt/articles/2026-chasing-k1-weekly-01) na aba Artigos que acompanha os jogos dos rivais rodada a rodada e como cada semana move a chance do Seoul de terminar em segundo.
+Atualizado após cada rodada. Para o Seoul E-Land em si, e não a corrida ao redor, veja o relatório [Estado do Clube](/pt/articles/2026-state-of-the-club-august), e o [Rastreador](/pt/tracker) avalia nossas previsões de julho e setembro semana a semana. A atualização do modelo após a 26ª rodada está em [Panorama Após a 26ª Rodada](/pt/articles/2026-outlook-after-round-26); os números abaixo foram rodados de novo após a 27ª rodada completa. A partir desta semana há também uma [carta semanal](/pt/articles/2026-chasing-k1-weekly-01) na aba Artigos que acompanha os jogos dos rivais rodada a rodada e como cada semana move a chance do Seoul de terminar em segundo.
 
 ## Onde Está Após a 27ª Rodada
 

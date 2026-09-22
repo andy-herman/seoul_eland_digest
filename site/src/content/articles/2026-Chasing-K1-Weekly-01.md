@@ -8,7 +8,7 @@ order: 1
 tags: [seoul-eland, promotion-race, weekly, suwon-samsung, suwon-fc, daegu, hwaseong]
 ---
 
-This is the first of a weekly letter that will run to the end of the season. Each edition does the same four things: gives the one number that matters (Seoul's chance of an automatic promotion place), shows how it has moved since the last edition, walks through what Suwon Samsung, Suwon FC, Daegu and Hwaseong play in the coming round and what the model expects of them, and then looks one week further ahead. The [Chasing K1](/previews/2026-chasing-k1-promotion) page on the Previews tab stays as the running summary; this is the diary.
+This is the first of a weekly letter that will run to the end of the season. Each edition does the same four things: gives the one number that matters (Seoul's chance of an automatic promotion place), shows how it has moved since the last edition, walks through what Suwon Samsung, Suwon FC, Daegu and Hwaseong play in the coming round and what the model expects of them, and then looks one week further ahead. The [Chasing K1](/articles/2026-chasing-k1-promotion) page on the Articles tab stays as the running summary; this is the diary.
 
 ## The number this week
 
