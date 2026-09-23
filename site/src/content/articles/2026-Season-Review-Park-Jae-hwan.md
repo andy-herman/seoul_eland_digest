@@ -86,4 +86,4 @@ Park Jae-hwan did a reasonable job in the system he was signed for. He won his h
 | 16 to 24 | | | Did not play | | | Unused substitute nine straight matches |
 | 25 to 27 | | | Not in the squad | | | Caio Marcelo signed in August |
 
-Statistics from the K League record and the club site, with match detail from the season's digests and Korean match reports. Two corrections to earlier digests: Cheongju's equalizer in Round 15 was scored by Lee Jong-eon, not Lee Jung-won, and the Round 10 penalty came from a Gimpo handball on Park Jae-hwan's delivery rather than a foul won by Euller. The series continues with the rest of the squad after the season.
+Statistics from the K League record and the club site, with match detail from the season's digests and Korean match reports. Two corrections to earlier digests: Cheongju's equalizer in Round 15 was scored by Lee Jong-eon, not Lee Jung-won, and the Round 10 penalty came from a Gimpo handball on Park Jae-hwan's delivery rather than a foul won by Euller. Part 23 reviews the manager.

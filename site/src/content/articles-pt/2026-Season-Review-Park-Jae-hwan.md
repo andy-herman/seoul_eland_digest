@@ -86,4 +86,4 @@ Park Jae-hwan fez um trabalho razoável no sistema para o qual foi contratado. G
 | 16 a 24 | | | Não jogou | | | Reserva não utilizado em nove partidas seguidas |
 | 25 a 27 | | | Fora da relação | | | Caio Marcelo contratado em agosto |
 
-Estatísticas do registro da K League e do site do clube, com detalhes de jogo dos digests da temporada e de relatos da imprensa coreana. Duas correções a digests anteriores: o empate do Cheongju na 15ª rodada foi marcado por Lee Jong-eon, não por Lee Jung-won, e o pênalti da 10ª rodada veio de um toque de mão do Gimpo num cruzamento de Park Jae-hwan, e não de uma falta sofrida por Euller. A série continua com o restante do elenco depois da temporada.
+Estatísticas do registro da K League e do site do clube, com detalhes de jogo dos digests da temporada e de relatos da imprensa coreana. Duas correções a digests anteriores: o empate do Cheongju na 15ª rodada foi marcado por Lee Jong-eon, não por Lee Jung-won, e o pênalti da 10ª rodada veio de um toque de mão do Gimpo num cruzamento de Park Jae-hwan, e não de uma falta sofrida por Euller. A Parte 23 avalia o treinador.

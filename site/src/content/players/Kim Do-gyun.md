@@ -1,12 +1,14 @@
 ---
-type: player
+type: manager
 team: Seoul E-Land FC
+role: Head coach, appointed 2023-12-14
 created: 2026-05-05
-tags: [player, k-league-2, seoul-e-land]
+tags: [manager, k-league-2, seoul-e-land]
 ---
 
 # Kim Do-gyun
 
+*Manager note for [[Seoul E-Land FC]]. Head coach since December 2023. Graded season review: [[2026-Season-Review-Kim-Do-gyun]]. Career and 2026 decision dossiers in `research_dump/players/`.*
 
 ## Mentions
 

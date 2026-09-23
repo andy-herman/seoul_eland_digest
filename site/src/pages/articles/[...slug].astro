@@ -99,7 +99,7 @@ const dateStr = entry.data.date.toLocaleDateString("en-US", {
             </a>
           )}
         </div>
-        {entry.data.player && (
+        {(entry.data.player || entry.data.series === "Season Review") && (
           <a href={withBase("/articles/season-review")} class="mt-4 inline-block text-xs font-black uppercase tracking-[0.14em] no-underline" style="color: var(--color-gold);">All player cards →</a>
         )}
         <details class="mt-4">
