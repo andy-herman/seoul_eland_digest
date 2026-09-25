@@ -109,7 +109,7 @@ const line = [
           </dl>
         </>
       )}
-      <a href={withBase(`/players/${player.slug}`)} class="mt-4 inline-block text-xs font-black uppercase tracking-[0.14em] no-underline" style="color: var(--color-gold-light);">
+      <a href={withBase(`${lang === "pt" ? "/pt" : ""}/players/${player.slug}`)} class="mt-4 inline-block text-xs font-black uppercase tracking-[0.14em] no-underline" style="color: var(--color-gold-light);">
         {t.squad} →
       </a>
     </div>
