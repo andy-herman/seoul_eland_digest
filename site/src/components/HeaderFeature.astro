@@ -1,0 +1,254 @@
+---
+// Featured slot for the header's section panels: a short stack of real links
+// (latest result, next match, the Season Review hub). Header renders it inside
+// a panel from md, and the match rows again at the foot of the phone drawer so
+// the nine destinations come first there.
+import ResultBadge from "./ResultBadge.astro";
+import { getTeamInitials } from "../lib/teamLogos";
+import { withBase } from "../lib/paths";
+
+interface FeatureRow {
+  key: string;
+  eyebrow: string;
+  cta?: string;
+  href: string;
+  /** Fixture rows: opponent crest and name, then a result badge or a date. */
+  opponent?: string;
+  logo?: string;
+  result?: string;
+  chipDate?: string;
+  chipTime?: string;
+  /** Story rows: a title, a headline, or both. */
+  title?: string;
+  headline?: string;
+  meta?: string;
+}
+
+interface Props {
+  rows: FeatureRow[];
+  locale?: "en" | "pt";
+}
+
+const { rows, locale = "en" } = Astro.props;
+---
+
+<div class="nav-feature">
+  {rows.map((row) => (
+    <a href={withBase(row.href)} class="nav-feature-row" data-feature={row.key}>
+      <span class="nav-feature-head">
+        <span class="nav-feature-eyebrow">{row.eyebrow}</span>
+        {row.cta && (
+          <span class="nav-feature-cta">
+            {row.cta}
+            <span aria-hidden="true"> →</span>
+          </span>
+        )}
+      </span>
+      {row.opponent ? (
+        <span class="nav-fixture">
+          <span class="nav-crest">
+            {row.logo ? (
+              <img src={row.logo} alt="" loading="lazy" />
+            ) : (
+              <span class="nav-crest-initials">{getTeamInitials(row.opponent)}</span>
+            )}
+          </span>
+          <span class="nav-fixture-text">
+            <span class="nav-fixture-team">{row.opponent}</span>
+            {row.meta && <span class="nav-feature-meta">{row.meta}</span>}
+          </span>
+          {row.result ? (
+            <ResultBadge result={row.result} size="sm" locale={locale} />
+          ) : (
+            <span class="nav-date-chip">
+              <span>{row.chipDate}</span>
+              <span>{row.chipTime}</span>
+            </span>
+          )}
+        </span>
+      ) : (
+        <>
+          {row.title && <span class="nav-feature-title">{row.title}</span>}
+          {row.meta && <span class="nav-feature-meta">{row.meta}</span>}
+          {row.headline && <span class="nav-feature-headline">{row.headline}</span>}
+        </>
+      )}
+    </a>
+  ))}
+</div>
+
+<style>
+  .nav-feature {
+    display: grid;
+    align-content: start;
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 22%, var(--color-rule));
+    border-radius: 1.1rem;
+    background: color-mix(in srgb, white 5%, transparent);
+  }
+
+  .nav-feature-row {
+    display: block;
+    min-width: 0;
+    padding: 0.8rem 0.95rem 0.85rem;
+    text-decoration: none;
+    transition: background-color 150ms ease;
+  }
+
+  .nav-feature-row + .nav-feature-row {
+    border-top: 1px solid color-mix(in srgb, var(--color-gold) 14%, var(--color-rule));
+  }
+
+  .nav-feature-row:hover {
+    background: color-mix(in srgb, white 5%, transparent);
+  }
+
+  .nav-feature-row:focus-visible {
+    outline: 2px solid var(--color-gold-light);
+    outline-offset: -2px;
+    border-radius: 1.1rem;
+  }
+
+  .nav-feature-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .nav-feature-eyebrow {
+    color: var(--color-gold-light);
+    font-size: 0.62rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .nav-feature-cta {
+    flex: none;
+    color: var(--color-link);
+    font-size: 0.72rem;
+    font-weight: 800;
+    transition: color 150ms ease;
+  }
+
+  .nav-feature-row:hover .nav-feature-cta {
+    color: var(--color-gold-light);
+  }
+
+  .nav-fixture {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-top: 0.55rem;
+  }
+
+  .nav-crest {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.6rem;
+    background: white;
+    padding: 0.25rem;
+  }
+
+  .nav-crest img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .nav-crest-initials {
+    color: var(--color-navy);
+    font-size: 0.7rem;
+    font-weight: 900;
+  }
+
+  .nav-fixture-text {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .nav-fixture-team {
+    display: block;
+    overflow: hidden;
+    color: var(--color-ink);
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1.2;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-feature-meta {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--color-muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .nav-date-chip {
+    display: grid;
+    flex: none;
+    justify-items: end;
+    gap: 0.1rem;
+    color: var(--color-ink);
+    font-size: 0.72rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.15;
+  }
+
+  .nav-date-chip span:last-child {
+    color: var(--color-muted);
+    font-weight: 700;
+  }
+
+  .nav-feature-title {
+    display: block;
+    margin-top: 0.45rem;
+    color: var(--color-ink);
+    font-size: 1.05rem;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .nav-feature-headline {
+    display: -webkit-box;
+    margin-top: 0.35rem;
+    overflow: hidden;
+    color: var(--color-ink);
+    font-size: 0.85rem;
+    font-weight: 700;
+    line-height: 1.35;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+  }
+
+  /* md to lg the panel runs the slot as a two-up strip under the links. */
+  @media (width >= 48rem) and (width < 64rem) {
+    .nav-feature {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .nav-feature-row + .nav-feature-row {
+      border-top: 0;
+      border-left: 1px solid color-mix(in srgb, var(--color-gold) 14%, var(--color-rule));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-feature-row,
+    .nav-feature-cta {
+      transition: none;
+    }
+  }
+</style>

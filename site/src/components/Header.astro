@@ -1,4 +1,9 @@
 ---
+import { getCollection } from "astro:content";
+import HeaderFeature from "./HeaderFeature.astro";
+import { fixtures, season } from "../data/matches";
+import { getPreMatchPreviewForRound } from "../lib/prematchPreviews";
+import { getTeamLogo } from "../lib/teamLogos";
 import { stripBase, withBase } from "../lib/paths";
 
 interface Props {
@@ -8,30 +13,104 @@ interface Props {
 const { locale = "en" } = Astro.props;
 const isPortuguese = locale === "pt";
 const pathname = stripBase(Astro.url.pathname);
-const englishNavItems = [
-  { href: "/", label: "Rounds" },
-  { href: "/matches", label: "Matches" },
-  { href: "/previews", label: "Previews" },
-  { href: "/tracker", label: "Tracker" },
-  { href: "/korean-cup", label: "Korean Cup", mobileLabel: "Cup" },
-  { href: "/guides", label: "Guides" },
-  { href: "/articles", label: "Articles" },
-  { href: "/articles/season-review", label: "Season Review", mobileLabel: "Grades" },
-  { href: "/players", label: "Squad" },
-];
-const navItems = isPortuguese
+const prefix = isPortuguese ? "/pt" : "";
+
+type NavLink = { href: string; label: string; description: string };
+type NavSection = { id: "matches" | "season"; label: string; dek: string; links: NavLink[] };
+
+// Three entries in the bar: two section panels and Squad as a plain link.
+// Matches holds everything tied to a fixture (before it, after it, the
+// schedule, the cup). Season holds the long view (the race, the grades,
+// features, and the evergreen guides for newcomers).
+const sections: NavSection[] = isPortuguese
   ? [
-      { href: "/pt/", label: "Rodadas" },
-      { href: "/pt/matches", label: "Partidas" },
-      { href: "/pt/previews", label: "Prévias" },
-      { href: "/pt/tracker", label: "Rastreador", mobileLabel: "Dados" },
-      { href: "/pt/korean-cup", label: "Copa da Coreia", mobileLabel: "Copa" },
-      { href: "/pt/guides", label: "Guias" },
-      { href: "/pt/articles", label: "Artigos" },
-      { href: "/pt/articles/season-review", label: "Avaliação", mobileLabel: "Notas" },
-      { href: "/players", label: "Elenco" },
+      {
+        id: "matches",
+        label: "Partidas",
+        dek: "Cada jogo do Seoul E-Land, antes e depois do apito.",
+        links: [
+          { href: "/pt/", label: "Rodadas", description: "O resumo completo de cada jogo da liga" },
+          { href: "/pt/previews", label: "Prévias", description: "Adversário, escalação e previsão" },
+          { href: "/pt/matches", label: "Todas as partidas", description: "Calendário, resultados e horários" },
+          { href: "/pt/korean-cup", label: "Copa da Coreia", description: "O chaveamento e o caminho do Seoul" },
+        ],
+      },
+      {
+        id: "season",
+        label: "Temporada",
+        dek: "A briga pelo acesso, o elenco avaliado e as leituras longas.",
+        links: [
+          { href: "/pt/tracker", label: "Rastreador", description: "A briga pelo acesso e nossa previsão" },
+          { href: "/pt/articles/season-review", label: "Avaliação da temporada", description: "Nota para cada jogador e o técnico" },
+          { href: "/pt/articles", label: "Artigos", description: "Reportagens e a carta Rumo à K1" },
+          { href: "/pt/guides", label: "Guias", description: "Chegou agora? Comece por aqui" },
+        ],
+      },
     ]
-  : englishNavItems;
+  : [
+      {
+        id: "matches",
+        label: "Matches",
+        dek: "Every Seoul E-Land match, before and after the whistle.",
+        links: [
+          { href: "/", label: "Rounds", description: "A full digest after every league match" },
+          { href: "/previews", label: "Previews", description: "Scouting, predicted XI and forecast" },
+          { href: "/matches", label: "All matches", description: "Schedule, results and kickoff times" },
+          { href: "/korean-cup", label: "Korean Cup", description: "The bracket and Seoul's cup run" },
+        ],
+      },
+      {
+        id: "season",
+        label: "Season",
+        dek: "The promotion race, the squad graded, and the long reads.",
+        links: [
+          { href: "/tracker", label: "Tracker", description: "The promotion race and our forecast" },
+          { href: "/articles/season-review", label: "Season Review", description: "Every player graded, plus the manager" },
+          { href: "/articles", label: "Articles", description: "Features and the Chasing K1 weekly" },
+          { href: "/guides", label: "Guides", description: "New here? Club, stadium, how to watch" },
+        ],
+      },
+    ];
+
+const squad: NavLink = isPortuguese
+  ? { href: "/players", label: "Elenco", description: "Perfis, números e fotos dos jogadores" }
+  : { href: "/players", label: "Squad", description: "Player profiles, shirt numbers and photos" };
+
+const t = isPortuguese
+  ? {
+      navLabel: "Navegação principal",
+      menu: "Menu",
+      latest: "Último resultado",
+      next: "Próximo jogo",
+      round: "Rodada",
+      venue: { home: "Casa", away: "Fora", neutral: "Neutro" },
+      digestCta: "Resumo",
+      previewCta: "Prévia",
+      scheduleCta: "Calendário",
+      kickoffTbd: "A definir",
+      hubEyebrow: "Avaliação da Temporada",
+      hubTitle: "O Elenco, com Nota",
+      hubMeta: (count: number) => `${count} partes, todos os jogadores com 10+ jogos na liga`,
+      hubCta: "Notas",
+      latestPart: "Mais recente",
+    }
+  : {
+      navLabel: "Main",
+      menu: "Menu",
+      latest: "Latest result",
+      next: "Next match",
+      round: "Round",
+      venue: { home: "Home", away: "Away", neutral: "Neutral" },
+      digestCta: "Digest",
+      previewCta: "Preview",
+      scheduleCta: "Schedule",
+      kickoffTbd: "Time TBD",
+      hubEyebrow: "Season Review",
+      hubTitle: "The Squad, Graded",
+      hubMeta: (count: number) => `${count} parts, every player with 10+ league apps`,
+      hubCta: "Grades",
+      latestPart: "Latest",
+    };
 
 function isActive(href: string) {
   // The hub lives under /articles, so the Articles tab must not light up for it.
@@ -46,14 +125,106 @@ function isActive(href: string) {
   }
   return pathname.startsWith(href);
 }
+
+// Featured slots. Same sources the matches page uses: fixtures for the
+// latest result and the next match, the digest collection for the report
+// link, the preview files for the next match's preview.
+const schedule = [...fixtures].sort((a, b) => a.round - b.round);
+const lastResult = schedule.filter((match) => match.result !== "TBD").at(-1);
+const nextMatch = schedule.find((match) => match.result === "TBD");
+
+const [digests, articles] = await Promise.all([
+  getCollection(isPortuguese ? "digestsPt" : "digests"),
+  getCollection(isPortuguese ? "articlesPt" : "articles"),
+]);
+const lastDigest = lastResult
+  ? digests.find((digest) => digest.data.season === season && digest.data.round === lastResult.round)
+  : undefined;
+const nextPreview = nextMatch ? getPreMatchPreviewForRound(nextMatch.round, locale) : undefined;
+
+const dateFormatter = new Intl.DateTimeFormat(isPortuguese ? "pt-BR" : "en-US", {
+  month: "short",
+  day: "numeric",
+  timeZone: "UTC",
+});
+const formatDate = (date: string) => dateFormatter.format(new Date(`${date}T00:00:00Z`));
+const formatKickoff = (time: string) => (time === "TBD" || time === "00:00" ? t.kickoffTbd : `${time} KST`);
+
+type FeatureRow = {
+  key: string;
+  eyebrow: string;
+  cta?: string;
+  href: string;
+  opponent?: string;
+  logo?: string;
+  result?: string;
+  chipDate?: string;
+  chipTime?: string;
+  title?: string;
+  headline?: string;
+  meta?: string;
+};
+
+const matchRows: FeatureRow[] = [];
+if (lastResult) {
+  matchRows.push({
+    key: "latest",
+    eyebrow: t.latest,
+    cta: lastDigest ? t.digestCta : t.scheduleCta,
+    href: lastDigest ? `${prefix}/rounds/${lastDigest.id.replace(/\.md$/, "")}` : `${prefix}/matches`,
+    opponent: lastResult.opponent,
+    logo: getTeamLogo(lastResult.opponent),
+    meta: `${t.round} ${lastResult.round} · ${t.venue[lastResult.venue]} · ${formatDate(lastResult.date)}`,
+    result: lastResult.result,
+  });
+}
+if (nextMatch) {
+  matchRows.push({
+    key: "next",
+    eyebrow: t.next,
+    cta: nextPreview ? t.previewCta : t.scheduleCta,
+    href: nextPreview ? `${prefix}/previews/${nextPreview.slug}` : `${prefix}/matches`,
+    opponent: nextMatch.opponent,
+    logo: getTeamLogo(nextMatch.opponent),
+    meta: `${t.round} ${nextMatch.round} · ${t.venue[nextMatch.venue]}`,
+    chipDate: formatDate(nextMatch.date),
+    chipTime: formatKickoff(nextMatch.time),
+  });
+}
+
+const reviews = articles
+  .filter((article) => article.data.series === (isPortuguese ? "Avaliação da Temporada" : "Season Review"))
+  .sort((a, b) => b.data.order - a.data.order);
+const latestReview = reviews[0];
+const seasonRows: FeatureRow[] = [
+  {
+    key: "hub",
+    eyebrow: t.hubEyebrow,
+    cta: t.hubCta,
+    href: `${prefix}/articles/season-review`,
+    title: t.hubTitle,
+    meta: t.hubMeta(reviews.length),
+  },
+];
+if (latestReview) {
+  seasonRows.push({
+    key: "latest-review",
+    eyebrow: `${t.latestPart} · ${latestReview.data.part ?? ""}`,
+    href: `${prefix}/articles/${latestReview.id.replace(/\.md$/, "")}`,
+    // "Season Review, Part 23: Kim Do-gyun, the Manager..." reads as the subject alone.
+    headline: latestReview.data.title.split(": ").slice(1).join(": ") || latestReview.data.title,
+  });
+}
+const featureRows = { matches: matchRows, season: seasonRows };
 ---
 
-<header class="sticky top-0 z-40 border-b backdrop-blur-xl" style="background-color: color-mix(in srgb, var(--color-navy-deep) 92%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));">
-  <!-- The single-row switch waits for md. At sm the nav still wraps to its own
-       row, and letting the roomier gap and vertical padding arrive there made
-       the sticky header 135px tall. Horizontal padding still steps at sm so the
-       logo stays aligned with the main content column. -->
-  <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-1.5 px-3 py-1.5 sm:px-6 md:flex-nowrap md:gap-5 md:py-3">
+<header class="site-header sticky top-0 z-40 border-b" style="border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));" data-site-header>
+  <div class="nav-scrim" aria-hidden="true"></div>
+  <!-- One row at every width. Below md the sections live in a drawer behind
+       the Menu button, so nothing wraps or side-scrolls. Horizontal padding
+       still steps at sm so the logo stays aligned with the main content
+       column. -->
+  <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-1.5 sm:px-6 md:gap-6 md:py-3">
     <a href={withBase("/")} class="flex items-center gap-3 no-underline" aria-label="Seoul E-Land Digest home">
       <span class="flex h-9 w-[4.6rem] items-center justify-center rounded-xl bg-white px-1.5 shadow-lg shadow-black/20 min-[380px]:h-10 min-[380px]:w-20 min-[380px]:px-2 lg:h-11 lg:w-24 lg:px-3">
         <img src={withBase("/assets/logo-official.svg")} alt="Seoul E-Land FC" class="h-7 w-auto min-[380px]:h-8" />
@@ -69,30 +240,609 @@ function isActive(href: string) {
       </span>
     </a>
 
-    <div class="order-3 w-full min-w-0 rounded-full border p-0.5 md:order-none md:w-auto md:p-1" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 18%, var(--color-rule));">
-    <!-- Type and padding stay compact until lg. Bumping them at sm made the nav
-         overflow harder on a tablet than on a phone, and it keeps 44px tap
-         targets on touch-sized screens rather than shrinking them at 640px. -->
-    <nav class="flex min-w-0 snap-x items-center gap-0.5 overflow-x-auto text-[0.7rem] font-bold lg:gap-1 lg:text-sm" style="scrollbar-width: none;" data-scroll-fade>
-      {navItems.map((item) => (
-        <a
-          href={withBase(item.href)}
-          class={`inline-flex min-h-11 shrink-0 snap-start items-center rounded-full px-2 py-1.5 no-underline transition-colors min-[380px]:px-2.5 lg:min-h-0 lg:px-3.5 lg:py-2 ${isActive(item.href) ? "bg-white shadow-sm" : "text-[var(--color-link)] hover:text-white"}`}
-          style={isActive(item.href) ? "color: var(--color-navy);" : undefined}
-          aria-label={item.label}
-          aria-current={isActive(item.href) ? "page" : undefined}
-        >
-          {item.mobileLabel ? (
-            <>
-              <span class="min-[430px]:hidden">{item.mobileLabel}</span>
-              <span class="hidden min-[430px]:inline">{item.label}</span>
-            </>
-          ) : (
-            item.label
-          )}
-        </a>
-      ))}
+    <button type="button" class="nav-menu-button" aria-expanded="false" aria-controls="site-nav" data-nav-menu>
+      <span>{t.menu}</span>
+      <span class="nav-menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+    </button>
+
+    <!-- Every destination is a real link in the markup. Section panels are
+         full-width bands under the bar from md; below md the same markup
+         stacks inside the drawer. Triggers keep 44px tap targets until lg. -->
+    <nav id="site-nav" class="site-nav" aria-label={t.navLabel}>
+      <ul class="nav-list">
+        {sections.map((section) => (
+          <li class="nav-section">
+            <button
+              type="button"
+              class="nav-trigger"
+              id={`nav-trigger-${section.id}`}
+              aria-expanded="false"
+              aria-controls={`nav-panel-${section.id}`}
+              data-nav-trigger={section.id}
+              data-active={section.links.some((link) => isActive(link.href)) ? "" : undefined}
+            >
+              <span class="nav-trigger-label">{section.label}</span>
+              <svg class="nav-chevron" viewBox="0 0 12 12" aria-hidden="true">
+                <path d="M2.75 4.5 6 7.75 9.25 4.5" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+
+            <div class="nav-panel" id={`nav-panel-${section.id}`}>
+              <div class="nav-panel-grid mx-auto max-w-6xl">
+                <div class="nav-panel-intro">
+                  <p class="nav-panel-kicker">{section.label}</p>
+                  <p class="nav-panel-dek">{section.dek}</p>
+                </div>
+
+                <ul class="nav-panel-links">
+                  {section.links.map((link) => (
+                    <li>
+                      <a href={withBase(link.href)} class="nav-link" aria-current={isActive(link.href) ? "page" : undefined}>
+                        <span class="nav-link-label">
+                          {link.label}
+                          <svg class="nav-link-arrow" viewBox="0 0 16 16" aria-hidden="true">
+                            <path d="M3 8h9.5M8.5 4l4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" />
+                          </svg>
+                        </span>
+                        <span class="nav-link-desc">{link.description}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+
+                <div class="nav-feature-slot">
+                  <HeaderFeature rows={featureRows[section.id]} locale={locale} />
+                </div>
+              </div>
+            </div>
+          </li>
+        ))}
+        <li class="nav-section nav-section-plain">
+          <a href={withBase(squad.href)} class="nav-trigger nav-squad" aria-current={isActive(squad.href) ? "page" : undefined}>
+            <span class="nav-trigger-label">{squad.label}</span>
+            <span class="nav-link-desc">{squad.description}</span>
+          </a>
+        </li>
+      </ul>
+      <!-- Phones get the match rows after all nine links rather than between
+           Matches and Season, so every destination shows on first open. -->
+      <div class="nav-drawer-feature">
+        <HeaderFeature rows={matchRows} locale={locale} />
+      </div>
     </nav>
-    </div>
   </div>
 </header>
+
+<script>
+  // Section panels (md and up) and the Menu drawer (below md) are plain
+  // disclosure buttons. aria-expanded is the state and the CSS keys off it,
+  // so this only flips attributes and looks after focus.
+  const header = document.querySelector<HTMLElement>("[data-site-header]");
+  const menuButton = header?.querySelector<HTMLButtonElement>("[data-nav-menu]");
+  const nav = header?.querySelector<HTMLElement>("#site-nav");
+
+  if (header && menuButton && nav) {
+    header.setAttribute("data-nav-ready", "");
+    const triggers = Array.from(header.querySelectorAll<HTMLButtonElement>("[data-nav-trigger]"));
+    let openTrigger: HTMLButtonElement | null = null;
+
+    const closePanel = (returnFocus = false) => {
+      if (!openTrigger) return;
+      openTrigger.setAttribute("aria-expanded", "false");
+      if (returnFocus) openTrigger.focus();
+      openTrigger = null;
+      header.removeAttribute("data-panel-open");
+    };
+
+    const openPanel = (trigger: HTMLButtonElement) => {
+      closePanel();
+      trigger.setAttribute("aria-expanded", "true");
+      openTrigger = trigger;
+      header.setAttribute("data-panel-open", "");
+    };
+
+    const setMenu = (open: boolean, returnFocus = false) => {
+      menuButton.setAttribute("aria-expanded", String(open));
+      header.toggleAttribute("data-menu-open", open);
+      document.documentElement.style.overflow = open ? "hidden" : "";
+      if (!open && returnFocus) menuButton.focus();
+    };
+
+    triggers.forEach((trigger) => {
+      const section = trigger.parentElement as HTMLElement;
+      trigger.addEventListener("click", () => (openTrigger === trigger ? closePanel() : openPanel(trigger)));
+      // Tabbing out of an open section closes it. A null relatedTarget is a
+      // click, which the pointerdown handler below already deals with.
+      section.addEventListener("focusout", (event) => {
+        const next = event.relatedTarget as Node | null;
+        if (openTrigger === trigger && next && !section.contains(next)) closePanel();
+      });
+    });
+
+    menuButton.addEventListener("click", () => setMenu(menuButton.getAttribute("aria-expanded") !== "true"));
+
+    document.addEventListener("pointerdown", (event) => {
+      if (openTrigger && !openTrigger.parentElement?.contains(event.target as Node)) closePanel();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        if (openTrigger) closePanel(true);
+        else if (header.hasAttribute("data-menu-open")) setMenu(false, true);
+        return;
+      }
+      // The drawer covers the page, so Tab cycles between the Menu button
+      // and the links inside it until the drawer is closed.
+      if (event.key !== "Tab" || !header.hasAttribute("data-menu-open")) return;
+      const stops = [menuButton, ...nav.querySelectorAll<HTMLElement>("a[href]")].filter(
+        (el) => el.getClientRects().length > 0,
+      );
+      const first = stops[0];
+      const last = stops[stops.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    const reset = () => {
+      closePanel();
+      setMenu(false);
+    };
+    window.matchMedia("(min-width: 48rem)").addEventListener("change", reset);
+    window.addEventListener("pageshow", reset);
+  }
+</script>
+
+<style>
+  /* The blur sits on a pseudo-element, not on the header: backdrop-filter on
+     the header would make it the containing block for position: fixed, and
+     the scrim needs the viewport. */
+  .site-header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: color-mix(in srgb, var(--color-navy-deep) 92%, transparent);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+  }
+
+  .nav-scrim {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background: color-mix(in srgb, var(--color-navy-deep) 60%, transparent);
+  }
+
+  .site-header[data-panel-open] .nav-scrim {
+    display: block;
+    animation: nav-fade 180ms ease-out;
+  }
+
+  .nav-list,
+  .nav-panel-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  :is(.nav-menu-button, .nav-trigger, .nav-link):focus-visible {
+    outline: 2px solid var(--color-gold-light);
+    outline-offset: 2px;
+  }
+
+  /* Menu button (below md) */
+  .nav-menu-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 2.75rem;
+    padding: 0 0.95rem 0 1.1rem;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 24%, var(--color-rule));
+    border-radius: 999px;
+    background: color-mix(in srgb, white 6%, transparent);
+    color: var(--color-ink);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
+  .nav-menu-button[aria-expanded="true"] {
+    background: color-mix(in srgb, white 12%, transparent);
+    border-color: color-mix(in srgb, var(--color-gold) 45%, var(--color-rule));
+  }
+
+  .nav-menu-icon {
+    position: relative;
+    width: 1rem;
+    height: 0.75rem;
+  }
+
+  .nav-menu-icon span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 200ms ease, opacity 150ms ease, top 200ms ease;
+  }
+
+  .nav-menu-icon span:nth-child(1) { top: 0; }
+  .nav-menu-icon span:nth-child(2) { top: calc(50% - 1px); }
+  .nav-menu-icon span:nth-child(3) { top: calc(100% - 2px); }
+
+  [aria-expanded="true"] .nav-menu-icon span:nth-child(1) { top: calc(50% - 1px); transform: rotate(45deg); }
+  [aria-expanded="true"] .nav-menu-icon span:nth-child(2) { opacity: 0; }
+  [aria-expanded="true"] .nav-menu-icon span:nth-child(3) { top: calc(50% - 1px); transform: rotate(-45deg); }
+
+  /* Panel links, shared by the bands and the drawer */
+  .nav-link {
+    display: block;
+    border-radius: 0.9rem;
+    padding: 0.75rem 0.85rem;
+    text-decoration: none;
+    transition: background-color 150ms ease;
+  }
+
+  .nav-link:hover {
+    background: color-mix(in srgb, white 6%, transparent);
+  }
+
+  .nav-link-label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-ink);
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.25;
+  }
+
+  .nav-link-arrow {
+    width: 0.85rem;
+    height: 0.85rem;
+    flex: none;
+    color: var(--color-gold-light);
+    opacity: 0;
+    transform: translateX(-4px);
+    transition: opacity 150ms ease, transform 150ms ease;
+  }
+
+  .nav-link:is(:hover, :focus-visible) .nav-link-arrow {
+    opacity: 1;
+    transform: none;
+  }
+
+  .nav-link-desc {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    font-weight: 500;
+    line-height: 1.35;
+    letter-spacing: normal;
+    text-transform: none;
+  }
+
+  .nav-link[aria-current="page"] {
+    background: color-mix(in srgb, var(--color-gold) 12%, transparent);
+    box-shadow: inset 3px 0 0 var(--color-gold);
+  }
+
+  .nav-link[aria-current="page"] .nav-link-label {
+    color: var(--color-gold-light);
+  }
+
+  .nav-panel-kicker {
+    color: var(--color-gold-light);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  .nav-panel-dek {
+    color: var(--color-link);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+
+  .nav-chevron {
+    width: 0.75rem;
+    height: 0.75rem;
+    flex: none;
+    transition: transform 200ms ease;
+  }
+
+  .nav-trigger[aria-expanded="true"] .nav-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Below md: one row, sections in a full-height drawer */
+  @media (width < 48rem) {
+    .site-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      height: calc(100vh - 100%);
+      height: calc(100dvh - 100%);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+      padding: 0.25rem 1rem calc(2.5rem + env(safe-area-inset-bottom));
+      border-top: 1px solid color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));
+      background:
+        radial-gradient(circle at 100% 0, color-mix(in srgb, var(--color-gold) 10%, transparent), transparent 18rem),
+        linear-gradient(180deg, var(--color-navy-deep) 0%, color-mix(in srgb, var(--color-navy) 45%, var(--color-navy-deep)) 100%);
+    }
+
+    .site-header[data-menu-open] .site-nav {
+      display: block;
+      animation: nav-drop 200ms ease-out;
+    }
+
+    /* Without the script, focusing the Menu button still reveals the links. */
+    .site-header:not([data-nav-ready]):focus-within .site-nav {
+      display: block;
+    }
+
+    .nav-trigger:is(button) {
+      display: none;
+    }
+
+    .nav-section + .nav-section {
+      margin-top: 0.5rem;
+      border-top: 1px solid color-mix(in srgb, var(--color-gold) 14%, var(--color-rule));
+    }
+
+    .nav-panel-intro {
+      padding: 1.1rem 0.85rem 0.3rem;
+    }
+
+    .nav-panel-links {
+      display: grid;
+      gap: 0.15rem;
+    }
+
+    .nav-link,
+    .nav-squad {
+      min-height: 2.75rem;
+      padding: 0.65rem 0.85rem;
+    }
+
+    .nav-link-label {
+      font-size: 1.02rem;
+    }
+
+    .nav-panel-dek {
+      display: none;
+    }
+
+    .nav-feature-slot {
+      display: none;
+    }
+
+    .nav-drawer-feature {
+      margin-top: 1.25rem;
+    }
+
+    .nav-section-plain {
+      padding-top: 0.75rem;
+    }
+
+    .nav-squad {
+      display: block;
+      border-radius: 0.9rem;
+      color: var(--color-ink);
+      font-size: 1.02rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .nav-squad[aria-current="page"] {
+      background: color-mix(in srgb, var(--color-gold) 12%, transparent);
+      box-shadow: inset 3px 0 0 var(--color-gold);
+      color: var(--color-gold-light);
+    }
+  }
+
+  /* md and up: three entries in the bar, panels as full-width bands */
+  @media (width >= 48rem) {
+    .nav-menu-button {
+      display: none;
+    }
+
+    .nav-list {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .nav-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-height: 2.75rem;
+      padding: 0 0.9rem;
+      border-radius: 999px;
+      color: var(--color-link);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-decoration: none;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: color 150ms ease, background-color 150ms ease;
+    }
+
+    .nav-trigger:hover,
+    .nav-trigger[aria-expanded="true"] {
+      color: var(--color-ink);
+    }
+
+    .nav-trigger[aria-expanded="true"] {
+      background: color-mix(in srgb, white 9%, transparent);
+    }
+
+    .nav-trigger-label {
+      position: relative;
+    }
+
+    /* The section holding the current page, and Squad when it is the page. */
+    :is(.nav-trigger[data-active], .nav-trigger[aria-current="page"]) {
+      color: var(--color-ink);
+    }
+
+    :is(.nav-trigger[data-active], .nav-trigger[aria-current="page"]) .nav-trigger-label::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: -0.14em;
+      bottom: -0.5rem;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--color-gold);
+    }
+
+    .nav-squad .nav-link-desc,
+    .nav-drawer-feature {
+      display: none;
+    }
+
+    .nav-panel {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      max-height: calc(100vh - 100%);
+      max-height: calc(100dvh - 100%);
+      overflow-y: auto;
+      border-top: 1px solid color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));
+      border-bottom: 1px solid color-mix(in srgb, var(--color-gold) 32%, var(--color-rule));
+      background:
+        radial-gradient(circle at 88% 0, color-mix(in srgb, var(--color-gold) 11%, transparent), transparent 24rem),
+        linear-gradient(180deg, color-mix(in srgb, var(--color-navy) 38%, var(--color-navy-deep)) 0%, var(--color-navy-deep) 100%);
+      box-shadow: 0 28px 60px color-mix(in srgb, black 45%, transparent);
+    }
+
+    .nav-trigger[aria-expanded="true"] + .nav-panel {
+      display: block;
+      animation: nav-drop 180ms ease-out;
+    }
+
+    /* Without the script, hover and keyboard focus still open a section. */
+    .site-header:not([data-nav-ready]) .nav-section:is(:hover, :focus-within) > .nav-panel {
+      display: block;
+    }
+
+    /* md to lg: links on top, the featured slot as a two-up strip below,
+       so neither gets squeezed into a narrow column. */
+    .nav-panel-grid {
+      display: grid;
+      gap: 1rem;
+      padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    .nav-panel-intro {
+      display: none;
+    }
+
+    .nav-panel-links {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-content: start;
+      gap: 0.35rem 0.75rem;
+    }
+  }
+
+  /* lg: links beside the featured column. The section intro waits for xl;
+     at 1024 it would squeeze every description onto two lines. */
+  @media (width >= 64rem) {
+    .nav-trigger {
+      min-height: 2.5rem;
+      padding: 0 1rem;
+      font-size: 0.8rem;
+    }
+
+    .nav-panel-grid {
+      grid-template-columns: minmax(0, 1fr) 17rem;
+      gap: 1.75rem;
+      padding: 1.5rem 1.5rem 1.75rem;
+    }
+
+    .nav-link {
+      padding: 0.85rem 0.95rem;
+    }
+  }
+
+  @media (width >= 80rem) {
+    .nav-panel-grid {
+      grid-template-columns: 12rem minmax(0, 1fr) 18rem;
+      gap: 2rem;
+      padding: 1.75rem 1.5rem 2rem;
+    }
+
+    .nav-panel-intro {
+      display: block;
+      padding-right: 1.5rem;
+      border-right: 1px solid color-mix(in srgb, var(--color-gold) 14%, var(--color-rule));
+    }
+
+    .nav-panel-kicker {
+      color: var(--color-ink);
+      font-size: 1.7rem;
+      font-weight: 900;
+      letter-spacing: -0.01em;
+      line-height: 1;
+    }
+
+    .nav-panel-kicker::before {
+      content: "";
+      display: block;
+      width: 2rem;
+      height: 3px;
+      margin-bottom: 0.85rem;
+      border-radius: 2px;
+      background: var(--color-gold);
+    }
+
+    .nav-panel-dek {
+      margin-top: 0.75rem;
+    }
+  }
+
+  @keyframes nav-drop {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes nav-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-nav,
+    .nav-panel,
+    .nav-scrim,
+    .nav-chevron,
+    .nav-link-arrow,
+    .nav-menu-icon span {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>
