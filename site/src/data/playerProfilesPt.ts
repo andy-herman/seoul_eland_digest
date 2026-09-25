@@ -47,6 +47,8 @@ export const PLAYER_PROFILES_PT: Record<string, string> = {
     "Defensor jovem cujo 2026 até aqui se resume a uma única e breve aparição na liga. O tipo de peça de elenco que uma reta final de briga pelo acesso às vezes transforma em oportunidade.",
   "jeong-yeon-won":
     "Defensor que ainda não se firmou na rotação, com uma curta aparição na liga nesta temporada.",
+  "caio-marcelo":
+    "Zagueiro brasileiro, canhoto e com 1,92 m, que fez 50 jogos pelo Daegu entre 2024 e 2025 e assinou em 18 de agosto, um dia antes do fechamento da janela de verão. Estreou num time cheio de mudanças em Seongnam, onze dias depois, e não teve culpa no gol sofrido. A primeira partida como titular desde então veio contra o Daegu, na 27ª rodada, quando ele e Baek Ji-woong jogaram ao lado de Osmar numa linha de três, e ele bloqueou com o corpo o chute de Kim Dae-woo na vitória por 2 a 1. Kim Do-gyun o citou entre os jogadores que quer ver marcando de bola parada.",
 
   // ---- Meio-campistas ----
   "park-chang-hwan":
@@ -85,6 +87,8 @@ export const PLAYER_PROFILES_PT: Record<string, string> = {
     "Atacante que ainda não conseguiu entrar no time nas partidas da liga nesta temporada.",
   "kim-woo-bin":
     "Atacante à margem do elenco, ainda à espera de minutos na liga em 2026.",
+  "hong-seok-jun":
+    "Ponta que chegou do Chungbuk Cheongju em 19 de agosto, na troca do último dia da janela que levou Francisco Geraldes no sentido contrário, contratado com o objetivo declarado de cobrir o buraco deixado pelo alistamento de Byeon Gyeong-jun. Tinha jogado todas as partidas de 2026 pelo Cheongju antes da transferência. Foi titular pela esquerda na estreia, em Seongnam, na 24ª rodada, arriscou de longe e deu lugar a Euller no intervalo. Seis dias depois, entrou no fim contra o ex-clube na vitória em Cheongju.",
 };
 
 export function getPlayerProfilePt(slug: string): string | undefined {

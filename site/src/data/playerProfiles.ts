@@ -50,6 +50,8 @@ export const PLAYER_PROFILES: Record<string, string> = {
     "Young defender whose 2026 to date amounts to a single brief league appearance. The kind of squad number that a promotion run-in occasionally turns into an opportunity.",
   "jeong-yeon-won":
     "Defender yet to establish himself in the rotation, with one short league appearance this season.",
+  "caio-marcelo":
+    "Brazilian centre-back, 192cm and left-footed, who played 50 times for Daegu across 2024 and 2025 and signed on August 18, a day before the summer window closed. Debuted in a rotated side at Seongnam eleven days later and was not at fault for the goal. His first start after that came against Daegu in Round 27, where he and Baek Ji-woong flanked Osmar in a back three and he blocked Kim Dae-woo's shot with his body in a 2-1 win. Kim Do-gyun has named him among the players he wants scoring from set pieces.",
 
   // ---- Midfielders ----
   "park-chang-hwan":
@@ -88,6 +90,8 @@ export const PLAYER_PROFILES: Record<string, string> = {
     "Forward yet to break into the league side this season.",
   "kim-woo-bin":
     "Forward on the fringe of the squad, still waiting on league minutes in 2026.",
+  "hong-seok-jun":
+    "Winger who arrived from Chungbuk Cheongju on August 19 in the deadline-day trade that sent Francisco Geraldes the other way, signed with the stated aim of covering the gap Byeon Gyeong-jun's enlistment left. Had played every 2026 match for Cheongju before the move. Started on the left on his debut at Seongnam in Round 24, tried his luck from range, and made way for Euller at half-time. Six days later he came on late against his old club in the win at Cheongju.",
 };
 
 export function getPlayerProfile(slug: string): string | undefined {
