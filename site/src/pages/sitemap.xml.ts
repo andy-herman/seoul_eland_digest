@@ -27,6 +27,7 @@ const STATIC_PATHS = [
   "/pt/guides",
   "/pt/articles",
   "/pt/articles/season-review",
+  "/pt/players",
 ];
 
 export async function GET(context: APIContext) {

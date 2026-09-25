@@ -87,3 +87,38 @@ export function getEnglishPosition(position: string | null) {
 
   return ENGLISH_POSITIONS[position] ?? position;
 }
+
+// Portuguese labels for the /pt/ squad page. Position terms match the ones
+// the Season Review hub already uses.
+const PORTUGUESE_NATIONALITIES: Record<string, string> = {
+  대한민국: "Coreia do Sul",
+  스페인: "Espanha",
+  브라질: "Brasil",
+  호주: "Austrália",
+  포르투갈: "Portugal",
+};
+
+const PORTUGUESE_POSITIONS: Record<string, string> = {
+  GK: "Goleiro",
+  DF: "Defensor",
+  MF: "Meio-campista",
+  FW: "Atacante",
+  AM: "Atacante",
+  OT: "Comissão técnica",
+};
+
+export function getPortugueseNationality(nationality: string | null) {
+  if (!nationality) {
+    return "-";
+  }
+
+  return PORTUGUESE_NATIONALITIES[nationality] ?? nationality;
+}
+
+export function getPortuguesePosition(position: string | null) {
+  if (!position) {
+    return "Jogador";
+  }
+
+  return PORTUGUESE_POSITIONS[position] ?? position;
+}
