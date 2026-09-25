@@ -25,13 +25,13 @@ export const PLAYER_PROFILES: Record<string, string> = {
 
   // ---- Defenders ----
   "osmar":
-    "Thirty-seven years old and still the organising voice of the back line, which is why he keeps playing full matches in a run of fixtures that would rest most defenders his age. Spanish, unhurried, and a genuine threat from set pieces at the other end. Came back from a Round 13 ankle scare and went straight into three consecutive ninety-minute performances, the last two five days apart.",
+    "Thirty-eight years old and still the organising voice of the back line, which is why he keeps playing full matches in a run of fixtures that would rest most defenders his age. Spanish, unhurried, and a genuine threat from set pieces at the other end. Came back from a Round 13 ankle scare and went straight into three consecutive ninety-minute performances, the last two five days apart.",
   "kim-oh-kyu":
-    "The club captain, and quietly one of only two players in the squad to have appeared in every match. Started most of the season before dropping to the bench during the recent run, which says more about Osmar's form than his own. Reliable enough that bringing him on to protect a lead is a decision nobody worries about.",
+    "The club captain, and quietly one of the most-used players in the squad. Started most of the season before dropping to the bench during the recent run, which says more about Osmar's form than his own. Reliable enough that bringing him on to protect a lead is a decision nobody worries about.",
   "oh-in-pyo":
     "A full-back who defends properly and still turns up in the opposition box often enough to matter, with a healthy return of goals and assists from defence. Scored at Suwon FC in Round 18 from a Lee Ju-hyeok cross. One of the highest minute-counts in the squad, which is what happens when a coach trusts someone in both boxes.",
   "baek-ji-woong":
-    "Listed as a midfielder, used as a centre-back, and the club's most unlikely goal source: he has more goals this season than most of the forwards. Attacks set pieces with real conviction. Headed the equaliser away at second-placed Busan IPark in Round 20, the goal that started the comeback in the biggest win of the season.",
+    "Listed as a midfielder, used as a centre-back, and the club's most unlikely goal source: he has more goals this season than most of the forwards. Attacks set pieces with real conviction. Volleyed in the equaliser away at second-placed Busan IPark in Round 20, the goal that started the comeback in the biggest win of the season.",
   "bae-seo-jun":
     "A young full-back with an appetite for the overlap who has been fighting his way into the starting side across the season. Took a battering at Hwaseong in Round 21, colliding with two different opponents before being withdrawn just after half-time, which is the sort of shift that does not show up on a stat sheet.",
   "kim-joo-hwan":
@@ -41,7 +41,7 @@ export const PLAYER_PROFILES: Record<string, string> = {
   "park-jin-young":
     "Defender who has taken a steady share of minutes across the season without ever being the story, which for a centre-back is usually a compliment.",
   "son-hyuk-chan":
-    "Defensive cover across the back line, and the man sent on at short notice when Osmar limped out of the Round 13 win over Seongnam after nineteen minutes. Has been used often enough to be considered part of the rotation rather than an emergency.",
+    "Defensive cover across the back line, and the man sent on at short notice when Osmar limped out of the Round 13 win over Seongnam after twenty-two minutes. Has been used often enough to be considered part of the rotation rather than an emergency.",
   "kim-hyun-woo":
     "Squad defender working his way toward a regular role, with a handful of appearances to build on this season.",
   "choi-rang":
@@ -83,7 +83,7 @@ export const PLAYER_PROFILES: Record<string, string> = {
   "kim-hyun":
     "Forward who has featured in most matchday squads this season, generally as a centre-forward option rotating with the starter. Started ahead of Park Jae-yong for a stretch in midsummer.",
   "gabriel-santos":
-    "Brazilian forward and part of a South American contingent that gives this squad much of its flavour. Has taken a steady share of minutes without yet finding the goal his season is waiting for.",
+    "Brazilian forward and part of a South American contingent that gives this squad much of its flavour. Has taken a steady share of minutes, and his late header at Seongnam saved a point.",
   "park-sun-woo":
     "Forward yet to break into the league side this season.",
   "kim-woo-bin":
