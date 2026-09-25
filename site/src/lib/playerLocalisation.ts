@@ -36,6 +36,8 @@ export const ENGLISH_PLAYER_NAMES: Record<string, string> = {
   제랄데스: "Francisco Geraldes",
   가브리엘: "Gabriel Santos",
   김우빈: "Kim Woo-bin",
+  카이오: "Caio Marcelo",
+  홍석준: "Hong Seok-jun",
 };
 
 const ENGLISH_NATIONALITIES: Record<string, string> = {
