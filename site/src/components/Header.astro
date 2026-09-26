@@ -76,6 +76,10 @@ const squad: NavLink = isPortuguese
   ? { href: "/pt/players", label: "Elenco", description: "Perfis, números e fotos dos jogadores" }
   : { href: "/players", label: "Squad", description: "Player profiles, shirt numbers and photos" };
 
+const play: NavLink = isPortuguese
+  ? { href: "/pt/play", label: "Jogo", description: "Pênaltis com os mascotes Leoul e Lenyang" }
+  : { href: "/play", label: "Play", description: "Penalties with the mascots Leoul and Lenyang" };
+
 const t = isPortuguese
   ? {
       navLabel: "Navegação principal",
@@ -303,8 +307,14 @@ const featureRows = { matches: matchRows, season: seasonRows };
             <span class="nav-link-desc">{squad.description}</span>
           </a>
         </li>
+        <li class="nav-section nav-section-plain">
+          <a href={withBase(play.href)} class="nav-trigger nav-squad" aria-current={isActive(play.href) ? "page" : undefined}>
+            <span class="nav-trigger-label">{play.label}</span>
+            <span class="nav-link-desc">{play.description}</span>
+          </a>
+        </li>
       </ul>
-      <!-- Phones get the match rows after all nine links rather than between
+      <!-- Phones get the match rows after all ten links rather than between
            Matches and Season, so every destination shows on first open. -->
       <div class="nav-drawer-feature">
         <HeaderFeature rows={matchRows} locale={locale} />

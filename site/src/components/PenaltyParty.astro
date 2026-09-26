@@ -1,0 +1,972 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { IMAGE_FILES, type ImageKey } from "../game/assets";
+import { CARDS } from "../game/cards";
+import { STRINGS, type Locale } from "../game/i18n";
+import { withBase } from "../lib/paths";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = STRINGS[locale];
+const art = (key: ImageKey) => withBase(`/play/${IMAGE_FILES[key]}`);
+const isPortuguese = locale === "pt";
+const profiles = [
+  { profile: t.leoul, image: art("leoulKick"), accent: "leoul" },
+  { profile: t.lenyang, image: art("lenyangHug"), accent: "lenyang" },
+];
+---
+
+<div class="pp-page">
+  <header class="supporter-panel pp-hero rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div class="min-w-0">
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.55rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{t.heading}</h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
+      </div>
+      {isPortuguese ? (
+        <TranslateButton href="/play" code="EN" label="Inglês" ariaLabel="Jogar em inglês" />
+      ) : (
+        <TranslateButton href="/pt/play" code="PT" label="Português" ariaLabel="Play in Portuguese" />
+      )}
+    </div>
+  </header>
+
+  <section class="pp-game" data-pp-root data-locale={locale} data-assets={withBase("/play/")} aria-label={t.heading}>
+    <div class="pp-stage">
+      <canvas class="pp-canvas" data-pp-canvas width="960" height="1200" role="img" aria-label={t.canvasLabel} tabindex="-1"></canvas>
+
+      <div class="pp-hud" data-pp-hud hidden>
+        <span class="pp-chip" data-pp-level>{t.level} 1</span>
+        <span class="pp-score" aria-label={t.score}><span data-pp-score>0</span></span>
+        <span class="pp-hud-right">
+          <span class="pp-lives" data-pp-lives role="img" aria-label={`${t.lives}: 3`}>
+            <img src={art("iconPaw")} alt="" width="160" height="154" />
+            <img src={art("iconPaw")} alt="" width="160" height="154" />
+            <img src={art("iconPaw")} alt="" width="160" height="154" />
+          </span>
+          <button type="button" class="pp-icon-btn" data-pp-pause aria-label={t.pause}>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.2" height="12" rx="1.2" /><rect x="11.8" y="4" width="3.2" height="12" rx="1.2" /></svg>
+          </button>
+          <button type="button" class="pp-icon-btn pp-mute" data-pp-mute aria-label={t.mute} aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M3 7.5h3l4-3.5v12l-4-3.5H3z" />
+              <path class="pp-wave" d="M13 7a4 4 0 0 1 0 6M15.2 5a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              <path class="pp-cross" d="M13 7.5l5 5M18 7.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </button>
+        </span>
+      </div>
+
+      <div class="pp-screen" data-pp-screen="loading">
+        <p class="pp-loading-text" data-pp-loading-text>{t.loading}</p>
+        <div class="pp-progress"><span data-pp-progress></span></div>
+      </div>
+
+      <div class="pp-screen pp-menu" data-pp-screen="menu" hidden>
+        <img class="pp-logo" src={art("title")} alt="Leoul & Lenyang" width="1400" height="239" />
+        <p class="pp-subtitle">{t.subtitle}</p>
+        <p class="pp-choose">{t.chooseMascot}</p>
+        <div class="pp-modes">
+          <button type="button" class="pp-mode pp-mode-leoul" data-pp-start="shoot">
+            <img src={art("leoulWave")} alt="" width="446" height="618" />
+            <span class="pp-mode-title">{t.shootMode}</span>
+            <span class="pp-mode-desc">{t.shootModeDesc}</span>
+            <span class="pp-mode-best" data-pp-best="shoot"></span>
+          </button>
+          <button type="button" class="pp-mode pp-mode-lenyang" data-pp-start="save">
+            <img src={art("lenyangReady")} alt="" width="440" height="480" />
+            <span class="pp-mode-title">{t.saveMode}</span>
+            <span class="pp-mode-desc">{t.saveModeDesc}</span>
+            <span class="pp-mode-best" data-pp-best="save"></span>
+          </button>
+        </div>
+        <details class="pp-how">
+          <summary>{t.howToPlay}</summary>
+          <p>{t.howShoot}</p>
+          <p>{t.howSave}</p>
+          <p class="pp-keys">{t.keyboardHint}</p>
+        </details>
+        <button type="button" class="pp-toggle" data-pp-music aria-pressed="true">
+          <span aria-hidden="true">♪</span> {t.musicLabel}: <span data-pp-music-state>{t.musicOn}</span>
+        </button>
+        <p class="pp-now-playing">{t.nowPlaying}</p>
+      </div>
+
+      <div class="pp-screen" data-pp-screen="pause" hidden>
+        <p class="pp-screen-title">{t.paused}</p>
+        <div class="pp-stack">
+          <button type="button" class="pp-btn pp-btn-primary" data-pp-resume>{t.resume}</button>
+          <button type="button" class="pp-btn" data-pp-menu>{t.menu}</button>
+        </div>
+      </div>
+
+      <div class="pp-screen pp-over" data-pp-screen="over" hidden>
+        <img class="pp-trophy" src={art("trophy")} alt="" width="440" height="526" />
+        <p class="pp-screen-title">{t.fullTime}</p>
+        <p class="pp-final-label">{t.finalScore}</p>
+        <p class="pp-final" data-pp-final>0</p>
+        <p class="pp-final-stats" data-pp-final-stats></p>
+        <p class="pp-best-line" data-pp-best-line></p>
+        <div class="pp-new-cards" data-pp-new-cards hidden>
+          <p>{t.newCards}</p>
+          <ul data-pp-new-cards-list></ul>
+        </div>
+        <div class="pp-stack">
+          <button type="button" class="pp-btn pp-btn-primary" data-pp-again>{t.playAgain}</button>
+          <button type="button" class="pp-btn" data-pp-switch>{t.switchMascot}</button>
+          <div class="pp-row">
+            <button type="button" class="pp-btn pp-btn-small" data-pp-share>{t.share}</button>
+            <button type="button" class="pp-btn pp-btn-small" data-pp-menu>{t.menu}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="pp-toast" data-pp-toast aria-hidden="true"></div>
+    </div>
+
+    <div class="pp-controls" data-pp-controls hidden>
+      <p class="pp-prompt" data-pp-prompt></p>
+      <div data-pp-shoot-controls>
+        <button type="button" class="pp-btn pp-btn-primary pp-btn-wide" data-pp-action>{t.shoot}</button>
+      </div>
+      <div class="pp-dives" data-pp-save-controls hidden>
+        <button type="button" class="pp-btn" data-pp-dive="left"><span aria-hidden="true">◀</span> {t.diveLeft}</button>
+        <button type="button" class="pp-btn" data-pp-dive="center">{t.stay}</button>
+        <button type="button" class="pp-btn" data-pp-dive="right">{t.diveRight} <span aria-hidden="true">▶</span></button>
+      </div>
+    </div>
+    <p class="pp-sr-only" aria-live="polite" data-pp-live></p>
+  </section>
+
+  <section class="pp-section" aria-labelledby="pp-meet-heading">
+    <p class="eyebrow">Seoul E-Land FC</p>
+    <h2 id="pp-meet-heading" class="pp-h2">{t.meetHeading}</h2>
+    <p class="pp-lede">{t.meetIntro}</p>
+    <div class="pp-meet-grid">
+      {profiles.map(({ profile, image, accent }) => (
+        <article class={`pp-profile pp-profile-${accent}`}>
+          <img src={image} alt={profile.name} loading="lazy" />
+          <div>
+            <p class="pp-profile-kind">{profile.kind}</p>
+            <h3 class="pp-profile-name">
+              {profile.name} <span lang="ko">{profile.korean}</span>
+            </h3>
+            <p class="pp-profile-age">{profile.age}</p>
+            {profile.story.map((line) => <p class="pp-profile-story">{line}</p>)}
+            <p class="pp-profile-likes"><strong>{profile.likesLabel}:</strong> {profile.likes}</p>
+            <p class="pp-profile-signature">{profile.signature}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="pp-section" aria-labelledby="pp-cards-heading">
+    <div class="pp-cards-head">
+      <div>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h2 id="pp-cards-heading" class="pp-h2">{t.cardsHeading}</h2>
+      </div>
+      <p class="pp-collected" data-pp-collected>{t.collected(0, CARDS.length)}</p>
+    </div>
+    <p class="pp-lede">{t.cardsIntro}</p>
+    <ol class="pp-card-grid">
+      {CARDS.map((card) => (
+        <li class={`pp-card pp-card-${card.mascot}`} data-card={card.id} data-locked>
+          <div class="pp-card-art">
+            <img src={art(card.art)} alt="" loading="lazy" />
+          </div>
+          <p class="pp-card-name">{card.mascot === "leoul" ? "Leoul · 레울" : "Lenyang · 레냥"}</p>
+          <h3 class="pp-card-title">{t.cards[card.id].title}</h3>
+          <p class="pp-card-fact">{t.cards[card.id].fact}</p>
+          <p class="pp-card-hint">
+            <span class="pp-card-lock">{t.locked}</span>
+            {t.cards[card.id].hint}
+          </p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <p class="pp-credit">{t.credit} {t.artCredit}</p>
+</div>
+
+<script>
+  import { mountPenaltyParty } from "../game/main";
+
+  document.querySelectorAll<HTMLElement>("[data-pp-root]").forEach((root) => mountPenaltyParty(root));
+</script>
+
+<style is:global>
+  .pp-game {
+    margin: 1.1rem auto 0;
+    width: min(100%, 36rem, calc((100vh - 12rem) * 0.8));
+    width: min(100%, 36rem, calc((100svh - 12rem) * 0.8));
+    min-width: min(100%, 19rem);
+  }
+
+  .pp-stage {
+    position: relative;
+    container-type: size;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border: 3px solid color-mix(in srgb, var(--color-gold) 55%, var(--color-navy));
+    border-radius: 1.5rem;
+    background: var(--color-navy);
+    box-shadow: 0 26px 70px color-mix(in srgb, black 40%, transparent);
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .pp-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .pp-hud {
+    position: absolute;
+    inset: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.4rem;
+    padding: 0.55rem 0.6rem;
+    pointer-events: none;
+  }
+
+  .pp-hud[hidden],
+  .pp-screen[hidden],
+  .pp-controls[hidden],
+  .pp-new-cards[hidden],
+  [data-pp-shoot-controls][hidden],
+  .pp-dives[hidden] {
+    display: none;
+  }
+
+  .pp-chip {
+    border: 2px solid color-mix(in srgb, var(--color-gold) 60%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 82%, transparent);
+    color: #fff4dc;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    padding: 0.28rem 0.6rem;
+    text-transform: uppercase;
+  }
+
+  .pp-score {
+    color: #fff4dc;
+    font-size: clamp(1.35rem, 6vw, 2.1rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: 0 3px 0 var(--color-navy), 2px 0 0 var(--color-navy), -2px 0 0 var(--color-navy), 0 -2px 0 var(--color-navy);
+  }
+
+  .pp-hud-right {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .pp-lives {
+    display: flex;
+    gap: 0.1rem;
+    margin-right: 0.15rem;
+  }
+
+  .pp-lives img {
+    width: clamp(1.2rem, 5vw, 1.6rem);
+    height: auto;
+    transition: filter 0.3s, opacity 0.3s;
+  }
+
+  .pp-lives img.pp-life-lost {
+    filter: grayscale(1) brightness(0.55);
+    opacity: 0.45;
+  }
+
+  .pp-icon-btn {
+    display: grid;
+    width: 2.3rem;
+    height: 2.3rem;
+    place-items: center;
+    border: 2px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 85%, transparent);
+    color: #fff4dc;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .pp-icon-btn svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: currentColor;
+  }
+
+  .pp-mute .pp-cross,
+  .pp-mute[data-state="off"] .pp-wave {
+    display: none;
+  }
+
+  .pp-mute[data-state="off"] .pp-cross {
+    display: inline;
+  }
+
+  .pp-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    overflow-y: auto;
+    padding: 1.1rem;
+    background: linear-gradient(180deg, color-mix(in srgb, #090c20 30%, transparent) 0%, color-mix(in srgb, #090c20 84%, transparent) 62%);
+    color: #fff;
+    text-align: center;
+  }
+
+  .pp-menu {
+    justify-content: flex-start;
+    padding-top: 8%;
+  }
+
+  .pp-loading-text {
+    font-weight: 800;
+    color: #fff4dc;
+  }
+
+  .pp-progress {
+    width: min(70%, 16rem);
+    height: 0.6rem;
+    overflow: hidden;
+    border: 2px solid var(--color-gold);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 80%, transparent);
+  }
+
+  .pp-progress span {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: #ffe38a;
+    transition: width 0.2s;
+  }
+
+  .pp-logo {
+    width: 94%;
+    height: auto;
+    filter: drop-shadow(0 6px 0 color-mix(in srgb, #090c20 40%, transparent));
+  }
+
+  .pp-subtitle {
+    margin-top: -0.35rem;
+    color: #ffe38a;
+    font-size: clamp(1.15rem, 5.5vw, 1.9rem);
+    font-weight: 900;
+    letter-spacing: 0.14em;
+    text-shadow: 0 3px 0 var(--color-navy);
+    text-transform: uppercase;
+  }
+
+  .pp-choose {
+    margin-top: auto;
+    color: #fff4dc;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .pp-modes {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.65rem;
+  }
+
+  .pp-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    border: 3px solid var(--color-navy);
+    border-radius: 1.1rem;
+    background: #fbf7ef;
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    cursor: pointer;
+    padding: 0.6rem 0.45rem 0.7rem;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .pp-mode-leoul {
+    background: linear-gradient(180deg, #e3f3fb 0%, #fbf7ef 60%);
+  }
+
+  .pp-mode-lenyang {
+    background: linear-gradient(180deg, #fbeadb 0%, #fbf7ef 60%);
+  }
+
+  .pp-mode:hover {
+    transform: translateY(-2px);
+  }
+
+  .pp-mode:active {
+    box-shadow: 0 2px 0 var(--color-navy);
+    transform: translateY(3px);
+  }
+
+  .pp-mode img {
+    width: auto;
+    height: clamp(4rem, 19vw, 7rem);
+  }
+
+  .pp-mode-title {
+    font-size: clamp(0.9rem, 3.8vw, 1.1rem);
+    font-weight: 900;
+    line-height: 1.15;
+  }
+
+  .pp-mode-desc {
+    color: #5f6579;
+    font-size: 0.74rem;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .pp-mode-best {
+    min-height: 1em;
+    color: #9a6a3f;
+    font-size: 0.72rem;
+    font-weight: 900;
+  }
+
+  .pp-how {
+    width: 100%;
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--color-navy) 82%, transparent);
+    font-size: 0.82rem;
+    line-height: 1.45;
+    padding: 0.45rem 0.8rem;
+    text-align: left;
+  }
+
+  .pp-how summary {
+    color: #ffe38a;
+    cursor: pointer;
+    font-weight: 900;
+  }
+
+  .pp-how p {
+    margin-top: 0.45rem;
+    color: #e6e9f7;
+  }
+
+  .pp-how .pp-keys {
+    color: #c2c7df;
+    font-size: 0.75rem;
+  }
+
+  .pp-toggle {
+    border: 2px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 85%, transparent);
+    color: #fff4dc;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 0.35rem 0.85rem;
+  }
+
+  .pp-now-playing {
+    color: #c2c7df;
+    font-size: 0.72rem;
+  }
+
+  .pp-screen-title {
+    color: #fff4dc;
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-shadow: 0 3px 0 var(--color-navy);
+    text-transform: uppercase;
+  }
+
+  .pp-stack {
+    display: flex;
+    width: min(100%, 17rem);
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .pp-row {
+    display: flex;
+    gap: 0.55rem;
+  }
+
+  .pp-row .pp-btn {
+    flex: 1;
+  }
+
+  .pp-btn {
+    display: inline-flex;
+    min-height: 2.9rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border: 3px solid var(--color-navy);
+    border-radius: 999px;
+    background: #fbf7ef;
+    box-shadow: 0 4px 0 var(--color-navy);
+    color: #15182a;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 900;
+    line-height: 1.1;
+    padding: 0.5rem 1rem;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.2s;
+  }
+
+  .pp-btn:active:not(:disabled) {
+    box-shadow: 0 1px 0 var(--color-navy);
+    transform: translateY(3px);
+  }
+
+  .pp-btn:disabled {
+    box-shadow: 0 2px 0 var(--color-navy);
+    cursor: default;
+    opacity: 0.5;
+    transform: translateY(2px);
+  }
+
+  .pp-btn-primary {
+    background: #ffe38a;
+  }
+
+  .pp-btn-small {
+    min-height: 2.5rem;
+    font-size: 0.82rem;
+  }
+
+  .pp-btn-wide {
+    width: 100%;
+    min-height: 3.4rem;
+    font-size: 1.2rem;
+    letter-spacing: 0.04em;
+  }
+
+  .pp-game :is(.pp-btn, .pp-mode, .pp-icon-btn, .pp-toggle, summary):focus-visible {
+    outline: 3px solid #56c1e8;
+    outline-offset: 3px;
+  }
+
+  .pp-trophy {
+    width: clamp(4.5rem, 22vw, 7.5rem);
+    height: auto;
+  }
+
+  [data-pp-new-best] .pp-trophy {
+    animation: pp-bounce 0.9s ease-out 2;
+  }
+
+  .pp-final-label {
+    color: #c2c7df;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .pp-final {
+    color: #ffe38a;
+    font-size: clamp(2.4rem, 11vw, 3.8rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: 0 4px 0 var(--color-navy);
+  }
+
+  .pp-final-stats,
+  .pp-best-line {
+    color: #e6e9f7;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .pp-new-cards {
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--color-navy) 85%, transparent);
+    font-size: 0.82rem;
+    padding: 0.45rem 0.9rem;
+  }
+
+  .pp-new-cards p {
+    color: #ffe38a;
+    font-weight: 900;
+  }
+
+  .pp-new-cards ul {
+    color: #fff4dc;
+    font-weight: 700;
+  }
+
+  .pp-toast {
+    position: absolute;
+    bottom: 0.9rem;
+    left: 50%;
+    max-width: 92%;
+    overflow: hidden;
+    border: 3px solid var(--color-navy);
+    border-radius: 999px;
+    background: #fbf7ef;
+    box-shadow: 0 4px 0 var(--color-navy);
+    color: #15182a;
+    font-size: 0.86rem;
+    font-weight: 900;
+    opacity: 0;
+    padding: 0.4rem 1rem;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    transform: translate(-50%, 1rem);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    white-space: nowrap;
+  }
+
+  .pp-toast.pp-toast-show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .pp-controls {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.7rem;
+  }
+
+  .pp-prompt {
+    min-height: 1.3rem;
+    color: var(--color-link);
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .pp-dives {
+    display: grid;
+    grid-template-columns: 1fr 0.8fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .pp-dives .pp-btn {
+    padding-inline: 0.4rem;
+    font-size: 0.88rem;
+  }
+
+  .pp-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .pp-section {
+    margin-top: 3.5rem;
+  }
+
+  .pp-h2 {
+    margin-top: 0.4rem;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+
+  .pp-lede {
+    max-width: 44rem;
+    margin-top: 0.5rem;
+    color: var(--color-link);
+    line-height: 1.6;
+  }
+
+  .pp-meet-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.4rem;
+  }
+
+  @media (min-width: 768px) {
+    .pp-meet-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .pp-profile {
+    display: grid;
+    align-items: start;
+    gap: 1rem;
+    grid-template-columns: minmax(5.5rem, 8rem) 1fr;
+    border: 1px solid #eadfce;
+    border-radius: 1.5rem;
+    background: var(--color-editorial-paper);
+    color: var(--color-editorial-ink);
+    padding: 1.2rem;
+  }
+
+  .pp-profile img {
+    width: 100%;
+    height: auto;
+  }
+
+  .pp-profile-kind {
+    color: #9a6a3f;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .pp-profile-name {
+    margin-top: 0.15rem;
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .pp-profile-name span {
+    color: #9a6a3f;
+    font-size: 1.1rem;
+  }
+
+  .pp-profile-age {
+    margin-top: 0.2rem;
+    color: var(--color-editorial-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .pp-profile-story,
+  .pp-profile-likes,
+  .pp-profile-signature {
+    margin-top: 0.55rem;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+
+  .pp-profile-signature {
+    color: var(--color-editorial-muted);
+    font-style: italic;
+  }
+
+  .pp-cards-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .pp-collected {
+    color: var(--color-gold-light);
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .pp-card-grid {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+    margin-top: 1.3rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .pp-card {
+    border: 3px solid var(--color-navy);
+    border-radius: 1.1rem;
+    background: #fbf7ef;
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    padding: 0.75rem 0.75rem 0.95rem;
+  }
+
+  .pp-card-leoul {
+    background: linear-gradient(180deg, #e3f3fb 0%, #fbf7ef 55%);
+  }
+
+  .pp-card-lenyang {
+    background: linear-gradient(180deg, #fbeadb 0%, #fbf7ef 55%);
+  }
+
+  .pp-card-art {
+    display: grid;
+    aspect-ratio: 1;
+    place-items: center;
+    border-radius: 0.8rem;
+    background: color-mix(in srgb, var(--color-navy) 6%, transparent);
+  }
+
+  .pp-card-art img {
+    max-width: 86%;
+    max-height: 86%;
+    object-fit: contain;
+  }
+
+  .pp-card-name {
+    margin-top: 0.55rem;
+    color: #9a6a3f;
+    font-size: 0.66rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .pp-card-title {
+    margin-top: 0.15rem;
+    font-size: 1rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .pp-card-fact {
+    margin-top: 0.35rem;
+    color: #3a3f55;
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .pp-card-hint {
+    display: none;
+    margin-top: 0.4rem;
+    color: #4a5070;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .pp-card-lock {
+    display: block;
+    color: #2f3b74;
+    font-size: 0.66rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .pp-card[data-locked] {
+    border-color: #2f3b74;
+    background: #dcdfea;
+    box-shadow: 0 5px 0 #2f3b74;
+  }
+
+  .pp-card[data-locked] .pp-card-art img {
+    filter: brightness(0) opacity(0.25);
+  }
+
+  .pp-card[data-locked] :is(.pp-card-title, .pp-card-fact) {
+    display: none;
+  }
+
+  .pp-card[data-locked] .pp-card-hint {
+    display: block;
+  }
+
+  .pp-card-new {
+    animation: pp-pop 0.6s ease-out;
+  }
+
+  .pp-credit {
+    max-width: 48rem;
+    margin: 3rem auto 0;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* Short stages (small phones): tighten the menu so it fits without scrolling. */
+  @container (max-height: 560px) {
+    .pp-menu {
+      gap: 0.4rem;
+      padding: 4% 0.8rem 0.8rem;
+    }
+
+    .pp-mode img {
+      height: 3.4rem;
+    }
+
+    .pp-mode-desc {
+      font-size: 0.68rem;
+    }
+
+    .pp-how {
+      padding-block: 0.3rem;
+    }
+
+    .pp-now-playing {
+      display: none;
+    }
+
+    .pp-screen-title {
+      font-size: 1.5rem;
+    }
+
+    .pp-trophy {
+      width: 3.8rem;
+    }
+
+    .pp-final {
+      font-size: 2.3rem;
+    }
+  }
+
+  @keyframes pp-pop {
+    0% {
+      transform: scale(0.9);
+    }
+    60% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes pp-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-10px);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pp-mode,
+    .pp-btn,
+    .pp-toast,
+    .pp-card-new,
+    [data-pp-new-best] .pp-trophy {
+      animation: none;
+      transition: none;
+    }
+  }
+</style>

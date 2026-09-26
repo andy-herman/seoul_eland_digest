@@ -1,0 +1,127 @@
+---
+import { withBase } from "../lib/paths";
+
+interface Props {
+  locale?: "en" | "pt";
+}
+
+const { locale = "en" } = Astro.props;
+const isPortuguese = locale === "pt";
+const copy = isPortuguese
+  ? {
+      href: "/pt/play",
+      eyebrow: "Novo · Jogo dos mascotes",
+      title: "A Festa dos Pênaltis do Leoul e do Lenyang",
+      desc: "Cobre pênaltis, faça defesas e colecione as 12 cartas dos mascotes.",
+      cta: "Jogar",
+    }
+  : {
+      href: "/play",
+      eyebrow: "New · Mascot game",
+      title: "Leoul & Lenyang's Penalty Party",
+      desc: "Take penalties, make saves and collect all 12 mascot cards.",
+      cta: "Play",
+    };
+---
+
+<a href={withBase(copy.href)} class="play-teaser supporter-panel mb-8 rounded-[1.5rem] sm:mb-10">
+  <img class="play-teaser-leoul" src={withBase("/play/leoul-wave.webp")} alt="" width="446" height="618" loading="lazy" />
+  <span class="play-teaser-copy">
+    <span class="eyebrow">{copy.eyebrow}</span>
+    <span class="play-teaser-title">{copy.title}</span>
+    <span class="play-teaser-desc">{copy.desc}</span>
+  </span>
+  <span class="play-teaser-cta">{copy.cta} <span aria-hidden="true">→</span></span>
+  <img class="play-teaser-lenyang" src={withBase("/play/lenyang-ready.webp")} alt="" width="440" height="480" loading="lazy" />
+</a>
+
+<style>
+  .play-teaser {
+    position: relative;
+    display: grid;
+    align-items: center;
+    gap: 0.9rem;
+    grid-template-columns: auto 1fr;
+    color: var(--color-ink);
+    padding: 1rem 1.1rem;
+    text-decoration: none;
+    transition: transform 0.15s ease;
+  }
+
+  .play-teaser:hover {
+    transform: translateY(-2px);
+  }
+
+  .play-teaser:focus-visible {
+    outline: 3px solid var(--color-gold-light);
+    outline-offset: 3px;
+  }
+
+  .play-teaser img {
+    position: relative;
+    width: auto;
+    height: 4.8rem;
+  }
+
+  .play-teaser-lenyang,
+  .play-teaser-cta {
+    display: none;
+  }
+
+  .play-teaser-copy {
+    position: relative;
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .play-teaser-title {
+    font-size: 1.15rem;
+    font-weight: 900;
+    line-height: 1.15;
+  }
+
+  .play-teaser-desc {
+    color: var(--color-link);
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  @media (min-width: 640px) {
+    .play-teaser {
+      grid-template-columns: auto 1fr auto auto;
+      padding: 1rem 1.5rem;
+    }
+
+    .play-teaser img {
+      height: 6rem;
+    }
+
+    .play-teaser-lenyang {
+      display: block;
+    }
+
+    .play-teaser-cta {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      border: 3px solid var(--color-navy);
+      border-radius: 999px;
+      background: #ffe38a;
+      box-shadow: 0 4px 0 var(--color-navy);
+      color: #15182a;
+      font-weight: 900;
+      padding: 0.55rem 1.1rem;
+    }
+
+    .play-teaser-title {
+      font-size: 1.4rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .play-teaser {
+      transition: none;
+    }
+  }
+</style>

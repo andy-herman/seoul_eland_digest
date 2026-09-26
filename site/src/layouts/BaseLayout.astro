@@ -12,13 +12,15 @@ interface Props {
   ogType?: "website" | "article";
   /** ISO date for article JSON-LD and og:article:published_time. */
   publishedDate?: string;
+  /** Site-relative 1200x630 share image; defaults to the site-wide card. */
+  ogImage?: string;
 }
 
-const { title, description, lang = "en", ogType = "website", publishedDate } = Astro.props;
+const { title, description, lang = "en", ogType = "website", publishedDate, ogImage = "/assets/og-card.png" } = Astro.props;
 const locale = lang === "pt" ? "pt" : "en";
 const siteName = "Seoul E-Land Digest";
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
-const ogImageUrl = new URL(withBase("/assets/og-card.png"), Astro.site).href;
+const ogImageUrl = new URL(withBase(ogImage), Astro.site).href;
 const jsonLd =
   ogType === "article"
     ? JSON.stringify({

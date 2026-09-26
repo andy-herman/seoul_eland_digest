@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import DigestCard from "../../components/DigestCard.astro";
 import LatestMatchCard from "../../components/LatestMatchCard.astro";
+import PlayTeaser from "../../components/PlayTeaser.astro";
 import TranslateButton from "../../components/TranslateButton.astro";
 import { getDigestDeck } from "../../lib/digestDeck";
 
@@ -67,6 +68,8 @@ const deckFallback = "Relatos de jogo, notas dos jogadores e uma leitura direta 
       )}
     </div>
   </section>
+
+  <PlayTeaser locale="pt" />
 
   {seasons.map((season) => {
     const seasonDigests = digests.filter((d) => d.data.season === season);
