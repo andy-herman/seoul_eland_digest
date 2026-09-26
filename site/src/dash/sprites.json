@@ -1,0 +1,282 @@
+{
+ "exportScale": 2.2,
+ "opponents": {
+  "ansan-greeners": {
+   "tackle": {
+    "file": "ansan-greeners-tackle.webp",
+    "w": 148.6,
+    "h": 84.1
+   },
+   "leap": {
+    "file": "ansan-greeners-leap.webp",
+    "w": 147.9,
+    "h": 77.7
+   }
+  },
+  "busan-ipark": {
+   "tackle": {
+    "file": "busan-ipark-tackle.webp",
+    "w": 133.5,
+    "h": 93.7
+   },
+   "leap": {
+    "file": "busan-ipark-leap.webp",
+    "w": 141.7,
+    "h": 81.1
+   }
+  },
+  "cheonan-city": {
+   "tackle": {
+    "file": "cheonan-city-tackle.webp",
+    "w": 126.0,
+    "h": 99.2
+   },
+   "leap": {
+    "file": "cheonan-city-leap.webp",
+    "w": 105.2,
+    "h": 109.3
+   }
+  },
+  "chungbuk-cheongju": {
+   "tackle": {
+    "file": "chungbuk-cheongju-tackle.webp",
+    "w": 137.9,
+    "h": 90.6
+   },
+   "leap": {
+    "file": "chungbuk-cheongju-leap.webp",
+    "w": 154.2,
+    "h": 74.6
+   }
+  },
+  "chungnam-asan": {
+   "tackle": {
+    "file": "chungnam-asan-tackle.webp",
+    "w": 138.3,
+    "h": 90.4
+   },
+   "leap": {
+    "file": "chungnam-asan-leap.webp",
+    "w": 134.5,
+    "h": 85.5
+   }
+  },
+  "daegu-fc": {
+   "tackle": {
+    "file": "daegu-fc-tackle.webp",
+    "w": 113.1,
+    "h": 110.5
+   },
+   "leap": {
+    "file": "daegu-fc-leap.webp",
+    "w": 117.7,
+    "h": 97.7
+   }
+  },
+  "gimhae-fc": {
+   "tackle": {
+    "file": "gimhae-fc-tackle.webp",
+    "w": 137.9,
+    "h": 90.7
+   },
+   "leap": {
+    "file": "gimhae-fc-leap.webp",
+    "w": 129.7,
+    "h": 88.7
+   }
+  },
+  "gimpo-fc": {
+   "tackle": {
+    "file": "gimpo-fc-tackle.webp",
+    "w": 133.2,
+    "h": 93.9
+   },
+   "leap": {
+    "file": "gimpo-fc-leap.webp",
+    "w": 119.0,
+    "h": 96.6
+   }
+  },
+  "gyeongnam-fc": {
+   "tackle": {
+    "file": "gyeongnam-fc-tackle.webp",
+    "w": 144.6,
+    "h": 86.4
+   },
+   "leap": {
+    "file": "gyeongnam-fc-leap.webp",
+    "w": 137.8,
+    "h": 83.5
+   }
+  },
+  "hwaseong-fc": {
+   "tackle": {
+    "file": "hwaseong-fc-tackle.webp",
+    "w": 123.9,
+    "h": 100.9
+   },
+   "leap": {
+    "file": "hwaseong-fc-leap.webp",
+    "w": 131.1,
+    "h": 87.7
+   }
+  },
+  "jeonnam-dragons": {
+   "tackle": {
+    "file": "jeonnam-dragons-tackle.webp",
+    "w": 161.9,
+    "h": 77.2
+   },
+   "leap": {
+    "file": "jeonnam-dragons-leap.webp",
+    "w": 160.1,
+    "h": 71.8
+   }
+  },
+  "paju-frontier": {
+   "tackle": {
+    "file": "paju-frontier-tackle.webp",
+    "w": 120.7,
+    "h": 103.5
+   },
+   "leap": {
+    "file": "paju-frontier-leap.webp",
+    "w": 124.2,
+    "h": 92.6
+   }
+  },
+  "seongnam-fc": {
+   "tackle": {
+    "file": "seongnam-fc-tackle.webp",
+    "w": 138.6,
+    "h": 90.2
+   },
+   "leap": {
+    "file": "seongnam-fc-leap.webp",
+    "w": 115.3,
+    "h": 99.8
+   }
+  },
+  "suwon-fc": {
+   "tackle": {
+    "file": "suwon-fc-tackle.webp",
+    "w": 127.0,
+    "h": 98.4
+   },
+   "leap": {
+    "file": "suwon-fc-leap.webp",
+    "w": 139.1,
+    "h": 82.7
+   }
+  },
+  "suwon-samsung-bluewings": {
+   "tackle": {
+    "file": "suwon-samsung-bluewings-tackle.webp",
+    "w": 123.9,
+    "h": 100.9
+   },
+   "leap": {
+    "file": "suwon-samsung-bluewings-leap.webp",
+    "w": 123.0,
+    "h": 93.5
+   }
+  },
+  "yongin-fc": {
+   "tackle": {
+    "file": "yongin-fc-tackle.webp",
+    "w": 139.1,
+    "h": 89.9
+   },
+   "leap": {
+    "file": "yongin-fc-leap.webp",
+    "w": 138.0,
+    "h": 83.3
+   }
+  }
+ },
+ "players": {
+  "leoul": {
+   "run1": {
+    "file": "leoul-run1.webp",
+    "w": 85.7,
+    "h": 117.5
+   },
+   "run2": {
+    "file": "leoul-run2.webp",
+    "w": 84.0,
+    "h": 114.3
+   },
+   "run3": {
+    "file": "leoul-run3.webp",
+    "w": 86.2,
+    "h": 117.8
+   },
+   "jump": {
+    "file": "leoul-jump.webp",
+    "w": 87.3,
+    "h": 107.7
+   },
+   "slide": {
+    "file": "leoul-slide.webp",
+    "w": 128.4,
+    "h": 88.1
+   },
+   "fall": {
+    "file": "leoul-fall.webp",
+    "w": 126.5,
+    "h": 85.8
+   }
+  },
+  "lenyang": {
+   "run1": {
+    "file": "lenyang-run1.webp",
+    "w": 156.9,
+    "h": 111.4
+   },
+   "run2": {
+    "file": "lenyang-run2.webp",
+    "w": 155.4,
+    "h": 110.1
+   },
+   "run3": {
+    "file": "lenyang-run3.webp",
+    "w": 161.7,
+    "h": 102.3
+   },
+   "jump": {
+    "file": "lenyang-jump.webp",
+    "w": 118.5,
+    "h": 122.1
+   },
+   "slide": {
+    "file": "lenyang-slide.webp",
+    "w": 193.3,
+    "h": 87.7
+   },
+   "fall": {
+    "file": "lenyang-fall.webp",
+    "w": 122.8,
+    "h": 101.9
+   }
+  }
+ },
+ "cone": {
+  "file": "cone.webp",
+  "w": 39.2,
+  "h": 46.0
+ },
+ "boards": {
+  "file": "boards.webp",
+  "px": [
+   1800,
+   143
+  ]
+ },
+ "stands": {
+  "file": "stands.webp",
+  "px": [
+   1080,
+   428
+  ]
+ }
+}

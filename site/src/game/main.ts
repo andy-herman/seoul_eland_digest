@@ -18,6 +18,8 @@ export function mountPenaltyParty(root: HTMLElement): void {
   };
 
   const canvas = el<HTMLCanvasElement>("[data-pp-canvas]");
+  const stage = el(".pp-stage");
+  document.documentElement.classList.add("pp-has-game");
   const hud = el("[data-pp-hud]");
   const scoreEl = el("[data-pp-score]");
   const levelEl = el("[data-pp-level]");
@@ -151,6 +153,19 @@ export function mountPenaltyParty(root: HTMLElement): void {
     }
   }
 
+  // On phones the game usually starts below the fold: bring the stage (and as
+  // much of the controls as fits) into view under the site header, which only
+  // covers content while it is sticky (landscape phones let it scroll away).
+  function revealStage(): void {
+    const header = document.querySelector<HTMLElement>("[data-site-header]");
+    const pinned = header && ["sticky", "fixed"].includes(getComputedStyle(header).position);
+    const offset = (pinned ? header.getBoundingClientRect().height : 0) + 8;
+    const top = stage.getBoundingClientRect().top;
+    const bottom = Math.max(stage.getBoundingClientRect().bottom, controls.getBoundingClientRect().bottom);
+    if (top >= offset && bottom <= window.innerHeight) return;
+    window.scrollTo({ top: window.scrollY + top - offset, behavior: reducedMotion.matches ? "auto" : "smooth" });
+  }
+
   // Game flow ----------------------------------------------------------------
 
   function startGame(mode: Mode): void {
@@ -166,6 +181,7 @@ export function mountPenaltyParty(root: HTMLElement): void {
     showScreen(null);
     engine.newGame(mode);
     canvas.focus({ preventScroll: true });
+    requestAnimationFrame(revealStage);
   }
 
   function pause(): void {

@@ -28,9 +28,9 @@ const profiles = [
         <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
       </div>
       {isPortuguese ? (
-        <TranslateButton href="/play" code="EN" label="Inglês" ariaLabel="Jogar em inglês" />
+        <TranslateButton href="/play/penalty-party" code="EN" label="Inglês" ariaLabel="Jogar em inglês" />
       ) : (
-        <TranslateButton href="/pt/play" code="PT" label="Português" ariaLabel="Play in Portuguese" />
+        <TranslateButton href="/pt/play/penalty-party" code="PT" label="Português" ariaLabel="Play in Portuguese" />
       )}
     </div>
   </header>
@@ -192,6 +192,7 @@ const profiles = [
     </ol>
   </section>
 
+  <p class="pp-back"><a href={withBase(isPortuguese ? "/pt/play" : "/play")}>← {isPortuguese ? "Todos os jogos dos mascotes" : "All mascot games"}</a></p>
   <p class="pp-credit">{t.credit} {t.artCredit}</p>
 </div>
 
@@ -203,6 +204,8 @@ const profiles = [
 
 <style is:global>
   .pp-game {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
     margin: 1.1rem auto 0;
     width: min(100%, 36rem, calc((100vh - 12rem) * 0.8));
     width: min(100%, 36rem, calc((100svh - 12rem) * 0.8));
@@ -221,7 +224,15 @@ const profiles = [
     touch-action: manipulation;
     user-select: none;
     -webkit-user-select: none;
+    -webkit-touch-callout: none;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  @supports not (aspect-ratio: 1) {
+    .pp-stage {
+      height: 0;
+      padding-top: 125%;
+    }
   }
 
   .pp-canvas {
@@ -264,6 +275,7 @@ const profiles = [
     letter-spacing: 0.1em;
     padding: 0.28rem 0.6rem;
     text-transform: uppercase;
+    white-space: nowrap;
   }
 
   .pp-score {
@@ -309,6 +321,17 @@ const profiles = [
     color: #fff4dc;
     cursor: pointer;
     pointer-events: auto;
+  }
+
+  .pp-icon-btn {
+    position: relative;
+  }
+
+  /* Bigger touch target without a bigger HUD. */
+  .pp-icon-btn::after {
+    position: absolute;
+    inset: -6px;
+    content: "";
   }
 
   .pp-icon-btn svg {
@@ -481,6 +504,12 @@ const profiles = [
   .pp-how .pp-keys {
     color: #c2c7df;
     font-size: 0.75rem;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .pp-how .pp-keys {
+      display: none;
+    }
   }
 
   .pp-toggle {
@@ -892,13 +921,80 @@ const profiles = [
     animation: pp-pop 0.6s ease-out;
   }
 
+  .pp-back {
+    margin-top: 2.4rem;
+    text-align: center;
+  }
+
+  .pp-back a {
+    color: var(--color-gold-light);
+    font-weight: 900;
+  }
+
   .pp-credit {
     max-width: 48rem;
-    margin: 3rem auto 0;
+    margin: 1.4rem auto 0;
     color: var(--color-muted);
     font-size: 0.8rem;
     line-height: 1.5;
     text-align: center;
+  }
+
+  /* Landscape phones: the header scrolls away, the stage takes the full height
+     and the buttons move beside it. */
+  @media (orientation: landscape) and (max-height: 560px) {
+    html.pp-has-game [data-site-header] {
+      position: relative;
+    }
+
+    .pp-game {
+      display: grid;
+      width: min(100%, 48rem);
+      min-width: 0;
+      align-items: center;
+      gap: 0 1rem;
+      grid-template-columns: min(calc((100vh - 1.5rem) * 0.8), 58%) minmax(9rem, 1fr);
+      grid-template-columns: min(calc((100svh - 1.5rem) * 0.8), 58%) minmax(9rem, 1fr);
+    }
+
+    .pp-controls {
+      margin-top: 0;
+    }
+
+    .pp-dives {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Narrow stages (landscape phones): shrink the HUD so it stays on one row. */
+  @container (max-width: 320px) {
+    .pp-hud {
+      gap: 0.2rem;
+      padding: 0.4rem;
+    }
+
+    .pp-chip {
+      font-size: 0.6rem;
+      letter-spacing: 0.04em;
+      padding: 0.2rem 0.45rem;
+    }
+
+    .pp-score {
+      font-size: 1.25rem;
+    }
+
+    .pp-hud-right {
+      gap: 0.2rem;
+    }
+
+    .pp-lives img {
+      width: 1rem;
+    }
+
+    .pp-icon-btn {
+      width: 1.85rem;
+      height: 1.85rem;
+    }
   }
 
   /* Short stages (small phones): tighten the menu so it fits without scrolling. */
@@ -934,6 +1030,45 @@ const profiles = [
 
     .pp-final {
       font-size: 2.3rem;
+    }
+  }
+
+  /* Very short stages (landscape phones): keep the logo and both mode buttons in view. */
+  @container (max-height: 400px) {
+    .pp-menu {
+      gap: 0.3rem;
+      padding: 3% 0.6rem 0.6rem;
+    }
+
+    .pp-logo {
+      width: 82%;
+    }
+
+    .pp-subtitle {
+      margin-top: -0.2rem;
+      font-size: 0.9rem;
+    }
+
+    .pp-choose,
+    .pp-mode-desc {
+      display: none;
+    }
+
+    .pp-modes {
+      margin-top: auto;
+      gap: 0.45rem;
+    }
+
+    .pp-mode {
+      padding: 0.35rem 0.3rem 0.4rem;
+    }
+
+    .pp-mode img {
+      height: 2.9rem;
+    }
+
+    .pp-how summary {
+      font-size: 0.72rem;
     }
   }
 

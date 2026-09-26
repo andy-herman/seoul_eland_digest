@@ -1,0 +1,261 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { withBase } from "../lib/paths";
+
+interface Props {
+  locale?: "en" | "pt";
+}
+
+const { locale = "en" } = Astro.props;
+const isPortuguese = locale === "pt";
+const prefix = isPortuguese ? "/pt" : "";
+
+const copy = isPortuguese
+  ? {
+      eyebrow: "Jogos dos mascotes",
+      heading: "Jogue com o Leoul e o Lenyang",
+      intro: "Dois jogos com os mascotes do Seoul E-Land. Os dois funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      newBadge: "Novo",
+      play: "Jogar",
+      credit:
+        "Leoul, Lenyang e a música 서울의 노래 (versão 2024) pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão.",
+    }
+  : {
+      eyebrow: "Mascot games",
+      heading: "Play with Leoul & Lenyang",
+      intro: "Two games starring Seoul E-Land's mascots. Both work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      newBadge: "New",
+      play: "Play",
+      credit:
+        "Leoul, Lenyang and the song 서울의 노래 (2024 ver) belong to Seoul E-Land FC. The other K League 2 mascots belong to their clubs. All are used with permission.",
+    };
+
+const games = [
+  {
+    href: `${prefix}/play/dribble-dash`,
+    isNew: true,
+    title: isPortuguese ? "A Corrida do Drible" : "Dribble Dash",
+    desc: isPortuguese
+      ? "Uma corrida sem fim com a bola no pé. Pule os carrinhos e deslize por baixo dos voadores dos mascotes dos outros 16 clubes da K League 2, e complete o álbum."
+      : "An endless run with the ball at your feet. Jump the slide tackles and duck the flying leaps of all 16 other K League 2 mascots, and fill your album.",
+    tags: isPortuguese ? ["Corrida", "18 cartas"] : ["Runner", "18 cards"],
+    art: [
+      { src: withBase("/play/dash/leoul-run1.webp"), cls: "games-art-hero", w: 189, h: 259 },
+      { src: withBase("/play/dash/daegu-fc-leap.webp"), cls: "games-art-rival games-art-rival-a", w: 200, h: 166 },
+      { src: withBase("/play/dash/busan-ipark-tackle.webp"), cls: "games-art-rival games-art-rival-b", w: 294, h: 206 },
+    ],
+    accent: "dash",
+  },
+  {
+    href: `${prefix}/play/penalty-party`,
+    isNew: false,
+    title: isPortuguese ? "A Festa dos Pênaltis" : "Penalty Party",
+    desc: isPortuguese
+      ? "Cobre pênaltis com o Leoul ou vá para o gol com o Lenyang, e colecione as 12 cartas dos mascotes."
+      : "Take penalties as Leoul or go in goal as Lenyang, and collect all 12 mascot cards.",
+    tags: isPortuguese ? ["Pênaltis", "12 cartas"] : ["Penalties", "12 cards"],
+    art: [
+      { src: withBase("/play/leoul-kick.webp"), cls: "games-art-hero", w: 397, h: 625 },
+      { src: withBase("/play/lenyang-hug.webp"), cls: "games-art-rival games-art-rival-a", w: 373, h: 432 },
+    ],
+    accent: "party",
+  },
+];
+---
+
+<div class="games-page">
+  <header class="supporter-panel rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div class="min-w-0">
+        <p class="eyebrow">{copy.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.55rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{copy.heading}</h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{copy.intro}</p>
+      </div>
+      {isPortuguese ? (
+        <TranslateButton href="/play" code="EN" label="Inglês" ariaLabel="Ver os jogos em inglês" />
+      ) : (
+        <TranslateButton href="/pt/play" code="PT" label="Português" ariaLabel="See the games in Portuguese" />
+      )}
+    </div>
+  </header>
+
+  <ul class="games-grid">
+    {games.map((game) => (
+      <li>
+        <a href={withBase(game.href)} class={`games-card games-card-${game.accent}`}>
+          <span class="games-art" aria-hidden="true">
+            {game.art.map((a) => (
+              <img class={a.cls} src={a.src} alt="" width={a.w} height={a.h} loading="lazy" />
+            ))}
+          </span>
+          <span class="games-body">
+            <span class="games-tags">
+              {game.isNew && <span class="games-new">{copy.newBadge}</span>}
+              {game.tags.map((tag) => <span class="games-tag">{tag}</span>)}
+            </span>
+            <span class="games-title">{game.title}</span>
+            <span class="games-desc">{game.desc}</span>
+            <span class="games-cta">{copy.play} <span aria-hidden="true">→</span></span>
+          </span>
+        </a>
+      </li>
+    ))}
+  </ul>
+
+  <p class="games-credit">{copy.credit}</p>
+</div>
+
+<style>
+  .games-grid {
+    display: grid;
+    gap: 1.1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    margin-top: 1.3rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .games-card {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    overflow: hidden;
+    border: 3px solid var(--color-navy);
+    border-radius: 1.4rem;
+    background: #fbf7ef;
+    box-shadow: 0 6px 0 var(--color-navy);
+    color: #15182a;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .games-card:hover {
+    transform: translateY(-3px);
+  }
+
+  .games-card:active {
+    box-shadow: 0 2px 0 var(--color-navy);
+    transform: translateY(3px);
+  }
+
+  .games-card:focus-visible {
+    outline: 3px solid var(--color-gold-light);
+    outline-offset: 4px;
+  }
+
+  .games-art {
+    position: relative;
+    display: block;
+    height: clamp(10rem, 34vw, 13rem);
+    overflow: hidden;
+    border-bottom: 3px solid var(--color-navy);
+  }
+
+  .games-card-dash .games-art {
+    background:
+      linear-gradient(180deg, transparent 62%, #79c267 62%, #79c267 100%),
+      linear-gradient(180deg, #3d9fe8 0%, #b7e5fb 62%);
+  }
+
+  .games-card-party .games-art {
+    background:
+      linear-gradient(180deg, transparent 64%, #6ab45c 64%, #6ab45c 100%),
+      linear-gradient(180deg, #0b1752 0%, #2a3a86 64%);
+  }
+
+  .games-art img {
+    position: absolute;
+    width: auto;
+    filter: drop-shadow(0 5px 0 color-mix(in srgb, #090c20 30%, transparent));
+  }
+
+  .games-art-hero {
+    bottom: 8%;
+    left: 10%;
+    height: 72%;
+  }
+
+  .games-card-dash .games-art-rival-a {
+    top: 12%;
+    right: 12%;
+    height: 34%;
+  }
+
+  .games-card-dash .games-art-rival-b {
+    right: 6%;
+    bottom: 6%;
+    height: 30%;
+  }
+
+  .games-card-party .games-art-rival-a {
+    right: 12%;
+    bottom: 10%;
+    height: 62%;
+  }
+
+  .games-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 0.95rem 1.1rem 1.15rem;
+  }
+
+  .games-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+
+  .games-tag,
+  .games-new {
+    border-radius: 999px;
+    font-size: 0.66rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    padding: 0.18rem 0.55rem;
+    text-transform: uppercase;
+  }
+
+  .games-tag {
+    background: color-mix(in srgb, var(--color-navy) 10%, transparent);
+    color: #2f3b74;
+  }
+
+  .games-new {
+    background: #ffe38a;
+    color: #15182a;
+  }
+
+  .games-title {
+    font-size: clamp(1.35rem, 4vw, 1.7rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .games-desc {
+    color: #3a3f55;
+    font-size: 0.92rem;
+    line-height: 1.5;
+  }
+
+  .games-cta {
+    align-self: flex-start;
+    margin-top: auto;
+    border: 3px solid var(--color-navy);
+    border-radius: 999px;
+    background: #ffe38a;
+    box-shadow: 0 3px 0 var(--color-navy);
+    font-weight: 900;
+    padding: 0.4rem 1.1rem;
+  }
+
+  .games-credit {
+    max-width: 48rem;
+    margin: 2.4rem auto 0;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+</style>

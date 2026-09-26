@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import DribbleDash from "../../components/DribbleDash.astro";
+import { DASH_STRINGS } from "../../dash/i18n";
+
+const t = DASH_STRINGS.en;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/dash/og-dash.jpg">
+  <DribbleDash locale="en" />
+</BaseLayout>

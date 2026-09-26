@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PenaltyParty from "../../../components/PenaltyParty.astro";
+import { STRINGS } from "../../../game/i18n";
+
+const t = STRINGS.pt;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} lang="pt" ogImage="/play/og-play-pt.jpg">
+  <PenaltyParty locale="pt" />
+</BaseLayout>

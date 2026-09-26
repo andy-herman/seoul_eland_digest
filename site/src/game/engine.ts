@@ -177,6 +177,8 @@ export class PenaltyEngine {
   private bubble: Bubble | null = null;
   private flash = 0;
   private shooterStep = 0;
+  /** Backdrop + pitch pre-composited at the canvas's backing size (rebuilt on resize). */
+  private background: HTMLCanvasElement | null = null;
   paused = false;
   reducedMotion = false;
 
@@ -187,7 +189,7 @@ export class PenaltyEngine {
     private readonly text: Strings,
     private readonly hooks: EngineHooks,
   ) {
-    const ctx = canvas.getContext("2d");
+    const ctx = canvas.getContext("2d", { alpha: false });
     if (!ctx) throw new Error("Canvas 2D is not supported.");
     this.ctx = ctx;
     this.round = this.blankRound();
@@ -209,6 +211,23 @@ export class PenaltyEngine {
     this.ctx.setTransform(w / VIEW_W, 0, 0, h / VIEW_H, 0, 0);
     this.ctx.imageSmoothingEnabled = true;
     this.ctx.imageSmoothingQuality = "high";
+    if (!this.background || this.background.width !== w || this.background.height !== h) this.buildBackground(w, h);
+  }
+
+  // Two full-screen layers per frame is the biggest cost on phones, so the
+  // static ones are drawn once into a canvas that matches the backing store.
+  private buildBackground(w: number, h: number): void {
+    if (typeof document === "undefined") return;
+    const cache = document.createElement("canvas");
+    cache.width = w;
+    cache.height = h;
+    const g = cache.getContext("2d", { alpha: false });
+    if (!g) return;
+    g.imageSmoothingEnabled = true;
+    g.imageSmoothingQuality = "high";
+    g.drawImage(this.img.backdrop, 0, 0, w, h);
+    g.drawImage(this.img.pitch, 0, 0, w, h);
+    this.background = cache;
   }
 
   start(): void {
@@ -767,10 +786,17 @@ export class PenaltyEngine {
 
   private draw(): void {
     const ctx = this.ctx;
-    ctx.clearRect(0, 0, VIEW_W, VIEW_H);
-    ctx.drawImage(this.img.backdrop, 0, 0, VIEW_W, VIEW_H);
+    if (this.background) {
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.drawImage(this.background, 0, 0);
+      ctx.restore();
+    } else {
+      ctx.drawImage(this.img.backdrop, 0, 0, VIEW_W, VIEW_H);
+      ctx.drawImage(this.img.pitch, 0, 0, VIEW_W, VIEW_H);
+    }
+    // The balloon floats in the sky, where the pitch layer is transparent.
     this.drawBalloon();
-    ctx.drawImage(this.img.pitch, 0, 0, VIEW_W, VIEW_H);
     const b = this.ball;
     if (b.y > 0.02) this.drawBall();
     this.drawGoalMarkers();
@@ -1065,8 +1091,8 @@ export class PenaltyEngine {
     const alpha = clamp(Math.min(bubble.t / 0.2, (bubble.life - bubble.t) / 0.3), 0, 1);
     ctx.save();
     ctx.globalAlpha = alpha;
-    ctx.font = `800 28px ${FONT}`;
-    const maxWidth = 380;
+    ctx.font = `800 36px ${FONT}`;
+    const maxWidth = 470;
     const words = bubble.text.split(" ");
     const lines: string[] = [];
     let line = "";
@@ -1080,16 +1106,15 @@ export class PenaltyEngine {
       }
     }
     if (line) lines.push(line);
-    const width = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 44;
-    const height = lines.length * 36 + 26;
+    const width = Math.max(...lines.map((l) => ctx.measureText(l).width)) + 48;
+    const height = lines.length * 44 + 28;
     const anchor = bubble.who === "leoul" ? { x: 300, y: 690 } : { x: 530, y: 455 };
     const x = clamp(anchor.x - width / 2, 16, VIEW_W - width - 16);
     const y = anchor.y - height - 26;
     ctx.fillStyle = "#FFFFFF";
     ctx.strokeStyle = NAVY;
     ctx.lineWidth = 5;
-    ctx.beginPath();
-    ctx.roundRect(x, y, width, height, 22);
+    this.roundedRect(x, y, width, height, 24);
     ctx.fill();
     ctx.stroke();
     ctx.beginPath();
@@ -1104,7 +1129,23 @@ export class PenaltyEngine {
     ctx.fillStyle = "#15182A";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
-    lines.forEach((l, i) => ctx.fillText(l, x + width / 2, y + 30 + i * 36));
+    lines.forEach((l, i) => ctx.fillText(l, x + width / 2, y + 36 + i * 44));
     ctx.restore();
+  }
+
+  /** CanvasRenderingContext2D.roundRect is missing before Safari 16, so draw it by hand there. */
+  private roundedRect(x: number, y: number, w: number, h: number, r: number): void {
+    const ctx = this.ctx;
+    ctx.beginPath();
+    if (typeof ctx.roundRect === "function") {
+      ctx.roundRect(x, y, w, h, r);
+      return;
+    }
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
   }
 }

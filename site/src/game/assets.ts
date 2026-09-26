@@ -53,8 +53,16 @@ export async function loadImages(base: string, onProgress: (done: number, total:
     entries.map(async ([key, file]) => {
       const img = new Image();
       img.decoding = "async";
-      img.src = `${base}${file}`;
-      await img.decode();
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => resolve();
+        img.onerror = () => reject(new Error(`Could not load ${file}`));
+        img.src = `${base}${file}`;
+      });
+      try {
+        await img.decode();
+      } catch {
+        // Some mobile browsers reject decode() for large images; onload is enough.
+      }
       done += 1;
       onProgress(done, entries.length);
       return [key, img] as const;

@@ -1,0 +1,1157 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { OPPONENT_SLUGS, OPPONENTS, SPRITES, type Hero, type Locale } from "../dash/data";
+import { DASH_STRINGS } from "../dash/i18n";
+import { withBase } from "../lib/paths";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = DASH_STRINGS[locale];
+const isPortuguese = locale === "pt";
+const dash = (file: string) => withBase(`/play/dash/${file}`);
+const gamesHref = isPortuguese ? "/pt/play" : "/play";
+const heroes: { id: Hero; art: string; width: number; height: number }[] = [
+  { id: "leoul", art: withBase("/play/leoul-wave.webp"), width: 446, height: 618 },
+  { id: "lenyang", art: withBase("/play/lenyang-ready.webp"), width: 440, height: 480 },
+];
+const round = (n: number) => Math.round(n * 2.2);
+---
+
+<div class="dd-page">
+  <header class="supporter-panel dd-hero rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div class="min-w-0">
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.55rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{t.heading}</h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
+      </div>
+      {isPortuguese ? (
+        <TranslateButton href="/play/dribble-dash" code="EN" label={t.translateLabel} ariaLabel={t.translateAria} />
+      ) : (
+        <TranslateButton href="/pt/play/dribble-dash" code="PT" label={t.translateLabel} ariaLabel={t.translateAria} />
+      )}
+    </div>
+  </header>
+
+  <section class="dd-game" data-dd-root data-locale={locale} data-assets={withBase("/play/dash/")} data-play-assets={withBase("/play/")} aria-label={t.heading}>
+    <div class="dd-pad-wrap dd-pad-wrap-slide">
+      <button type="button" class="dd-pad dd-pad-slide" data-dd-slide disabled aria-label={t.slide}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7" /></svg>
+        <span>{t.slide}</span>
+      </button>
+    </div>
+
+    <div class="dd-stage">
+      <canvas class="dd-canvas" data-dd-canvas width="900" height="506" role="img" aria-label={t.canvasLabel} tabindex="-1"></canvas>
+
+      <div class="dd-hud" data-dd-hud hidden>
+        <span class="dd-chip" aria-label={t.treatsLabel}>
+          <img src={withBase("/play/icon-star.webp")} alt="" width="160" height="155" />
+          <span data-dd-treats>0</span>
+        </span>
+        <span class="dd-scorebox">
+          <span class="dd-score" data-dd-score aria-label={t.scoreLabel}>0</span>
+          <span class="dd-hud-best">{t.bestLabel} <span data-dd-hud-best>0</span></span>
+        </span>
+        <span class="dd-hud-right">
+          <button type="button" class="dd-icon-btn" data-dd-pause aria-label={t.pause}>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.2" height="12" rx="1.2" /><rect x="11.8" y="4" width="3.2" height="12" rx="1.2" /></svg>
+          </button>
+          <button type="button" class="dd-icon-btn dd-mute" data-dd-mute aria-label={t.mute} aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M3 7.5h3l4-3.5v12l-4-3.5H3z" />
+              <path class="dd-wave" d="M13 7a4 4 0 0 1 0 6M15.2 5a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              <path class="dd-cross" d="M13 7.5l5 5M18 7.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </button>
+        </span>
+      </div>
+
+      <p class="dd-hint" data-dd-hint hidden></p>
+      <div class="dd-toast" data-dd-toast role="status" aria-live="polite"></div>
+
+      <div class="dd-screen" data-dd-screen="loading">
+        <p class="dd-loading-text" data-dd-loading-text>{t.loading}</p>
+        <div class="dd-progress"><span data-dd-progress></span></div>
+      </div>
+
+      <div class="dd-screen dd-menu" data-dd-screen="menu" hidden>
+        <p class="dd-title">{t.menuTitle}</p>
+        <p class="dd-choose">{t.menuSubtitle}</p>
+        <div class="dd-heroes">
+          {heroes.map(({ id }, i) => (
+            <button type="button" class={`dd-hero-btn dd-hero-${id}`} data-dd-start={id} data-dd-autofocus={i === 0 ? "" : undefined}>
+              <img src={dash(SPRITES.players[id].run1.file)} alt="" width={round(SPRITES.players[id].run1.w)} height={round(SPRITES.players[id].run1.h)} />
+              <span class="dd-hero-name">{t.heroes[id].name}</span>
+              <span class="dd-hero-desc">{t.heroes[id].desc}</span>
+            </button>
+          ))}
+        </div>
+        <p class="dd-menu-stats"><span data-dd-menu-best></span> <span data-dd-menu-album></span></p>
+        <button type="button" class="dd-toggle" data-dd-music aria-pressed="true">
+          <span aria-hidden="true">♪</span> {t.musicLabel}: <span data-dd-music-state>{t.musicOn}</span>
+        </button>
+      </div>
+
+      <div class="dd-screen" data-dd-screen="paused" hidden>
+        <p class="dd-screen-title">{t.paused}</p>
+        <div class="dd-stack">
+          <button type="button" class="dd-btn dd-btn-primary" data-dd-resume data-dd-autofocus>{t.resume}</button>
+          <button type="button" class="dd-btn" data-dd-menu>{t.menu}</button>
+        </div>
+      </div>
+
+      <div class="dd-screen dd-over" data-dd-screen="over" hidden>
+        <img class="dd-over-art" data-dd-over-art alt="" hidden />
+        <p class="dd-screen-title dd-over-title" data-dd-over-title></p>
+        <p class="dd-over-club" data-dd-over-club></p>
+        <p class="dd-final"><span class="dd-final-label">{t.scoreLabel}</span> <span data-dd-final>0</span></p>
+        <p class="dd-stats" data-dd-stats></p>
+        <p class="dd-best-line" data-dd-best-line></p>
+        <div class="dd-new-cards" data-dd-new-cards hidden>
+          <p>{t.newCardsHeading}</p>
+          <ul data-dd-new-cards-list></ul>
+        </div>
+        <div class="dd-stack">
+          <button type="button" class="dd-btn dd-btn-primary" data-dd-again data-dd-autofocus>{t.playAgain}</button>
+          <div class="dd-row">
+            <button type="button" class="dd-btn dd-btn-small" data-dd-menu>{t.changeHero}</button>
+            <a class="dd-btn dd-btn-small" href="#dd-album" data-dd-album-link>{t.seeAlbum}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dd-pad-wrap dd-pad-wrap-jump">
+      <button type="button" class="dd-pad dd-pad-jump" data-dd-jump disabled aria-label={t.jump}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 15l7-7 7 7" /></svg>
+        <span>{t.jump}</span>
+      </button>
+    </div>
+    <div class="dd-controls-marker" data-dd-controls data-active="false"></div>
+    <p class="dd-sr-only" data-dd-live aria-live="polite"></p>
+  </section>
+
+  <p class="dd-rotate-tip">{t.rotateTip}</p>
+
+  <details class="dd-how">
+    <summary>{t.howToPlay}</summary>
+    <p>{t.howJump}</p>
+    <p>{t.howSlide}</p>
+    <p>{t.howTreats}</p>
+    <p class="dd-keys">{t.keyboardHint}</p>
+    <p class="dd-now-playing">{t.nowPlaying}</p>
+  </details>
+
+  <section class="dd-section" id="dd-album" aria-labelledby="dd-album-heading">
+    <div class="dd-album-head">
+      <div>
+        <p class="eyebrow">K League 2 · 2026</p>
+        <h2 id="dd-album-heading" class="dd-h2">{t.albumHeading}</h2>
+        <p class="dd-lede">{t.albumIntro}</p>
+      </div>
+      <p class="dd-collected" data-dd-collected></p>
+    </div>
+    <ul class="dd-card-grid">
+      {heroes.map(({ id, art, width, height }) => (
+        <li class={`dd-card dd-card-hero dd-card-${id}`} data-dd-card={id} data-locked>
+          <div class="dd-card-art">
+            <img src={art} alt={t.heroes[id].name} width={width} height={height} loading="lazy" />
+          </div>
+          <p class="dd-card-club">Seoul E-Land FC</p>
+          <p class="dd-card-name">{t.heroes[id].name} <span lang="ko">{id === "leoul" ? "레울" : "레냥"}</span></p>
+          <p class="dd-card-kind">{t.heroCard[id].kind}</p>
+          <p class="dd-card-fact">{t.heroCard[id].fact}</p>
+          <p class="dd-card-hint"><span class="dd-card-lock">{t.locked}</span> {t.heroLockedHint(t.heroes[id].name)}</p>
+        </li>
+      ))}
+      {OPPONENT_SLUGS.map((slug) => {
+        const o = OPPONENTS[slug];
+        const leap = SPRITES.opponents[slug].leap;
+        return (
+          <li class="dd-card" data-dd-card={slug} data-locked style={`--dd-accent: ${o.color};`}>
+            <div class="dd-card-art">
+              <img src={dash(leap.file)} alt={o.name} width={round(leap.w)} height={round(leap.h)} loading="lazy" />
+            </div>
+            <p class="dd-card-club">{o.club}</p>
+            <p class="dd-card-name">{o.name} <span lang="ko">{o.korean}</span></p>
+            <p class="dd-card-kind">{o.kind[locale]}</p>
+            <p class="dd-card-fact">{o.fact[locale]}</p>
+            <p class="dd-card-hint"><span class="dd-card-lock">{t.locked}</span> {t.lockedHint}</p>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <p class="dd-back"><a href={withBase(gamesHref)}>← {t.allGames}</a></p>
+  <p class="dd-credit">{t.credit} {t.artCredit}</p>
+</div>
+
+<script>
+  import { mountDribbleDash } from "../dash/main";
+
+  document.querySelectorAll<HTMLElement>("[data-dd-root]").forEach((root) => mountDribbleDash(root));
+</script>
+
+<style is:global>
+  .dd-game {
+    display: grid;
+    width: min(100%, 60rem);
+    margin: 1.1rem auto 0;
+    gap: 0.6rem;
+    grid-template-areas:
+      "stage stage"
+      "slide jump";
+    grid-template-columns: 1fr 1fr;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .dd-stage {
+    position: relative;
+    grid-area: stage;
+    container-type: size;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border: 3px solid color-mix(in srgb, var(--color-gold) 55%, var(--color-navy));
+    border-radius: 1.25rem;
+    background: #3d9fe8;
+    box-shadow: 0 26px 70px color-mix(in srgb, black 40%, transparent);
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  @supports not (aspect-ratio: 1) {
+    .dd-stage {
+      height: 0;
+      padding-top: 56.25%;
+    }
+  }
+
+  .dd-canvas {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    outline: none;
+    touch-action: none;
+  }
+
+  .dd-pad-wrap-slide {
+    grid-area: slide;
+  }
+
+  .dd-pad-wrap-jump {
+    grid-area: jump;
+  }
+
+  .dd-pad {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    min-height: 4.2rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
+    border: 3px solid var(--color-navy);
+    border-radius: 1.2rem;
+    background: #fbf7ef;
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    touch-action: none;
+    transition: transform 0.08s ease, box-shadow 0.08s ease, opacity 0.2s;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .dd-pad svg {
+    width: 1.4rem;
+    height: 1.4rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 3.2;
+  }
+
+  .dd-pad-jump {
+    background: #ffe38a;
+  }
+
+  .dd-pad:active:not(:disabled) {
+    box-shadow: 0 1px 0 var(--color-navy);
+    transform: translateY(4px);
+  }
+
+  .dd-pad:disabled {
+    cursor: default;
+    opacity: 0.45;
+  }
+
+  .dd-controls-marker {
+    display: none;
+  }
+
+  .dd-hud {
+    position: absolute;
+    inset: 0 0 auto;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.4rem;
+    padding: 0.55rem 0.6rem;
+    pointer-events: none;
+  }
+
+  .dd-hud[hidden],
+  .dd-screen[hidden],
+  .dd-hint[hidden],
+  .dd-new-cards[hidden],
+  .dd-over-art[hidden] {
+    display: none;
+  }
+
+  /* The game-over screen shows the final score itself. */
+  [data-dd-mode="over"] :is(.dd-chip, .dd-scorebox, [data-dd-pause]) {
+    visibility: hidden;
+  }
+
+  .dd-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    border: 2px solid color-mix(in srgb, var(--color-gold) 60%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 82%, transparent);
+    color: #fff4dc;
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 900;
+    padding: 0.2rem 0.6rem 0.2rem 0.35rem;
+    white-space: nowrap;
+  }
+
+  .dd-chip img {
+    width: 1.2rem;
+    height: auto;
+  }
+
+  .dd-scorebox {
+    display: flex;
+    min-width: 4.6rem;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid color-mix(in srgb, var(--color-gold) 60%, transparent);
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--color-navy) 78%, transparent);
+    line-height: 1;
+    padding: 0.2rem 0.7rem 0.25rem;
+  }
+
+  .dd-score {
+    color: #fff4dc;
+    font-size: clamp(1.25rem, 4.4vw, 2rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 900;
+    text-shadow: 0 2px 0 var(--color-navy);
+  }
+
+  .dd-score.dd-pulse {
+    animation: dd-pop 0.45s ease-out;
+  }
+
+  .dd-hud-best {
+    margin-top: 0.15rem;
+    color: #ffe38a;
+    font-size: 0.6rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .dd-hud-right {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .dd-icon-btn {
+    position: relative;
+    display: grid;
+    width: 2.3rem;
+    height: 2.3rem;
+    place-items: center;
+    border: 2px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 85%, transparent);
+    color: #fff4dc;
+    cursor: pointer;
+    pointer-events: auto;
+  }
+
+  .dd-icon-btn::after {
+    position: absolute;
+    inset: -6px;
+    content: "";
+  }
+
+  .dd-icon-btn svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: currentColor;
+  }
+
+  .dd-mute .dd-cross,
+  .dd-mute[data-state="off"] .dd-wave {
+    display: none;
+  }
+
+  .dd-mute[data-state="off"] .dd-cross {
+    display: inline;
+  }
+
+  .dd-hint {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    max-width: 90%;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 82%, transparent);
+    color: #fff4dc;
+    font-size: clamp(0.8rem, 2.6vw, 1rem);
+    font-weight: 900;
+    padding: 0.45rem 1rem;
+    pointer-events: none;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    animation: dd-fade-in 0.3s ease-out;
+  }
+
+  .dd-toast {
+    position: absolute;
+    bottom: 0.3rem;
+    left: 50%;
+    max-width: 92%;
+    overflow: hidden;
+    border: 3px solid var(--color-navy);
+    border-radius: 999px;
+    background: #fbf7ef;
+    box-shadow: 0 4px 0 var(--color-navy);
+    color: #15182a;
+    font-size: 0.86rem;
+    font-weight: 900;
+    opacity: 0;
+    padding: 0.35rem 1rem;
+    pointer-events: none;
+    text-overflow: ellipsis;
+    transform: translate(-50%, 0.6rem);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    white-space: nowrap;
+  }
+
+  /* Small stages: a slimmer toast that fits in the grass below the ground line. */
+  @container (max-width: 480px) {
+    .dd-toast {
+      bottom: 0.15rem;
+      border-width: 2px;
+      box-shadow: 0 2px 0 var(--color-navy);
+      font-size: 0.7rem;
+      padding: 0.12rem 0.7rem;
+    }
+  }
+
+  .dd-toast.dd-toast-show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  .dd-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-content: safe center;
+    gap: 0.5rem;
+    overflow-y: auto;
+    padding: 0.9rem;
+    background: linear-gradient(180deg, color-mix(in srgb, #090c20 22%, transparent) 0%, color-mix(in srgb, #090c20 80%, transparent) 70%);
+    color: #fff;
+    text-align: center;
+  }
+
+  .dd-loading-text {
+    color: #fff4dc;
+    font-weight: 800;
+  }
+
+  .dd-progress {
+    width: min(70%, 16rem);
+    height: 0.6rem;
+    overflow: hidden;
+    border: 2px solid var(--color-gold);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 80%, transparent);
+  }
+
+  .dd-progress span {
+    display: block;
+    width: 0;
+    height: 100%;
+    background: #ffe38a;
+    transition: width 0.2s;
+  }
+
+  .dd-title {
+    color: #ffe38a;
+    font-size: clamp(1.6rem, 6.5vw, 3rem);
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    line-height: 1;
+    text-shadow: 0 4px 0 var(--color-navy), 3px 0 0 var(--color-navy), -3px 0 0 var(--color-navy), 0 -3px 0 var(--color-navy);
+    text-transform: uppercase;
+  }
+
+  .dd-choose {
+    color: #fff4dc;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-shadow: 0 2px 0 var(--color-navy);
+    text-transform: uppercase;
+  }
+
+  .dd-heroes {
+    display: grid;
+    width: min(100%, 34rem);
+    gap: 0.6rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dd-hero-btn {
+    display: grid;
+    align-items: center;
+    gap: 0.1rem 0.6rem;
+    grid-template-areas:
+      "art name"
+      "art desc";
+    grid-template-columns: auto 1fr;
+    border: 3px solid var(--color-navy);
+    border-radius: 1.1rem;
+    background: #fbf7ef;
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    cursor: pointer;
+    padding: 0.5rem 0.7rem;
+    text-align: left;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+
+  .dd-hero-leoul {
+    background: linear-gradient(135deg, #e3f3fb 0%, #fbf7ef 60%);
+  }
+
+  .dd-hero-lenyang {
+    background: linear-gradient(135deg, #fbeadb 0%, #fbf7ef 60%);
+  }
+
+  .dd-hero-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .dd-hero-btn:active {
+    box-shadow: 0 2px 0 var(--color-navy);
+    transform: translateY(3px);
+  }
+
+  .dd-hero-btn img {
+    grid-area: art;
+    width: auto;
+    height: clamp(3.2rem, 11vw, 5.4rem);
+  }
+
+  .dd-hero-name {
+    grid-area: name;
+    align-self: end;
+    font-size: clamp(1rem, 3.6vw, 1.3rem);
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .dd-hero-desc {
+    grid-area: desc;
+    align-self: start;
+    color: #5f6579;
+    font-size: 0.74rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .dd-menu-stats {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem 0.9rem;
+    color: #ffe38a;
+    font-size: 0.8rem;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    text-shadow: 0 2px 0 var(--color-navy);
+  }
+
+  .dd-toggle {
+    border: 2px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-navy) 85%, transparent);
+    color: #fff4dc;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: 800;
+    padding: 0.3rem 0.85rem;
+  }
+
+  .dd-screen-title {
+    color: #fff4dc;
+    font-size: clamp(1.4rem, 5.5vw, 2.3rem);
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    line-height: 1.05;
+    text-shadow: 0 3px 0 var(--color-navy);
+    text-transform: uppercase;
+  }
+
+  .dd-over {
+    justify-content: center;
+    justify-content: safe center;
+    gap: 0.35rem;
+  }
+
+  .dd-over-art {
+    width: auto;
+    max-width: 38%;
+    height: clamp(3rem, 16cqh, 6.5rem);
+    object-fit: contain;
+    filter: drop-shadow(0 4px 0 color-mix(in srgb, #090c20 45%, transparent));
+  }
+
+  .dd-over-club {
+    color: #c2c7df;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .dd-final {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+    color: #ffe38a;
+    font-size: clamp(1.8rem, 7vw, 3rem);
+    font-variant-numeric: tabular-nums;
+    font-weight: 900;
+    line-height: 1;
+    text-shadow: 0 4px 0 var(--color-navy);
+  }
+
+  .dd-final-label {
+    color: #c2c7df;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-shadow: none;
+    text-transform: uppercase;
+  }
+
+  .dd-stats,
+  .dd-best-line {
+    color: #e6e9f7;
+    font-size: 0.84rem;
+    font-weight: 700;
+  }
+
+  [data-dd-new-best] .dd-best-line {
+    color: #ffe38a;
+    font-weight: 900;
+    animation: dd-bounce 0.9s ease-out 2;
+  }
+
+  .dd-new-cards {
+    max-width: 28rem;
+    border-radius: 0.9rem;
+    background: color-mix(in srgb, var(--color-navy) 85%, transparent);
+    font-size: 0.8rem;
+    padding: 0.4rem 0.9rem;
+  }
+
+  .dd-new-cards p {
+    color: #ffe38a;
+    font-weight: 900;
+  }
+
+  .dd-new-cards ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.05rem 0.7rem;
+    color: #fff4dc;
+    font-weight: 700;
+  }
+
+  .dd-stack {
+    display: flex;
+    width: min(100%, 18rem);
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+  }
+
+  .dd-row {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .dd-row .dd-btn {
+    flex: 1;
+  }
+
+  .dd-btn {
+    display: inline-flex;
+    min-height: 2.8rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border: 3px solid var(--color-navy);
+    border-radius: 999px;
+    background: #fbf7ef;
+    box-shadow: 0 4px 0 var(--color-navy);
+    color: #15182a;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 900;
+    line-height: 1.1;
+    padding: 0.45rem 1rem;
+    text-decoration: none;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  .dd-btn:active {
+    box-shadow: 0 1px 0 var(--color-navy);
+    transform: translateY(3px);
+  }
+
+  .dd-btn-primary {
+    background: #ffe38a;
+  }
+
+  .dd-btn-small {
+    min-height: 2.4rem;
+    font-size: 0.8rem;
+  }
+
+  .dd-game :is(.dd-btn, .dd-hero-btn, .dd-icon-btn, .dd-toggle, .dd-pad):focus-visible,
+  .dd-how summary:focus-visible {
+    outline: 3px solid #56c1e8;
+    outline-offset: 3px;
+  }
+
+  .dd-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .dd-rotate-tip {
+    display: none;
+    margin-top: 0.7rem;
+    color: var(--color-link);
+    font-size: 0.82rem;
+    text-align: center;
+  }
+
+  @media (max-width: 640px) and (orientation: portrait) and (pointer: coarse) {
+    .dd-rotate-tip {
+      display: block;
+    }
+  }
+
+  .dd-how {
+    width: min(100%, 60rem);
+    margin: 0.9rem auto 0;
+    border: 1px solid var(--color-rule);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--color-navy) 40%, transparent);
+    padding: 0.6rem 1rem;
+  }
+
+  .dd-how summary {
+    cursor: pointer;
+    font-weight: 900;
+  }
+
+  .dd-how p {
+    margin-top: 0.45rem;
+    color: var(--color-link);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .dd-now-playing {
+    font-size: 0.78rem !important;
+  }
+
+  @media (hover: none) and (pointer: coarse) {
+    .dd-how .dd-keys {
+      display: none;
+    }
+  }
+
+  .dd-section {
+    margin-top: 3.2rem;
+  }
+
+  .dd-h2 {
+    margin-top: 0.4rem;
+    font-size: clamp(1.6rem, 5vw, 2.2rem);
+    font-weight: 900;
+    letter-spacing: -0.01em;
+  }
+
+  .dd-lede {
+    max-width: 44rem;
+    margin-top: 0.5rem;
+    color: var(--color-link);
+    line-height: 1.6;
+  }
+
+  .dd-album-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .dd-collected {
+    color: var(--color-gold-light);
+    font-size: 0.85rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .dd-card-grid {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    margin-top: 1.3rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .dd-card {
+    --dd-accent: #0b1752;
+    border: 3px solid var(--color-navy);
+    border-radius: 1.1rem;
+    background: #fbf7ef;
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    padding: 0.7rem 0.75rem 0.9rem;
+  }
+
+  .dd-card-art {
+    display: grid;
+    aspect-ratio: 4 / 3;
+    place-items: center;
+    border-radius: 0.8rem;
+    background:
+      radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--dd-accent) 26%, #fbf7ef) 0%, color-mix(in srgb, var(--dd-accent) 8%, #fbf7ef) 70%);
+  }
+
+  .dd-card-leoul .dd-card-art {
+    background: linear-gradient(180deg, #e3f3fb 0%, #fbf7ef 100%);
+  }
+
+  .dd-card-lenyang .dd-card-art {
+    background: linear-gradient(180deg, #fbeadb 0%, #fbf7ef 100%);
+  }
+
+  .dd-card-art img {
+    max-width: 88%;
+    max-height: 86%;
+    object-fit: contain;
+  }
+
+  .dd-card-club {
+    margin-top: 0.55rem;
+    color: color-mix(in srgb, var(--dd-accent) 70%, #15182a);
+    font-size: 0.66rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .dd-card-name {
+    margin-top: 0.1rem;
+    font-size: 1.05rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .dd-card-name span {
+    color: #5f6579;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .dd-card-kind {
+    color: #9a6a3f;
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  .dd-card-fact {
+    margin-top: 0.35rem;
+    color: #3a3f55;
+    font-size: 0.8rem;
+    line-height: 1.45;
+  }
+
+  .dd-card-hint {
+    display: none;
+    margin-top: 0.4rem;
+    color: #4a5070;
+    font-size: 0.78rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .dd-card-lock {
+    display: block;
+    color: #2f3b74;
+    font-size: 0.66rem;
+    font-weight: 900;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .dd-card[data-locked] {
+    border-color: #2f3b74;
+    background: #dcdfea;
+    box-shadow: 0 5px 0 #2f3b74;
+  }
+
+  .dd-card[data-locked] .dd-card-art {
+    background: color-mix(in srgb, #2f3b74 10%, #dcdfea);
+  }
+
+  .dd-card[data-locked] .dd-card-art img {
+    filter: brightness(0) opacity(0.25);
+  }
+
+  .dd-card[data-locked] :is(.dd-card-name, .dd-card-kind, .dd-card-fact) {
+    display: none;
+  }
+
+  .dd-card[data-locked] .dd-card-hint {
+    display: block;
+  }
+
+  .dd-card-new {
+    animation: dd-pop 0.6s ease-out;
+  }
+
+  .dd-back {
+    margin-top: 2.2rem;
+    text-align: center;
+  }
+
+  .dd-back a {
+    color: var(--color-gold-light);
+    font-weight: 900;
+  }
+
+  .dd-credit {
+    max-width: 50rem;
+    margin: 1.4rem auto 0;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  /* Portrait phones: a taller stage so the pitch and the menu have room. */
+  @media (max-width: 640px) and (orientation: portrait) {
+    .dd-stage {
+      aspect-ratio: 4 / 3;
+    }
+
+    .dd-pad {
+      min-height: 4.6rem;
+    }
+  }
+
+  /* Landscape phones: the header scrolls away, the stage takes the height and
+     the two pads sit either side of it, under the thumbs. */
+  @media (orientation: landscape) and (max-height: 560px) {
+    html.dd-has-game [data-site-header] {
+      position: relative;
+    }
+
+    .dd-game {
+      width: 100%;
+      align-items: center;
+      gap: 0.6rem;
+      grid-template-areas: "slide stage jump";
+      grid-template-columns: minmax(4.6rem, 1fr) minmax(0, calc((100vh - 1.2rem) * 16 / 9)) minmax(4.6rem, 1fr);
+      grid-template-columns: minmax(4.6rem, 1fr) minmax(0, calc((100svh - 1.2rem) * 16 / 9)) minmax(4.6rem, 1fr);
+    }
+
+    /* The stage takes its width from the column and its height from 16:9;
+       the pads stretch to the stage's height. */
+    .dd-stage {
+      width: 100%;
+    }
+
+    .dd-pad-wrap {
+      align-self: stretch;
+    }
+
+    .dd-pad {
+      flex-direction: column;
+      font-size: 0.85rem;
+    }
+  }
+
+  /* Medium-height stages (tablets, small laptops): tighten the game-over screen. */
+  @container (max-height: 470px) {
+    .dd-over {
+      gap: 0.25rem;
+      padding-block: 0.6rem;
+    }
+
+    .dd-over-art {
+      height: 3.2rem;
+    }
+
+    .dd-over .dd-screen-title {
+      font-size: clamp(1.2rem, 4.2vw, 1.8rem);
+    }
+
+    .dd-final {
+      font-size: clamp(1.6rem, 5vw, 2.4rem);
+    }
+  }
+
+  /* Short stages: compact menu and game-over screens. */
+  @container (max-height: 340px) {
+    .dd-screen {
+      gap: 0.3rem;
+      padding: 0.5rem;
+    }
+
+    .dd-hero-desc,
+    .dd-over-club,
+    .dd-new-cards {
+      display: none;
+    }
+
+    .dd-hero-btn {
+      padding: 0.35rem 0.5rem;
+    }
+
+    .dd-hero-btn img {
+      height: 2.8rem;
+    }
+
+    .dd-choose {
+      font-size: 0.66rem;
+    }
+
+    .dd-over-art {
+      height: 2.6rem;
+    }
+
+    .dd-stack {
+      gap: 0.35rem;
+      margin-top: 0.1rem;
+    }
+
+    .dd-btn {
+      min-height: 2.3rem;
+      font-size: 0.85rem;
+      padding-block: 0.3rem;
+    }
+
+    .dd-btn-small {
+      min-height: 2.1rem;
+      font-size: 0.75rem;
+    }
+
+    .dd-stats,
+    .dd-best-line {
+      font-size: 0.74rem;
+    }
+  }
+
+  @container (max-height: 250px) {
+    .dd-choose,
+    .dd-menu-stats,
+    .dd-toggle,
+    .dd-over-art,
+    .dd-stats {
+      display: none;
+    }
+  }
+
+  @keyframes dd-pop {
+    0% {
+      transform: scale(0.9);
+    }
+    60% {
+      transform: scale(1.08);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes dd-bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-6px);
+    }
+  }
+
+  @keyframes dd-fade-in {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -40%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .dd-game *,
+    .dd-card {
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+</style>

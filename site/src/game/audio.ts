@@ -2,6 +2,7 @@
 // sound effects synthesised with Web Audio, so there is nothing else to load.
 
 const PREFS_KEY = "pp-audio-v1";
+const MUSIC_VOLUME = 0.42;
 
 interface AudioPrefs {
   muted: boolean;
@@ -23,6 +24,7 @@ export class GameAudio {
   private noise: AudioBuffer | null = null;
   private readonly music: HTMLAudioElement;
   private musicWanted = false;
+  private musicRouted = false;
   private prefs: AudioPrefs;
 
   constructor(private readonly musicUrl: string) {
@@ -30,7 +32,7 @@ export class GameAudio {
     this.music = new Audio();
     this.music.preload = "none";
     this.music.loop = true;
-    this.music.volume = 0.42;
+    this.music.volume = MUSIC_VOLUME;
   }
 
   get muted(): boolean {
@@ -54,6 +56,19 @@ export class GameAudio {
       this.noise = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
       const data = this.noise.getChannelData(0);
       for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1;
+    }
+    // iOS ignores HTMLMediaElement.volume (it always reads back as 1), so there
+    // the music goes through a gain node to sit under the sound effects.
+    if (!this.musicRouted && Math.abs(this.music.volume - MUSIC_VOLUME) > 0.01) {
+      try {
+        const source = this.ctx.createMediaElementSource(this.music);
+        const gain = this.ctx.createGain();
+        gain.gain.value = MUSIC_VOLUME;
+        source.connect(gain).connect(this.ctx.destination);
+        this.musicRouted = true;
+      } catch {
+        // Leave the element playing at full volume.
+      }
     }
     if (this.ctx.state === "suspended") void this.ctx.resume();
   }
@@ -198,5 +213,35 @@ export class GameAudio {
 
   click(): void {
     this.tone("sine", 900, 700, 0, 0.05, 0.12);
+  }
+
+  // Dribble Dash sounds.
+
+  jump(): void {
+    this.tone("sine", 320, 760, 0, 0.16, 0.22);
+    this.tone("triangle", 640, 1300, 0.01, 0.12, 0.06);
+  }
+
+  slide(): void {
+    this.burst("bandpass", 1800, 0, 0.28, 0.2, 0.02);
+    this.tone("sine", 260, 140, 0, 0.2, 0.12);
+  }
+
+  treat(): void {
+    [988, 1319].forEach((f, i) => this.tone("square", f, f, i * 0.06, 0.1, 0.07));
+  }
+
+  dodge(): void {
+    this.tone("sine", 700, 1050, 0, 0.09, 0.07);
+  }
+
+  crash(): void {
+    this.tone("sine", 180, 50, 0, 0.3, 0.9);
+    this.burst("lowpass", 900, 0, 0.35, 0.6);
+    [660, 523, 392].forEach((f, i) => this.tone("triangle", f, f * 0.97, 0.18 + i * 0.12, 0.16, 0.12));
+  }
+
+  milestone(): void {
+    [784, 1175].forEach((f, i) => this.tone("sine", f, f, i * 0.07, 0.12, 0.09));
   }
 }
