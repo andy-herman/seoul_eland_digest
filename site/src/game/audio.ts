@@ -24,7 +24,6 @@ export class GameAudio {
   private noise: AudioBuffer | null = null;
   private readonly music: HTMLAudioElement;
   private musicWanted = false;
-  private musicRouted = false;
   private prefs: AudioPrefs;
 
   constructor(private readonly musicUrl: string) {
@@ -32,6 +31,9 @@ export class GameAudio {
     this.music = new Audio();
     this.music.preload = "none";
     this.music.loop = true;
+    // iOS ignores this (volume is read-only there). The music deliberately stays
+    // a plain media element rather than going through Web Audio, because iPhones
+    // mute Web Audio when the silent switch is on and the soundtrack would vanish.
     this.music.volume = MUSIC_VOLUME;
   }
 
@@ -56,19 +58,6 @@ export class GameAudio {
       this.noise = this.ctx.createBuffer(1, length, this.ctx.sampleRate);
       const data = this.noise.getChannelData(0);
       for (let i = 0; i < length; i++) data[i] = Math.random() * 2 - 1;
-    }
-    // iOS ignores HTMLMediaElement.volume (it always reads back as 1), so there
-    // the music goes through a gain node to sit under the sound effects.
-    if (!this.musicRouted && Math.abs(this.music.volume - MUSIC_VOLUME) > 0.01) {
-      try {
-        const source = this.ctx.createMediaElementSource(this.music);
-        const gain = this.ctx.createGain();
-        gain.gain.value = MUSIC_VOLUME;
-        source.connect(gain).connect(this.ctx.destination);
-        this.musicRouted = true;
-      } catch {
-        // Leave the element playing at full volume.
-      }
     }
     if (this.ctx.state === "suspended") void this.ctx.resume();
   }
