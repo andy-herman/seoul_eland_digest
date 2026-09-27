@@ -1,0 +1,44 @@
+{
+ "size": [
+  1920,
+  1080
+ ],
+ "worldScale": 1.2,
+ "feetRow": 936,
+ "farTouchlineRow": 862,
+ "grassTopRow": 853,
+ "trackRows": [
+  809,
+  853
+ ],
+ "boardsRows": [
+  766,
+  809
+ ],
+ "frontWallRows": [
+  739,
+  766
+ ],
+ "lowerTierRows": [
+  523,
+  739
+ ],
+ "bandRows": [
+  467,
+  523
+ ],
+ "upperTierRows": [
+  240,
+  467
+ ],
+ "roofRows": [
+  63,
+  158
+ ],
+ "goalLineX": [
+  180,
+  1740
+ ],
+ "pxPerMetreAtFeet": 60,
+ "note": "Blender render, camera 52 mm; image rows are in 1080p image pixels (world y = row / 1.2)"
+}
