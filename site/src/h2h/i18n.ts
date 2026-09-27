@@ -13,6 +13,7 @@ export interface H2HStrings {
   quick: string;
   playerSelect: string;
   playerHelp: string;
+  seasonLine: (g: number, a: number, apps: number) => string;
   nextFixture: string;
   table: string;
   fixtures: string;
@@ -33,6 +34,8 @@ export interface H2HStrings {
   shot: string;
   draw: string;
   result: string;
+  matchStats: string;
+  tableMove: (before: number, after: number) => string;
   winLine: (name: string) => string;
   lossLine: (name: string) => string;
   drawLine: string;
@@ -61,6 +64,7 @@ export const H2H_STRINGS: Record<Locale, H2HStrings> = {
     quick: "Quick match",
     playerSelect: "Choose your player",
     playerHelp: "Every player is viable. Speed, jump and shot are derived from position, height and 2026 production.",
+    seasonLine: (g, a, apps) => `2026: ${g} goals, ${a} assists, ${apps} apps`,
     nextFixture: "Next fixture",
     table: "League table",
     fixtures: "Fixtures",
@@ -81,6 +85,8 @@ export const H2H_STRINGS: Record<Locale, H2HStrings> = {
     shot: "Shot",
     draw: "Draw",
     result: "Result",
+    matchStats: "Match stats",
+    tableMove: (before, after) => `Table: ${before} → ${after}`,
     winLine: (name) => `${name} wins it.`,
     lossLine: (name) => `${name} takes it.`,
     drawLine: "A hard-earned draw.",
@@ -108,6 +114,7 @@ export const H2H_STRINGS: Record<Locale, H2HStrings> = {
     quick: "Jogo rápido",
     playerSelect: "Escolha o jogador",
     playerHelp: "Todos são competitivos. Velocidade, salto e chute vêm de posição, altura e produção em 2026.",
+    seasonLine: (g, a, apps) => `2026: ${g} gols, ${a} assistências, ${apps} jogos`,
     nextFixture: "Próximo jogo",
     table: "Tabela da liga",
     fixtures: "Jogos",
@@ -128,6 +135,8 @@ export const H2H_STRINGS: Record<Locale, H2HStrings> = {
     shot: "Chute",
     draw: "Empate",
     result: "Resultado",
+    matchStats: "Números da partida",
+    tableMove: (before, after) => `Tabela: ${before} → ${after}`,
     winLine: (name) => `${name} venceu.`,
     lossLine: (name) => `${name} ficou com a vitória.`,
     drawLine: "Empate suado.",

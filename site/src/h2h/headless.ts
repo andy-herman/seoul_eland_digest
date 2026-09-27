@@ -1,7 +1,7 @@
-import { SQUAD, OPPONENT_SLUGS } from "./data";
+import { AI_TIER, SQUAD, OPPONENT_SLUGS, type OpponentSlug } from "./data";
 import { applyRound, newSeason, validateTable } from "./league";
 import { simulateAiMatch } from "./main";
-import { MATCH_SECONDS, WORLD_H, WORLD_W } from "./sim";
+import { H2HMatch, MATCH_SECONDS, STEP, WORLD_H, WORLD_W, blankInput, type InputState } from "./sim";
 
 const player = SQUAD.find((p) => p.num === 16) ?? SQUAD[0];
 let leftGoals = 0;
@@ -37,6 +37,8 @@ const avgGoals = (leftGoals + rightGoals) / 240;
 if (avgGoals < 2 || avgGoals > 8) throw new Error(`average goals out of range: ${avgGoals}`);
 if (freezes <= 0) throw new Error("freeze never happened");
 if (counters <= 0) throw new Error("counter never happened");
+const split = leftGoals / (leftGoals + rightGoals);
+if (split < 0.4 || split > 0.6) throw new Error(`equal AI split out of range: ${split}`);
 
 let season = newSeason(player, 4242);
 for (let i = 0; i < 16; i++) {
@@ -47,4 +49,41 @@ if (season.round !== 16) throw new Error(`expected 16 rounds, got ${season.round
 const seoul = season.rows.find((r) => r.id === "seoul-eland");
 if (!seoul || seoul.p !== 16) throw new Error("Seoul did not play 16 matches");
 
-console.log(JSON.stringify({ matches: 240, leftGoals, rightGoals, avgGoals: Number(avgGoals.toFixed(2)), maxScore, minClock, freezes, counters, maxBallStep: Number(maxBallStep.toFixed(2)), teams: season.rows.length, rounds: season.round }));
+const tierReport: Record<string, { matches: number; wins: number; draws: number; losses: number; gf: number; ga: number }> = {};
+for (const slug of OPPONENT_SLUGS) {
+  const tier = String(AI_TIER[slug]);
+  tierReport[tier] ??= { matches: 0, wins: 0, draws: 0, losses: 0, gf: 0, ga: 0 };
+  for (let i = 0; i < 10; i++) {
+    const m = casualMatch(slug, 7000 + i * 97);
+    const row = tierReport[tier];
+    row.matches += 1;
+    row.gf += m.score.left;
+    row.ga += m.score.right;
+    if (m.score.left > m.score.right) row.wins += 1;
+    else if (m.score.left === m.score.right) row.draws += 1;
+    else row.losses += 1;
+  }
+}
+
+console.log(JSON.stringify({ matches: 240, leftGoals, rightGoals, equalSplitLeft: Number(split.toFixed(3)), avgGoals: Number(avgGoals.toFixed(2)), maxScore, minClock, freezes, counters, countersPerMatch: Number((counters / 240).toFixed(2)), maxBallStep: Number(maxBallStep.toFixed(2)), teams: season.rows.length, rounds: season.round, tierReport }));
+
+function casualMatch(opponent: OpponentSlug, seed: number): H2HMatch {
+  const m = new H2HMatch({ player, opponent, kit: "home", mode: "league", seed });
+  m.start();
+  let guard = 0;
+  while (m.phase !== "ended" && guard++ < 60 * 240) {
+    m.step(STEP, casualInput(m), m.aiInput("right", STEP));
+  }
+  return m;
+}
+
+function casualInput(m: H2HMatch): InputState {
+  const input = blankInput();
+  const target = m.ball.x < 820 ? m.ball.x - 60 : 520;
+  if (target < m.left.x - 28) input.left = true;
+  if (target > m.left.x + 28) input.right = true;
+  if (m.ball.y < m.left.y - 120 && Math.abs(m.ball.x - m.left.x) < 145 && m.left.onGround) input.jump = true;
+  if (Math.abs(m.ball.x - (m.left.x + 72)) < 70 && Math.abs(m.ball.y - (m.left.y - 70)) < 90) input.kick = true;
+  input.power = m.left.powerBanked && Math.abs(m.ball.x - m.left.x) < 170;
+  return input;
+}

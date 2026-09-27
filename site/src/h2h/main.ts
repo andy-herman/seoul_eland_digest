@@ -65,6 +65,7 @@ export function mountHeadToHead(root: HTMLElement): void {
   let acc = 0;
   let raf = 0;
   let resultPending = false;
+  let tableBefore = 1;
 
   function show(next: typeof mode): void {
     mode = next;
@@ -72,6 +73,8 @@ export function mountHeadToHead(root: HTMLElement): void {
     root.dataset.mode = next;
     q("[data-h2h-touch]")!.hidden = next !== "match";
     q("[data-h2h-hud]")!.hidden = !(next === "match" || next === "paused");
+    document.body.classList.toggle("h2h-lock-scroll", next === "match" || next === "paused");
+    if (next === "match") requestAnimationFrame(() => q("[data-h2h-stage]")?.scrollIntoView({ block: "center", inline: "nearest" }));
   }
 
   function syncSelected(): void {
@@ -80,6 +83,23 @@ export function mountHeadToHead(root: HTMLElement): void {
       b.setAttribute("aria-pressed", String(on));
     }
     q("[data-h2h-selected]")!.textContent = `#${selected.num} ${selected.ko} · ${selected.en}`;
+    const img = q<HTMLImageElement>("[data-h2h-preview-img]");
+    if (img) img.src = `${assets}stickers/${selected.num}-home.webp`;
+    const line = q("[data-h2h-preview-line]");
+    if (line) line.textContent = t.seasonLine(selected.goals, selected.assists, selected.apps);
+    const bars = q("[data-h2h-preview-bars]");
+    if (bars) {
+      const stats = SQUAD.find((p) => p.num === selected.num);
+      bars.textContent = "";
+      if (stats) {
+        const values = [stats.goals / 12 + 0.35, stats.height / 210, (stats.goals * 2 + stats.assists + stats.apps / 8) / 28];
+        for (const v of values) {
+          const s = document.createElement("span");
+          s.style.setProperty("--v", String(Math.max(0.25, Math.min(0.9, v))));
+          bars.append(s);
+        }
+      }
+    }
   }
 
   function renderSeason(): void {
@@ -98,6 +118,7 @@ export function mountHeadToHead(root: HTMLElement): void {
     for (const f of season.fixtures) {
       const li = document.createElement("li");
       li.dataset.done = String(!!f.result);
+      if (f.result) li.dataset.chip = f.result.gf > f.result.ga ? "W" : f.result.gf === f.result.ga ? "D" : "L";
       li.textContent = `${String(f.round + 1).padStart(2, "0")} · ${f.home ? t.home : t.away} · ${OPPONENTS[f.opponent].club}${f.result ? ` · ${f.result.gf}-${f.result.ga}` : ""}`;
       fx.append(li);
     }
@@ -126,7 +147,8 @@ export function mountHeadToHead(root: HTMLElement): void {
 
   function layout(): void {
     const box = q("[data-h2h-stage]")!;
-    renderer?.resize(Math.min(box.clientWidth, window.innerWidth - 22));
+    const rect = box.getBoundingClientRect();
+    renderer?.resize(Math.max(300, Math.min(box.clientWidth, window.innerWidth - rect.left * 2 - 8)));
   }
 
   async function startMatch(opponent: OpponentSlug, kit: Kit, matchMode: "league" | "quick" | "ai" = "league"): Promise<void> {
@@ -138,6 +160,10 @@ export function mountHeadToHead(root: HTMLElement): void {
     if (playerHud) playerHud.textContent = `${selected.ko} · ${selected.en}`;
     const rivalHud = q("[data-h2h-hud-rival]");
     if (rivalHud) rivalHud.innerHTML = `${OPPONENTS[opponent].name.toUpperCase()}<small>${OPPONENTS[opponent].korean}</small>`;
+    const homeAvatar = q<HTMLElement>("[data-side='home']");
+    if (homeAvatar) homeAvatar.style.backgroundImage = `url(${assets}heads/${selected.num}.webp)`;
+    const rivalAvatar = q<HTMLElement>("[data-side='rival']");
+    if (rivalAvatar) rivalAvatar.style.backgroundImage = `url(${assets}mascots/${opponent}.webp)`;
     resultPending = false;
     show("match");
   }
@@ -171,6 +197,7 @@ export function mountHeadToHead(root: HTMLElement): void {
       q("[data-h2h-end-text]")!.textContent = seasonEnding();
       return;
     }
+    tableBefore = sortRows(season.rows).findIndex((r) => r.id === "seoul-eland") + 1;
     void startMatch(next.opponent, next.home ? "home" : "away", "league");
   });
   q("[data-h2h-to-quick]")?.addEventListener("click", () => show("quick"));
@@ -182,6 +209,11 @@ export function mountHeadToHead(root: HTMLElement): void {
     void startMatch(b.dataset.h2hQuick as OpponentSlug, quickKit, "quick");
   });
   q("[data-h2h-pause]")?.addEventListener("click", () => show(mode === "paused" ? "match" : "paused"));
+  q("[data-h2h-mute]")?.addEventListener("click", () => {
+    audio.setMuted(!audio.muted);
+    const btn = q("[data-h2h-mute]");
+    if (btn) btn.textContent = audio.muted ? "×" : "♪";
+  });
   q("[data-h2h-resume]")?.addEventListener("click", () => show("match"));
   q("[data-h2h-result-continue]")?.addEventListener("click", () => {
     renderSeason();
@@ -217,6 +249,11 @@ export function mountHeadToHead(root: HTMLElement): void {
       save.season = season;
       store(save);
     }
+    const after = sortRows(season.rows).findIndex((r) => r.id === "seoul-eland") + 1;
+    const stats = q("[data-h2h-result-stats]");
+    if (stats) stats.textContent = `${match.score.left} goals · ${match.stats.kickContacts} shots · ${match.stats.powerShots} power shots`;
+    const move = q("[data-h2h-result-table]");
+    if (move) move.textContent = match.mode === "league" ? t.tableMove(tableBefore, after) : t.quickMatch;
     show("result");
   }
 
@@ -265,6 +302,24 @@ export function mountHeadToHead(root: HTMLElement): void {
     },
     startQuick: (opponent: OpponentSlug = "ansan-greeners", kit: Kit = "home") => startMatch(opponent, kit, "quick"),
     simulateAiMatch: (seed = 1, opponent: OpponentSlug = "ansan-greeners") => simulateAiMatch(selected, opponent, seed),
+    endNow: () => {
+      if (match) {
+        match.elapsed = 90;
+        match.step(STEP, blankInput(), blankInput());
+      }
+    },
+    forceGoal: (side: "left" | "right") => {
+      if (!match) return;
+      match.ball.x = side === "left" ? 1510 : 90;
+      match.ball.y = 705;
+      match.ball.vx = side === "left" ? 360 : -360;
+      match.ball.vy = 0;
+      match.step(STEP, blankInput(), blankInput());
+    },
+    setSeasonRound: (n: number) => {
+      season.round = Math.max(0, Math.min(16, Math.floor(n)));
+      renderSeason();
+    },
     destroy: () => cancelAnimationFrame(raf),
   };
   if (new URLSearchParams(location.search).has("qa")) (window as unknown as { __h2h?: typeof api }).__h2h = api;

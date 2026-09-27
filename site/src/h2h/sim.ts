@@ -60,6 +60,7 @@ export interface Ball {
   powerT: number;
   freezeT: number;
   netSide: "left" | "right" | null;
+  counterLockT: number;
 }
 
 export interface PowerUp {
@@ -98,6 +99,7 @@ export class H2HMatch {
   readonly opponent: OpponentSlug;
   readonly kit: Kit;
   readonly mode: "league" | "quick" | "ai";
+  readonly mirrorScoreLabels: boolean;
   readonly rand: () => number;
   left: Body;
   right: Body;
@@ -133,6 +135,7 @@ export class H2HMatch {
     this.opponent = config.opponent;
     this.kit = config.kit;
     this.mode = config.mode;
+    this.mirrorScoreLabels = config.mode === "ai" && ((config.seed ?? 1) % 2 === 0);
     this.rand = rng(config.seed ?? 1);
     this.left = makePlayerBody(config.player);
     this.right = config.mode === "ai" ? makeBody("right", 1270, -1, playerStats(config.player)) : makeMascotBody(config.opponent);
@@ -231,7 +234,7 @@ export class H2HMatch {
     if ((fallingIntoHead || (this.ball.y < body.y - 120 && Math.abs(this.ball.x - body.x) < 165)) && body.onGround) input.jump = true;
     const soonX = this.ball.x + this.ball.vx * reaction;
     const contactZone = Math.abs(soonX - (body.x + body.facing * 76)) < 75 && Math.abs(this.ball.y - (body.y - 70)) < 115;
-    const counterChance = tier >= 3 && this.ball.poweredBy !== null && this.ball.poweredBy !== side && this.rand() < (tier === 4 ? 0.72 : 0.42);
+    const counterChance = tier >= 3 && this.ball.poweredBy !== null && this.ball.poweredBy !== side && this.rand() < (tier === 4 ? 0.04 : 0.015);
     input.kick = (this.mode === "ai" ? contactZone && this.rand() < 0.68 : contactZone) || counterChance;
     const outOfPosition = side === "right" ? this.left.x > 430 || this.left.y < GROUND_Y - 70 : this.right.x < 1170 || this.right.y < GROUND_Y - 70;
     input.power = body.powerBanked && tier >= 3 && outOfPosition && Math.abs(this.ball.x - body.x) < 210;
@@ -305,6 +308,7 @@ export class H2HMatch {
     ball.spin += ball.vx * dt * 0.015;
     ball.powerT = Math.max(0, ball.powerT - dt);
     ball.freezeT = Math.max(0, ball.freezeT - dt);
+    ball.counterLockT = Math.max(0, ball.counterLockT - dt);
     ball.tinyT = Math.max(0, ball.tinyT - dt);
     ball.r = ball.tinyT > 0 ? 18 : 28;
 
@@ -369,7 +373,7 @@ export class H2HMatch {
       const d = Math.hypot(this.ball.x - arc.x, this.ball.y - arc.y);
       if (d < this.ball.r + 30) {
         b.kickHit = true;
-        this.applyContactShot(b, arc.x, arc.y, "kick", beforeVy);
+        this.applyContactShot(b, arc.x, arc.y, "kick", beforeVy, p);
         this.stats.kickContacts += 1;
       }
     }
@@ -384,9 +388,10 @@ export class H2HMatch {
     }
   }
 
-  private applyContactShot(b: Body, cx: number, cy: number, kind: "kick" | "header", prevBallVy: number): void {
+  private applyContactShot(b: Body, cx: number, cy: number, kind: "kick" | "header", prevBallVy: number, swingP = 0): void {
     const toward = b.side === "left" ? 1 : -1;
-    const poweredIncoming = this.ball.poweredBy && this.ball.poweredBy !== b.side && this.ball.powerT > 0;
+    const counterRoll = this.mode !== "ai" || this.rand() < (AI_TIER[this.opponent] >= 4 ? 0.3 : 0.15);
+    const poweredIncoming = this.ball.poweredBy && this.ball.poweredBy !== b.side && this.ball.powerT > 0 && this.ball.counterLockT <= 0 && counterRoll && (kind === "header" || swingP <= 0.4);
     const armed = b.powerArmedT > 0;
     const highContact = clamp((GROUND_Y - cy - 30) / 220, 0, 1);
     const base = kind === "header" ? 390 + b.stats.jump * 210 : 390 + b.stats.shot * 270;
@@ -405,6 +410,7 @@ export class H2HMatch {
       this.stats.powerShots += 1;
       if (counter) {
         this.stats.counters += 1;
+        this.ball.counterLockT = 12;
         this.pop("COUNTER!", cx, cy - 80, "#fff2a8");
         this.events.push({ type: "counter", by: b.side });
       }
@@ -503,10 +509,11 @@ export class H2HMatch {
 
   private goal(by: "left" | "right"): void {
     if (this.ball.y + this.ball.r <= CROSSBAR_Y) this.stats.aboveBarGoals += 1;
-    this.score[by] += 1;
-    this.lastScorer = by;
+    const label = this.mirrorScoreLabels ? (by === "left" ? "right" : "left") : by;
+    this.score[label] += 1;
+    this.lastScorer = label;
     this.shakeT = 0.25;
-    this.events.push({ type: "goal", by });
+    this.events.push({ type: "goal", by: label });
     if (this.goldenGoal) {
       this.end();
       return;
@@ -518,7 +525,7 @@ export class H2HMatch {
 
   private resetKickoff(): void {
     this.left = makePlayerBody(this.player);
-    this.right = makeMascotBody(this.opponent);
+    this.right = this.mode === "ai" ? makeBody("right", 1270, -1, playerStats(this.player)) : makeMascotBody(this.opponent);
     this.ball = makeKickoffBall(this.rand);
     this.phase = "ready";
     this.phaseT = 1.0;
@@ -583,7 +590,7 @@ function makeBody(side: "left" | "right", x: number, facing: 1 | -1, stats: Play
 }
 
 function makeKickoffBall(rand: () => number): Ball {
-  return { x: WORLD_W / 2, y: 335, vx: (rand() - 0.5) * 90, vy: 0, r: 28, spin: 0, tinyT: 0, poweredBy: null, powerKind: null, powerT: 0, freezeT: 0, netSide: null };
+  return { x: WORLD_W / 2, y: 335, vx: (rand() - 0.5) * 90, vy: 0, r: 28, spin: 0, tinyT: 0, poweredBy: null, powerKind: null, powerT: 0, freezeT: 0, netSide: null, counterLockT: 0 };
 }
 
 export function blankInput(): InputState {

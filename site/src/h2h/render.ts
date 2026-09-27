@@ -154,7 +154,7 @@ export class H2HRenderer {
     const ratio = head ? head.naturalWidth / head.naturalHeight : 1;
     const headW = headH * ratio;
     const hx = 0;
-    const hy = -178 + (b.mood === "sad" ? 12 : 0) + (b.mood === "header" ? -8 : 0);
+    const hy = -130 + (b.mood === "sad" ? 12 : 0) + (b.mood === "header" ? -8 : 0);
     ctx.save();
     if (b.freezeT > 0) {
       ctx.globalAlpha = 0.75;
@@ -245,18 +245,12 @@ export class H2HRenderer {
       ctx.beginPath();
       ctx.moveTo(45, -126); ctx.lineTo(25, -132); ctx.lineTo(15, -47); ctx.lineTo(45, -55); ctx.closePath(); ctx.fill();
     }
-    ctx.fillStyle = home ? "#ffffff" : "#d9dde6";
-    for (let row = 0; row < 3; row++) {
-      for (let i = 0; i < 5 + row; i++) {
-        const x = -38 + i * 15 - row * 4;
-        const y = -72 + row * 10;
-        ctx.beginPath();
-        ctx.moveTo(x, y + 16);
-        ctx.lineTo(x + 8, y);
-        ctx.lineTo(x + 16, y + 16);
-        ctx.fill();
-      }
-    }
+    const grad = ctx.createLinearGradient(0, -82, 0, -44);
+    grad.addColorStop(0, "rgba(255,255,255,0)");
+    grad.addColorStop(1, home ? "rgba(255,255,255,.75)" : "rgba(210,215,225,.72)");
+    ctx.fillStyle = grad;
+    roundRect(ctx, -40, -82, 80, 37, 8);
+    ctx.fill();
     if (player.captain) {
       ctx.fillStyle = "#ffd43b";
       roundRect(ctx, -55, -101, 14, 27, 4);
@@ -343,16 +337,7 @@ export class H2HRenderer {
     ctx.save();
     ctx.translate(b.x, b.y);
     ctx.rotate(b.spin);
-    if (this.images.ball) ctx.drawImage(this.images.ball, -b.r, -b.r, b.r * 2, b.r * 2);
-    else {
-      ctx.fillStyle = "#f8fafc";
-      ctx.strokeStyle = "#1a1a24";
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.arc(0, 0, b.r, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.stroke();
-    }
+    soccerBall(ctx, b.r);
     ctx.restore();
     if (b.y < 0) {
       ctx.fillStyle = "#ffd64a";
@@ -521,6 +506,43 @@ function ribbon(ctx: CanvasRenderingContext2D, x: number, y: number, text: strin
   ctx.font = "900 22px system-ui";
   ctx.textAlign = "left";
   ctx.fillText(text, x + 18, y + 30, 326);
+}
+
+function soccerBall(ctx: CanvasRenderingContext2D, r: number): void {
+  ctx.fillStyle = "#f8fafc";
+  ctx.strokeStyle = "#1a1a24";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(0, 0, r, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = "#111827";
+  polygon(ctx, 0, 0, r * 0.34, 5, -Math.PI / 2);
+  ctx.fill();
+  ctx.lineWidth = 2.5;
+  for (let i = 0; i < 5; i++) {
+    const a = -Math.PI / 2 + i * (Math.PI * 2 / 5);
+    const x = Math.cos(a) * r * 0.63;
+    const y = Math.sin(a) * r * 0.63;
+    polygon(ctx, x, y, r * 0.18, 5, a);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(Math.cos(a) * r * 0.2, Math.sin(a) * r * 0.2);
+    ctx.lineTo(x, y);
+    ctx.stroke();
+  }
+}
+
+function polygon(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, sides: number, rot: number): void {
+  ctx.beginPath();
+  for (let i = 0; i < sides; i++) {
+    const a = rot + i * Math.PI * 2 / sides;
+    const px = x + Math.cos(a) * r;
+    const py = y + Math.sin(a) * r;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
 }
 
 function localizePop(text: string, locale: "en" | "pt"): string {
