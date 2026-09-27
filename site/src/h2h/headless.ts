@@ -49,12 +49,13 @@ if (season.round !== 16) throw new Error(`expected 16 rounds, got ${season.round
 const seoul = season.rows.find((r) => r.id === "seoul-eland");
 if (!seoul || seoul.p !== 16) throw new Error("Seoul did not play 16 matches");
 
-const tierReport: Record<string, { matches: number; wins: number; draws: number; losses: number; gf: number; ga: number }> = {};
+const tierReport: Record<string, { matches: number; wins: number; draws: number; losses: number; gf: number; ga: number; winPct?: number; lossPct?: number }> = {};
+const perClub: Record<string, number> = { "1": 50, "2": 40, "3": 40, "4": 100 };
 for (const slug of OPPONENT_SLUGS) {
   const tier = String(AI_TIER[slug]);
   tierReport[tier] ??= { matches: 0, wins: 0, draws: 0, losses: 0, gf: 0, ga: 0 };
-  for (let i = 0; i < 10; i++) {
-    const m = casualMatch(slug, 7000 + i * 97);
+  for (let i = 0; i < perClub[tier]; i++) {
+    const m = casualMatch(slug, 7000 + Number(tier) * 10000 + OPPONENT_SLUGS.indexOf(slug) * 1009 + i * 97);
     const row = tierReport[tier];
     row.matches += 1;
     row.gf += m.score.left;
@@ -64,6 +65,16 @@ for (const slug of OPPONENT_SLUGS) {
     else row.losses += 1;
   }
 }
+for (const row of Object.values(tierReport)) {
+  row.winPct = Number((row.wins / row.matches).toFixed(3));
+  row.lossPct = Number((row.losses / row.matches).toFixed(3));
+}
+if (tierReport["1"].winPct! < 0.7) throw new Error(`tier 1 too hard: ${tierReport["1"].winPct}`);
+if (tierReport["2"].winPct! < 0.5 || tierReport["2"].winPct! > 0.65) throw new Error(`tier 2 out of range: ${tierReport["2"].winPct}`);
+if (tierReport["3"].winPct! > 0.4) throw new Error(`tier 3 too easy: ${tierReport["3"].winPct}`);
+if (tierReport["4"].winPct! > 0.2) throw new Error(`tier 4 too easy: ${tierReport["4"].winPct}`);
+if (tierReport["4"].lossPct! > 0.7) throw new Error(`tier 4 too punishing: ${tierReport["4"].lossPct}`);
+if (!(tierReport["1"].winPct! > tierReport["2"].winPct! && tierReport["2"].winPct! > tierReport["3"].winPct! && tierReport["3"].winPct! > tierReport["4"].winPct!)) throw new Error("tier win rates are not monotonic");
 
 console.log(JSON.stringify({ matches: 240, leftGoals, rightGoals, equalSplitLeft: Number(split.toFixed(3)), avgGoals: Number(avgGoals.toFixed(2)), maxScore, minClock, freezes, counters, countersPerMatch: Number((counters / 240).toFixed(2)), maxBallStep: Number(maxBallStep.toFixed(2)), teams: season.rows.length, rounds: season.round, tierReport }));
 

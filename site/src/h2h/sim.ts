@@ -1,4 +1,4 @@
-import { AI_TIER, PLAYER_METRICS, POWER_ARCHETYPE, RIVAL_STRENGTH, playerStats, rng, type Kit, type OpponentSlug, type PlayerStats, type SquadPlayer } from "./data";
+import { AI_TIER, MASCOT_METRICS, PLAYER_METRICS, POWER_ARCHETYPE, RIVAL_STRENGTH, playerStats, rng, type Kit, type OpponentSlug, type PlayerStats, type SquadPlayer } from "./data";
 
 export const WORLD_W = 1600;
 export const WORLD_H = 900;
@@ -219,14 +219,26 @@ export class H2HMatch {
     if (this.ai[nextKey] > 0) return this.ai[stateKey];
     const baseTier = AI_TIER[this.opponent];
     const tier = this.mode === "ai" ? (side === "left" ? Math.max(1, baseTier - 1) : Math.min(4, baseTier + 2)) : side === "right" ? baseTier : 3;
-    const reaction = Math.max(0.08, [0.24, 0.18, 0.125, 0.085][tier - 1] + this.rand() * 0.035);
+    const reaction = Math.max(0.08, [0.25, 0.165, 0.105, 0.08][tier - 1] + this.rand() * 0.035);
     this.ai[nextKey] = reaction;
     const attack = side === "left" ? 1 : -1;
     const ownGoal = side === "left" ? GOAL_LINE_L : GOAL_LINE_R;
-    const ballOnOwnHalf = this.mode === "ai" ? (side === "left" ? this.ball.x < WORLD_W * 0.57 : this.ball.x > WORLD_W * 0.43) : side === "left" ? this.ball.x < WORLD_W * 0.48 : this.ball.x > WORLD_W * 0.52;
-    const defensiveSpot = ownGoal + attack * (190 + tier * 18);
+    const ballOnOwnHalf =
+      tier >= 4
+        ? side === "left"
+          ? this.ball.x < WORLD_W * 0.72
+          : this.ball.x > WORLD_W * 0.28
+        : this.mode === "ai"
+          ? side === "left"
+            ? this.ball.x < WORLD_W * 0.57
+            : this.ball.x > WORLD_W * 0.43
+          : side === "left"
+            ? this.ball.x < WORLD_W * 0.48
+            : this.ball.x > WORLD_W * 0.52;
+    const defensiveDepth = tier >= 4 ? 120 : 190 + tier * 18;
+    const defensiveSpot = ownGoal + attack * defensiveDepth;
     const chaseSpot = this.ball.x - attack * (this.ball.y < 430 ? 24 : 80);
-    let wanted = ballOnOwnHalf ? defensiveSpot : chaseSpot;
+    let wanted = ballOnOwnHalf ? (tier >= 4 ? (defensiveSpot * 0.7 + this.ball.x * 0.3) : defensiveSpot) : chaseSpot;
     if (this.powerUp && tier >= 3 && Math.abs(this.powerUp.x - body.x) < 430) wanted = this.powerUp.x;
     const input = blankInput();
     if (wanted < body.x - 16) input.left = true;
@@ -564,14 +576,23 @@ function makePlayerBody(player: SquadPlayer, kit: Kit, side: "left" | "right" = 
 function makeMascotBody(opponent: OpponentSlug): Body {
   const tier = AI_TIER[opponent];
   const strength = RIVAL_STRENGTH[opponent];
+  const tierStat = tier === 2 ? 0.03 : tier === 3 ? 0.04 : tier === 4 ? 0.04 : 0;
   const body = makeBody("right", 1270, -1, {
-    speed: clamp(0.48 + tier * 0.045 + (strength - 70) / 500, 0.45, 0.72),
-    jump: clamp(0.5 + tier * 0.035 + (strength - 70) / 650, 0.45, 0.72),
-    shot: clamp(0.5 + tier * 0.04 + (strength - 70) / 450, 0.45, 0.72),
+    speed: clamp(0.48 + tier * 0.045 + (strength - 70) / 500 + tierStat, 0.45, tier === 4 ? 0.78 : 0.72),
+    jump: clamp(0.5 + tier * 0.035 + (strength - 70) / 650 + tierStat * 0.7, 0.45, tier === 4 ? 0.78 : 0.72),
+    shot: clamp(0.5 + tier * 0.04 + (strength - 70) / 450 + tierStat, 0.45, tier === 4 ? 0.78 : 0.72),
   });
-  // Approximate mascot head from the idle sprite box until per-mascot head metadata exists.
-  body.headR = clamp(240 * 0.33, 55, 80);
-  body.headY = 240 * 0.74;
+  const club = (MASCOT_METRICS.clubs[opponent] as { boxes?: [number, number, number, number][]; head?: [number, number, number] } | undefined);
+  const idle = club?.boxes?.[2];
+  const head = club?.head;
+  if (idle && head) {
+    const scale = 240 / idle[3];
+    body.headR = clamp(head[2] * scale, 50, 85);
+    body.headY = (MASCOT_METRICS.foot - head[1]) * scale;
+  } else {
+    body.headR = clamp(240 * 0.33, 55, 80);
+    body.headY = 240 * 0.74;
+  }
   return body;
 }
 
