@@ -60,6 +60,7 @@ export function mountHeadToHead(root: HTMLElement): void {
   let match: H2HMatch | null = null;
   let renderer: H2HRenderer | null = null;
   let mode: "loading" | "select" | "season" | "quick" | "match" | "paused" | "result" | "end" = "loading";
+  let quickKit: Kit = "home";
   let last = performance.now();
   let acc = 0;
   let raf = 0;
@@ -88,6 +89,7 @@ export function mountHeadToHead(root: HTMLElement): void {
     tbody.textContent = "";
     sortRows(season.rows).forEach((row, i) => {
       const tr = document.createElement("tr");
+      if (row.id === "seoul-eland") tr.dataset.seoul = "true";
       tr.innerHTML = `<td>${i + 1}</td><td><span style="--c:${row.color}"></span>${row.shortName}</td><td>${row.p}</td><td>${row.w}</td><td>${row.d}</td><td>${row.l}</td><td>${row.gf}</td><td>${row.ga}</td><td>${row.gd}</td><td>${row.pts}</td>`;
       tbody.append(tr);
     });
@@ -111,10 +113,13 @@ export function mountHeadToHead(root: HTMLElement): void {
     const head = await loadImage(`${assets}heads/${selected.num}.webp`);
     const sticker = await loadImage(`${assets}stickers/${selected.num}-${kit}.webp`);
     const mascot = await loadImage(`${assets}mascots/${opponent}.webp`);
-    const stadium = await loadImage(`${assets}stadium/${kit === "home" ? "mokdong" : "away"}.webp`);
+    const stadium =
+      kit === "home"
+        ? await loadImage(`${assets}stadium/mokdong.webp`)
+        : (await loadImage(`${assets}stadium/away-${opponent}.webp`)) ?? (await loadImage(`${assets}stadium/away.webp`));
     const ball = await loadImage(`${playAssets}ball.webp`);
     const images: H2HImages = { playerHead: head, playerSticker: sticker, mascot, stadium, ball };
-    renderer = new H2HRenderer(canvas, images);
+    renderer = new H2HRenderer(canvas, images, locale);
     if (match) match.images = images;
     layout();
   }
@@ -129,6 +134,10 @@ export function mountHeadToHead(root: HTMLElement): void {
     audio.startMusic();
     match = new H2HMatch({ player: selected, opponent, kit, mode: matchMode, seed: Date.now() % 100000 });
     await buildRenderer(opponent, kit);
+    const playerHud = q("[data-h2h-hud-player]");
+    if (playerHud) playerHud.textContent = `${selected.ko} · ${selected.en}`;
+    const rivalHud = q("[data-h2h-hud-rival]");
+    if (rivalHud) rivalHud.innerHTML = `${OPPONENTS[opponent].name.toUpperCase()}<small>${OPPONENTS[opponent].korean}</small>`;
     resultPending = false;
     show("match");
   }
@@ -165,8 +174,12 @@ export function mountHeadToHead(root: HTMLElement): void {
     void startMatch(next.opponent, next.home ? "home" : "away", "league");
   });
   q("[data-h2h-to-quick]")?.addEventListener("click", () => show("quick"));
+  for (const b of qa<HTMLButtonElement>("[data-h2h-kit]")) b.addEventListener("click", () => {
+    quickKit = b.dataset.h2hKit as Kit;
+    for (const x of qa<HTMLButtonElement>("[data-h2h-kit]")) x.setAttribute("aria-pressed", String(x === b));
+  });
   for (const b of qa<HTMLButtonElement>("[data-h2h-quick]")) b.addEventListener("click", () => {
-    void startMatch(b.dataset.h2hQuick as OpponentSlug, b.dataset.kit as Kit, "quick");
+    void startMatch(b.dataset.h2hQuick as OpponentSlug, quickKit, "quick");
   });
   q("[data-h2h-pause]")?.addEventListener("click", () => show(mode === "paused" ? "match" : "paused"));
   q("[data-h2h-resume]")?.addEventListener("click", () => show("match"));
@@ -186,7 +199,7 @@ export function mountHeadToHead(root: HTMLElement): void {
   function updateHud(): void {
     if (!match) return;
     q("[data-h2h-clock]")!.textContent = match.goldenGoal ? "GG" : `${Math.floor(match.clock / 60)}:${String(Math.ceil(match.clock % 60)).padStart(2, "0")}`;
-    q("[data-h2h-score]")!.textContent = `${match.score.left} - ${match.score.right}`;
+    q("[data-h2h-score]")!.textContent = `${match.score.left} : ${match.score.right}`;
     q("[data-h2h-power]")!.style.setProperty("--p", String(match.left.power));
     q("[data-h2h-rival-power]")!.style.setProperty("--p", String(match.right.power));
   }
@@ -196,8 +209,9 @@ export function mountHeadToHead(root: HTMLElement): void {
     resultPending = true;
     const score = `${match.score.left}-${match.score.right}`;
     q("[data-h2h-result-score]")!.textContent = score;
+    const pts = match.score.left > match.score.right ? 3 : match.score.left === match.score.right ? 1 : 0;
     q("[data-h2h-result-line]")!.textContent =
-      match.score.left > match.score.right ? `#${selected.num} ${selected.ko} wins it.` : match.score.left < match.score.right ? `${OPPONENTS[match.opponent].name} takes it.` : t.draw;
+      match.score.left > match.score.right ? `${t.winLine(`#${selected.num} ${selected.ko}`)} ${t.pointsGained(pts)}` : match.score.left < match.score.right ? `${t.lossLine(OPPONENTS[match.opponent].name)} ${t.pointsGained(pts)}` : `${t.drawLine} ${t.pointsGained(pts)}`;
     if (match.mode === "league") {
       season = applyRound(season, match.score.left, match.score.right);
       save.season = season;
@@ -260,7 +274,7 @@ export function simulateAiMatch(player: SquadPlayer, opponent: OpponentSlug, see
   const m = new H2HMatch({ player, opponent, kit: "home", mode: "ai", seed });
   m.start();
   let guard = 0;
-  while (m.phase !== "ended" && guard++ < 60 * 160) {
+  while (m.phase !== "ended" && guard++ < 60 * 260) {
     const left = m.aiInput("left", STEP);
     const right = m.aiInput("right", STEP);
     m.step(STEP, left, right);

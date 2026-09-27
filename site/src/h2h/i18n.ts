@@ -33,6 +33,12 @@ export interface H2HStrings {
   shot: string;
   draw: string;
   result: string;
+  winLine: (name: string) => string;
+  lossLine: (name: string) => string;
+  drawLine: string;
+  pointsGained: (n: number) => string;
+  homeLabel: string;
+  awayLabel: string;
   continue: string;
   champion: string;
   playoff: string;
@@ -75,6 +81,12 @@ export const H2H_STRINGS: Record<Locale, H2HStrings> = {
     shot: "Shot",
     draw: "Draw",
     result: "Result",
+    winLine: (name) => `${name} wins it.`,
+    lossLine: (name) => `${name} takes it.`,
+    drawLine: "A hard-earned draw.",
+    pointsGained: (n) => `${n} ${n === 1 ? "point" : "points"} gained`,
+    homeLabel: "Home kit",
+    awayLabel: "Away kit",
     continue: "Continue",
     champion: "Champions! Seoul E-Land are promoted to K League 1.",
     playoff: "Play-off place secured. One more push for promotion.",
@@ -116,6 +128,12 @@ export const H2H_STRINGS: Record<Locale, H2HStrings> = {
     shot: "Chute",
     draw: "Empate",
     result: "Resultado",
+    winLine: (name) => `${name} venceu.`,
+    lossLine: (name) => `${name} ficou com a vitória.`,
+    drawLine: "Empate suado.",
+    pointsGained: (n) => `${n} ${n === 1 ? "ponto ganho" : "pontos ganhos"}`,
+    homeLabel: "Uniforme de casa",
+    awayLabel: "Uniforme de fora",
     continue: "Continuar",
     champion: "Campeões! O Seoul E-Land subiu para a K League 1.",
     playoff: "Vaga no play-off garantida. Falta mais um empurrão pelo acesso.",
