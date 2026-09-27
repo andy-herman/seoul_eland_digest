@@ -120,7 +120,7 @@ export class GameAudio {
     return { ctx: this.ctx, out: this.out };
   }
 
-  private tone(type: OscillatorType, from: number, to: number, start: number, duration: number, volume: number): void {
+  protected tone(type: OscillatorType, from: number, to: number, start: number, duration: number, volume: number): void {
     const audio = this.ready();
     if (!audio) return;
     const { ctx, out } = audio;
@@ -138,7 +138,7 @@ export class GameAudio {
     osc.stop(t0 + duration + 0.05);
   }
 
-  private burst(filterType: BiquadFilterType, frequency: number, start: number, duration: number, volume: number, attack = 0.01): void {
+  protected burst(filterType: BiquadFilterType, frequency: number, start: number, duration: number, volume: number, attack = 0.01): void {
     const audio = this.ready();
     if (!audio || !this.noise) return;
     const { ctx, out } = audio;

@@ -14,7 +14,7 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Dois jogos com os mascotes do Seoul E-Land. Os dois funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      intro: "Três jogos com os mascotes do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
       newBadge: "Novo",
       play: "Jogar",
       credit:
@@ -23,7 +23,7 @@ const copy = isPortuguese
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Two games starring Seoul E-Land's mascots. Both work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      intro: "Three games starring Seoul E-Land's mascots. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
       newBadge: "New",
       play: "Play",
       credit:
@@ -32,8 +32,19 @@ const copy = isPortuguese
 
 const games = [
   {
-    href: `${prefix}/play/dribble-dash`,
+    href: `${prefix}/play/balloon-battle`,
     isNew: true,
+    title: isPortuguese ? "A Batalha de Balões" : "Balloon Battle",
+    desc: isPortuguese
+      ? "Uma aventura de balões d'água no estilo de Crazy Arcade. Prenda os mascotes da K League 2 em bolhas, estoure todos e derrote seis chefes gigantes em seis mundos."
+      : "A water-balloon adventure in the style of Crazy Arcade. Trap the K League 2 mascots in bubbles, pop them, and beat six giant bosses across six worlds.",
+    tags: isPortuguese ? ["Aventura", "18 fases", "6 chefes"] : ["Adventure", "18 stages", "6 bosses"],
+    art: [{ src: withBase("/play/balloon/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
+    accent: "balloon",
+  },
+  {
+    href: `${prefix}/play/dribble-dash`,
+    isNew: false,
     title: isPortuguese ? "A Corrida do Drible" : "Dribble Dash",
     desc: isPortuguese
       ? "Uma corrida sem fim com a bola no pé. Pule os carrinhos e deslize por baixo dos voadores dos mascotes dos outros 16 clubes da K League 2, e complete o álbum."
@@ -167,6 +178,19 @@ const games = [
     position: absolute;
     width: auto;
     filter: drop-shadow(0 5px 0 color-mix(in srgb, #090c20 30%, transparent));
+  }
+
+  .games-card-balloon .games-art {
+    background: #5aa33e;
+  }
+
+  .games-art img.games-art-cover {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    filter: none;
+    object-fit: cover;
+    object-position: 50% 45%;
   }
 
   .games-art-hero {

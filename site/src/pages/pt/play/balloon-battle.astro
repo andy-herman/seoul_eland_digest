@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import BalloonBattle from "../../../components/BalloonBattle.astro";
+import { BB_STRINGS } from "../../../balloon/i18n";
+
+const t = BB_STRINGS.pt;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/balloon/og-balloon-pt.jpg" lang="pt">
+  <BalloonBattle locale="pt" />
+</BaseLayout>

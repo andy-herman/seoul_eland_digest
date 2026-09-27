@@ -1,0 +1,1504 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { ALL_MASCOTS, ENEMIES, HERO_STATS, OPPONENTS, WORLDS, type Hero, type Locale } from "../balloon/data";
+import { STAGES } from "../balloon/levels";
+import { BB_STRINGS } from "../balloon/i18n";
+import { withBase } from "../lib/paths";
+import fxMeta from "../balloon/atlas/tiles_fx.json";
+import charsMeta from "../balloon/atlas/chars.json";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = BB_STRINGS[locale];
+const isPortuguese = locale === "pt";
+const asset = (file: string) => withBase(`/play/balloon/${file}`);
+const gamesHref = isPortuguese ? "/pt/play" : "/play";
+const heroes: Hero[] = ["leoul", "lenyang"];
+const rows = (charsMeta as unknown as { rows: Record<string, { row: number }> }).rows;
+const fx = fxMeta.sprites as Record<string, { x: number; y: number; w: number; h: number }>;
+const FX_W = 1024;
+const FX_H = 328;
+/** Inline CSS for an item icon cut from the effects atlas, `size` px tall. */
+const icon = (name: string, size: number) => {
+  const s = fx[name];
+  const k = size / s.h;
+  return `width:${(s.w * k).toFixed(1)}px;height:${size}px;background-image:url(${asset("tiles_fx.webp")});background-size:${(FX_W * k).toFixed(1)}px ${(FX_H * k).toFixed(1)}px;background-position:${(-s.x * k).toFixed(1)}px ${(-s.y * k).toFixed(1)}px;`;
+};
+const avatar = (slug: string) => `--row:${rows[slug]?.row ?? 0};`;
+const statBar = (v: [number, number], max = 10) => ({ base: (v[0] / max) * 100, top: (v[1] / max) * 100 });
+const albumIds = [...heroes, ...ALL_MASCOTS];
+---
+
+<div class="bb-page" style={`--bb-chars:url(${asset("chars.webp")});`}>
+  <header class="supporter-panel bb-hero-panel rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div class="min-w-0">
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.55rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{t.heading}</h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
+      </div>
+      {isPortuguese ? (
+        <TranslateButton href="/play/balloon-battle" code="EN" label={t.translateLabel} ariaLabel={t.translateAria} />
+      ) : (
+        <TranslateButton href="/pt/play/balloon-battle" code="PT" label={t.translateLabel} ariaLabel={t.translateAria} />
+      )}
+    </div>
+  </header>
+
+  <section
+    class="bb-game"
+    data-bb-root
+    data-locale={locale}
+    data-assets={asset("")}
+    data-music={withBase("/play/seoul-song-2024.mp3")}
+    data-mode="loading"
+    aria-label={t.heading}
+  >
+    <div class="bb-hud" data-bb-hud hidden>
+      <div class="bb-hud-row">
+        <span class="bb-hearts" data-bb-hearts aria-label={t.hudHearts}>♥♥♥</span>
+        <span class="bb-stage-label" data-bb-stage-label></span>
+        <span class="bb-time" data-bb-time aria-label={t.hudTime}>3:00</span>
+        <span class="bb-score" aria-label={t.hudScore}><small>{t.hudScore}</small> <span data-bb-score>0</span></span>
+        <span class="bb-hud-btns">
+          <button type="button" class="bb-icon-btn" data-bb-pause aria-label={t.pause}>
+            <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.2" height="12" rx="1.2" /><rect x="11.8" y="4" width="3.2" height="12" rx="1.2" /></svg>
+          </button>
+          <button type="button" class="bb-icon-btn bb-mute" data-bb-mute aria-label={t.mute} aria-pressed="false">
+            <svg viewBox="0 0 20 20" aria-hidden="true">
+              <path d="M3 7.5h3l4-3.5v12l-4-3.5H3z" />
+              <path class="bb-wave" d="M13 7a4 4 0 0 1 0 6M15.2 5a7 7 0 0 1 0 10" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+              <path class="bb-cross" d="M13 7.5l5 5M18 7.5l-5 5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+            </svg>
+          </button>
+        </span>
+      </div>
+      <div class="bb-hud-row bb-hud-stats">
+        <span class="bb-stat" title={t.statBalloons}><span class="bb-ico" style={icon("item_balloon", 22)}></span><span data-bb-stat="balloons">1</span></span>
+        <span class="bb-stat" title={t.statRange}><span class="bb-ico" style={icon("item_potion", 22)}></span><span data-bb-stat="range">1</span></span>
+        <span class="bb-stat" title={t.statSpeed}><span class="bb-ico" style={icon("item_cleats", 18)}></span><span data-bb-stat="speed">5</span></span>
+        <span class="bb-stat" title={t.hudNeedles}><span class="bb-ico" style={icon("item_needle", 22)}></span><span data-bb-needles>0</span></span>
+        <span class="bb-stat" title={t.hudShields}><span class="bb-ico" style={icon("item_shield", 18)}></span><span data-bb-shields>0</span></span>
+        <span class="bb-stat bb-kick" data-bb-kick hidden><span class="bb-ico" style={icon("item_kick", 18)}></span></span>
+      </div>
+    </div>
+
+    <div class="bb-stage" data-bb-stage>
+      <canvas class="bb-canvas" data-bb-canvas width="720" height="662" role="img" aria-label={t.canvasLabel} tabindex="-1"></canvas>
+      <p class="bb-banner" data-bb-banner hidden></p>
+      <div class="bb-toast" data-bb-toast role="status" aria-live="polite"></div>
+
+      <div class="bb-screen" data-bb-screen="loading">
+        <p class="bb-loading" data-bb-loading-text>{t.loading}</p>
+      </div>
+
+      <div class="bb-screen bb-title" data-bb-screen="title" hidden>
+        <img class="bb-logo" src={asset("title.webp")} alt={t.heading} width="1200" height="575" />
+        <p class="bb-choose">{t.chooseHero}</p>
+        <div class="bb-heroes">
+          {heroes.map((id, i) => {
+            const s = HERO_STATS[id];
+            return (
+              <button type="button" class={`bb-hero-card bb-hero-${id}`} data-bb-hero={id} aria-pressed="false" data-bb-autofocus={i === 0 ? "" : undefined}>
+                <span class="bb-avatar bb-avatar-lg" style={avatar(id)}></span>
+                <span class="bb-hero-name">{t.heroes[id].name}</span>
+                <span class="bb-hero-type">{t.heroes[id].type}</span>
+                <span class="bb-hero-desc">{t.heroes[id].desc}</span>
+                <span class="bb-bars">
+                  {([["statBalloons", s.balloons], ["statRange", s.range], ["statSpeed", s.speed]] as const).map(([k, v]) => {
+                    const b = statBar(v);
+                    return (
+                      <span class="bb-bar-row">
+                        <span class="bb-bar-label">{t[k]}</span>
+                        <span class="bb-bar"><span class="bb-bar-max" style={`width:${b.top}%`}></span><span class="bb-bar-base" style={`width:${b.base}%`}></span></span>
+                      </span>
+                    );
+                  })}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <div class="bb-row">
+          <button type="button" class="bb-btn bb-btn-primary" data-bb-play>{t.play}</button>
+          <button type="button" class="bb-btn bb-btn-small" data-bb-music aria-pressed="true"><span aria-hidden="true">♪</span> {t.music}: <span data-bb-music-state>{t.musicOn}</span></button>
+        </div>
+        <p class="bb-hint bb-hint-keys">{t.keyboardHint}</p>
+        <p class="bb-hint bb-hint-touch">{t.touchHint}</p>
+      </div>
+
+      <div class="bb-screen bb-worlds-screen" data-bb-screen="worlds" hidden>
+        <div class="bb-screen-head">
+          <button type="button" class="bb-btn bb-btn-small" data-bb-to-title>← {t.back}</button>
+          <p class="bb-screen-title">{t.worldsTitle}</p>
+        </div>
+        <ol class="bb-worlds">
+          {WORLDS.map((w, wi) => (
+            <li class="bb-world" data-bb-world={w.id} style={`--bb-accent:${w.color};`}>
+              <div class="bb-world-head">
+                <span class="bb-world-num">{wi + 1}</span>
+                <span class="bb-world-name">{t.worlds[w.id]}</span>
+              </div>
+              <div class="bb-world-mascots" aria-hidden="true">
+                {w.mascots.map((slug) => <span class="bb-avatar bb-avatar-sm" style={avatar(slug)} title={OPPONENTS[slug].name}></span>)}
+              </div>
+              <div class="bb-stage-btns">
+                {STAGES.filter((s) => s.world === w.id).map((s) => (
+                  <button type="button" class={`bb-stage-btn${s.boss ? " bb-stage-boss" : ""}`} data-bb-stage-btn={s.id} disabled>
+                    <span class="bb-stage-id">{s.id}</span>
+                    <span class="bb-stage-name">{s.boss ? `${t.bossStage}: ` : ""}{t.stages[s.id]}</span>
+                    <span class="bb-rank" data-bb-rank></span>
+                  </button>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <div class="bb-screen bb-intro" data-bb-screen="intro" hidden>
+        <p class="bb-intro-stage" data-bb-intro-stage></p>
+        <p class="bb-screen-title" data-bb-intro-title></p>
+        <p class="bb-intro-world" data-bb-intro-world></p>
+        <p class="bb-meet-head">{t.meet}</p>
+        <ul class="bb-meet-list" data-bb-intro-mascots></ul>
+        <p class="bb-tip" data-bb-intro-tip></p>
+        <div class="bb-row">
+          <button type="button" class="bb-btn bb-btn-primary" data-bb-intro-start data-bb-autofocus>{t.start}</button>
+          <button type="button" class="bb-btn bb-btn-small" data-bb-to-worlds>{t.toWorlds}</button>
+        </div>
+      </div>
+
+      <div class="bb-screen bb-overlay" data-bb-screen="paused" hidden>
+        <p class="bb-screen-title">{t.paused}</p>
+        <div class="bb-stack">
+          <button type="button" class="bb-btn bb-btn-primary" data-bb-resume data-bb-autofocus>{t.resume}</button>
+          <button type="button" class="bb-btn" data-bb-restart>{t.restart}</button>
+          <button type="button" class="bb-btn" data-bb-to-worlds>{t.toWorlds}</button>
+          <button type="button" class="bb-btn bb-btn-small" data-bb-music aria-pressed="true"><span aria-hidden="true">♪</span> {t.music}: <span data-bb-music-state>{t.musicOn}</span></button>
+        </div>
+      </div>
+
+      <div class="bb-screen bb-overlay" data-bb-screen="result" hidden>
+        <p class="bb-result-head">{t.resultTitle}</p>
+        <p class="bb-result-title" data-bb-result-title></p>
+        <p class="bb-rank-big" data-bb-result-rank>S</p>
+        <dl class="bb-result-stats">
+          <div><dt>{t.score}</dt><dd data-bb-result-score>0</dd></div>
+          <div><dt>{t.time}</dt><dd data-bb-result-time>0:00</dd></div>
+          <div><dt>{t.heartsLost}</dt><dd data-bb-result-lost>0</dd></div>
+        </dl>
+        <p class="bb-new-best" data-bb-result-best hidden>{t.newBest}</p>
+        <div class="bb-result-cards" data-bb-result-cards hidden>
+          <p>{t.newCards}</p>
+          <ul></ul>
+        </div>
+        <div class="bb-stack">
+          <button type="button" class="bb-btn bb-btn-primary" data-bb-next data-bb-autofocus>{t.next}</button>
+          <div class="bb-row">
+            <button type="button" class="bb-btn bb-btn-small" data-bb-retry>{t.retry}</button>
+            <button type="button" class="bb-btn bb-btn-small" data-bb-to-worlds>{t.toWorlds}</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="bb-screen bb-overlay" data-bb-screen="over" hidden>
+        <p class="bb-screen-title bb-over-title">{t.overTitle}</p>
+        <p class="bb-over-text">{t.overText}</p>
+        <div class="bb-stack">
+          <button type="button" class="bb-btn bb-btn-primary" data-bb-retry data-bb-autofocus>{t.retry}</button>
+          <button type="button" class="bb-btn bb-btn-small" data-bb-to-worlds>{t.toWorlds}</button>
+        </div>
+      </div>
+
+      <div class="bb-screen bb-overlay" data-bb-screen="ending" hidden>
+        <img class="bb-ending-art" src={withBase("/play/leoul-celebrate.webp")} alt="" width="160" height="200" />
+        <p class="bb-screen-title">{t.endingTitle}</p>
+        <p class="bb-over-text">{t.endingText}</p>
+        <p class="bb-final-score"><span>{t.score}</span> <strong data-bb-ending-score>0</strong></p>
+        <button type="button" class="bb-btn bb-btn-primary" data-bb-to-worlds data-bb-autofocus>{t.toWorlds}</button>
+      </div>
+    </div>
+
+    <div class="bb-controls" data-bb-controls data-active="false">
+      <div class="bb-joy" data-bb-joy aria-hidden="true">
+        <div class="bb-joy-base" data-bb-joy-base data-active="false"><div class="bb-joy-knob" data-bb-joy-knob></div></div>
+      </div>
+      <div class="bb-pads">
+        <button type="button" class="bb-pad bb-pad-item" data-bb-btn="item" aria-label={t.itemBtn}>
+          <span class="bb-ico" style={icon("item_needle", 30)}></span>
+          <span>{t.itemBtn}</span>
+        </button>
+        <button type="button" class="bb-pad bb-pad-bomb" data-bb-btn="bomb" aria-label={t.balloonBtn}>
+          <span class="bb-ico" style={icon("balloon0", 46)}></span>
+          <span>{t.balloonBtn}</span>
+        </button>
+      </div>
+    </div>
+    <p class="bb-sr-only" data-bb-live aria-live="polite"></p>
+  </section>
+
+  <p class="bb-rotate-tip">{t.rotateTip}</p>
+
+  <details class="bb-how">
+    <summary>{t.howToPlay}</summary>
+    <p>{t.howRules}</p>
+    <p>{t.howTrap}</p>
+    <p>{t.howItems}</p>
+    <p>{t.howBoss}</p>
+    <p class="bb-keys">{t.keyboardHint}</p>
+    <p class="bb-keys">{t.touchHint}</p>
+    <p class="bb-now-playing">{t.nowPlaying}</p>
+  </details>
+
+  <section class="bb-section" id="bb-album" aria-labelledby="bb-album-heading">
+    <div class="bb-album-head">
+      <div>
+        <p class="eyebrow">K League 2 · 2026</p>
+        <h2 id="bb-album-heading" class="bb-h2">{t.albumHeading}</h2>
+        <p class="bb-lede">{t.albumIntro}</p>
+      </div>
+      <p class="bb-collected" data-bb-collected></p>
+    </div>
+    <ul class="bb-card-grid">
+      {albumIds.map((id) => {
+        const hero = id === "leoul" || id === "lenyang";
+        const o = hero ? null : OPPONENTS[id as keyof typeof OPPONENTS];
+        return (
+          <li class={`bb-card${hero ? " bb-card-hero" : ""}`} data-bb-card={id} data-locked style={o ? `--bb-accent:${o.color};` : undefined}>
+            <div class="bb-card-art"><span class="bb-avatar bb-avatar-xl" style={avatar(id)} role="img" aria-label={hero ? t.heroes[id as Hero].name : o!.name}></span></div>
+            <p class="bb-card-club">{hero ? "Seoul E-Land FC" : o!.club}</p>
+            <p class="bb-card-name">{hero ? t.heroes[id as Hero].name : o!.name} <span lang="ko">{hero ? (id === "leoul" ? "레울" : "레냥") : o!.korean}</span></p>
+            <p class="bb-card-kind">{hero ? t.heroCard[id as Hero].kind : o!.kind[locale]}</p>
+            {!hero && <p class="bb-card-move">{t.behaviors[ENEMIES[id as keyof typeof ENEMIES].behavior]}</p>}
+            <p class="bb-card-fact">{hero ? t.heroCard[id as Hero].fact : o!.fact[locale]}</p>
+            <p class="bb-card-hint"><span class="bb-card-lock">{t.locked}</span> {t.lockedHint}</p>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+
+  <p class="bb-back"><a href={withBase(gamesHref)}>← {t.allGames}</a></p>
+  <p class="bb-credit">{t.credit} {t.artCredit}</p>
+</div>
+
+<script>
+  import { mountBalloonBattle } from "../balloon/main";
+
+  document.querySelectorAll<HTMLElement>("[data-bb-root]").forEach((root) => mountBalloonBattle(root));
+</script>
+
+<style is:global>
+  .bb-game {
+    --bb-world: #e64a3b;
+    display: flex;
+    width: min(100%, 60rem);
+    margin: 1.1rem auto 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    -webkit-user-select: none;
+    scroll-margin-top: calc(var(--bb-header, 0px) + 0.4rem);
+  }
+
+  .bb-stage {
+    position: relative;
+    /* the canvas and the pause / result overlays share one cell, so an overlay taller
+       than the board grows the box instead of being clipped */
+    display: grid;
+    max-width: 100%;
+    overflow: hidden;
+    border: 3px solid var(--color-navy);
+    border-radius: 1.1rem;
+    background: linear-gradient(180deg, #5fc4ff 0%, #2f86d8 100%);
+    box-shadow: 0 6px 0 var(--color-navy), 0 22px 60px color-mix(in srgb, black 35%, transparent);
+    -webkit-touch-callout: none;
+  }
+
+  .bb-stage > .bb-canvas,
+  .bb-stage > .bb-overlay {
+    grid-area: 1 / 1;
+  }
+
+  .bb-canvas {
+    display: block;
+    outline: none;
+    touch-action: none;
+  }
+
+  /* menus live in normal flow (they can be taller than the board) */
+  .bb-game[data-mode="loading"] .bb-canvas,
+  .bb-game[data-mode="title"] .bb-canvas,
+  .bb-game[data-mode="worlds"] .bb-canvas,
+  .bb-game[data-mode="intro"] .bb-canvas {
+    display: none;
+  }
+
+  .bb-game[data-mode="loading"] .bb-stage,
+  .bb-game[data-mode="title"] .bb-stage,
+  .bb-game[data-mode="worlds"] .bb-stage,
+  .bb-game[data-mode="intro"] .bb-stage {
+    width: min(100%, 44rem) !important;
+    background:
+      radial-gradient(circle at 20% 15%, rgba(255, 255, 255, 0.35) 0 6%, transparent 7%),
+      radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.25) 0 4%, transparent 5%),
+      linear-gradient(180deg, #6fcdff 0%, #3a8fe0 100%);
+  }
+
+  .bb-screen {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1.1rem 1rem 1.3rem;
+    color: #fff;
+    text-align: center;
+  }
+
+  .bb-screen[hidden] {
+    display: none;
+  }
+
+  .bb-overlay {
+    justify-content: center;
+    background: color-mix(in srgb, #0d1b4a 72%, transparent);
+    backdrop-filter: blur(2px);
+  }
+
+  .bb-loading {
+    padding: 4rem 1rem;
+    font-size: 1.1rem;
+    font-weight: 900;
+    text-shadow: 0 3px 0 var(--color-navy);
+  }
+
+  .bb-logo {
+    width: min(92%, 30rem);
+    height: auto;
+    filter: drop-shadow(0 6px 0 rgba(13, 27, 74, 0.35));
+  }
+
+  .bb-choose,
+  .bb-screen-title,
+  .bb-result-head {
+    font-size: 1.35rem;
+    font-weight: 900;
+    line-height: 1.1;
+    text-shadow: 0 3px 0 var(--color-navy), 2px 0 0 var(--color-navy), -2px 0 0 var(--color-navy), 0 -2px 0 var(--color-navy);
+  }
+
+  .bb-heroes {
+    display: grid;
+    width: 100%;
+    max-width: 34rem;
+    gap: 0.7rem;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .bb-hero-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+    border: 3px solid var(--color-navy);
+    border-radius: 1.1rem;
+    background: #fbf7ef;
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    cursor: pointer;
+    padding: 0.6rem 0.6rem 0.8rem;
+    transition: transform 0.12s ease;
+  }
+
+  .bb-hero-card[aria-pressed="true"] {
+    background: #fff6c9;
+    outline: 4px solid #ffd23f;
+    outline-offset: 2px;
+    transform: translateY(-3px);
+  }
+
+  .bb-hero-name {
+    font-size: 1.2rem;
+    font-weight: 900;
+  }
+
+  .bb-hero-type {
+    color: #2f6fd1;
+    font-size: 0.72rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .bb-hero-desc {
+    min-height: 2.4em;
+    color: #4a5066;
+    font-size: 0.78rem;
+    line-height: 1.25;
+  }
+
+  .bb-bars {
+    display: grid;
+    width: 100%;
+    gap: 0.2rem;
+    margin-top: 0.3rem;
+  }
+
+  .bb-bar-row {
+    display: grid;
+    align-items: center;
+    gap: 0.4rem;
+    grid-template-columns: 4.6rem 1fr;
+    font-size: 0.66rem;
+    font-weight: 800;
+    text-align: left;
+  }
+
+  .bb-bar {
+    position: relative;
+    height: 0.55rem;
+    overflow: hidden;
+    border: 2px solid var(--color-navy);
+    border-radius: 999px;
+    background: #e6e9f2;
+  }
+
+  .bb-bar-max,
+  .bb-bar-base {
+    position: absolute;
+    inset: 0 auto 0 0;
+  }
+
+  .bb-bar-max {
+    background: #9fd3ff;
+  }
+
+  .bb-bar-base {
+    background: #2f86ff;
+  }
+
+  .bb-avatar {
+    display: inline-block;
+    flex: none;
+    width: 48px;
+    height: 53.3px;
+    background-image: var(--bb-chars);
+    background-repeat: no-repeat;
+    background-size: 288px 960px;
+    background-position: 0 calc(var(--row) * -53.333px);
+  }
+
+  .bb-avatar-sm {
+    width: 36px;
+    height: 40px;
+    background-size: 216px 720px;
+    background-position: 0 calc(var(--row) * -40px);
+  }
+
+  .bb-avatar-lg {
+    width: 90px;
+    height: 100px;
+    background-size: 540px 1800px;
+    background-position: 0 calc(var(--row) * -100px);
+  }
+
+  .bb-avatar-xl {
+    width: 120px;
+    height: 133.3px;
+    background-size: 720px 2400px;
+    background-position: 0 calc(var(--row) * -133.333px);
+  }
+
+  .bb-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+  }
+
+  .bb-stack {
+    display: flex;
+    width: min(100%, 18rem);
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .bb-btn {
+    display: inline-flex;
+    min-height: 2.8rem;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border: 3px solid var(--color-navy);
+    border-radius: 999px;
+    background: #fbf7ef;
+    box-shadow: 0 4px 0 var(--color-navy);
+    color: #15182a;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 900;
+    line-height: 1.1;
+    padding: 0.45rem 1.1rem;
+    text-decoration: none;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+  }
+
+  .bb-btn:active {
+    box-shadow: 0 1px 0 var(--color-navy);
+    transform: translateY(3px);
+  }
+
+  .bb-btn-primary {
+    min-width: 10rem;
+    background: #ffd23f;
+    font-size: 1.1rem;
+  }
+
+  .bb-btn-small {
+    min-height: 2.3rem;
+    font-size: 0.82rem;
+    padding: 0.35rem 0.9rem;
+  }
+
+  .bb-hint {
+    max-width: 32rem;
+    color: #eaf6ff;
+    font-size: 0.78rem;
+    line-height: 1.35;
+  }
+
+  .bb-hint-touch {
+    display: none;
+  }
+
+  .bb-game[data-touch="true"] .bb-hint-touch {
+    display: block;
+  }
+
+  .bb-game[data-touch="true"] .bb-hint-keys {
+    display: none;
+  }
+
+  /* stage select */
+  .bb-screen-head {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .bb-screen-head .bb-screen-title {
+    flex: 1;
+    padding-right: 5rem;
+  }
+
+  .bb-worlds {
+    display: grid;
+    width: 100%;
+    gap: 0.7rem;
+    grid-template-columns: repeat(auto-fill, minmax(15.5rem, 1fr));
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bb-world {
+    --bb-accent: #e64a3b;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    border: 3px solid var(--color-navy);
+    border-radius: 1rem;
+    background: #fbf7ef;
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    padding: 0.55rem;
+    text-align: left;
+  }
+
+  .bb-world[data-locked="true"] {
+    opacity: 0.62;
+  }
+
+  .bb-world-head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 0.7rem;
+    background: var(--bb-accent);
+    color: #fff;
+    padding: 0.3rem 0.5rem;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .bb-world-num {
+    display: grid;
+    width: 1.6rem;
+    height: 1.6rem;
+    flex: none;
+    place-items: center;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    font-weight: 900;
+  }
+
+  .bb-world-name {
+    font-size: 0.98rem;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+
+  .bb-world-mascots {
+    display: flex;
+    gap: 0.1rem;
+    padding-left: 0.2rem;
+  }
+
+  .bb-stage-btns {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .bb-stage-btn {
+    display: grid;
+    align-items: center;
+    gap: 0.5rem;
+    grid-template-columns: 2.4rem 1fr auto;
+    border: 2px solid var(--color-navy);
+    border-radius: 0.7rem;
+    background: #fff;
+    box-shadow: 0 3px 0 var(--color-navy);
+    color: #15182a;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 800;
+    padding: 0.35rem 0.5rem;
+    text-align: left;
+  }
+
+  .bb-stage-btn:disabled {
+    cursor: not-allowed;
+    background: #eceef3;
+    box-shadow: 0 1px 0 var(--color-navy);
+    color: #7a8094;
+  }
+
+  .bb-stage-btn:not(:disabled):active {
+    box-shadow: 0 1px 0 var(--color-navy);
+    transform: translateY(2px);
+  }
+
+  .bb-stage-boss .bb-stage-id {
+    background: #e5484d;
+  }
+
+  .bb-stage-id {
+    border-radius: 0.45rem;
+    background: #2f86ff;
+    color: #fff;
+    font-weight: 900;
+    padding: 0.15rem 0;
+    text-align: center;
+  }
+
+  .bb-rank {
+    min-width: 1.8rem;
+    color: #d4a100;
+    font-size: 0.95rem;
+    font-weight: 900;
+    text-align: right;
+  }
+
+  /* intro card */
+  .bb-intro-stage {
+    border-radius: 999px;
+    background: var(--bb-world);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    padding: 0.2rem 0.8rem;
+    text-transform: uppercase;
+  }
+
+  .bb-intro-world,
+  .bb-meet-head {
+    color: #eaf6ff;
+    font-size: 0.85rem;
+    font-weight: 800;
+  }
+
+  .bb-meet-list {
+    display: grid;
+    width: min(100%, 30rem);
+    gap: 0.4rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bb-meet {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: 2px solid var(--color-navy);
+    border-radius: 0.8rem;
+    background: #fbf7ef;
+    color: #15182a;
+    font-size: 0.85rem;
+    line-height: 1.25;
+    padding: 0.25rem 0.6rem;
+    text-align: left;
+  }
+
+  .bb-meet em {
+    color: #5f6579;
+    font-size: 0.72rem;
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .bb-meet small {
+    color: #2f5fc4;
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .bb-tip {
+    max-width: 30rem;
+    border: 2px dashed rgba(255, 255, 255, 0.7);
+    border-radius: 0.8rem;
+    font-size: 0.86rem;
+    font-weight: 700;
+    line-height: 1.35;
+    padding: 0.45rem 0.7rem;
+  }
+
+  .bb-tip:empty {
+    display: none;
+  }
+
+  /* results */
+  .bb-result-title {
+    color: #eaf6ff;
+    font-size: 0.9rem;
+    font-weight: 800;
+  }
+
+  .bb-rank-big {
+    display: grid;
+    width: 5.2rem;
+    height: 5.2rem;
+    place-items: center;
+    border: 4px solid var(--color-navy);
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #fff6c9, #ffd23f 60%, #e0a200);
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    font-size: 2.2rem;
+    font-weight: 900;
+    animation: bb-pop-in 0.5s cubic-bezier(0.2, 1.6, 0.4, 1);
+  }
+
+  .bb-rank-big[data-rank="SS"] {
+    background: radial-gradient(circle at 35% 30%, #ffffff, #7fe3ff 55%, #2f86ff);
+    font-size: 1.8rem;
+  }
+
+  .bb-result-stats {
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    font-weight: 800;
+  }
+
+  .bb-result-stats dt {
+    color: #cfe9ff;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+  }
+
+  .bb-result-stats dd {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 900;
+  }
+
+  .bb-new-best {
+    color: #ffd23f;
+    font-weight: 900;
+  }
+
+  .bb-result-cards {
+    font-size: 0.85rem;
+    font-weight: 800;
+  }
+
+  .bb-result-cards ul {
+    margin: 0.2rem 0 0;
+    padding: 0;
+    list-style: none;
+    color: #fff3b0;
+  }
+
+  .bb-over-title {
+    font-size: 2rem;
+  }
+
+  .bb-over-text {
+    max-width: 22rem;
+    color: #eaf6ff;
+    font-weight: 700;
+  }
+
+  .bb-ending-art {
+    width: 6rem;
+    height: auto;
+  }
+
+  .bb-final-score strong {
+    font-size: 1.4rem;
+  }
+
+  /* in-game banner and toast */
+  .bb-banner {
+    position: absolute;
+    top: 38%;
+    left: 50%;
+    z-index: 4;
+    margin: 0;
+    color: #fff;
+    font-size: clamp(1.6rem, 7vw, 3.2rem);
+    font-weight: 900;
+    pointer-events: none;
+    text-shadow: 0 5px 0 var(--color-navy), 3px 0 0 var(--color-navy), -3px 0 0 var(--color-navy), 0 -3px 0 var(--color-navy);
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+
+  .bb-banner[data-kind="go"],
+  .bb-banner[data-kind="clear"] {
+    color: #ffd23f;
+  }
+
+  .bb-banner[data-kind="hurry"] {
+    color: #ff6b6b;
+  }
+
+  .bb-banner-anim {
+    animation: bb-banner 0.55s cubic-bezier(0.2, 1.6, 0.4, 1);
+  }
+
+  .bb-toast {
+    position: absolute;
+    bottom: 0.6rem;
+    left: 50%;
+    z-index: 5;
+    width: max-content;
+    max-width: min(92%, 24rem);
+    line-height: 1.25;
+    border: 2px solid var(--color-navy);
+    border-radius: 1rem;
+    background: #fbf7ef;
+    box-shadow: 0 3px 0 var(--color-navy);
+    color: #15182a;
+    font-size: clamp(0.66rem, 2.2vw, 0.8rem);
+    font-weight: 800;
+    opacity: 0;
+    padding: 0.35rem 0.9rem;
+    pointer-events: none;
+    text-align: center;
+    transform: translate(-50%, 10px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .bb-toast[data-show="true"] {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @keyframes bb-banner {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -50%) scale(0.4);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  @keyframes bb-pop-in {
+    from {
+      transform: scale(0.2) rotate(-20deg);
+    }
+    to {
+      transform: scale(1) rotate(0);
+    }
+  }
+
+  /* HUD */
+  .bb-hud {
+    width: min(100%, 56rem);
+    border: 3px solid var(--color-navy);
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #fbf7ef, #efe6d2);
+    box-shadow: 0 4px 0 var(--color-navy);
+    color: #15182a;
+    padding: 0.3rem 0.55rem;
+  }
+
+  .bb-hud[hidden] {
+    display: none;
+  }
+
+  .bb-hud-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem 0.8rem;
+  }
+
+  .bb-hud-stats {
+    gap: 0.3rem 0.7rem;
+    margin-top: 0.15rem;
+  }
+
+  .bb-hearts {
+    color: #e5484d;
+    font-size: 1.1rem;
+    letter-spacing: 0.05em;
+    text-shadow: 0 1px 0 var(--color-navy);
+  }
+
+  .bb-stage-label {
+    flex: 1;
+    min-width: 8rem;
+    overflow: hidden;
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .bb-time {
+    border-radius: 0.5rem;
+    background: #15182a;
+    color: #7fffb0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 0.95rem;
+    font-weight: 900;
+    padding: 0.05rem 0.45rem;
+  }
+
+  .bb-time[data-hurry="true"] {
+    color: #ff6b6b;
+  }
+
+  .bb-score {
+    font-size: 0.95rem;
+    font-weight: 900;
+  }
+
+  .bb-score small {
+    color: #5f6579;
+    font-size: 0.66rem;
+    text-transform: uppercase;
+  }
+
+  .bb-hud-btns {
+    display: flex;
+    gap: 0.35rem;
+  }
+
+  .bb-icon-btn {
+    display: grid;
+    width: 2.1rem;
+    height: 2.1rem;
+    place-items: center;
+    border: 2px solid var(--color-navy);
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 0 var(--color-navy);
+    color: #15182a;
+    cursor: pointer;
+  }
+
+  .bb-icon-btn svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: currentColor;
+  }
+
+  .bb-mute .bb-cross,
+  .bb-mute[aria-pressed="true"] .bb-wave {
+    display: none;
+  }
+
+  .bb-mute[aria-pressed="true"] .bb-cross {
+    display: inline;
+  }
+
+  .bb-stat {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: 0.9rem;
+    font-weight: 900;
+  }
+
+  .bb-stat[hidden] {
+    display: none;
+  }
+
+  .bb-ico {
+    display: inline-block;
+    flex: none;
+    background-repeat: no-repeat;
+  }
+
+  /* touch controls */
+  .bb-controls {
+    display: none;
+  }
+
+  .bb-game[data-touch="true"] .bb-controls[data-active="true"] {
+    display: flex;
+    width: 100%;
+    max-width: 34rem;
+    height: 9rem;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+
+  .bb-joy {
+    position: relative;
+    flex: 1;
+    border: 2px dashed color-mix(in srgb, var(--color-navy) 30%, transparent);
+    border-radius: 1.2rem;
+    touch-action: none;
+  }
+
+  .bb-joy-base {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 6.4rem;
+    height: 6.4rem;
+    border: 3px solid var(--color-navy);
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.9), rgba(200, 225, 255, 0.85));
+    box-shadow: 0 4px 0 var(--color-navy);
+    opacity: 0.8;
+    transform: translate(-50%, -50%);
+  }
+
+  .bb-joy-base[data-active="true"] {
+    opacity: 1;
+  }
+
+  .bb-joy-knob {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2.8rem;
+    height: 2.8rem;
+    border: 3px solid var(--color-navy);
+    border-radius: 50%;
+    background: #2f86ff;
+    transform: translate(-50%, -50%);
+  }
+
+  .bb-pads {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .bb-pad {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--color-navy);
+    border-radius: 50%;
+    background: #fbf7ef;
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    font-size: 0.7rem;
+    font-weight: 900;
+    touch-action: none;
+  }
+
+  .bb-pad[data-pressed="true"] {
+    box-shadow: 0 1px 0 var(--color-navy);
+    transform: translateY(4px);
+  }
+
+  .bb-pad-bomb {
+    width: 6.6rem;
+    height: 6.6rem;
+    background: radial-gradient(circle at 35% 30%, #e9f7ff, #7fd0ff 60%, #3f9cff);
+  }
+
+  .bb-pad-item {
+    width: 4.3rem;
+    height: 4.3rem;
+    align-self: flex-end;
+    opacity: 0.55;
+  }
+
+  .bb-pad-item[data-ready="true"] {
+    opacity: 1;
+    background: #fff3b0;
+  }
+
+  /* phones held sideways: board in the middle, controls on the sides */
+  .bb-game[data-landscape="true"][data-mode="playing"] {
+    position: relative;
+  }
+
+  .bb-game[data-landscape="true"] .bb-controls[data-active="true"] {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 30;
+    max-width: none;
+    height: 100%;
+    justify-content: space-between;
+    padding: 0 0.6rem 0.6rem;
+    pointer-events: none;
+  }
+
+  .bb-game[data-landscape="true"] .bb-joy,
+  .bb-game[data-landscape="true"] .bb-pads {
+    width: 9.5rem;
+    flex: none;
+    align-self: flex-end;
+    pointer-events: auto;
+  }
+
+  .bb-game[data-landscape="true"] .bb-joy {
+    height: 60%;
+    border: none;
+  }
+
+  .bb-game[data-landscape="true"] .bb-pads {
+    flex-direction: column-reverse;
+    align-items: flex-end;
+  }
+
+  html[data-bb-immersive] [data-site-header] {
+    display: none !important;
+  }
+
+  html[data-bb-immersive] .bb-game .bb-hud {
+    position: fixed;
+    top: 6px;
+    left: 6px;
+    z-index: 31;
+    width: calc((100vw - var(--bb-board-w, 360px)) / 2 - 14px);
+    max-width: 13rem;
+    padding: 0.25rem 0.4rem;
+  }
+
+  html[data-bb-immersive] .bb-game .bb-stage-label {
+    display: none;
+  }
+
+  html[data-bb-immersive] .bb-game .bb-hud-row {
+    gap: 0.2rem 0.45rem;
+  }
+
+  html[data-bb-immersive] .bb-game .bb-joy {
+    height: 58%;
+  }
+
+  .bb-rotate-tip {
+    display: none;
+  }
+
+  .bb-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  /* how to play + album */
+  .bb-how {
+    width: min(100%, 48rem);
+    margin: 1.4rem auto 0;
+    border: 2px solid color-mix(in srgb, var(--color-navy) 25%, transparent);
+    border-radius: 1rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .bb-how summary {
+    cursor: pointer;
+    font-weight: 900;
+  }
+
+  .bb-how p {
+    margin-top: 0.55rem;
+    line-height: 1.55;
+  }
+
+  .bb-keys,
+  .bb-now-playing {
+    color: #5f6579;
+    font-size: 0.88rem;
+  }
+
+  .bb-section {
+    margin-top: 2.2rem;
+  }
+
+  .bb-album-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.6rem;
+  }
+
+  .bb-h2 {
+    font-size: 1.6rem;
+    font-weight: 900;
+  }
+
+  .bb-lede {
+    max-width: 40rem;
+    color: var(--color-link);
+  }
+
+  .bb-collected {
+    font-weight: 900;
+  }
+
+  .bb-card-grid {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+    margin-top: 1.3rem;
+    padding: 0;
+    list-style: none;
+  }
+
+  .bb-card {
+    --bb-accent: #0b1752;
+    border: 3px solid var(--color-navy);
+    border-radius: 1.1rem;
+    background: #fbf7ef;
+    box-shadow: 0 5px 0 var(--color-navy);
+    color: #15182a;
+    padding: 0.7rem 0.75rem 0.9rem;
+  }
+
+  .bb-card-art {
+    display: grid;
+    aspect-ratio: 4 / 3;
+    place-items: center;
+    border-radius: 0.8rem;
+    background: radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--bb-accent) 26%, #fbf7ef) 0%, color-mix(in srgb, var(--bb-accent) 8%, #fbf7ef) 70%);
+  }
+
+  .bb-card-hero .bb-card-art {
+    background: linear-gradient(180deg, #e3f3fb 0%, #fbf7ef 100%);
+  }
+
+  .bb-card-club {
+    margin-top: 0.55rem;
+    color: color-mix(in srgb, var(--bb-accent) 70%, #15182a);
+    font-size: 0.66rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .bb-card-name {
+    margin-top: 0.1rem;
+    font-size: 1.05rem;
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .bb-card-name span {
+    color: #5f6579;
+    font-size: 0.85rem;
+  }
+
+  .bb-card-kind {
+    color: #5f6579;
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  .bb-card-move {
+    margin-top: 0.25rem;
+    color: #2f5fc4;
+    font-size: 0.76rem;
+    font-weight: 800;
+  }
+
+  .bb-card-fact {
+    margin-top: 0.35rem;
+    font-size: 0.82rem;
+    line-height: 1.4;
+  }
+
+  .bb-card-hint {
+    display: none;
+    margin-top: 0.35rem;
+    color: #5f6579;
+    font-size: 0.78rem;
+  }
+
+  .bb-card-lock {
+    border-radius: 999px;
+    background: #15182a;
+    color: #fff;
+    font-size: 0.62rem;
+    font-weight: 900;
+    padding: 0.05rem 0.45rem;
+    text-transform: uppercase;
+  }
+
+  .bb-card[data-locked] .bb-card-art .bb-avatar {
+    filter: brightness(0) opacity(0.35);
+  }
+
+  .bb-card[data-locked] .bb-card-fact,
+  .bb-card[data-locked] .bb-card-move {
+    display: none;
+  }
+
+  .bb-card[data-locked] .bb-card-hint {
+    display: block;
+  }
+
+  .bb-back {
+    margin-top: 1.8rem;
+    font-weight: 900;
+  }
+
+  .bb-credit {
+    margin-top: 0.8rem;
+    color: #5f6579;
+    font-size: 0.8rem;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .bb-game {
+      margin-top: 0.7rem;
+    }
+
+    .bb-stage {
+      border-radius: 0.8rem;
+    }
+
+    .bb-heroes {
+      gap: 0.45rem;
+    }
+
+    .bb-avatar-lg {
+      width: 72px;
+      height: 80px;
+      background-size: 432px 1440px;
+      background-position: 0 calc(var(--row) * -80px);
+    }
+
+    .bb-hero-desc {
+      display: none;
+    }
+
+    .bb-bar-row {
+      grid-template-columns: 3.6rem 1fr;
+      font-size: 0.6rem;
+    }
+
+    .bb-hud {
+      padding: 0.25rem 0.4rem;
+    }
+
+    .bb-stage-label {
+      display: none;
+    }
+
+    .bb-overlay {
+      gap: 0.45rem;
+      padding: 0.75rem 0.7rem 0.95rem;
+    }
+
+    .bb-overlay .bb-rank-big {
+      width: 4rem;
+      height: 4rem;
+      font-size: 1.75rem;
+    }
+
+    .bb-overlay .bb-rank-big[data-rank="SS"] {
+      font-size: 1.45rem;
+    }
+
+    .bb-result-stats {
+      gap: 0.7rem;
+    }
+
+    .bb-result-stats dd {
+      font-size: 1.05rem;
+    }
+
+    .bb-over-title {
+      font-size: 1.6rem;
+    }
+
+    .bb-ending-art {
+      width: 4.5rem;
+    }
+  }
+
+  /* the smallest phones: keep the top HUD row on one line so the board never shifts mid-game */
+  @media (max-width: 360px) {
+    .bb-hud-row:first-child {
+      flex-wrap: nowrap;
+      gap: 0.3rem 0.45rem;
+    }
+
+    .bb-score small {
+      display: none;
+    }
+
+    .bb-hearts {
+      font-size: 1rem;
+      letter-spacing: 0;
+    }
+
+    .bb-hud-btns {
+      gap: 0.3rem;
+      margin-left: auto;
+    }
+
+    .bb-icon-btn {
+      width: 1.95rem;
+      height: 1.95rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bb-banner-anim,
+    .bb-rank-big {
+      animation: none;
+    }
+  }
+</style>
