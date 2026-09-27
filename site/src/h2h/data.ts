@@ -39,7 +39,7 @@ export interface MascotMetrics {
   cell: number;
   foot: number;
   frames: string[];
-  clubs: Record<string, { boxes: [number, number, number, number][] }>;
+  clubs: Record<string, { boxes: [number, number, number, number][]; head?: [number, number, number] }>;
 }
 
 export interface PlayerSpriteMetrics {
