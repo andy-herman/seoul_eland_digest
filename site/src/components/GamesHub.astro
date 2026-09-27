@@ -14,7 +14,7 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Três jogos com os mascotes do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      intro: "Quatro jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
       newBadge: "Novo",
       play: "Jogar",
       credit:
@@ -23,7 +23,7 @@ const copy = isPortuguese
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Three games starring Seoul E-Land's mascots. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      intro: "Four games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
       newBadge: "New",
       play: "Play",
       credit:
@@ -32,8 +32,19 @@ const copy = isPortuguese
 
 const games = [
   {
-    href: `${prefix}/play/balloon-battle`,
+    href: `${prefix}/play/head-to-head`,
     isNew: true,
+    title: isPortuguese ? "Liga Cabeça a Cabeça" : "Head-to-Head League",
+    desc: isPortuguese
+      ? "Escolha um jogador real do elenco 2026 do Seoul E-Land e dispute uma temporada de 16 jogos contra os mascotes rivais numa tabela ao vivo."
+      : "Pick a real 2026 Seoul E-Land player and play a 16-match season against rival mascots with a live league table.",
+    tags: isPortuguese ? ["Futebol", "35 jogadores", "Liga"] : ["Soccer", "35 players", "League"],
+    art: [{ src: withBase("/play/h2h/stickers/16-home.webp"), cls: "games-art-h2h", w: 440, h: 660 }],
+    accent: "h2h",
+  },
+  {
+    href: `${prefix}/play/balloon-battle`,
+    isNew: false,
     title: isPortuguese ? "A Batalha de Balões" : "Balloon Battle",
     desc: isPortuguese
       ? "Uma aventura de balões d'água no estilo de Crazy Arcade. Prenda os mascotes da K League 2 em bolhas, estoure todos e derrote seis chefes gigantes em seis mundos."
@@ -182,6 +193,20 @@ const games = [
 
   .games-card-balloon .games-art {
     background: #5aa33e;
+  }
+
+  .games-card-h2h .games-art {
+    background:
+      radial-gradient(circle at 78% 30%, rgba(255, 214, 74, 0.75), transparent 22%),
+      linear-gradient(180deg, transparent 61%, #58a34b 61%, #58a34b 100%),
+      linear-gradient(180deg, #9ed6ff 0%, #f7fbff 61%);
+  }
+
+  .games-art-h2h {
+    bottom: -8%;
+    left: 50%;
+    height: 106%;
+    transform: translateX(-50%);
   }
 
   .games-art img.games-art-cover {

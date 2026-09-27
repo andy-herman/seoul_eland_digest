@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import HeadToHead from "../../../components/HeadToHead.astro";
+import { H2H_STRINGS } from "../../../h2h/i18n";
+
+const t = H2H_STRINGS.pt;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/og-play.jpg" lang="pt">
+  <HeadToHead locale="pt" />
+</BaseLayout>
