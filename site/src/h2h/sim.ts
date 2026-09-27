@@ -224,34 +224,34 @@ export class H2HMatch {
     const attack = side === "left" ? 1 : -1;
     const ownGoal = side === "left" ? GOAL_LINE_L : GOAL_LINE_R;
     const ballOnOwnHalf =
-      tier >= 4
+      this.mode === "ai"
         ? side === "left"
-          ? this.ball.x < WORLD_W * 0.72
-          : this.ball.x > WORLD_W * 0.28
-        : this.mode === "ai"
-          ? side === "left"
-            ? this.ball.x < WORLD_W * 0.57
-            : this.ball.x > WORLD_W * 0.43
-          : side === "left"
-            ? this.ball.x < WORLD_W * 0.48
-            : this.ball.x > WORLD_W * 0.52;
-    const defensiveDepth = tier >= 4 ? 120 : 190 + tier * 18;
+          ? this.ball.x < WORLD_W * (tier >= 4 ? 0.6 : 0.57)
+          : this.ball.x > WORLD_W * (tier >= 4 ? 0.4 : 0.43)
+        : side === "left"
+          ? this.ball.x < WORLD_W * 0.48
+          : this.ball.x > WORLD_W * 0.52;
+    const defensiveDepth = tier >= 4 ? 130 : 190 + tier * 18;
     const defensiveSpot = ownGoal + attack * defensiveDepth;
     const chaseSpot = this.ball.x - attack * (this.ball.y < 430 ? 24 : 80);
-    let wanted = ballOnOwnHalf ? (tier >= 4 ? (defensiveSpot * 0.7 + this.ball.x * 0.3) : defensiveSpot) : chaseSpot;
+    const emergencyDefense = tier >= 4 && (side === "left" ? this.ball.x < GOAL_LINE_L + 320 : this.ball.x > GOAL_LINE_R - 320);
+    let wanted = emergencyDefense ? ownGoal + attack * 82 : ballOnOwnHalf ? defensiveSpot : chaseSpot;
     if (this.powerUp && tier >= 3 && Math.abs(this.powerUp.x - body.x) < 430) wanted = this.powerUp.x;
     const input = blankInput();
     if (wanted < body.x - 16) input.left = true;
     if (wanted > body.x + 16) input.right = true;
     const head = headCenter(body);
     const fallingIntoHead = this.ball.vy > 30 && Math.abs(this.ball.x - head.x) < 145 && this.ball.y < head.y + 30 && this.ball.y > CROSSBAR_Y - 20;
-    if ((fallingIntoHead || (this.ball.y < body.y - 120 && Math.abs(this.ball.x - body.x) < 165)) && body.onGround) input.jump = true;
+    const highDangerSave = tier >= 4 && emergencyDefense && this.ball.y < body.y - 80 && this.ball.y > CROSSBAR_Y - 40 && Math.abs(this.ball.x - body.x) < 220;
+    if ((fallingIntoHead || highDangerSave || (this.ball.y < body.y - 120 && Math.abs(this.ball.x - body.x) < 165)) && body.onGround) input.jump = true;
     const soonX = this.ball.x + this.ball.vx * reaction;
     const contactZone = Math.abs(soonX - (body.x + body.facing * 76)) < 75 && Math.abs(this.ball.y - (body.y - 70)) < 115;
+    const defensiveClear = tier >= 4 && ballOnOwnHalf && Math.abs(soonX - (body.x + body.facing * 72)) < 125 && Math.abs(this.ball.y - (body.y - 70)) < 155;
     const counterChance = tier >= 3 && this.ball.poweredBy !== null && this.ball.poweredBy !== side && this.rand() < (tier === 4 ? 0.04 : 0.015);
-    input.kick = (this.mode === "ai" ? contactZone && this.rand() < 0.68 : contactZone) || counterChance;
+    const panicSave = tier >= 4 && emergencyDefense && Math.abs(soonX - body.x) < 190 && Math.abs(this.ball.y - (body.y - 70)) < 185;
+    input.kick = (this.mode === "ai" ? (contactZone && this.rand() < 0.68) || defensiveClear || panicSave : contactZone) || counterChance;
     const outOfPosition = side === "right" ? this.left.x > 430 || this.left.y < GROUND_Y - 70 : this.right.x < 1170 || this.right.y < GROUND_Y - 70;
-    input.power = body.powerBanked && tier >= 3 && outOfPosition && Math.abs(this.ball.x - body.x) < 210;
+    input.power = body.powerBanked && tier >= 3 && (outOfPosition || tier >= 4) && Math.abs(this.ball.x - body.x) < (tier >= 4 ? 300 : 210);
     this.ai[stateKey] = input;
     return input;
   }
@@ -411,6 +411,10 @@ export class H2HMatch {
     const base = kind === "header" ? 390 + b.stats.jump * 210 : 390 + b.stats.shot * 270;
     this.ball.vx = toward * (base + Math.abs(b.vx) * 0.34);
     this.ball.vy = kind === "header" ? -360 - b.stats.jump * 240 : -80 - highContact * 520 + Math.min(120, prevBallVy * 0.08);
+    if (b.side === "right" && AI_TIER[this.opponent] >= 4 && kind === "kick") {
+      this.ball.vx *= 3.5;
+      this.ball.vy = Math.max(this.ball.vy, -110);
+    }
     if (armed || poweredIncoming) {
       const counter = !!poweredIncoming;
       const shot = b.side === "left" ? "leopard" : POWER_ARCHETYPE[this.opponent];
@@ -576,7 +580,7 @@ function makePlayerBody(player: SquadPlayer, kit: Kit, side: "left" | "right" = 
 function makeMascotBody(opponent: OpponentSlug): Body {
   const tier = AI_TIER[opponent];
   const strength = RIVAL_STRENGTH[opponent];
-  const tierStat = tier === 2 ? 0.03 : tier === 3 ? 0.04 : tier === 4 ? 0.04 : 0;
+  const tierStat = tier === 1 ? 0.03 : tier === 2 ? 0.03 : tier === 3 ? 0.04 : tier === 4 ? 0.12 : 0;
   const body = makeBody("right", 1270, -1, {
     speed: clamp(0.48 + tier * 0.045 + (strength - 70) / 500 + tierStat, 0.45, tier === 4 ? 0.78 : 0.72),
     jump: clamp(0.5 + tier * 0.035 + (strength - 70) / 650 + tierStat * 0.7, 0.45, tier === 4 ? 0.78 : 0.72),

@@ -49,17 +49,21 @@ if (season.round !== 16) throw new Error(`expected 16 rounds, got ${season.round
 const seoul = season.rows.find((r) => r.id === "seoul-eland");
 if (!seoul || seoul.p !== 16) throw new Error("Seoul did not play 16 matches");
 
-const tierReport: Record<string, { matches: number; wins: number; draws: number; losses: number; gf: number; ga: number; winPct?: number; lossPct?: number }> = {};
+const tierReport: Record<
+  string,
+  { matches: number; wins: number; draws: number; losses: number; gf: number; ga: number; nilNil: number; winPct?: number; lossPct?: number; drawPct?: number; ppm?: number; casualGpm?: number; mascotGpm?: number; nilNilPct?: number }
+> = {};
 const perClub: Record<string, number> = { "1": 50, "2": 40, "3": 40, "4": 100 };
 for (const slug of OPPONENT_SLUGS) {
   const tier = String(AI_TIER[slug]);
-  tierReport[tier] ??= { matches: 0, wins: 0, draws: 0, losses: 0, gf: 0, ga: 0 };
+  tierReport[tier] ??= { matches: 0, wins: 0, draws: 0, losses: 0, gf: 0, ga: 0, nilNil: 0 };
   for (let i = 0; i < perClub[tier]; i++) {
     const m = casualMatch(slug, 7000 + Number(tier) * 10000 + OPPONENT_SLUGS.indexOf(slug) * 1009 + i * 97);
     const row = tierReport[tier];
     row.matches += 1;
     row.gf += m.score.left;
     row.ga += m.score.right;
+    if (m.score.left === 0 && m.score.right === 0) row.nilNil += 1;
     if (m.score.left > m.score.right) row.wins += 1;
     else if (m.score.left === m.score.right) row.draws += 1;
     else row.losses += 1;
@@ -68,13 +72,23 @@ for (const slug of OPPONENT_SLUGS) {
 for (const row of Object.values(tierReport)) {
   row.winPct = Number((row.wins / row.matches).toFixed(3));
   row.lossPct = Number((row.losses / row.matches).toFixed(3));
+  row.drawPct = Number((row.draws / row.matches).toFixed(3));
+  row.ppm = Number(((row.wins * 3 + row.draws) / row.matches).toFixed(3));
+  row.casualGpm = Number((row.gf / row.matches).toFixed(2));
+  row.mascotGpm = Number((row.ga / row.matches).toFixed(2));
+  row.nilNilPct = Number((row.nilNil / row.matches).toFixed(3));
 }
-if (tierReport["1"].winPct! < 0.7) throw new Error(`tier 1 too hard: ${tierReport["1"].winPct}`);
-if (tierReport["2"].winPct! < 0.5 || tierReport["2"].winPct! > 0.65) throw new Error(`tier 2 out of range: ${tierReport["2"].winPct}`);
-if (tierReport["3"].winPct! > 0.4) throw new Error(`tier 3 too easy: ${tierReport["3"].winPct}`);
-if (tierReport["4"].winPct! > 0.2) throw new Error(`tier 4 too easy: ${tierReport["4"].winPct}`);
-if (tierReport["4"].lossPct! > 0.7) throw new Error(`tier 4 too punishing: ${tierReport["4"].lossPct}`);
-if (!(tierReport["1"].winPct! > tierReport["2"].winPct! && tierReport["2"].winPct! > tierReport["3"].winPct! && tierReport["3"].winPct! > tierReport["4"].winPct!)) throw new Error("tier win rates are not monotonic");
+if (tierReport["1"].winPct! < 0.8 || tierReport["1"].winPct! > 0.95 || tierReport["1"].lossPct! > 0.1 || tierReport["1"].drawPct! > 0.2 || tierReport["1"].ppm! < 2.3 || tierReport["1"].mascotGpm! < 1) throw new Error(`tier 1 out of range: ${JSON.stringify(tierReport["1"])}`);
+if (tierReport["2"].winPct! < 0.5 || tierReport["2"].winPct! > 0.65 || tierReport["2"].lossPct! < 0.2 || tierReport["2"].lossPct! > 0.4 || tierReport["2"].drawPct! > 0.25 || tierReport["2"].ppm! < 1.6 || tierReport["2"].ppm! > 2.1 || tierReport["2"].mascotGpm! < 2) throw new Error(`tier 2 out of range: ${JSON.stringify(tierReport["2"])}`);
+if (tierReport["3"].winPct! < 0.25 || tierReport["3"].winPct! > 0.4 || tierReport["3"].lossPct! < 0.45 || tierReport["3"].lossPct! > 0.65 || tierReport["3"].drawPct! > 0.25 || tierReport["3"].ppm! < 0.9 || tierReport["3"].ppm! > 1.4 || tierReport["3"].mascotGpm! < 3) throw new Error(`tier 3 out of range: ${JSON.stringify(tierReport["3"])}`);
+if (tierReport["4"].winPct! < 0.1 || tierReport["4"].winPct! > 0.2 || tierReport["4"].lossPct! < 0.6 || tierReport["4"].lossPct! > 0.78 || tierReport["4"].drawPct! > 0.25 || tierReport["4"].ppm! < 0.4 || tierReport["4"].ppm! > 0.9 || tierReport["4"].mascotGpm! < 3.5) throw new Error(`tier 4 out of range: ${JSON.stringify(tierReport["4"])}`);
+for (const [tier, row] of Object.entries(tierReport)) {
+  const totalGpm = (row.gf + row.ga) / row.matches;
+  if (totalGpm < 3) throw new Error(`tier ${tier} total goals too low: ${totalGpm}`);
+  if (row.nilNilPct! > 0.1) throw new Error(`tier ${tier} 0-0 share too high: ${row.nilNilPct}`);
+}
+if (!(tierReport["1"].ppm! > tierReport["2"].ppm! && tierReport["2"].ppm! > tierReport["3"].ppm! && tierReport["3"].ppm! > tierReport["4"].ppm!)) throw new Error("tier PPM is not monotonic");
+if (!(tierReport["1"].mascotGpm! < tierReport["2"].mascotGpm! && tierReport["2"].mascotGpm! < tierReport["3"].mascotGpm! && tierReport["3"].mascotGpm! < tierReport["4"].mascotGpm!)) throw new Error("mascot goals are not monotonic");
 
 console.log(JSON.stringify({ matches: 240, leftGoals, rightGoals, equalSplitLeft: Number(split.toFixed(3)), avgGoals: Number(avgGoals.toFixed(2)), maxScore, minClock, freezes, counters, countersPerMatch: Number((counters / 240).toFixed(2)), maxBallStep: Number(maxBallStep.toFixed(2)), teams: season.rows.length, rounds: season.round, tierReport }));
 
