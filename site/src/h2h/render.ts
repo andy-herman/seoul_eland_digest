@@ -1,9 +1,10 @@
-import { MASCOT_METRICS, OPPONENTS, type Kit, type OpponentSlug, type SquadPlayer } from "./data";
+import { MASCOT_METRICS, OPPONENTS, PLAYER_METRICS, type Kit, type OpponentSlug, type SquadPlayer } from "./data";
 import { CROSSBAR_Y, GOAL_LINE_L, GOAL_LINE_R, GROUND_Y, H2HMatch, NET_BACK_L, NET_BACK_R, WORLD_H, WORLD_W, headCenter, kickPoint, type Body, type PowerUp } from "./sim";
 
 export interface H2HImages {
   ball?: HTMLImageElement;
   playerHead?: HTMLImageElement;
+  playerStrip?: HTMLImageElement;
   playerSticker?: HTMLImageElement;
   mascot?: HTMLImageElement;
   stadium?: HTMLImageElement;
@@ -146,6 +147,12 @@ export class H2HRenderer {
   }
 
   private player(ctx: CanvasRenderingContext2D, b: Body, player: SquadPlayer, kit: Kit, head?: HTMLImageElement): void {
+    const strip = this.images.playerStrip;
+    const meta = PLAYER_METRICS.players[`${player.num}-${kit}`];
+    if (strip && meta) {
+      this.playerStrip(ctx, b, strip, meta);
+      return;
+    }
     const bob = b.mood === "idle" ? Math.sin(b.anim) * 2.6 : 0;
     ctx.save();
     ctx.translate(b.x, b.y + bob);
@@ -165,6 +172,26 @@ export class H2HRenderer {
     ctx.restore();
     if (b.freezeT > 0) this.ice(ctx, hx, hy - 95);
     ctx.restore();
+  }
+
+  private playerStrip(ctx: CanvasRenderingContext2D, b: Body, strip: HTMLImageElement, meta: { boxes: [number, number, number, number][] }): void {
+    const frame = b.mood === "kick" ? 4 : b.mood === "jump" || b.mood === "header" ? 3 : b.mood === "celebrate" ? 5 : b.mood === "run" ? (Math.floor(b.anim * 2) % 2) : 2;
+    const box = meta.boxes[frame] ?? [70, 70, 240, 300];
+    const scale = (b.bigHeadT > 0 ? 288 : 250) / box[3];
+    const cell = PLAYER_METRICS.cell;
+    ctx.save();
+    if (b.mood === "sad") {
+      ctx.translate(b.x, b.y);
+      ctx.rotate(0.07);
+      ctx.translate(-b.x, -b.y + 8);
+    }
+    if (b.freezeT > 0) {
+      ctx.globalAlpha = 0.78;
+      ctx.filter = "sepia(.3) saturate(1.4) hue-rotate(155deg)";
+    }
+    ctx.drawImage(strip, frame * cell, 0, cell, cell, b.x - box[0] * scale - box[2] * scale / 2 + (box[0] + box[2] / 2) * scale, b.y - PLAYER_METRICS.foot * scale, cell * scale, cell * scale);
+    ctx.restore();
+    if (b.freezeT > 0) this.ice(ctx, b.x, b.y - 135);
   }
 
   private placeholderHead(ctx: CanvasRenderingContext2D, player: SquadPlayer, x: number, y: number, r: number): void {

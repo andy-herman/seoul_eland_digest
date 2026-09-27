@@ -1,5 +1,6 @@
 import squadRaw from "./squad.json";
 import mascotMetricsRaw from "./mascots.json";
+import playerMetricsRaw from "./players.json";
 import { OPPONENTS, OPPONENT_SLUGS, type OpponentSlug } from "../dash/data";
 
 export type Locale = "en" | "pt";
@@ -41,8 +42,16 @@ export interface MascotMetrics {
   clubs: Record<string, { boxes: [number, number, number, number][] }>;
 }
 
+export interface PlayerSpriteMetrics {
+  cell: number;
+  foot: number;
+  frames: string[];
+  players: Record<string, { boxes: [number, number, number, number][]; head?: [number, number, number] }>;
+}
+
 export const SQUAD = squadRaw as SquadPlayer[];
 export const MASCOT_METRICS = mascotMetricsRaw as unknown as MascotMetrics;
+export const PLAYER_METRICS = playerMetricsRaw as unknown as PlayerSpriteMetrics;
 export { OPPONENTS, OPPONENT_SLUGS, type OpponentSlug };
 
 export const SEOUL_TEAM = {

@@ -132,6 +132,7 @@ export function mountHeadToHead(root: HTMLElement): void {
 
   async function buildRenderer(opponent: OpponentSlug, kit: Kit): Promise<void> {
     const head = await loadImage(`${assets}heads/${selected.num}.webp`);
+    const playerStrip = await loadImage(`${assets}players/${selected.num}-${kit}.webp`);
     const sticker = await loadImage(`${assets}stickers/${selected.num}-${kit}.webp`);
     const mascot = await loadImage(`${assets}mascots/${opponent}.webp`);
     const stadium =
@@ -139,7 +140,7 @@ export function mountHeadToHead(root: HTMLElement): void {
         ? await loadImage(`${assets}stadium/mokdong.webp`)
         : (await loadImage(`${assets}stadium/away-${opponent}.webp`)) ?? (await loadImage(`${assets}stadium/away.webp`));
     const ball = await loadImage(`${playAssets}ball.webp`);
-    const images: H2HImages = { playerHead: head, playerSticker: sticker, mascot, stadium, ball };
+    const images: H2HImages = { playerHead: head, playerStrip, playerSticker: sticker, mascot, stadium, ball };
     renderer = new H2HRenderer(canvas, images, locale);
     if (match) match.images = images;
     layout();

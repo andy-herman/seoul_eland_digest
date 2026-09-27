@@ -1,0 +1,6 @@
+{
+  "cell": 384,
+  "foot": 372,
+  "frames": ["walk0", "walk1", "idle", "jump", "kick", "cheer"],
+  "players": {}
+}
