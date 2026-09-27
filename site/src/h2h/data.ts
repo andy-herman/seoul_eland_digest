@@ -46,7 +46,8 @@ export interface PlayerSpriteMetrics {
   cell: number;
   foot: number;
   frames: string[];
-  players: Record<string, { boxes: [number, number, number, number][]; head?: [number, number, number] }>;
+  facing?: "right" | "left";
+  players: Record<string, { boxes: [number, number, number, number][]; anchors?: [number, number][]; head?: [number, number, number] }>;
 }
 
 export const SQUAD = squadRaw as SquadPlayer[];

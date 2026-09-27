@@ -1,4 +1,4 @@
-import { AI_TIER, POWER_ARCHETYPE, RIVAL_STRENGTH, playerStats, rng, type Kit, type OpponentSlug, type PlayerStats, type SquadPlayer } from "./data";
+import { AI_TIER, PLAYER_METRICS, POWER_ARCHETYPE, RIVAL_STRENGTH, playerStats, rng, type Kit, type OpponentSlug, type PlayerStats, type SquadPlayer } from "./data";
 
 export const WORLD_W = 1600;
 export const WORLD_H = 900;
@@ -29,6 +29,7 @@ export interface Body {
   w: number;
   h: number;
   headR: number;
+  headY: number;
   facing: 1 | -1;
   onGround: boolean;
   kickT: number;
@@ -137,8 +138,8 @@ export class H2HMatch {
     this.mode = config.mode;
     this.mirrorScoreLabels = config.mode === "ai" && ((config.seed ?? 1) % 2 === 0);
     this.rand = rng(config.seed ?? 1);
-    this.left = makePlayerBody(config.player);
-    this.right = config.mode === "ai" ? makeBody("right", 1270, -1, playerStats(config.player)) : makeMascotBody(config.opponent);
+    this.left = makePlayerBody(config.player, config.kit);
+    this.right = config.mode === "ai" ? makePlayerBody(config.player, config.kit, "right", 1270, -1) : makeMascotBody(config.opponent);
     this.ball = makeKickoffBall(this.rand);
   }
 
@@ -183,6 +184,7 @@ export class H2HMatch {
     }
 
     this.timeScale = 1;
+    if (this.clock <= 0.1) this.elapsed = MATCH_SECONDS;
     this.elapsed += dt;
     this.clock = Math.max(0, MATCH_SECONDS - this.elapsed);
     if (this.clock <= 0 && !this.goldenGoal) {
@@ -524,8 +526,8 @@ export class H2HMatch {
   }
 
   private resetKickoff(): void {
-    this.left = makePlayerBody(this.player);
-    this.right = this.mode === "ai" ? makeBody("right", 1270, -1, playerStats(this.player)) : makeMascotBody(this.opponent);
+    this.left = makePlayerBody(this.player, this.kit);
+    this.right = this.mode === "ai" ? makePlayerBody(this.player, this.kit, "right", 1270, -1) : makeMascotBody(this.opponent);
     this.ball = makeKickoffBall(this.rand);
     this.phase = "ready";
     this.phaseT = 1.0;
@@ -545,19 +547,32 @@ export class H2HMatch {
   }
 }
 
-function makePlayerBody(player: SquadPlayer): Body {
+function makePlayerBody(player: SquadPlayer, kit: Kit, side: "left" | "right" = "left", x = 330, facing: 1 | -1 = 1): Body {
   const stats = playerStats(player);
-  return makeBody("left", 330, 1, stats);
+  const body = makeBody(side, x, facing, stats);
+  const meta = PLAYER_METRICS.players[`${player.num}-${kit}`];
+  const idle = meta?.boxes[2];
+  const head = meta?.head;
+  if (idle && head) {
+    const scale = 250 / idle[3];
+    body.headR = head[2] * scale;
+    body.headY = (PLAYER_METRICS.foot - head[1]) * scale;
+  }
+  return body;
 }
 
 function makeMascotBody(opponent: OpponentSlug): Body {
   const tier = AI_TIER[opponent];
   const strength = RIVAL_STRENGTH[opponent];
-  return makeBody("right", 1270, -1, {
+  const body = makeBody("right", 1270, -1, {
     speed: clamp(0.48 + tier * 0.045 + (strength - 70) / 500, 0.45, 0.72),
     jump: clamp(0.5 + tier * 0.035 + (strength - 70) / 650, 0.45, 0.72),
     shot: clamp(0.5 + tier * 0.04 + (strength - 70) / 450, 0.45, 0.72),
   });
+  // Approximate mascot head from the idle sprite box until per-mascot head metadata exists.
+  body.headR = clamp(240 * 0.33, 55, 80);
+  body.headY = 240 * 0.74;
+  return body;
 }
 
 function makeBody(side: "left" | "right", x: number, facing: 1 | -1, stats: PlayerStats): Body {
@@ -570,6 +585,7 @@ function makeBody(side: "left" | "right", x: number, facing: 1 | -1, stats: Play
     w: 92,
     h: 232,
     headR: 62 + stats.jump * 10,
+    headY: 166,
     facing,
     onGround: true,
     kickT: 0,
@@ -599,7 +615,7 @@ export function blankInput(): InputState {
 
 export function headCenter(b: Body): { x: number; y: number } {
   const r = b.headR * (b.bigHeadT > 0 ? 1.3 : 1);
-  return { x: b.x, y: b.y - b.h + r + 4 };
+  return { x: b.x, y: b.y - b.headY + (r - b.headR) * 0.15 };
 }
 
 export function kickPoint(b: Body, p: number): { x: number; y: number } {

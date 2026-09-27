@@ -15,7 +15,12 @@ export class H2HRenderer {
   private scale = 1;
   private ox = 0;
   private oy = 0;
+  private debug = false;
   constructor(private readonly canvas: HTMLCanvasElement, private readonly images: H2HImages, private readonly locale: "en" | "pt" = "en") {}
+
+  setDebug(on: boolean): void {
+    this.debug = on;
+  }
 
   resize(cssWidth: number): void {
     const width = Math.max(320, Math.floor(cssWidth));
@@ -46,6 +51,7 @@ export class H2HRenderer {
     this.mascot(ctx, match.right, match.opponent);
     this.ball(ctx, match);
     this.goalFronts(ctx);
+    if (this.debug) this.hitboxOverlay(ctx, match);
     this.fx(ctx, match);
     ctx.restore();
   }
@@ -176,10 +182,21 @@ export class H2HRenderer {
 
   private playerStrip(ctx: CanvasRenderingContext2D, b: Body, strip: HTMLImageElement, meta: { boxes: [number, number, number, number][] }): void {
     const frame = b.mood === "kick" ? 4 : b.mood === "jump" || b.mood === "header" ? 3 : b.mood === "celebrate" ? 5 : b.mood === "run" ? (Math.floor(b.anim * 2) % 2) : 2;
-    const box = meta.boxes[frame] ?? [70, 70, 240, 300];
-    const scale = (b.bigHeadT > 0 ? 288 : 250) / box[3];
+    const idle = meta.boxes[2] ?? [70, 70, 240, 300];
+    const scale = (b.bigHeadT > 0 ? 288 : 250) / idle[3];
+    const anchorX = PLAYER_METRICS.players ? (meta as { anchors?: [number, number][] }).anchors?.[frame]?.[0] ?? PLAYER_METRICS.cell / 2 : PLAYER_METRICS.cell / 2;
     const cell = PLAYER_METRICS.cell;
     ctx.save();
+    ctx.translate(b.x, b.y);
+    if (!b.onGround) {
+      const lean = Math.max(-0.1, Math.min(0.1, b.vx / 2600));
+      ctx.rotate(lean);
+      const sy = b.vy < 0 ? 1.04 : 0.97;
+      ctx.scale(1 / sy, sy);
+    } else if (b.mood === "idle") {
+      ctx.translate(0, Math.sin(b.anim) * 1.5);
+    }
+    ctx.translate(-b.x, -b.y);
     if (b.mood === "sad") {
       ctx.translate(b.x, b.y);
       ctx.rotate(0.07);
@@ -189,7 +206,7 @@ export class H2HRenderer {
       ctx.globalAlpha = 0.78;
       ctx.filter = "sepia(.3) saturate(1.4) hue-rotate(155deg)";
     }
-    ctx.drawImage(strip, frame * cell, 0, cell, cell, b.x - box[0] * scale - box[2] * scale / 2 + (box[0] + box[2] / 2) * scale, b.y - PLAYER_METRICS.foot * scale, cell * scale, cell * scale);
+    ctx.drawImage(strip, frame * cell, 0, cell, cell, b.x - anchorX * scale, b.y - PLAYER_METRICS.foot * scale, cell * scale, cell * scale);
     ctx.restore();
     if (b.freezeT > 0) this.ice(ctx, b.x, b.y - 135);
   }
@@ -323,7 +340,8 @@ export class H2HRenderer {
     }
     const frame = b.mood === "kick" ? 4 : b.mood === "jump" || b.mood === "header" ? 3 : b.mood === "celebrate" ? 5 : b.mood === "run" ? (Math.floor(b.anim * 2) % 2) : 2;
     const box = MASCOT_METRICS.clubs[slug]?.boxes[frame] ?? [70, 70, 240, 300];
-    const scale = 240 / box[3];
+    const idle = MASCOT_METRICS.clubs[slug]?.boxes[2] ?? box;
+    const scale = 240 / idle[3];
     const cell = MASCOT_METRICS.cell;
     ctx.save();
     if (b.mood === "sad") {
@@ -335,7 +353,7 @@ export class H2HRenderer {
       ctx.globalAlpha = 0.78;
       ctx.filter = "sepia(.3) saturate(1.4) hue-rotate(155deg)";
     }
-    ctx.drawImage(this.images.mascot, frame * cell, 0, cell, cell, b.x - box[0] * scale - box[2] * scale / 2 + (box[0] + box[2] / 2) * scale, b.y - MASCOT_METRICS.foot * scale, cell * scale, cell * scale);
+    ctx.drawImage(this.images.mascot, frame * cell, 0, cell, cell, b.x - (cell / 2) * scale, b.y - MASCOT_METRICS.foot * scale, cell * scale, cell * scale);
     ctx.restore();
     if (b.freezeT > 0) this.ice(ctx, b.x, b.y - 130);
     if (b.powerArmedT > 0) {
@@ -473,6 +491,25 @@ export class H2HRenderer {
       this.mascot(ctx, { ...match.right, mood: "celebrate", x: 1320, y: 690 } as Body, match.opponent);
       ribbon(ctx, 1110, 650, `${OPPONENTS[match.opponent].name} · ${OPPONENTS[match.opponent].korean}`, OPPONENTS[match.opponent].color);
     }
+  }
+
+  private hitboxOverlay(ctx: CanvasRenderingContext2D, match: H2HMatch): void {
+    ctx.save();
+    ctx.lineWidth = 2;
+    for (const b of [match.left, match.right]) {
+      ctx.strokeStyle = "#22c55e";
+      ctx.strokeRect(b.x - b.w / 2, b.y - b.h, b.w, b.h);
+      const h = headCenter(b);
+      ctx.strokeStyle = "#ef4444";
+      ctx.beginPath();
+      ctx.arc(h.x, h.y, b.headR * (b.bigHeadT > 0 ? 1.3 : 1), 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    ctx.strokeStyle = "#06b6d4";
+    ctx.beginPath();
+    ctx.arc(match.ball.x, match.ball.y, match.ball.r, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
   }
 
   private confetti(ctx: CanvasRenderingContext2D, color: string): void {

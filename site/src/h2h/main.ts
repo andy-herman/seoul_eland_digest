@@ -3,7 +3,7 @@
 
 import { SQUAD, OPPONENTS, type Kit, type OpponentSlug, type SquadPlayer } from "./data";
 import { applyRound, newSeason, sortRows, validateTable, type SeasonState } from "./league";
-import { H2HMatch, STEP, blankInput, type InputState } from "./sim";
+import { H2HMatch, STEP, blankInput, headCenter, type Body, type InputState } from "./sim";
 import { H2HRenderer, type H2HImages } from "./render";
 import { H2HControls } from "./input";
 import { H2HAudio } from "./audio";
@@ -66,6 +66,10 @@ export function mountHeadToHead(root: HTMLElement): void {
   let raf = 0;
   let resultPending = false;
   let tableBefore = 1;
+  let vsActive = false;
+  let vsHold = false;
+  let vsTimer = 0;
+  let qaPaused = false;
 
   function show(next: typeof mode): void {
     mode = next;
@@ -164,9 +168,40 @@ export function mountHeadToHead(root: HTMLElement): void {
     const homeAvatar = q<HTMLElement>("[data-side='home']");
     if (homeAvatar) homeAvatar.style.backgroundImage = `url(${assets}heads/${selected.num}.webp)`;
     const rivalAvatar = q<HTMLElement>("[data-side='rival']");
-    if (rivalAvatar) rivalAvatar.style.backgroundImage = `url(${assets}mascots/${opponent}.webp)`;
+    if (rivalAvatar) {
+      rivalAvatar.style.backgroundImage = `url(${assets}mascot-heads/${opponent}.webp)`;
+      rivalAvatar.style.backgroundColor = OPPONENTS[opponent].color;
+    }
     resultPending = false;
     show("match");
+    showVs(opponent, kit, matchMode);
+  }
+
+  function showVs(opponent: OpponentSlug, kit: Kit, matchMode: "league" | "quick" | "ai"): void {
+    const vs = q<HTMLElement>("[data-h2h-vs]");
+    if (!vs) return;
+    vs.style.setProperty("--rival", OPPONENTS[opponent].color);
+    const playerImg = q<HTMLImageElement>("[data-h2h-vs-player]");
+    if (playerImg) playerImg.src = `${assets}stickers/${selected.num}-${kit}.webp`;
+    const playerName = q("[data-h2h-vs-player-name]");
+    if (playerName) playerName.textContent = `#${selected.num} ${selected.ko}`;
+    const rivalImg = q<HTMLImageElement>("[data-h2h-vs-rival]");
+    if (rivalImg) rivalImg.src = `${assets}mascot-heads/${opponent}.webp`;
+    const rivalName = q("[data-h2h-vs-rival-name]");
+    if (rivalName) rivalName.textContent = `${OPPONENTS[opponent].name} · ${OPPONENTS[opponent].korean}`;
+    const meta = q("[data-h2h-vs-meta]");
+    const round = season.round + 1;
+    if (meta) meta.textContent = matchMode === "league" ? `${kit === "home" ? "Mokdong Leoul Park" : OPPONENTS[opponent].club} · Round ${round} of 16` : "Quick match";
+    vs.hidden = false;
+    vsActive = true;
+    window.clearTimeout(vsTimer);
+    if (!vsHold) vsTimer = window.setTimeout(() => hideVs(), 1800);
+  }
+
+  function hideVs(): void {
+    const vs = q<HTMLElement>("[data-h2h-vs]");
+    if (vs) vs.hidden = true;
+    vsActive = false;
   }
 
   for (const b of qa<HTMLButtonElement>("[data-h2h-player]")) b.addEventListener("click", () => {
@@ -227,6 +262,10 @@ export function mountHeadToHead(root: HTMLElement): void {
   window.addEventListener("resize", layout);
   window.addEventListener("keydown", (e) => {
     if ((e.key === "p" || e.key === "Escape") && (mode === "match" || mode === "paused")) show(mode === "match" ? "paused" : "match");
+    if (vsActive) hideVs();
+  });
+  root.addEventListener("pointerdown", () => {
+    if (vsActive && !vsHold) hideVs();
   });
 
   function updateHud(): void {
@@ -261,7 +300,7 @@ export function mountHeadToHead(root: HTMLElement): void {
   function frame(now: number): void {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    if (mode === "match" && match) {
+    if (mode === "match" && match && !vsActive && !qaPaused) {
       acc += dt;
       while (acc >= STEP) {
         const ai = match.aiInput("right", STEP);
@@ -303,6 +342,15 @@ export function mountHeadToHead(root: HTMLElement): void {
     },
     startQuick: (opponent: OpponentSlug = "ansan-greeners", kit: Kit = "home") => startMatch(opponent, kit, "quick"),
     simulateAiMatch: (seed = 1, opponent: OpponentSlug = "ansan-greeners") => simulateAiMatch(selected, opponent, seed),
+    hitboxes: () => hitboxes(match),
+    debug: (on: boolean) => {
+      renderer?.setDebug(!!on);
+      if (match) renderer?.draw(match);
+    },
+    pause: (on: boolean) => {
+      qaPaused = !!on;
+      if (match) renderer?.draw(match);
+    },
     endNow: () => {
       if (match) {
         match.elapsed = 90;
@@ -320,6 +368,27 @@ export function mountHeadToHead(root: HTMLElement): void {
     setSeasonRound: (n: number) => {
       season.round = Math.max(0, Math.min(16, Math.floor(n)));
       renderSeason();
+    },
+    holdVs: (hold: boolean) => {
+      vsHold = hold;
+      if (!hold && vsActive) hideVs();
+    },
+    finishSeason: (position = 1) => {
+      const rows = sortRows(season.rows);
+      const seoul = rows.find((r) => r.id === "seoul-eland");
+      if (seoul) {
+        seoul.p = 16;
+        seoul.w = position === 1 ? 11 : position <= 5 ? 8 : 6;
+        seoul.d = position === 1 ? 4 : position <= 5 ? 5 : 4;
+        seoul.l = 16 - seoul.w - seoul.d;
+        seoul.gf = position === 1 ? 42 : position <= 5 ? 30 : 24;
+        seoul.ga = position === 1 ? 18 : position <= 5 ? 23 : 28;
+        seoul.gd = seoul.gf - seoul.ga;
+        seoul.pts = seoul.w * 3 + seoul.d;
+      }
+      season.round = 16;
+      q("[data-h2h-end-text]")!.textContent = position === 1 ? t.champion : position <= 5 ? t.playoff : t.again;
+      show("end");
     },
     destroy: () => cancelAnimationFrame(raf),
   };
@@ -340,4 +409,23 @@ export function simulateAiMatch(player: SquadPlayer, opponent: OpponentSlug, see
 
 export function makeBlankInput(): InputState {
   return blankInput();
+}
+
+function hitboxes(match: H2HMatch | null) {
+  if (!match) return null;
+  const body = (b: Body) => {
+    const h = headCenter(b);
+    return {
+      x: b.x - b.w / 2,
+      y: b.y - b.h,
+      w: b.w,
+      h: b.h,
+      head: { x: h.x, y: h.y, r: b.headR * (b.bigHeadT > 0 ? 1.3 : 1) },
+    };
+  };
+  return {
+    left: body(match.left),
+    right: body(match.right),
+    ball: { x: match.ball.x, y: match.ball.y, r: match.ball.r },
+  };
 }
