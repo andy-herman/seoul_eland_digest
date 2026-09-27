@@ -78,13 +78,13 @@ for (const row of Object.values(tierReport)) {
   row.mascotGpm = Number((row.ga / row.matches).toFixed(2));
   row.nilNilPct = Number((row.nilNil / row.matches).toFixed(3));
 }
-if (tierReport["1"].winPct! < 0.8 || tierReport["1"].winPct! > 0.95 || tierReport["1"].lossPct! > 0.1 || tierReport["1"].drawPct! > 0.2 || tierReport["1"].ppm! < 2.3 || tierReport["1"].mascotGpm! < 1) throw new Error(`tier 1 out of range: ${JSON.stringify(tierReport["1"])}`);
-if (tierReport["2"].winPct! < 0.5 || tierReport["2"].winPct! > 0.65 || tierReport["2"].lossPct! < 0.2 || tierReport["2"].lossPct! > 0.4 || tierReport["2"].drawPct! > 0.25 || tierReport["2"].ppm! < 1.6 || tierReport["2"].ppm! > 2.1 || tierReport["2"].mascotGpm! < 2) throw new Error(`tier 2 out of range: ${JSON.stringify(tierReport["2"])}`);
-if (tierReport["3"].winPct! < 0.25 || tierReport["3"].winPct! > 0.4 || tierReport["3"].lossPct! < 0.45 || tierReport["3"].lossPct! > 0.65 || tierReport["3"].drawPct! > 0.25 || tierReport["3"].ppm! < 0.9 || tierReport["3"].ppm! > 1.4 || tierReport["3"].mascotGpm! < 3) throw new Error(`tier 3 out of range: ${JSON.stringify(tierReport["3"])}`);
-if (tierReport["4"].winPct! < 0.1 || tierReport["4"].winPct! > 0.2 || tierReport["4"].lossPct! < 0.6 || tierReport["4"].lossPct! > 0.78 || tierReport["4"].drawPct! > 0.25 || tierReport["4"].ppm! < 0.4 || tierReport["4"].ppm! > 0.9 || tierReport["4"].mascotGpm! < 3.5) throw new Error(`tier 4 out of range: ${JSON.stringify(tierReport["4"])}`);
+if (tierReport["1"].winPct! < 0.8 || tierReport["1"].winPct! > 0.92 || tierReport["1"].lossPct! > 0.1 || tierReport["1"].drawPct! > 0.2 || tierReport["1"].ppm! < 2.3 || tierReport["1"].mascotGpm! < 1 || tierReport["1"].mascotGpm! > 6) throw new Error(`tier 1 out of range: ${JSON.stringify(tierReport["1"])}`);
+if (tierReport["2"].winPct! < 0.5 || tierReport["2"].winPct! > 0.65 || tierReport["2"].lossPct! < 0.2 || tierReport["2"].lossPct! > 0.4 || tierReport["2"].drawPct! > 0.25 || tierReport["2"].ppm! < 1.6 || tierReport["2"].ppm! > 2.1 || tierReport["2"].mascotGpm! < 2 || tierReport["2"].mascotGpm! > 6) throw new Error(`tier 2 out of range: ${JSON.stringify(tierReport["2"])}`);
+if (tierReport["3"].winPct! < 0.25 || tierReport["3"].winPct! > 0.4 || tierReport["3"].lossPct! < 0.45 || tierReport["3"].lossPct! > 0.65 || tierReport["3"].drawPct! > 0.25 || tierReport["3"].ppm! < 0.9 || tierReport["3"].ppm! > 1.4 || tierReport["3"].mascotGpm! < 3 || tierReport["3"].mascotGpm! > 6) throw new Error(`tier 3 out of range: ${JSON.stringify(tierReport["3"])}`);
+if (tierReport["4"].winPct! < 0.1 || tierReport["4"].winPct! > 0.2 || tierReport["4"].lossPct! < 0.6 || tierReport["4"].lossPct! > 0.78 || tierReport["4"].drawPct! > 0.25 || tierReport["4"].ppm! < 0.4 || tierReport["4"].ppm! > 0.9 || tierReport["4"].casualGpm! > 3 || tierReport["4"].mascotGpm! < 3.5 || tierReport["4"].mascotGpm! > 6) throw new Error(`tier 4 out of range: ${JSON.stringify(tierReport["4"])}`);
 for (const [tier, row] of Object.entries(tierReport)) {
   const totalGpm = (row.gf + row.ga) / row.matches;
-  if (totalGpm < 3) throw new Error(`tier ${tier} total goals too low: ${totalGpm}`);
+  if (totalGpm < 3 || totalGpm > 9) throw new Error(`tier ${tier} total goals out of range: ${totalGpm}`);
   if (row.nilNilPct! > 0.1) throw new Error(`tier ${tier} 0-0 share too high: ${row.nilNilPct}`);
 }
 if (!(tierReport["1"].ppm! > tierReport["2"].ppm! && tierReport["2"].ppm! > tierReport["3"].ppm! && tierReport["3"].ppm! > tierReport["4"].ppm!)) throw new Error("tier PPM is not monotonic");

@@ -36,6 +36,7 @@ export interface Body {
   kickCooldown: number;
   kickHit: boolean;
   headerT: number;
+  recoverT: number;
   power: number;
   powerBanked: boolean;
   powerArmedT: number;
@@ -219,7 +220,7 @@ export class H2HMatch {
     if (this.ai[nextKey] > 0) return this.ai[stateKey];
     const baseTier = AI_TIER[this.opponent];
     const tier = this.mode === "ai" ? (side === "left" ? Math.max(1, baseTier - 1) : Math.min(4, baseTier + 2)) : side === "right" ? baseTier : 3;
-    const reaction = Math.max(0.08, [0.25, 0.165, 0.105, 0.08][tier - 1] + this.rand() * 0.035);
+    const reaction = Math.max(0.08, [0.23, 0.165, 0.105, 0.08][tier - 1] + this.rand() * 0.035);
     this.ai[nextKey] = reaction;
     const attack = side === "left" ? 1 : -1;
     const ownGoal = side === "left" ? GOAL_LINE_L : GOAL_LINE_R;
@@ -235,7 +236,7 @@ export class H2HMatch {
     const defensiveSpot = ownGoal + attack * defensiveDepth;
     const chaseSpot = this.ball.x - attack * (this.ball.y < 430 ? 24 : 80);
     const emergencyDefense = tier >= 4 && (side === "left" ? this.ball.x < GOAL_LINE_L + 320 : this.ball.x > GOAL_LINE_R - 320);
-    let wanted = emergencyDefense ? ownGoal + attack * 82 : ballOnOwnHalf ? defensiveSpot : chaseSpot;
+    let wanted = emergencyDefense ? ownGoal + attack * 82 : body.recoverT > 0 ? ownGoal + attack * 215 : ballOnOwnHalf ? defensiveSpot : chaseSpot;
     if (this.powerUp && tier >= 3 && Math.abs(this.powerUp.x - body.x) < 430) wanted = this.powerUp.x;
     const input = blankInput();
     if (wanted < body.x - 16) input.left = true;
@@ -312,6 +313,7 @@ export class H2HMatch {
     this.collideBodyBall(b);
     b.mood = b.kickT > 0 ? "kick" : b.headerT > 0 ? "header" : !b.onGround ? "jump" : Math.abs(b.vx) > 45 ? "run" : "idle";
     b.headerT = Math.max(0, b.headerT - dt);
+    b.recoverT = Math.max(0, b.recoverT - dt);
   }
 
   private updateBall(dt: number): void {
@@ -412,7 +414,7 @@ export class H2HMatch {
     this.ball.vx = toward * (base + Math.abs(b.vx) * 0.34);
     this.ball.vy = kind === "header" ? -360 - b.stats.jump * 240 : -80 - highContact * 520 + Math.min(120, prevBallVy * 0.08);
     if (b.side === "right" && AI_TIER[this.opponent] >= 4 && kind === "kick") {
-      this.ball.vx *= 3.5;
+      this.ball.vx *= 3.4;
       this.ball.vy = Math.max(this.ball.vy, -110);
     }
     if (armed || poweredIncoming) {
@@ -436,6 +438,10 @@ export class H2HMatch {
       this.ball.poweredBy = null;
       this.ball.powerKind = null;
       this.ball.powerT = 0;
+    }
+    if (b.side === "right" && kind === "kick") {
+      const tier = AI_TIER[this.opponent];
+      b.recoverT = Math.max(b.recoverT, tier >= 4 ? 0.38 : tier >= 3 ? 0.15 : 0);
     }
   }
 
@@ -580,7 +586,7 @@ function makePlayerBody(player: SquadPlayer, kit: Kit, side: "left" | "right" = 
 function makeMascotBody(opponent: OpponentSlug): Body {
   const tier = AI_TIER[opponent];
   const strength = RIVAL_STRENGTH[opponent];
-  const tierStat = tier === 1 ? 0.03 : tier === 2 ? 0.03 : tier === 3 ? 0.04 : tier === 4 ? 0.12 : 0;
+  const tierStat = tier === 1 ? 0.06 : tier === 2 ? 0.028 : tier === 3 ? 0.03 : tier === 4 ? 0.12 : 0;
   const body = makeBody("right", 1270, -1, {
     speed: clamp(0.48 + tier * 0.045 + (strength - 70) / 500 + tierStat, 0.45, tier === 4 ? 0.78 : 0.72),
     jump: clamp(0.5 + tier * 0.035 + (strength - 70) / 650 + tierStat * 0.7, 0.45, tier === 4 ? 0.78 : 0.72),
@@ -617,6 +623,7 @@ function makeBody(side: "left" | "right", x: number, facing: 1 | -1, stats: Play
     kickCooldown: 0,
     kickHit: false,
     headerT: 0,
+    recoverT: 0,
     power: 0.08,
     powerBanked: false,
     powerArmedT: 0,
