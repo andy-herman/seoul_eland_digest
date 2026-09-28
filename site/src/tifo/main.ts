@@ -368,6 +368,7 @@ export function mountTifoMaster(root: HTMLElement): void {
   if (qaMode) {
     (window as unknown as { __tifo: unknown }).__tifo = {
       state: () => ({ mode: root.dataset.mode, design: design.frames.map((f) => [...f]), frameIndex, check: check ? { level: check.level.id, errors: check.errors, wrongTaps: check.wrongTaps } : null }),
+      loadGallery: (id: string) => { const item = GALLERY.find((g) => g.id === id) ?? GALLERY[0]; design = cloneDesign(item, "qa-gallery"); frameIndex = 0; drawGrid(); },
       loadDesign: (frames: number[][], wave: WaveMode = "left") => { design = { id: "qa", title: "QA", frames: frames.map((f) => Uint8Array.from(f)), wave }; frameIndex = 0; drawGrid(); },
       paint: (index: number, c: number) => { design.frames[frameIndex][index] = c; drawGrid(); },
       showFast: () => openShow(design, true),

@@ -142,8 +142,8 @@ const isPt = locale === "pt";
   .tf-poster { position: relative; display: grid; grid-template-columns: 1fr 1.4fr 1fr; align-items: end; min-height: 18rem; overflow: hidden; border: 3px solid var(--ink); border-radius: 1rem; background: radial-gradient(circle at 50% 0, #385191, #08122a 72%); }
   .tf-poster img { width: min(28vw, 220px); max-height: 17rem; object-fit: contain; filter: drop-shadow(0 8px 0 rgba(0,0,0,.35)); }
   .tf-poster img:last-of-type { justify-self: end; }
-  .tf-poster h2 { position: absolute; left: 1rem; bottom: 1rem; margin: 0; font-size: clamp(2rem, 7vw, 5rem); line-height: .9; font-weight: 1000; text-transform: uppercase; text-shadow: 0 4px 0 #000; }
-  .tf-poster h2 span { display: block; font-size: .35em; color: var(--gold); }
+  .tf-poster h2 { position: absolute; left: 1rem; bottom: 1rem; max-width: min(34rem, 62%); margin: 0; font-size: clamp(2rem, 7vw, 5rem); line-height: .92; font-weight: 1000; text-transform: uppercase; text-shadow: 0 4px 0 #000; }
+  .tf-poster h2 span { display: block; margin-top: .4rem; font-size: .34em; line-height: 1.1; color: var(--gold); letter-spacing: 0; }
   .tf-poster-stand { align-self: center; display: grid; grid-template-columns: repeat(16, 1fr); gap: 2px; transform: perspective(480px) rotateX(18deg); }
   .tf-poster-stand i { height: .8rem; background: var(--c); box-shadow: 0 0 10px color-mix(in srgb, var(--c), transparent 60%); }
   .tf-mode-buttons, .tf-actions, .tf-toolrow, .tf-controls, .tf-frames, .tf-showbar, .tf-topbar { display: flex; flex-wrap: wrap; gap: .55rem; align-items: center; }
@@ -181,6 +181,6 @@ const isPt = locale === "pt";
     .tf-panel { order: 2; }
     .tf-info { grid-template-columns: 1fr; }
     .tf-poster { min-height: 15rem; grid-template-columns: .7fr 1.2fr .7fr; }
-    .tf-poster h2 { font-size: clamp(1.7rem, 12vw, 3.4rem); }
+    .tf-poster h2 { max-width: 74%; font-size: clamp(1.7rem, 12vw, 3.4rem); }
   }
 </style>
