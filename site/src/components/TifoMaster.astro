@@ -166,6 +166,7 @@ const isPt = locale === "pt";
   .tf-show { position: relative; min-height: 72vh; padding: 0; overflow: hidden; background: #071228; }
   .tf-show canvas[data-tifo-show-canvas] { height: 72vh; border: 0; border-radius: .8rem; }
   .tf-count { position: absolute; top: max(.7rem, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); min-width: 5.5rem; display: grid; place-items: center; pointer-events: none; border: 2px solid rgba(255, 194, 58, .55); border-radius: 999px; background: rgba(7, 18, 40, .72); padding: .25rem .9rem; font-size: clamp(1.15rem, 3.6vw, 2.1rem); line-height: 1; font-weight: 1000; color: var(--gold); text-shadow: 0 2px 0 #000; }
+  .tf-count:empty { display: none; }
   .tf-showbar { position: absolute; left: 1rem; right: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); justify-content: center; }
   .tf-ref { position: absolute; left: 50%; top: max(.6rem, env(safe-area-inset-top)); transform: translateX(-50%); display: flex; align-items: center; gap: .7rem; max-width: calc(100% - 1.2rem); padding: .45rem .6rem; border: 3px solid var(--ink); border-radius: .9rem; background: rgba(255,255,255,.94); color: #10182f; font-weight: 900; pointer-events: none; }
   .tf-ref canvas { display: block; flex: none; height: min(5.5rem, 16vh); width: auto; aspect-ratio: 12 / 5; border: 0; border-radius: .35rem; }
