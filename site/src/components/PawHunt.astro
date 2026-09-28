@@ -1,0 +1,298 @@
+---
+import { PAWS, PAW_TOTAL, CHAPTERS, localizedTarget } from "../paw/hunt";
+import { PAW_STRINGS, type PawLocale } from "../paw/strings";
+import { withBase } from "../lib/paths";
+
+interface Props { locale: PawLocale }
+const { locale } = Astro.props;
+const t = PAW_STRINGS[locale];
+---
+
+<script>
+  import "../paw/page";
+</script>
+
+<section class="paw-hero">
+  <div>
+    <p class="eyebrow">{t.eyebrow}</p>
+    <h1>{t.title}</h1>
+    <p class="lead">{t.intro}</p>
+    <div class="paw-progress" aria-label={`${t.progress}: 0 ${PAW_TOTAL}`}>
+      <span data-paw-progress></span>
+    </div>
+    <p class="progress-copy"><strong data-paw-count>0</strong> / {PAW_TOTAL} {t.progress}</p>
+  </div>
+  <img src={withBase("/play/lenyang-hug.webp")} alt="Lenyang" loading="eager" />
+</section>
+
+<section class="paw-how">
+  <h2>{t.howTitle}</h2>
+  <ol>
+    {t.steps.map((step) => <li>{step}</li>)}
+  </ol>
+  <p>{t.credit}</p>
+</section>
+
+{CHAPTERS.map((chapter) => (
+  <section class="paw-chapter" data-chapter={chapter.number}>
+    <header>
+      <p class="eyebrow">Chapter {chapter.number}</p>
+      <h2>{chapter.title[locale]}</h2>
+      {chapter.number > 1 && <p class="chapter-lock">{t.locked}</p>}
+    </header>
+    <div class="paw-grid">
+      {PAWS.filter((paw) => paw.chapter === chapter.number).map((paw) => (
+        <article class="paw-card" data-paw-card={paw.id}>
+          <div class="paw-card-top">
+            <span class="paw-num">{paw.number}</span>
+            <span class="paw-state" data-status>{t.notFound}</span>
+          </div>
+          <p class="paw-riddle">{paw.riddle[locale]}</p>
+          <button type="button" data-hint-toggle>{t.showHint}</button>
+          <p class="paw-hint" data-hint hidden>{paw.hint[locale]}</p>
+          <a class="paw-link" data-paw-link hidden href={withBase(localizedTarget(paw, locale))}>{t.visit}</a>
+        </article>
+      ))}
+    </div>
+  </section>
+))}
+
+<section class="paw-reward" data-reward>
+  <div>
+    <p class="eyebrow">21 / 21</p>
+    <h2>{t.rewardTitle}</h2>
+    <p class="reward-lock">{t.rewardLocked}</p>
+    <p class="reward-done">{t.completed}</p>
+    <label>
+      {t.nameLabel}
+      <input id="paw-name" type="text" maxlength="32" placeholder="Lenyang's friend" />
+    </label>
+    <div class="reward-actions">
+      <button type="button" data-draw>{t.drawCertificate}</button>
+      <button type="button" data-download>{t.download}</button>
+      <button type="button" data-share>{t.share}</button>
+    </div>
+  </div>
+  <canvas id="paw-certificate" width="1000" height="630" aria-label={t.rewardTitle}></canvas>
+</section>
+
+<div class="paw-reset-row">
+  <button type="button" data-reset>{t.reset}</button>
+</div>
+
+<style>
+  .paw-hero {
+    display: grid;
+    gap: 1.5rem;
+    align-items: center;
+    grid-template-columns: minmax(0, 1fr);
+    border: 1px solid var(--color-rule);
+    border-radius: 2rem;
+    padding: clamp(1.25rem, 4vw, 3rem);
+    background: radial-gradient(circle at 85% 15%, color-mix(in srgb, var(--color-gold) 35%, transparent), transparent 34%), linear-gradient(135deg, var(--color-navy), var(--color-blue));
+    color: white;
+    overflow: hidden;
+  }
+
+  .paw-hero h1 {
+    max-width: 12ch;
+    font-size: clamp(2.5rem, 9vw, 5.5rem);
+    line-height: 0.88;
+    letter-spacing: -0.06em;
+    text-transform: uppercase;
+  }
+
+  .lead {
+    margin-top: 1rem;
+    max-width: 42rem;
+    font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+    color: color-mix(in srgb, white 88%, var(--color-gold));
+  }
+
+  .paw-hero img {
+    width: min(16rem, 70vw);
+    justify-self: center;
+    filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.35));
+  }
+
+  .paw-progress {
+    margin-top: 1.25rem;
+    height: 0.85rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    overflow: hidden;
+  }
+
+  .paw-progress span {
+    display: block;
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: var(--color-gold);
+  }
+
+  .progress-copy {
+    margin-top: 0.5rem;
+    font-weight: 900;
+  }
+
+  .paw-how,
+  .paw-chapter,
+  .paw-reward {
+    margin-top: 1.5rem;
+    border: 1px solid var(--color-rule);
+    border-radius: 1.5rem;
+    padding: clamp(1rem, 3vw, 2rem);
+    background: var(--color-surface);
+  }
+
+  .paw-how ol {
+    margin-top: 0.75rem;
+    padding-left: 1.3rem;
+  }
+
+  .paw-how li + li {
+    margin-top: 0.4rem;
+  }
+
+  .paw-grid {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  }
+
+  .paw-card {
+    border: 1px solid var(--color-rule);
+    border-radius: 1.25rem;
+    padding: 1rem;
+    background: color-mix(in srgb, white 6%, transparent);
+  }
+
+  .paw-card-top,
+  .reward-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .paw-num {
+    display: inline-grid;
+    place-items: center;
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 999px;
+    background: var(--color-blue);
+    color: white;
+    font-weight: 950;
+  }
+
+  .paw-state {
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    font-size: 0.78rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    background: color-mix(in srgb, var(--color-gold) 18%, transparent);
+  }
+
+  .paw-card[data-found] .paw-state {
+    background: var(--color-gold);
+    color: var(--color-navy-deep);
+  }
+
+  .paw-riddle {
+    margin-top: 0.9rem;
+    font-weight: 800;
+    line-height: 1.45;
+  }
+
+  .paw-card button,
+  .paw-link,
+  .reward-actions button,
+  .paw-reset-row button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.5rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color-blue) 45%, var(--color-rule));
+    padding: 0.55rem 0.9rem;
+    font-weight: 900;
+    text-decoration: none;
+    color: var(--color-navy-deep);
+    background: var(--color-gold);
+    cursor: pointer;
+  }
+
+  .paw-hint {
+    margin: 0.7rem 0;
+    color: var(--color-text-muted);
+  }
+
+  .chapter-lock {
+    display: none;
+    font-weight: 900;
+    color: var(--color-text-muted);
+  }
+
+  .paw-chapter[data-locked] .chapter-lock {
+    display: block;
+  }
+
+  .paw-chapter[data-locked] .paw-card {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  .paw-reward {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .paw-reward:not([data-unlocked]) canvas,
+  .paw-reward:not([data-unlocked]) label,
+  .paw-reward:not([data-unlocked]) .reward-actions,
+  .paw-reward:not([data-unlocked]) .reward-done {
+    display: none;
+  }
+
+  .paw-reward[data-unlocked] .reward-lock {
+    display: none;
+  }
+
+  .paw-reward label {
+    display: grid;
+    gap: 0.35rem;
+    max-width: 24rem;
+    font-weight: 900;
+  }
+
+  .paw-reward input {
+    border: 1px solid var(--color-rule);
+    border-radius: 0.8rem;
+    padding: 0.7rem 0.85rem;
+    background: white;
+    color: var(--color-navy-deep);
+  }
+
+  canvas {
+    width: 100%;
+    max-width: 45rem;
+    border-radius: 1rem;
+    border: 1px solid var(--color-rule);
+  }
+
+  .paw-reset-row {
+    margin-top: 1rem;
+    text-align: center;
+  }
+
+  @media (min-width: 760px) {
+    .paw-hero,
+    .paw-reward {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+  }
+</style>

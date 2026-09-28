@@ -1,0 +1,111 @@
+---
+---
+
+<script>
+  import "../paw/client";
+</script>
+
+<style is:global>
+  .paw-anchor-host {
+    position: relative;
+  }
+
+  .paw-print-button {
+    position: absolute;
+    z-index: 20;
+    top: -2.2rem;
+    right: 0.1rem;
+    width: 1.7rem;
+    height: 1.7rem;
+    border: 2px solid color-mix(in srgb, var(--color-gold, #f6c84c) 70%, white);
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-blue, #1446a0) 88%, white);
+    color: var(--color-gold, #f6c84c);
+    box-shadow: 0 8px 22px color-mix(in srgb, black 28%, transparent);
+    cursor: pointer;
+    display: inline-grid;
+    place-items: center;
+    padding: 0.22rem;
+  }
+
+  .paw-print-button svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    fill: currentColor;
+  }
+
+  .paw-print-button:hover {
+    transform: translateY(-1px) rotate(-6deg);
+  }
+
+  .paw-print-button:focus-visible {
+    outline: 3px solid #fff;
+    outline-offset: 3px;
+  }
+
+  .paw-print-button.is-found {
+    opacity: 0.66;
+    color: #fff;
+  }
+
+  .paw-check {
+    fill: none;
+    stroke: var(--color-gold, #f6c84c);
+    stroke-width: 7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .paw-print-button.is-pop::after {
+    content: "✦";
+    position: absolute;
+    right: -0.4rem;
+    top: -0.55rem;
+    color: var(--color-gold, #f6c84c);
+    font-size: 1.1rem;
+    animation: paw-spark 0.6s ease-out both;
+  }
+
+  .paw-toast {
+    position: fixed;
+    z-index: 80;
+    left: 50%;
+    bottom: 1rem;
+    max-width: min(92vw, 28rem);
+    transform: translateX(-50%);
+    border: 1px solid color-mix(in srgb, var(--color-gold, #f6c84c) 55%, transparent);
+    border-radius: 1rem;
+    background: color-mix(in srgb, var(--color-navy-deep, #06162e) 94%, black);
+    color: white;
+    padding: 0.85rem 1rem;
+    box-shadow: 0 18px 45px color-mix(in srgb, black 38%, transparent);
+    font-weight: 800;
+  }
+
+  .paw-toast a {
+    color: var(--color-gold, #f6c84c);
+    margin-left: 0.35rem;
+  }
+
+  @keyframes paw-spark {
+    from { transform: translateY(0) scale(0.6); opacity: 0; }
+    40% { opacity: 1; }
+    to { transform: translateY(-0.8rem) scale(1.2); opacity: 0; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .paw-print-button:hover,
+    .paw-print-button.is-pop::after {
+      animation: none;
+      transform: none;
+    }
+  }
+
+  @media print {
+    .paw-print-button,
+    .paw-toast {
+      display: none !important;
+    }
+  }
+</style>
