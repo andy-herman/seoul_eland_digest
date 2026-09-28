@@ -2,7 +2,9 @@
 // saves and the QA hooks.
 import { AI_TIER, OPPONENTS, type OpponentSlug } from "../h2h/data";
 import { ClapAudio } from "./audio";
-import { CHANTS, FULLTIME_T, KICKOFF_T, minuteAt, type Cue } from "./chants";
+import { CHANTS, gridFor, type ChantGrid, type Cue } from "./chants";
+import { songTitle, type ClubSongId } from "../lib/clubSongs";
+import { DEFAULT_SONG, isSongId } from "../rhythm/songs";
 import type { DetEvent } from "./detector";
 import { CLAP_STRINGS, type Locale } from "./i18n";
 import { ClapMatch, starsFor, type MatchEvent, type Tier } from "./match";
@@ -14,6 +16,7 @@ const LEAD = 0.8; // seconds between pressing kick off and the song starting
 type Mode = "loading" | "menu" | "play" | "paused" | "result" | "calibrate";
 
 interface Save {
+  song: ClubSongId;
   input: "mic" | "tap";
   level: "casual" | "ultras";
   rival: OpponentSlug | "";
@@ -24,10 +27,10 @@ interface Save {
 }
 
 function loadSave(): Save {
-  const base: Save = { input: "mic", level: "casual", rival: "", sensitivity: 0.6, micOffset: null, record: {}, stars: {} };
+  const base: Save = { song: DEFAULT_SONG.id, input: "mic", level: "casual", rival: "", sensitivity: 0.6, micOffset: null, record: {}, stars: {} };
   try {
     const raw = JSON.parse(localStorage.getItem(SAVE_KEY) ?? "{}");
-    return { ...base, ...raw, record: { ...(raw.record ?? {}) }, stars: { ...(raw.stars ?? {}) } };
+    return { ...base, ...raw, song: isSongId(raw.song) ? raw.song : base.song, record: { ...(raw.record ?? {}) }, stars: { ...(raw.stars ?? {}) } };
   } catch {
     return base;
   }
@@ -51,7 +54,9 @@ export function mountClapForSeoul(root: HTMLElement): void {
   const qaMode = new URLSearchParams(location.search).has("qa");
   const coarse = matchMedia("(pointer: coarse)").matches;
   const save = loadSave();
-  const audio = new ClapAudio(root.dataset.song!);
+  let grid: ChantGrid = gridFor(save.song);
+  const songUrl = (g: ChantGrid) => `${root.dataset.play!}${g.song.file}`;
+  const audio = new ClapAudio(songUrl(grid));
   if (save.micOffset !== null) audio.micOffset = save.micOffset;
   // taps reuse the input offset a player calibrated in Seoul Song Rhythm, if any
   try {
@@ -62,6 +67,7 @@ export function mountClapForSeoul(root: HTMLElement): void {
   }
   const canvas = q<HTMLCanvasElement>("[data-cs-canvas]")!;
   const renderer = new ClapRenderer(canvas, { rhythm: root.dataset.rhythm!, play: root.dataset.play!, mascots: root.dataset.mascots! });
+  renderer.song = grid.song;
   const nextSlug = (root.dataset.nextSlug as OpponentSlug) || "gimpo-fc";
   let rival: OpponentSlug = save.rival || nextSlug;
   let mode: Mode = "loading";
@@ -107,6 +113,7 @@ export function mountClapForSeoul(root: HTMLElement): void {
 
   // ------------------------------------------------------------------ menu
   const refreshMenu = () => {
+    for (const b of qa<HTMLButtonElement>("[data-cs-song]")) b.setAttribute("aria-checked", String(b.dataset.csSong === grid.song.id));
     for (const b of qa<HTMLButtonElement>("[data-cs-input]")) b.setAttribute("aria-checked", String(b.dataset.csInput === save.input));
     for (const b of qa<HTMLButtonElement>("[data-cs-level]")) b.setAttribute("aria-checked", String(b.dataset.csLevel === save.level));
     for (const b of qa<HTMLButtonElement>("[data-cs-rival]")) {
@@ -121,6 +128,16 @@ export function mountClapForSeoul(root: HTMLElement): void {
     q<HTMLInputElement>("[data-cs-sens]")!.value = String(Math.round(save.sensitivity * 100));
     q("[data-cs-mic-row]")!.hidden = save.input !== "mic";
   };
+  const pickSong = (id: string) => {
+    if (!isSongId(id) || id === grid.song.id || mode === "play" || mode === "paused") return;
+    grid = gridFor(id);
+    save.song = id;
+    store(save);
+    audio.setUrl(songUrl(grid));
+    renderer.song = grid.song;
+    refreshMenu();
+  };
+  for (const b of qa<HTMLButtonElement>("[data-cs-song]")) b.addEventListener("click", () => pickSong(b.dataset.csSong!));
   for (const b of qa<HTMLButtonElement>("[data-cs-input]"))
     b.addEventListener("click", () => {
       save.input = b.dataset.csInput as Save["input"];
@@ -204,7 +221,10 @@ export function mountClapForSeoul(root: HTMLElement): void {
       usingMic = await ensureMic();
       if (!audio.ready) {
         const btn = q("[data-cs-go]")!;
-        await audio.load((f) => (btn.textContent = t.loadingSong(Math.round(f * 100))));
+        for (const s of qa<HTMLButtonElement>("[data-cs-song]")) s.disabled = true;
+        await audio.load((f) => (btn.textContent = t.loadingSong(Math.round(f * 100)))).finally(() => {
+          for (const s of qa<HTMLButtonElement>("[data-cs-song]")) s.disabled = false;
+        });
       }
     } catch {
       note(t.micUnsupported, true);
@@ -214,7 +234,8 @@ export function mountClapForSeoul(root: HTMLElement): void {
     if (!audio.ready) return;
     const op = OPPONENTS[rival];
     renderer.setRival(rival, op.color);
-    match = new ClapMatch({ tier: AI_TIER[rival] as Tier, level: save.level, seed: (Date.now() & 0xffffff) ^ 0x5eed });
+    match = new ClapMatch({ tier: AI_TIER[rival] as Tier, level: save.level, seed: (Date.now() & 0xffffff) ^ 0x5eed, grid });
+    renderer.song = grid.song;
     clapsHeard = 0;
     perfects = 0;
     loudest = -90;
@@ -272,7 +293,7 @@ export function mountClapForSeoul(root: HTMLElement): void {
       if (autoplay) autoInput(now);
       match.update(now);
       onMatchEvents(match.drain());
-      if (match.done && !finished && now > FULLTIME_T + 1.2) {
+      if (match.done && !finished && now > grid.fulltimeT + 1.2) {
         finished = true;
         audio.fadeOut(2.5);
         setTimeout(showResult, 900);
@@ -286,7 +307,7 @@ export function mountClapForSeoul(root: HTMLElement): void {
       {
         now,
         score: match ? match.score : [0, 0],
-        minute: minuteAt(now),
+        minute: grid.minuteAt(now),
         momentum: match ? match.momentum : 0,
         chance: match ? match.chance : null,
         cue,
@@ -427,6 +448,7 @@ export function mountClapForSeoul(root: HTMLElement): void {
     q("[data-cs-r-loud]")!.textContent = usingMic && loudest > -89 ? `${Math.round(loudest)} dBFS` : "-";
     q("[data-cs-r-stars]")!.innerHTML = stars.map((s, i) => `<li data-on="${s}"><b>${s ? "★" : "☆"}</b> ${t.stars[i]}</li>`).join("");
     q("[data-cs-r-record]")!.textContent = t.record(rec[0], rec[1], rec[2]);
+    q("[data-cs-r-song]")!.textContent = `♪ ${songTitle(grid.song, locale)}`;
     setMode("result");
     root.scrollIntoView({ block: "start", behavior: "smooth" });
   };
@@ -543,12 +565,21 @@ export function mountClapForSeoul(root: HTMLElement): void {
       },
       finish: () => {
         if (!match) return;
-        match.update(FULLTIME_T + 5);
+        match.update(grid.fulltimeT + 5);
         onMatchEvents(match.drain());
         finished = true;
         showResult();
       },
-      kickoffTime: KICKOFF_T,
+      get kickoffTime() {
+        return grid.kickoffT;
+      },
+      get fulltimeTime() {
+        return grid.fulltimeT;
+      },
+      song: (id?: string) => {
+        if (id) pickSong(id);
+        return grid.song.id;
+      },
       cues: () => (match ? match.cues.map((c) => ({ chant: c.chant, t0: c.t0, t1: c.t1, claps: c.claps, shouts: c.shouts })) : []),
       fileMic: async (url: string) => {
         audio.unlock();

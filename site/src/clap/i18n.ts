@@ -37,6 +37,8 @@ export interface ClapStrings {
   calResult: (ms: number) => string;
   calNone: string;
   bleedHint: string;
+  songTitle: string;
+  songPace: Record<"seoul-song-2024" | "my-seoul-eland-2022", string>;
   calDone: string;
   sensitivity: string;
   sensHint: string;
@@ -86,7 +88,7 @@ export interface ClapStrings {
 const en: ClapStrings = {
   pageTitle: "Clap for Seoul: your claps are the controller | Seoul E-Land Digest",
   pageDescription:
-    "A football match you play with your hands and voice. Clap the supporters' chants on the beat of 서울의 노래 (2024 ver) and the noise in the room drives Seoul E-Land's attacks. Made for watch parties, with a tap mode for quiet places.",
+    "A football match you play with your hands and voice. Clap the supporters' chants on the beat of 서울의 노래 (2024 ver) or 사랑하는 나의 서울 이랜드 (2022 ver) and the noise in the room drives Seoul E-Land's attacks. Made for watch parties, with a tap mode for quiet places.",
   eyebrow: "Mascot games · Clap for Seoul",
   heading: "Clap for Seoul",
   ko: "짝짝 짝짝짝",
@@ -120,6 +122,8 @@ const en: ClapStrings = {
   calStart: "Start",
   calResult: (ms) => `Your microphone is ${ms} ms late. Saved.`,
   calNone: "No claps heard. Clap louder, or turn the sensitivity up.",
+  songTitle: "Which song?",
+  songPace: { "seoul-song-2024": "steady, a good first match", "my-seoul-eland-2022": "faster, and a longer match" },
   bleedHint: "The song was leaking back into the microphone, which makes shouts hard to hear. Turn the speakers down a little, point them away from the device, or play the song on headphones.",
   calDone: "Done",
   sensitivity: "Clap sensitivity",
@@ -182,13 +186,13 @@ const en: ClapStrings = {
   ],
   privacy: "The microphone is only used while a match is playing, and the sound is analysed on your device. Nothing is recorded or uploaded.",
   credits:
-    "Leoul, Lenyang and the song 서울의 노래 (2024 ver) belong to Seoul E-Land FC. The other K League 2 mascots belong to their clubs. All are used with permission.",
+    "Leoul, Lenyang and the songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver) belong to Seoul E-Land FC. The other K League 2 mascots belong to their clubs. All are used with permission.",
 };
 
 const pt: ClapStrings = {
   pageTitle: "Clap for Seoul: suas palmas são o controle | Seoul E-Land Digest",
   pageDescription:
-    "Um jogo de futebol que você joga com as mãos e a voz. Bata palmas nos gritos da torcida no ritmo de 서울의 노래 (versão 2024) e o barulho da sala empurra os ataques do Seoul E-Land. Feito para assistir aos jogos em grupo, com um modo de toque para lugares silenciosos.",
+    "Um jogo de futebol que você joga com as mãos e a voz. Bata palmas nos gritos da torcida no ritmo de 서울의 노래 (versão 2024) ou 사랑하는 나의 서울 이랜드 (versão 2022) e o barulho da sala empurra os ataques do Seoul E-Land. Feito para assistir aos jogos em grupo, com um modo de toque para lugares silenciosos.",
   eyebrow: "Jogos dos mascotes · Clap for Seoul",
   heading: "Clap for Seoul",
   ko: "짝짝 짝짝짝",
@@ -222,6 +226,8 @@ const pt: ClapStrings = {
   calStart: "Começar",
   calResult: (ms) => `Seu microfone atrasa ${ms} ms. Salvo.`,
   calNone: "Nenhuma palma ouvida. Bata mais forte ou aumente a sensibilidade.",
+  songTitle: "Qual música?",
+  songPace: { "seoul-song-2024": "ritmo firme, bom para começar", "my-seoul-eland-2022": "mais rápida, e uma partida mais longa" },
   bleedHint: "A música estava vazando de volta para o microfone, o que dificulta ouvir os gritos. Abaixe um pouco o som, vire as caixas para longe do aparelho ou toque a música no fone.",
   calDone: "Pronto",
   sensitivity: "Sensibilidade das palmas",
@@ -284,7 +290,7 @@ const pt: ClapStrings = {
   ],
   privacy: "O microfone só é usado durante o jogo, e o som é analisado no seu aparelho. Nada é gravado nem enviado.",
   credits:
-    "Leoul, Lenyang e a música 서울의 노래 (versão 2024) pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão.",
+    "Leoul, Lenyang e as músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão.",
 };
 
 export const CLAP_STRINGS: Record<Locale, ClapStrings> = { en, pt };

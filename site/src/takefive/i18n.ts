@@ -328,7 +328,7 @@ const en: TakeFiveStrings = {
     "A quick tap of Pass rolls the ball to the teammate you are facing. Slow motion makes recording easier.",
   ],
   credits:
-    "Leoul, Lenyang and the song 서울의 노래 (2024 ver) belong to Seoul E-Land FC. The other K League 2 mascots belong to their clubs. All are used with permission. Player art is from the Digest's sticker set.",
+    "Leoul, Lenyang and the songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver) belong to Seoul E-Land FC. The other K League 2 mascots belong to their clubs. All are used with permission. Player art is from the Digest's sticker set.",
 };
 
 const pt: TakeFiveStrings = {
@@ -544,7 +544,7 @@ const pt: TakeFiveStrings = {
     "Um toque rápido no Passe rola a bola para o companheiro à sua frente. A câmera lenta facilita a gravação.",
   ],
   credits:
-    "Leoul, Lenyang e a música 서울의 노래 (versão 2024) pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão. A arte dos jogadores vem do álbum de figurinhas do Digest.",
+    "Leoul, Lenyang e as músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão. A arte dos jogadores vem do álbum de figurinhas do Digest.",
 };
 
 export const TAKE5_STRINGS: Record<Locale, TakeFiveStrings> = { en, pt };

@@ -2,6 +2,7 @@
 // it, HUD, touch/keyboard/button controls, game over, and the mascot album.
 
 import { GameAudio } from "../game/audio";
+import { clubPlaylist } from "../lib/clubSongs";
 import { OPPONENT_SLUGS, OPPONENTS, SPRITES, type AlbumId, type Hero, type Locale, type PlayerPoseName } from "./data";
 import { DASH_STRINGS } from "./i18n";
 import { DashRenderer, type DashImages } from "./render";
@@ -101,7 +102,7 @@ export function mountDribbleDash(root: HTMLElement): void {
   const collectedEl = document.querySelector<HTMLElement>("[data-dd-collected]");
   const screens = [...root.querySelectorAll<HTMLElement>("[data-dd-screen]")];
 
-  const audio = new GameAudio(`${playBase}seoul-song-2024.mp3`);
+  const audio = new GameAudio(clubPlaylist(playBase));
   const save = loadSave();
   const coarse = window.matchMedia("(hover: none) and (pointer: coarse)");
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");

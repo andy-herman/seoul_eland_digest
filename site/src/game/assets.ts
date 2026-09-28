@@ -34,7 +34,6 @@ export const IMAGE_FILES = {
 export type ImageKey = keyof typeof IMAGE_FILES;
 export type Images = Record<ImageKey, HTMLImageElement>;
 
-export const MUSIC_FILE = "seoul-song-2024.mp3";
 
 /** The Blender layers were rendered at 1.5x the logical canvas. */
 export const RENDER_SCALE = 1.5;

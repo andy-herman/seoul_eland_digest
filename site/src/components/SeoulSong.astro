@@ -2,7 +2,8 @@
 import TranslateButton from "./TranslateButton.astro";
 import { withBase } from "../lib/paths";
 import { RHYTHM_STRINGS, type Locale } from "../rhythm/i18n";
-import { CHARTS } from "../rhythm/charts";
+import { CLUB_SONGS, songTitle } from "../lib/clubSongs";
+import { DEFAULT_SONG, SONGS } from "../rhythm/songs";
 
 interface Props {
   locale?: Locale;
@@ -35,7 +36,7 @@ const R = withBase("/play/rhythm/");
     </div>
   </header>
 
-  <section class="ss-game" data-ss-root data-mode="loading" data-locale={locale} data-assets={R} data-play={withBase("/play/")} data-song={withBase("/play/seoul-song-2024.mp3")} style={`--ss-wide-bg: url(${R}stand-wide-bg.webp); --ss-wide-a: url(${R}stand-wide-a.webp); --ss-wide-b: url(${R}stand-wide-b.webp); --ss-tall-bg: url(${R}stand-tall-bg.webp); --ss-tall-a: url(${R}stand-tall-a.webp); --ss-tall-b: url(${R}stand-tall-b.webp);`}>
+  <section class="ss-game" data-ss-root data-mode="loading" data-locale={locale} data-assets={R} data-play={withBase("/play/")} style={`--ss-wide-bg: url(${R}stand-wide-bg.webp); --ss-wide-a: url(${R}stand-wide-a.webp); --ss-wide-b: url(${R}stand-wide-b.webp); --ss-tall-bg: url(${R}stand-tall-bg.webp); --ss-tall-a: url(${R}stand-tall-a.webp); --ss-tall-b: url(${R}stand-tall-b.webp);`}>
     <div class="ss-stage" data-ss-stage>
       <canvas data-ss-canvas aria-label={t.heading}></canvas>
       <div class="ss-hud">
@@ -72,13 +73,23 @@ const R = withBase("/play/rhythm/");
           <span>{t.ko}</span>
         </div>
       </div>
-      <div class="ss-diffs" role="radiogroup" aria-label={t.play}>
+      <p class="ss-pick-label" id={`ss-song-label-${locale}`}>{t.songLabel}</p>
+      <div class="ss-songs" role="radiogroup" aria-labelledby={`ss-song-label-${locale}`}>
+        {CLUB_SONGS.map((s) => (
+          <button type="button" class="ss-song" data-ss-song={s.id} role="radio" aria-checked={s.id === DEFAULT_SONG.id ? "true" : "false"}>
+            <b>{songTitle(s, locale)}</b>
+            <small>{s.gloss[locale]} · {SONGS[s.id].bpm} BPM · {Math.floor(SONGS[s.id].end / 60)}:{String(Math.round(SONGS[s.id].end % 60)).padStart(2, "0")}</small>
+          </button>
+        ))}
+      </div>
+      <p class="ss-pick-label" id={`ss-diff-label-${locale}`}>{t.diffLabel}</p>
+      <div class="ss-diffs" role="radiogroup" aria-labelledby={`ss-diff-label-${locale}`}>
         {diffs.map((d) => (
           <button type="button" class="ss-diff" data-ss-diff={d.id} role="radio" aria-checked="false">
             <span class="ss-diff-name">{t.diffs[d.id].name} <small>{t.diffs[d.id].ko}</small></span>
             <span class="ss-stars" aria-hidden="true">{"★".repeat(d.stars)}<i>{"★".repeat(10 - d.stars)}</i></span>
             <span class="ss-diff-blurb">{t.diffs[d.id].blurb}</span>
-            <span class="ss-diff-meta">{CHARTS[d.id].length} {t.notes} · <em data-ss-best={d.id}>{t.noBest}</em></span>
+            <span class="ss-diff-meta"><span data-ss-notes={d.id}>{DEFAULT_SONG.charts[d.id].length}</span> {t.notes} · <em data-ss-best={d.id}>{t.noBest}</em></span>
           </button>
         ))}
       </div>
@@ -109,6 +120,7 @@ const R = withBase("/play/rhythm/");
         <img class="ss-res-mascot" data-ss-res-mascot src={withBase("/play/leoul-celebrate.webp")} alt="" width="468" height="667" />
         <div>
           <p class="ss-kicker" data-ss-res-kicker></p>
+          <p class="ss-res-song" data-ss-res-song></p>
           <div class="ss-grade" data-ss-grade>S</div>
           <p class="ss-res-text" data-ss-res-text></p>
           <p class="ss-badges"><span data-ss-badge-new hidden>{t.newBest}</span><span data-ss-badge-fc hidden>{t.fullCombo}</span><span data-ss-badge-ap hidden>{t.allPerfect}</span></p>
@@ -214,6 +226,14 @@ const R = withBase("/play/rhythm/");
     .ss-poster { aspect-ratio: 4 / 3; background-image: var(--ss-tall-a), var(--ss-tall-b), var(--ss-tall-bg); background-position: center 58%; }
     .ss-poster img { height: 58%; }
   }
+  .ss-pick-label { margin: .2rem 0 -.2rem; font-size: .8rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+  .ss-songs { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); }
+  .ss-song { display: grid; gap: .2rem; text-align: left; padding: .7rem 1rem; border: 3px solid var(--ink); border-radius: 1rem; background: #1b2660; color: #fff; box-shadow: 0 4px 0 var(--ink); cursor: pointer; }
+  .ss-song b { font-size: 1.02rem; line-height: 1.25; }
+  .ss-song small { font-size: .78rem; font-weight: 700; opacity: .85; }
+  .ss-song[aria-checked="true"] { background: #ffe38a; color: #15182a; }
+  .ss-song:disabled { opacity: .6; cursor: progress; }
+  .ss-res-song { margin: .1rem 0 0; font-size: .9rem; font-weight: 800; opacity: .9; }
   .ss-diffs { display: grid; gap: .7rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
   .ss-diff { display: grid; gap: .3rem; text-align: left; padding: .85rem 1rem; border: 3px solid var(--ink); border-radius: 1rem; background: #1b2660; color: #fff; box-shadow: 0 4px 0 var(--ink); cursor: pointer; }
   .ss-diff[aria-checked="true"] { background: #ffe38a; color: #15182a; }

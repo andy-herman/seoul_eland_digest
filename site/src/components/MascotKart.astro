@@ -1,6 +1,7 @@
 ---
 import TranslateButton from "./TranslateButton.astro";
 import { withBase } from "../lib/paths";
+import { clubPlaylistAttr } from "../lib/clubPlaylist";
 import { KART_STRINGS, type Locale } from "../kart/i18n";
 
 interface Props {
@@ -29,7 +30,7 @@ const cupTracks = { seoul: ["mokdong", "hangang", "namsan", "suwon"], korea: ["b
     </div>
   </header>
 
-  <section class="kart-game" data-kart-root data-mode="loading" data-locale={locale} data-assets={withBase("/play/kart/")} data-play={withBase("/play/")} data-music={withBase("/play/seoul-song-2024.mp3")}>
+  <section class="kart-game" data-kart-root data-mode="loading" data-locale={locale} data-assets={withBase("/play/kart/")} data-play={withBase("/play/")} data-music={clubPlaylistAttr()}>
     <div class="kart-stage" data-kart-stage>
       <canvas data-kart-canvas aria-label={t.heading}></canvas>
       <div class="kh" data-kh>

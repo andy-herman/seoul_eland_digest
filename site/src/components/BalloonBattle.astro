@@ -4,6 +4,7 @@ import { ALL_MASCOTS, ENEMIES, HERO_STATS, OPPONENTS, WORLDS, type Hero, type Lo
 import { STAGES } from "../balloon/levels";
 import { BB_STRINGS } from "../balloon/i18n";
 import { withBase } from "../lib/paths";
+import { clubPlaylistAttr } from "../lib/clubPlaylist";
 import fxMeta from "../balloon/atlas/tiles_fx.json";
 import charsMeta from "../balloon/atlas/chars.json";
 
@@ -53,7 +54,7 @@ const albumIds = [...heroes, ...ALL_MASCOTS];
     data-bb-root
     data-locale={locale}
     data-assets={asset("")}
-    data-music={withBase("/play/seoul-song-2024.mp3")}
+    data-music={clubPlaylistAttr()}
     data-mode="loading"
     aria-label={t.heading}
   >

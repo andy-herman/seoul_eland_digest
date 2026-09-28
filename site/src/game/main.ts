@@ -1,4 +1,5 @@
-import { loadImages, MUSIC_FILE } from "./assets";
+import { loadImages } from "./assets";
+import { clubPlaylist } from "../lib/clubSongs";
 import { GameAudio } from "./audio";
 import { CARDS, loadBest, loadUnlocked, saveBest, saveUnlocked, type CardId } from "./cards";
 import { PenaltyEngine, type DiveZone, type Mode, type Phase, type ShotReport, type Special } from "./engine";
@@ -43,7 +44,7 @@ export function mountPenaltyParty(root: HTMLElement): void {
     [...root.querySelectorAll<HTMLElement>("[data-pp-screen]")].map((s) => [s.dataset.ppScreen as ScreenName, s]),
   );
 
-  const audio = new GameAudio(`${base}${MUSIC_FILE}`);
+  const audio = new GameAudio(clubPlaylist(base));
   const unlocked = loadUnlocked();
   const best = loadBest();
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");

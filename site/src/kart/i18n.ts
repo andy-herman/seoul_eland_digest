@@ -198,7 +198,7 @@ export const KART_STRINGS: Record<Locale, KartStrings> = {
       "In item races, water balloons trap karts in a bubble, soccer balls chase the kart ahead, and a red card goes after the leader.",
     ],
     credits:
-      "Leoul and Lenyang belong to Seoul E-Land FC. The other mascots belong to Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008, Gimpo FC, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings and Yongin FC, and are used with permission. Song 서울의 노래 (2024 ver.) used with Seoul E-Land FC's permission. Inspired by Nexon's KartRider. Tracks, karts and landmarks modelled in Blender for this game. Fan-made game, not an official club or Nexon product.",
+      "Leoul and Lenyang belong to Seoul E-Land FC. The other mascots belong to Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008, Gimpo FC, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings and Yongin FC, and are used with permission. Songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver) used with Seoul E-Land FC's permission. Inspired by Nexon's KartRider. Tracks, karts and landmarks modelled in Blender for this game. Fan-made game, not an official club or Nexon product.",
   },
   pt: {
     pageTitle: "Mascot Kart | Seoul E-Land Digest",
@@ -308,6 +308,6 @@ export const KART_STRINGS: Record<Locale, KartStrings> = {
       "Nas corridas com itens, o balão d'água prende o kart numa bolha, a bola persegue o kart da frente e o cartão vermelho vai atrás do líder.",
     ],
     credits:
-      "Leoul e Lenyang pertencem ao Seoul E-Land FC. Os outros mascotes pertencem ao Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008, Gimpo FC, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings e Yongin FC, e são usados com permissão. Música 서울의 노래 (2024 ver.) usada com permissão do Seoul E-Land FC. Inspirado no KartRider da Nexon. Pistas, karts e pontos turísticos modelados no Blender para este jogo. Jogo feito por fãs, não é um produto oficial do clube nem da Nexon.",
+      "Leoul e Lenyang pertencem ao Seoul E-Land FC. Os outros mascotes pertencem ao Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008, Gimpo FC, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings e Yongin FC, e são usados com permissão. Músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) usadas com permissão do Seoul E-Land FC. Inspirado no KartRider da Nexon. Pistas, karts e pontos turísticos modelados no Blender para este jogo. Jogo feito por fãs, não é um produto oficial do clube nem da Nexon.",
   },
 };

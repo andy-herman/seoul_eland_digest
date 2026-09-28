@@ -13,6 +13,8 @@ export interface RhythmStrings {
   loading: string;
   loadingSong: string;
   play: string;
+  songLabel: string;
+  diffLabel: string;
   diffs: Record<"easy" | "normal" | "hard", { name: string; ko: string; blurb: string }>;
   notes: string;
   best: string;
@@ -65,16 +67,18 @@ export interface RhythmStrings {
 export const RHYTHM_STRINGS: Record<Locale, RhythmStrings> = {
   en: {
     pageTitle: "Seoul Song Rhythm | Seoul E-Land Digest",
-    pageDescription: "A rhythm game to the club song 서울의 노래 (2024 ver): drum along with Leoul, Lenyang and the Mokdong supporters' end on four lanes, in Easy, Normal and Hard.",
+    pageDescription: "A rhythm game to the club songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver): drum along with Leoul, Lenyang and the Mokdong supporters' end on four lanes, in Easy, Normal and Hard.",
     eyebrow: "New browser game",
     heading: "Seoul Song Rhythm",
     ko: "서울의 노래 리듬",
-    intro: "Drum along to 서울의 노래 (2024 ver) with Leoul, Lenyang and the whole supporters' end. Hit the notes as they reach the drums, hold the long ones, and build a combo until the stand goes into fever.",
+    intro: "Drum along to the club's songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver), with Leoul, Lenyang and the whole supporters' end. Hit the notes as they reach the drums, hold the long ones, and build a combo until the stand goes into fever.",
     translateLabel: "Português",
     translateAria: "Play in Portuguese",
     loading: "Loading the stand…",
     loadingSong: "Loading the song…",
     play: "Play",
+    songLabel: "Song",
+    diffLabel: "Difficulty",
     diffs: {
       easy: { name: "Easy", ko: "쉬움", blurb: "The beat and the big moments. Good for a first go." },
       normal: { name: "Normal", ko: "보통", blurb: "The melody line, with chords in the chorus." },
@@ -140,21 +144,23 @@ export const RHYTHM_STRINGS: Record<Locale, RhythmStrings> = {
       "If the notes feel early or late, use Calibrate in the settings. On iPhone, switch off silent mode if you cannot hear the music.",
     ],
     credits:
-      "The song 서울의 노래 (2024 ver), Leoul and Lenyang belong to Seoul E-Land FC and are used with permission. The Mokdong stand, the drums and the notes were made in Blender for this game, and the charts were built from a beat analysis of the song.",
+      "The songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver), Leoul and Lenyang belong to Seoul E-Land FC and are used with permission. The Mokdong stand, the drums and the notes were made in Blender for this game, and the charts were built from a beat and melody analysis of each song.",
     audioError: "The song did not load. Check your connection and try again.",
   },
   pt: {
     pageTitle: "Seoul Song Rhythm | Seoul E-Land Digest",
-    pageDescription: "Um jogo de ritmo com a música do clube, 서울의 노래 (versão 2024): toque tambor com o Leoul, o Lenyang e a torcida de Mokdong em quatro pistas, no Fácil, Normal e Difícil.",
+    pageDescription: "Um jogo de ritmo com as músicas do clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022): toque tambor com o Leoul, o Lenyang e a torcida de Mokdong em quatro pistas, no Fácil, Normal e Difícil.",
     eyebrow: "Novo jogo no navegador",
     heading: "Seoul Song Rhythm",
     ko: "서울의 노래 리듬",
-    intro: "Toque tambor ao som de 서울의 노래 (versão 2024) com o Leoul, o Lenyang e toda a torcida. Acerte as notas quando chegarem aos tambores, segure as longas e faça combos até a arquibancada entrar em febre.",
+    intro: "Toque tambor ao som das músicas do clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022), com o Leoul, o Lenyang e toda a torcida. Acerte as notas quando chegarem aos tambores, segure as longas e faça combos até a arquibancada entrar em febre.",
     translateLabel: "English",
     translateAria: "Jogar em inglês",
     loading: "Carregando a arquibancada…",
     loadingSong: "Carregando a música…",
     play: "Jogar",
+    songLabel: "Música",
+    diffLabel: "Dificuldade",
     diffs: {
       easy: { name: "Fácil", ko: "쉬움", blurb: "A batida e os grandes momentos. Bom para começar." },
       normal: { name: "Normal", ko: "보통", blurb: "A melodia, com acordes no refrão." },
@@ -220,7 +226,7 @@ export const RHYTHM_STRINGS: Record<Locale, RhythmStrings> = {
       "Se as notas parecem adiantadas ou atrasadas, use Calibrar nos ajustes. No iPhone, desligue o modo silencioso se não ouvir a música.",
     ],
     credits:
-      "A música 서울의 노래 (versão 2024), o Leoul e o Lenyang pertencem ao Seoul E-Land FC e são usados com permissão. A arquibancada de Mokdong, os tambores e as notas foram feitos no Blender para este jogo, e as partituras saíram de uma análise das batidas da música.",
+      "As músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022), o Leoul e o Lenyang pertencem ao Seoul E-Land FC e são usados com permissão. A arquibancada de Mokdong, os tambores e as notas foram feitos no Blender para este jogo, e as partituras saíram de uma análise das batidas e da melodia de cada música.",
     audioError: "A música não carregou. Verifique a conexão e tente de novo.",
   },
 };

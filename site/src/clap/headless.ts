@@ -4,7 +4,8 @@
 // sloppy, silent and spamming rooms against every rival strength, and end-to-end runs where a whole
 // match of synthetic room audio goes through the detector into the judge, with and without bleed.
 // Build: npx esbuild src/clap/headless.ts --bundle --platform=node --format=esm --outfile=/tmp/clap-headless.mjs && node /tmp/clap-headless.mjs
-import { CHANTS, FULLTIME_T, KICKOFF_T, buildCues } from "./chants";
+import { CHANTS, gridFor, type ChantGrid } from "./chants";
+import { SONG_IDS } from "../rhythm/songs";
 import { ClapDetector, buildSongRef, type DetEvent, type SongRef } from "./detector";
 import { ClapMatch, starsFor, type Tier } from "./match";
 import { FS, addClap, addCrowd, addGroupClap, addMusic, addReverb, addShout, addSinging, addTalk, makeSong, rng, silence } from "./synth";
@@ -194,7 +195,7 @@ const SONG_SEC = 70;
 const song = makeSong(SONG_SEC, 140, 0.1204, rng(8));
 const songRef = buildSongRef(song, FS);
 {
-  const cues = buildCues();
+  const cues = gridFor("seoul-song-2024").buildCues();
   const bleedRep: Record<string, unknown> = {};
   for (const db of [-12, -20, -26]) {
     for (const shift of [0, 0.02, -0.02]) {
@@ -258,9 +259,11 @@ interface Style {
 function gauss(r: () => number): number {
   return Math.sqrt(-2 * Math.log(Math.max(1e-9, r()))) * Math.cos(2 * Math.PI * r());
 }
-function playMatch(tier: Tier, style: Style, seed: number, level: "casual" | "ultras" = "ultras"): ClapMatch {
+function playMatch(tier: Tier, style: Style, seed: number, grid: ChantGrid, level: "casual" | "ultras" = "ultras"): ClapMatch {
   const r = rng(seed);
-  const m = new ClapMatch({ tier, level, seed });
+  const m = new ClapMatch({ tier, level, seed, grid });
+  const KICKOFF_T = grid.kickoffT;
+  const FULLTIME_T = grid.fulltimeT;
   const inputs: { t: number; kind: "clap" | "on" | "off" }[] = [];
   if (!style.silent) {
     for (const cue of m.cues) {
@@ -305,7 +308,11 @@ const STYLES: Record<string, Style> = {
   spam: { jitter: 0, missRate: 1, extraRate: 0, spam: 8, shouts: false, rollRate: 0 },
   random: { jitter: 0, missRate: 1, extraRate: 3, spam: 0, shouts: false, rollRate: 3 },
 };
-const balance: Record<string, Record<string, string>> = {};
+const balanceBySong: Record<string, Record<string, Record<string, string>>> = {};
+for (const songId of SONG_IDS) {
+const grid = gridFor(songId);
+const balance: Record<string, Record<string, string>> = (balanceBySong[songId] = {});
+const fail = (m: string) => violations.push(`${songId}: ${m}`);
 for (const [name, style] of Object.entries(STYLES)) {
   balance[name] = {};
   for (const tier of [1, 2, 3, 4] as Tier[]) {
@@ -317,7 +324,7 @@ for (const [name, style] of Object.entries(STYLES)) {
     let acc = 0;
     const N = 20;
     for (let s = 0; s < N; s++) {
-      const m = playMatch(tier, style, 1000 + s * 7 + tier);
+      const m = playMatch(tier, style, 1000 + s * 7 + tier, grid);
       gf += m.score[0];
       ga += m.score[1];
       acc += m.accuracy;
@@ -335,31 +342,36 @@ for (const [name, style] of Object.entries(STYLES)) {
     if (name === "sloppy" && tier === 4 && winRate > 0.5) fail(`sloppy room beats tier 4 too often: ${w}/${N}`);
   }
 }
-report.balance = balance;
-
 // every chant in the schedule sits inside the song and between kick-off and full time
 {
-  const cues = buildCues();
-  report.cues = { count: cues.length, first: cues[0].t0.toFixed(2), last: cues[cues.length - 1].t1.toFixed(2), kinds: cues.map((c) => c.chant).join(",") };
+  const cues = grid.buildCues();
+  (report.cues ??= {} as Record<string, unknown>) as Record<string, unknown>;
+  (report.cues as Record<string, unknown>)[songId] = { count: cues.length, kickoff: grid.kickoffT.toFixed(2), fulltime: grid.fulltimeT.toFixed(2), first: cues[0].t0.toFixed(2), last: cues[cues.length - 1].t1.toFixed(2), kinds: cues.map((c) => c.chant).join(",") };
   if (cues.length < 20) fail(`only ${cues.length} chants in a match`);
-  if (cues[0].t0 < KICKOFF_T || cues[cues.length - 1].t1 > FULLTIME_T) fail("a chant falls outside the match");
+  if (cues[0].t0 < grid.kickoffT || cues[cues.length - 1].t1 > grid.fulltimeT) fail("a chant falls outside the match");
+  if (grid.fulltimeT > grid.song.end) fail("full time comes after the song ends");
+  // the quick claps must stay far enough apart for the detector to hear each one (it merges 110 ms)
+  const minGap = Math.min(...cues.flatMap((c) => c.claps.slice(1).map((x, i) => x - c.claps[i])));
+  if (minGap < 0.16) fail(`claps in a chant only ${(minGap * 1000).toFixed(0)} ms apart`);
 }
+}
+report.balance = balanceBySong;
 
 // ------------------------------------------------------------------ end to end: room audio through the detector
 // A whole match: a room clapping and shouting the chants (a little late or early, some quiet), a
 // murmuring crowd and some music; the second time the song also leaks back from the speakers.
-function endToEnd(label: string, bleedDb: number | null): void {
+function endToEnd(label: string, bleedDb: number | null, grid: ChantGrid): void {
   const r = rng(2024);
-  const m = new ClapMatch({ tier: 3, level: "ultras" });
-  const len = FULLTIME_T + 2;
+  const m = new ClapMatch({ tier: 3, level: "ultras", grid });
+  const len = grid.fulltimeT + 2;
   const b = silence(len);
   let ref: SongRef | undefined;
   if (bleedDb !== null) {
-    const s = makeSong(len, 140, 0.1204, rng(99));
+    const s = makeSong(len, grid.song.bpm, grid.song.t0, rng(99));
     const g = Math.pow(10, bleedDb / 20);
     for (let i = 0; i < b.length; i++) b[i] = s[i] * g;
     ref = buildSongRef(s, FS);
-  } else addMusic(b, 0.012, 140, r);
+  } else addMusic(b, 0.012, grid.song.bpm, r);
   addCrowd(b, 0.012, r);
   for (const cue of m.cues) {
     const def = CHANTS[cue.chant];
@@ -397,13 +409,16 @@ function endToEnd(label: string, bleedDb: number | null): void {
   report[label] = { score: m.score, accuracy: +(m.accuracy * 100).toFixed(1), clapsHeard, expectedClaps, shoutsHeard, expectedShouts, stars: starsFor(m), bleedGain: ref ? d.bleed : undefined };
   if (m.score[0] <= m.score[1]) fail(`${label}: a room clapping in time drew or lost ${m.score.join("-")}`);
   if (m.accuracy < 0.8) fail(`${label}: accuracy only ${(m.accuracy * 100).toFixed(0)}%`);
-  // (over the bleed, a clap landing right on a loud beat of the song can be taken for the song)
-  const tol = bleedDb === null ? 0.03 : 0.08;
+  // (over the bleed, a clap landing right on a loud beat of the song can be taken for the song: the
+  // stand-in song has a clap layer on its backbeat, the worst case, and some chant claps sit right on it)
+  const tol = bleedDb === null ? 0.03 : 0.12;
   if (Math.abs(clapsHeard - expectedClaps) > expectedClaps * tol) fail(`${label}: heard ${clapsHeard} claps, expected ${expectedClaps}`);
   if (shoutsHeard < expectedShouts * 0.9) fail(`${label}: heard ${shoutsHeard} shouts, expected ${expectedShouts}`);
 }
-endToEnd("endToEnd", null);
-endToEnd("endToEndWithBleed", -16);
+for (const songId of SONG_IDS) {
+  endToEnd(`endToEnd ${songId}`, null, gridFor(songId));
+  endToEnd(`endToEndWithBleed ${songId}`, -16, gridFor(songId));
+}
 
 report.violations = violations;
 report.runtimeSeconds = (Date.now() - t0) / 1000;

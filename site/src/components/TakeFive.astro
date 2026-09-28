@@ -1,6 +1,7 @@
 ---
 import TranslateButton from "./TranslateButton.astro";
 import { withBase } from "../lib/paths";
+import { clubPlaylistAttr } from "../lib/clubPlaylist";
 import { TAKE5_STRINGS, type Locale } from "../takefive/i18n";
 import { LEVELS } from "../takefive/levels";
 import { rewriteLevels } from "../takefive/rewrite";
@@ -50,7 +51,7 @@ const dateFmt = new Intl.DateTimeFormat(isPt ? "pt-BR" : "en-US", { day: "numeri
     </div>
   </header>
 
-  <section class="t5-game" data-t5-root data-mode="loading" data-locale={locale} data-heads={heads} data-mascots={mascots} data-song={withBase("/play/seoul-song-2024.mp3")}>
+  <section class="t5-game" data-t5-root data-mode="loading" data-locale={locale} data-heads={heads} data-mascots={mascots} data-song={clubPlaylistAttr()}>
     <script is:inline type="application/json" data-t5-rewrites set:html={JSON.stringify(seeds)} />
 
     <div class="t5-screen t5-loading" data-t5-screen="loading"><p>{t.loading}</p></div>

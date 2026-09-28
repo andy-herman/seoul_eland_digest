@@ -119,7 +119,7 @@ const en: Strings = {
     "Take penalties as Leoul or go in goal as Lenyang in a cute mini-game starring Seoul E-Land FC's mascots, collect all 12 mascot cards, and get to know the Leopards' two mascots.",
   eyebrow: "Mascot game",
   heading: "Leoul & Lenyang's Penalty Party",
-  intro: "Take penalties as Leoul or go in goal as Lenyang, and collect all 12 mascot cards. Sound on: the soundtrack is the club's own 서울의 노래 (2024 ver).",
+  intro: "Take penalties as Leoul or go in goal as Lenyang, and collect all 12 mascot cards. Sound on: the soundtrack is the club's own songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver).",
   subtitle: "Penalty Party",
   loading: "Warming up...",
   loadError: "The game couldn't load. Refresh the page to try again.",
@@ -138,7 +138,7 @@ const en: Strings = {
   musicLabel: "Music",
   musicOn: "On",
   musicOff: "Off",
-  nowPlaying: "Soundtrack: 서울의 노래 (2024 ver), Seoul E-Land FC",
+  nowPlaying: "Soundtrack: 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver), Seoul E-Land FC",
   score: "Score",
   level: "Level",
   lives: "Lives",
@@ -309,7 +309,7 @@ const en: Strings = {
     },
   },
   credit:
-    "Leoul, Lenyang and the song 서울의 노래 (2024 ver) belong to Seoul E-Land FC and are used with the club's permission.",
+    "Leoul, Lenyang and the songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver) belong to Seoul E-Land FC and are used with the club's permission.",
   artCredit: "Game art made in Blender and with AI image models, based on the club's official mascot art.",
 };
 
@@ -319,7 +319,7 @@ const pt: Strings = {
     "Cobre pênaltis com o Leoul ou vá para o gol com o Lenyang num minijogo fofo com os mascotes do Seoul E-Land FC, colecione as 12 cartas e conheça os dois mascotes dos Leopards.",
   eyebrow: "Jogo dos mascotes",
   heading: "A Festa dos Pênaltis do Leoul e do Lenyang",
-  intro: "Cobre pênaltis com o Leoul ou vá para o gol com o Lenyang e colecione as 12 cartas dos mascotes. Ligue o som: a trilha é a própria 서울의 노래 (versão 2024) do clube.",
+  intro: "Cobre pênaltis com o Leoul ou vá para o gol com o Lenyang e colecione as 12 cartas dos mascotes. Ligue o som: a trilha são as músicas do próprio clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022).",
   subtitle: "Festa dos Pênaltis",
   loading: "Aquecendo...",
   loadError: "Não foi possível carregar o jogo. Atualize a página para tentar de novo.",
@@ -338,7 +338,7 @@ const pt: Strings = {
   musicLabel: "Música",
   musicOn: "Ligada",
   musicOff: "Desligada",
-  nowPlaying: "Trilha: 서울의 노래 (versão 2024), Seoul E-Land FC",
+  nowPlaying: "Trilha: 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022), Seoul E-Land FC",
   score: "Pontos",
   level: "Fase",
   lives: "Vidas",
@@ -509,7 +509,7 @@ const pt: Strings = {
     },
   },
   credit:
-    "Leoul, Lenyang e a música 서울의 노래 (versão 2024) pertencem ao Seoul E-Land FC e são usados com autorização do clube.",
+    "Leoul, Lenyang e as músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) pertencem ao Seoul E-Land FC e são usados com autorização do clube.",
   artCredit: "Arte do jogo feita no Blender e com modelos de IA de imagem, a partir da arte oficial dos mascotes.",
 };
 

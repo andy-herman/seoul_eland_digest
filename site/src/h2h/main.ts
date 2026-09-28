@@ -8,6 +8,7 @@ import { FC_STEP, type FcEvent, type FcState, type RestartType, type Side } from
 import { FcRenderer, type FcRenderImages } from "./fc/render";
 import { FcControls } from "./fc/input";
 import { H2HAudio } from "./audio";
+import { clubPlaylist } from "../lib/clubSongs";
 import { H2H_STRINGS, type EndVariant } from "./i18n";
 import { RIVAL_OVR, bestFive, cardFor, teamOvr, type FcCard } from "./ratings";
 
@@ -86,7 +87,7 @@ export function mountHeadToHead(root: HTMLElement): void {
   const q = <T extends HTMLElement = HTMLElement>(sel: string) => root.querySelector<T>(sel);
   const qa = <T extends HTMLElement = HTMLElement>(sel: string) => [...root.querySelectorAll<T>(sel)];
   const canvas = q<HTMLCanvasElement>("[data-h2h-canvas]")!;
-  const audio = new H2HAudio(root.dataset.music ?? `${playAssets}seoul-song-2024.mp3`);
+  const audio = new H2HAudio(root.dataset.music ?? clubPlaylist(playAssets));
   const controls = new FcControls(root);
   const save = loadSave();
   let selected = SQUAD.find((p) => p.num === save.selected) ?? SQUAD[0];

@@ -14,7 +14,23 @@ export class SongAudio {
   hitSounds = true;
   offset = 0; // seconds; positive means the player hits late, so their presses are pulled earlier
 
-  constructor(private readonly url: string) {}
+  private url: string;
+  constructor(url: string) {
+    this.url = url;
+  }
+
+  /** Switch to another song. The next load() fetches it; a load still running for the old song is dropped. */
+  setUrl(url: string): void {
+    if (url === this.url) return;
+    this.stop();
+    this.url = url;
+    this.buffer = null;
+    this.loading = null;
+  }
+
+  get songUrl(): string {
+    return this.url;
+  }
 
   /** Call from a user gesture. */
   unlock(): void {
@@ -53,8 +69,9 @@ export class SongAudio {
   load(onProgress?: (f: number) => void): Promise<AudioBuffer> {
     if (this.buffer) return Promise.resolve(this.buffer);
     if (this.loading) return this.loading;
-    this.loading = (async () => {
-      const res = await fetch(this.url);
+    const url = this.url;
+    const loading = (async () => {
+      const res = await fetch(url);
       if (!res.ok) throw new Error(`song ${res.status}`);
       const total = Number(res.headers.get("content-length")) || 2.7e6;
       let bytes: ArrayBuffer;
@@ -82,12 +99,15 @@ export class SongAudio {
         const p = this.ctx!.decodeAudioData(bytes, resolve, reject);
         if (p && typeof (p as Promise<AudioBuffer>).then === "function") (p as Promise<AudioBuffer>).then(resolve, reject);
       });
-      this.buffer = buf;
+      if (this.url === url) this.buffer = buf; // unless the player picked another song meanwhile
       onProgress?.(1);
       return buf;
     })();
-    this.loading.catch(() => (this.loading = null));
-    return this.loading;
+    this.loading = loading;
+    loading.catch(() => {
+      if (this.loading === loading) this.loading = null;
+    });
+    return loading;
   }
 
   /** Start the song so that song time `from` is heard `lead` seconds from now. */

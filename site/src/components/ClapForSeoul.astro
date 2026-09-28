@@ -5,6 +5,8 @@ import { CLAP_STRINGS, type Locale } from "../clap/i18n";
 import { AI_TIER, OPPONENTS, OPPONENT_SLUGS } from "../h2h/data";
 import { fixtures } from "../data/matches";
 import { FIXTURE_SLUG } from "../takefive/rewrite";
+import { CLUB_SONGS, songTitle } from "../lib/clubSongs";
+import { DEFAULT_SONG, SONGS } from "../rhythm/songs";
 
 interface Props {
   locale?: Locale;
@@ -40,7 +42,6 @@ const mascots = withBase("/play/h2h/mascot-heads/");
     data-cs-root
     data-mode="loading"
     data-locale={locale}
-    data-song={withBase("/play/seoul-song-2024.mp3")}
     data-rhythm={withBase("/play/rhythm/")}
     data-play={withBase("/play/")}
     data-mascots={mascots}
@@ -88,6 +89,17 @@ const mascots = withBase("/play/h2h/mascot-heads/");
         </div>
       </div>
       <div class="cs-block">
+        <h2>{t.songTitle}</h2>
+        <div class="cs-choices" role="radiogroup" aria-label={t.songTitle}>
+          {CLUB_SONGS.map((s) => (
+            <button type="button" class="cs-choice" role="radio" aria-checked={s.id === DEFAULT_SONG.id ? "true" : "false"} data-cs-song={s.id}>
+              <b>♪ {songTitle(s, locale)}</b>
+              <span>{s.gloss[locale]} · {SONGS[s.id].bpm} BPM · {t.songPace[s.id]}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div class="cs-block">
         <h2>{t.levelTitle}</h2>
         <div class="cs-choices" role="radiogroup" aria-label={t.levelTitle}>
           <button type="button" class="cs-choice" role="radio" aria-checked="true" data-cs-level="casual"><b>{t.levels.casual.name}</b><span>{t.levels.casual.blurb}</span></button>
@@ -126,6 +138,7 @@ const mascots = withBase("/play/h2h/mascot-heads/");
           <h2 class="cs-r-title" data-cs-r-title></h2>
           <p class="cs-r-score"><span data-cs-r-score></span> <img data-cs-r-rival src={`${mascots}${nextSlug}.webp`} alt="" width="40" height="40" /></p>
           <p class="cs-r-record" data-cs-r-record></p>
+          <p class="cs-r-record" data-cs-r-song></p>
         </div>
       </div>
       <dl class="cs-stats">

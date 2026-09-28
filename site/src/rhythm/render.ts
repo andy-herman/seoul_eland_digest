@@ -1,10 +1,9 @@
 // Seoul Song Rhythm renderer (Canvas 2D). A four-lane highway in perspective over the Blender render
 // of the Mokdong supporters' end; the two fan layers bounce in turn on the beat. Notes are Blender
 // pucks, the receptors are Blender drums; Leoul and Lenyang cheer beside the highway.
-import { SECTIONS, SONG_STEP, SONG_T0 } from "./charts";
+import { DEFAULT_SONG, type RhythmSong, type Section } from "./songs";
 import { type Judgment, LANES, type Note, type RhythmEngine } from "./engine";
 
-const BEAT = SONG_STEP * 4;
 const LANE_COLOR = ["#ffc23a", "#58c6ff", "#58c6ff", "#ffc23a"];
 const JUDGE_COLOR: Record<Judgment, string> = { perfect: "#ffe27a", great: "#7fd7ff", good: "#8ff0a4", miss: "#c7cbe0" };
 const PERSP = 0.85; // top of the highway is 1 / (1 + PERSP) of the bottom width
@@ -69,6 +68,12 @@ export class RhythmRenderer {
   private pose: { leoul: Pose; lenyang: Pose; until: number } = { leoul: "ready", lenyang: "ready", until: 0 };
   private flash = 0;
   labels: Labels | null = null;
+
+  /** The song being played: its beat grid drives the stand, the beat lines and the sections. */
+  song: RhythmSong = DEFAULT_SONG;
+  private get beat(): number {
+    return this.song.step * 4;
+  }
 
   constructor(readonly canvas: HTMLCanvasElement, assets: RhythmAssets) {
     this.g = canvas.getContext("2d", { alpha: false })!;
@@ -171,18 +176,18 @@ export class RhythmRenderer {
   }
 
   onCombo(combo: number, now: number): void {
-    if (combo > 0 && combo % 25 === 0) this.pose = { leoul: "big", lenyang: "big", until: now + BEAT * 2 };
+    if (combo > 0 && combo % 25 === 0) this.pose = { leoul: "big", lenyang: "big", until: now + this.beat * 2 };
   }
 
   onFever(on: boolean, now: number): void {
     this.flash = on ? 1 : 0;
-    if (on) this.pose = { leoul: "big", lenyang: "big", until: now + BEAT * 2 };
+    if (on) this.pose = { leoul: "big", lenyang: "big", until: now + this.beat * 2 };
   }
 
   private sectionAt(now: number): "quiet" | "verse" | "chorus" {
-    const k = (now - SONG_T0) / SONG_STEP;
-    let s: "quiet" | "verse" | "chorus" = "quiet";
-    for (const [kk, name] of SECTIONS) if (k >= kk) s = name;
+    const k = (now - this.song.t0) / this.song.step;
+    let s: Section = "quiet";
+    for (const [kk, name] of this.song.sections) if (k >= kk) s = name;
     return s;
   }
 
@@ -190,7 +195,7 @@ export class RhythmRenderer {
     const g = this.g;
     const { W, H } = this;
     const fever = !!e && e.inFever(now);
-    const beatF = (now - SONG_T0) / BEAT;
+    const beatF = (now - this.song.t0) / this.beat;
     const phase = beatF - Math.floor(beatF);
     const sec = playing ? this.sectionAt(now) : "verse";
     const energy = !playing || now < 0 ? 0.35 : sec === "chorus" ? 1 : sec === "verse" ? 0.65 : 0.3;
@@ -278,9 +283,9 @@ export class RhythmRenderer {
       g.fill();
     }
     // beat and bar lines
-    const firstBeat = Math.ceil((now - SONG_T0) / BEAT);
+    const firstBeat = Math.ceil((now - this.song.t0) / this.beat);
     for (let b = firstBeat; b < firstBeat + 12; b++) {
-      const t = SONG_T0 + b * BEAT;
+      const t = this.song.t0 + b * this.beat;
       const z = (t - now) / this.visible;
       if (z > 1 || z < 0) continue;
       const a = this.proj(-0.5, z);
@@ -531,7 +536,7 @@ export class RhythmRenderer {
     const g = this.g;
     if (now > this.pose.until) {
       const cheering = fever || (playing && this.sectionAt(now) === "chorus");
-      const alt = Math.floor((now - SONG_T0) / BEAT) % 2 === 0;
+      const alt = Math.floor((now - this.song.t0) / this.beat) % 2 === 0;
       this.pose = cheering
         ? { leoul: alt ? "big" : "cheer", lenyang: alt ? "cheer" : "big", until: now }
         : { leoul: "ready", lenyang: "ready", until: now };

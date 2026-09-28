@@ -2,7 +2,7 @@
 // results into momentum, chances and goals. DOM-free and deterministic: the same inputs always
 // give the same match, so the headless suite can check that a room that claps well wins and a
 // silent or spamming room does not.
-import { CHANTS, FULLTIME_T, KICKOFF_T, buildCues, type Cue } from "./chants";
+import { CHANTS, DEFAULT_GRID, type ChantGrid, type Cue } from "./chants";
 
 export type Judgment = "perfect" | "great" | "good" | "miss";
 export const WINDOWS: Record<"casual" | "ultras", { perfect: number; great: number; good: number; shout: number }> = {
@@ -40,10 +40,12 @@ export interface MatchOptions {
   tier: Tier;
   level: "casual" | "ultras";
   seed?: number;
+  grid?: ChantGrid; // the song's chant timeline (default 서울의 노래)
 }
 
 export class ClapMatch {
   readonly cues: Cue[];
+  readonly grid: ChantGrid;
   readonly win: (typeof WINDOWS)["casual"];
   momentum = 0;
   score: [number, number] = [0, 0];
@@ -51,7 +53,7 @@ export class ClapMatch {
   chance: "home" | "away" | null = null;
   events: MatchEvent[] = [];
   done = false;
-  private t = KICKOFF_T;
+  private t: number;
   private next = 0; // next cue to judge
   private claps: number[] = [];
   private shouts: { t0: number; t1: number }[] = [];
@@ -63,7 +65,9 @@ export class ClapMatch {
   private rnd: () => number;
 
   constructor(readonly opts: MatchOptions) {
-    this.cues = buildCues();
+    this.grid = opts.grid ?? DEFAULT_GRID;
+    this.cues = this.grid.buildCues();
+    this.t = this.grid.kickoffT;
     this.win = WINDOWS[opts.level];
     let s = (opts.seed ?? 20260928) >>> 0 || 1;
     this.rnd = () => {
@@ -173,9 +177,9 @@ export class ClapMatch {
   /** Move the match on to song time t (call every frame). */
   update(t: number): void {
     if (this.done) return;
-    if (!this.kicked && t >= KICKOFF_T) {
+    if (!this.kicked && t >= this.grid.kickoffT) {
       this.kicked = true;
-      this.events.push({ type: "whistle", t: KICKOFF_T, what: "kickoff" });
+      this.events.push({ type: "whistle", t: this.grid.kickoffT, what: "kickoff" });
     }
     if (!this.kicked) return;
     const dt = Math.max(0, Math.min(0.25, t - this.t));
@@ -189,14 +193,14 @@ export class ClapMatch {
       this.events.push({ type: "cue", cue: cue.i, acc: r.acc });
       this.resolve(r, cue.t1);
     }
-    const mid = (KICKOFF_T + FULLTIME_T) / 2;
+    const mid = (this.grid.kickoffT + this.grid.fulltimeT) / 2;
     if (!this.halfDone && t >= mid) {
       this.halfDone = true;
       this.events.push({ type: "whistle", t: mid, what: "half" });
     }
-    if (t >= FULLTIME_T && this.next >= this.cues.length) {
+    if (t >= this.grid.fulltimeT && this.next >= this.cues.length) {
       this.done = true;
-      this.events.push({ type: "whistle", t: FULLTIME_T, what: "full" });
+      this.events.push({ type: "whistle", t: this.grid.fulltimeT, what: "full" });
     }
   }
 

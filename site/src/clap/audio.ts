@@ -122,6 +122,12 @@ export class ClapAudio extends SongAudio {
     node.port.postMessage({ refStart: this.songStartCtx + out + this.inputLatency + this.micOffset });
   }
 
+  override setUrl(url: string): void {
+    if (url === this.songUrl) return;
+    super.setUrl(url);
+    this.refSent = false; // the next syncRef hands the detector the new song
+  }
+
   override stop(): void {
     super.stop();
     this.node?.port.postMessage({ refStart: REF_IDLE }); // no song playing: nothing to subtract

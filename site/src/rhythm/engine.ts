@@ -1,7 +1,7 @@
 // Seoul Song Rhythm judge engine: DOM-free, driven by song time in seconds, so the browser game and
 // the headless suite share it. Taps are judged on press; holds are judged on the press (head) and
 // again at the end (tail: keep holding until the end, or let go no earlier than the grace window).
-import { CHARTS, SONG_STEP, SONG_T0 } from "./charts";
+import { DEFAULT_SONG, type RhythmSong } from "./songs";
 
 export type Difficulty = "easy" | "normal" | "hard";
 export type Judgment = "perfect" | "great" | "good" | "miss";
@@ -15,7 +15,6 @@ const VALUE: Record<Judgment, number> = { perfect: 1, great: 0.7, good: 0.4, mis
 const POINTS: Record<Judgment, number> = { perfect: 300, great: 200, good: 100, miss: 0 };
 const FEVER_GAIN: Record<Judgment, number> = { perfect: 0.034, great: 0.022, good: 0.006, miss: -0.14 };
 export const FEVER_BEATS = 16;
-const BEAT = SONG_STEP * 4;
 
 export interface Note {
   id: number;
@@ -45,10 +44,10 @@ export interface Result {
   allPerfect: boolean;
 }
 
-export function buildNotes(diff: Difficulty): Note[] {
-  return CHARTS[diff].map(([k, lane, len], id) => {
-    const t = SONG_T0 + k * SONG_STEP;
-    return { id, lane, t, end: t + len * SONG_STEP, hold: len > 0, state: "pending" };
+export function buildNotes(diff: Difficulty, song: RhythmSong = DEFAULT_SONG): Note[] {
+  return song.charts[diff].map(([k, lane, len], id) => {
+    const t = song.t0 + k * song.step;
+    return { id, lane, t, end: t + len * song.step, hold: len > 0, state: "pending" };
   });
 }
 
@@ -73,8 +72,14 @@ export class RhythmEngine {
   private tickT = [0, 0, 0, 0];
   events: RhythmEvent[] = [];
 
-  constructor(readonly diff: Difficulty, notes?: Note[]) {
-    this.notes = notes ?? buildNotes(diff);
+  private readonly step: number; // seconds per 16th of the song
+  constructor(
+    readonly diff: Difficulty,
+    notes?: Note[],
+    readonly song: RhythmSong = DEFAULT_SONG,
+  ) {
+    this.step = song.step;
+    this.notes = notes ?? buildNotes(diff, song);
     this.lanes = Array.from({ length: LANES }, (_, l) => this.notes.filter((n) => n.lane === l));
     this.total = this.notes.reduce((s, n) => s + (n.hold ? 2 : 1), 0);
   }
@@ -142,8 +147,8 @@ export class RhythmEngine {
       const h = this.holding[l];
       if (h) {
         // hold ticks: a little score every 16th while the hold is down
-        while (this.tickT[l] + SONG_STEP <= Math.min(t, h.end)) {
-          this.tickT[l] += SONG_STEP;
+        while (this.tickT[l] + this.step <= Math.min(t, h.end)) {
+          this.tickT[l] += this.step;
           this.score += 10 * this.multiplier(t);
         }
         if (t >= h.end) {
@@ -224,7 +229,7 @@ export class RhythmEngine {
     if (!this.inFever(t)) {
       this.fever = Math.max(0, Math.min(1, this.fever + FEVER_GAIN[j]));
       if (this.fever >= 1) {
-        this.feverUntil = t + FEVER_BEATS * BEAT;
+        this.feverUntil = t + FEVER_BEATS * this.step * 4;
         this.events.push({ type: "fever", on: true });
       }
     }

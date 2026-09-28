@@ -3,7 +3,7 @@
 // match, and the room meter shows how loud you are.
 import { CHANTS, type ChantId, type Cue } from "./chants";
 import type { Judgment } from "./match";
-import { SONG_STEP, SONG_T0 } from "../rhythm/charts";
+import { DEFAULT_SONG, type RhythmSong } from "../rhythm/songs";
 
 export interface ClapView {
   now: number; // song seconds as heard
@@ -79,6 +79,8 @@ const GOLD = "#ffc23a";
 const LOOKAHEAD = 2.2; // seconds of lane visible ahead of the hit line
 
 export class ClapRenderer {
+  /** The song being played: the stand bobs and the beat ticks follow its grid. */
+  song: RhythmSong = DEFAULT_SONG;
   private readonly ctx: CanvasRenderingContext2D;
   private w = 1;
   private h = 1;
@@ -251,7 +253,7 @@ export class ClapRenderer {
     g.clearRect(0, 0, W, H);
 
     // --- the stand, bobbing on the beat (harder when the team is pushing)
-    const beat = (v.now - SONG_T0) / (SONG_STEP * 4);
+    const beat = (v.now - this.song.t0) / (this.song.step * 4);
     const ph = beat - Math.floor(beat);
     const push = 0.5 + Math.max(0, v.momentum) * 0.8 + v.level * 0.6;
     const bob = Math.pow(1 - ph, 3) * u * 0.9 * push;
@@ -488,10 +490,10 @@ export class ClapRenderer {
     this.pill(x0, y, x1 - x0, lh);
     g.clip();
     // beat ticks
-    const beatLen = SONG_STEP * 4;
-    const firstBeat = Math.ceil((v.now - 0.5 - SONG_T0) / beatLen);
+    const beatLen = this.song.step * 4;
+    const firstBeat = Math.ceil((v.now - 0.5 - this.song.t0) / beatLen);
     for (let k = firstBeat; ; k++) {
-      const t = SONG_T0 + k * beatLen;
+      const t = this.song.t0 + k * beatLen;
       const X = hitX + (t - v.now) * pxPerSec;
       if (X > x1) break;
       if (X < x0) continue;

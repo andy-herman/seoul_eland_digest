@@ -103,13 +103,13 @@ export const PAWS: PawClue[] = [
     targetPathPt: "/pt/play/",
     selector: "main h1, main h2",
     riddle: {
-      en: "Leoul and I found a whole shelf of phone-friendly toy boxes, and the club song was playing. Where do mascots go to play?",
-      pt: "Leoul e eu achamos uma prateleira inteira de brinquedos para celular, com a música do clube tocando. Onde os mascotes vão brincar?",
+      en: "Leoul and I found a whole shelf of phone-friendly toy boxes, and the club songs were playing. Where do mascots go to play?",
+      pt: "Leoul e eu achamos uma prateleira inteira de brinquedos para celular, com as músicas do clube tocando. Onde os mascotes vão brincar?",
     },
     hint: { en: "Games page", pt: "Página de jogos" },
     source: {
       file: "site/src/components/GamesHub.astro",
-      snippet: "They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      snippet: "They all work on your phone, and the soundtrack is the club's own songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver).",
     },
   },
   {

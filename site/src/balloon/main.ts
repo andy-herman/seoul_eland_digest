@@ -8,6 +8,7 @@ import { Game } from "./sim";
 import { Renderer, BOARD_ASPECT, type Images } from "./render";
 import { Controls } from "./input";
 import { BalloonAudio } from "./audio";
+import { clubPlaylist } from "../lib/clubSongs";
 import { BB_STRINGS } from "./i18n";
 import type { GameEvent } from "./core";
 
@@ -69,7 +70,7 @@ export function mountBalloonBattle(root: HTMLElement): void {
   const toast = q("[data-bb-toast]")!;
   const live = q("[data-bb-live]");
   const controlsEl = q("[data-bb-controls]")!;
-  const audio = new BalloonAudio(root.dataset.music ?? "/play/seoul-song-2024.mp3");
+  const audio = new BalloonAudio(root.dataset.music ?? clubPlaylist("/play/"));
   const save = loadSave();
 
   let mode: Mode = "loading";

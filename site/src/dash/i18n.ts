@@ -98,7 +98,7 @@ const en: DashStrings = {
   musicLabel: "Music",
   musicOn: "on",
   musicOff: "off",
-  nowPlaying: "Soundtrack: 서울의 노래 (2024 ver), Seoul E-Land FC",
+  nowPlaying: "Soundtrack: 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver), Seoul E-Land FC",
   scoreLabel: "Score",
   bestLabel: "Best",
   treatsLabel: "Treats",
@@ -140,7 +140,7 @@ const en: DashStrings = {
   translateLabel: "Português",
   translateAria: "Play in Portuguese",
   credit:
-    "Every mascot belongs to its club and is used with permission: Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008 and Gimhae City, Gimpo FC and Gimpo City, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings and Yongin FC. Leoul, Lenyang and the song 서울의 노래 (2024 ver) belong to Seoul E-Land FC.",
+    "Every mascot belongs to its club and is used with permission: Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008 and Gimhae City, Gimpo FC and Gimpo City, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings and Yongin FC. Leoul, Lenyang and the songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver) belong to Seoul E-Land FC.",
   artCredit:
     "Game art made in Blender and with AI image models (Kling O1), drawn from each club's official mascot art. Mascot facts come from the clubs' own mascot pages.",
 };
@@ -179,7 +179,7 @@ const pt: DashStrings = {
   musicLabel: "Música",
   musicOn: "ligada",
   musicOff: "desligada",
-  nowPlaying: "Trilha: 서울의 노래 (versão 2024), Seoul E-Land FC",
+  nowPlaying: "Trilha: 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022), Seoul E-Land FC",
   scoreLabel: "Pontos",
   bestLabel: "Recorde",
   treatsLabel: "Petiscos",
@@ -221,7 +221,7 @@ const pt: DashStrings = {
   translateLabel: "Inglês",
   translateAria: "Jogar em inglês",
   credit:
-    "Cada mascote pertence ao seu clube e é usado com permissão: Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008 e cidade de Gimhae, Gimpo FC e cidade de Gimpo, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings e Yongin FC. Leoul, Lenyang e a música 서울의 노래 (versão 2024) pertencem ao Seoul E-Land FC.",
+    "Cada mascote pertence ao seu clube e é usado com permissão: Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008 e cidade de Gimhae, Gimpo FC e cidade de Gimpo, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings e Yongin FC. Leoul, Lenyang e as músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) pertencem ao Seoul E-Land FC.",
   artCredit:
     "Arte do jogo feita no Blender e com modelos de IA de imagem (Kling O1), a partir da arte oficial dos mascotes de cada clube. As curiosidades vêm das páginas oficiais dos clubes.",
 };

@@ -14,20 +14,20 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Dez jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      intro: "Dez jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha são as músicas do próprio clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022).",
       newBadge: "Novo",
       play: "Jogar",
       credit:
-        "Leoul, Lenyang e a música 서울의 노래 (versão 2024) pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão.",
+        "Leoul, Lenyang e as músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão.",
     }
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Ten games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      intro: "Ten games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver).",
       newBadge: "New",
       play: "Play",
       credit:
-        "Leoul, Lenyang and the song 서울의 노래 (2024 ver) belong to Seoul E-Land FC. The other K League 2 mascots belong to their clubs. All are used with permission.",
+        "Leoul, Lenyang and the songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver) belong to Seoul E-Land FC. The other K League 2 mascots belong to their clubs. All are used with permission.",
     };
 
 const games = [
@@ -80,9 +80,9 @@ const games = [
     isNew: false,
     title: "Seoul Song Rhythm",
     desc: isPortuguese
-      ? "Um jogo de ritmo com 서울의 노래 (versão 2024). Toque tambor com o Leoul, o Lenyang e a torcida de Mokdong: acerte as notas, segure as longas e leve a arquibancada à febre, no Fácil, Normal ou Difícil."
-      : "A rhythm game to 서울의 노래 (2024 ver). Drum along with Leoul, Lenyang and the Mokdong supporters' end: hit the notes, hold the long ones and send the stand into fever, on Easy, Normal or Hard.",
-    tags: isPortuguese ? ["Ritmo", "3 níveis", "4 pistas"] : ["Rhythm", "3 levels", "4 lanes"],
+      ? "Um jogo de ritmo com duas músicas do clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022). Toque tambor com o Leoul, o Lenyang e a torcida de Mokdong: acerte as notas, segure as longas e leve a arquibancada à febre, no Fácil, Normal ou Difícil."
+      : "A rhythm game to two club songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver). Drum along with Leoul, Lenyang and the Mokdong supporters' end: hit the notes, hold the long ones and send the stand into fever, on Easy, Normal or Hard.",
+    tags: isPortuguese ? ["Ritmo", "2 músicas", "3 níveis"] : ["Rhythm", "2 songs", "3 levels"],
     art: [{ src: withBase("/play/rhythm/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
     accent: "rhythm",
   },

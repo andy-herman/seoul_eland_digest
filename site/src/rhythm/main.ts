@@ -1,7 +1,8 @@
 // Seoul Song Rhythm: menus, play loop, pause, results, calibration, saves and the QA hooks.
 import { SongAudio } from "./audio";
-import { SONG_BPM, SONG_END } from "./charts";
 import { type Difficulty, type Judgment, RhythmEngine, perfectInputs } from "./engine";
+import { songTitle, type ClubSongId } from "../lib/clubSongs";
+import { DEFAULT_SONG, SONGS, isSongId, type RhythmSong } from "./songs";
 import { RHYTHM_STRINGS, type Locale } from "./i18n";
 import { RhythmRenderer } from "./render";
 
@@ -16,20 +17,24 @@ interface Best {
   fc: boolean;
   ap: boolean;
 }
+type Bests = Partial<Record<Difficulty, Best>>;
 interface Save {
+  song: ClubSongId;
   diff: Difficulty;
   speed: number;
-  offset: number; // ms
+  offset: number; // ms (Clap for Seoul reads this too)
   hits: boolean;
-  best: Partial<Record<Difficulty, Best>>;
+  bests: Partial<Record<ClubSongId, Bests>>; // per song
 }
 type Mode = "loading" | "menu" | "play" | "paused" | "result" | "calibrate";
 
 function loadSave(): Save {
-  const base: Save = { diff: "normal", speed: 5, offset: 0, hits: true, best: {} };
+  const base: Save = { song: DEFAULT_SONG.id, diff: "normal", speed: 5, offset: 0, hits: true, bests: {} };
   try {
-    const raw = JSON.parse(localStorage.getItem(SAVE_KEY) ?? "{}");
-    return { ...base, ...raw, best: { ...(raw.best ?? {}) } };
+    const { best, ...raw } = JSON.parse(localStorage.getItem(SAVE_KEY) ?? "{}");
+    // saves from before the second song kept one set of bests, all for 서울의 노래
+    const bests = { ...(best ? { [DEFAULT_SONG.id]: best } : {}), ...(raw.bests ?? {}) };
+    return { ...base, ...raw, song: isSongId(raw.song) ? raw.song : base.song, bests };
   } catch {
     return base;
   }
@@ -49,9 +54,12 @@ export function mountSeoulSong(root: HTMLElement): void {
   const q = <T extends HTMLElement = HTMLElement>(sel: string) => root.querySelector<T>(sel);
   const qa = <T extends HTMLElement = HTMLElement>(sel: string) => [...root.querySelectorAll<T>(sel)];
   const canvas = q<HTMLCanvasElement>("[data-ss-canvas]")!;
-  const audio = new SongAudio(root.dataset.song!);
-  const renderer = new RhythmRenderer(canvas, { base: root.dataset.assets!, play: root.dataset.play! });
   const save = loadSave();
+  let song: RhythmSong = SONGS[save.song] ?? DEFAULT_SONG;
+  const songUrl = (s: RhythmSong) => `${root.dataset.play!}${s.file}`;
+  const audio = new SongAudio(songUrl(song));
+  const renderer = new RhythmRenderer(canvas, { base: root.dataset.assets!, play: root.dataset.play! });
+  renderer.song = song;
   const coarse = matchMedia("(pointer: coarse)").matches;
   const fmtInt = new Intl.NumberFormat(locale === "pt" ? "pt-BR" : "en-US");
   const fmtPct = new Intl.NumberFormat(locale === "pt" ? "pt-BR" : "en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -77,10 +85,13 @@ export function mountSeoulSong(root: HTMLElement): void {
   };
 
   // ------------------------------------------------------------------ menu
+  const bestsFor = (s: RhythmSong): Bests => (save.bests[s.id] ??= {});
   const refreshMenu = () => {
+    for (const b of qa<HTMLButtonElement>("[data-ss-song]")) b.setAttribute("aria-checked", String(b.dataset.ssSong === song.id));
     for (const b of qa<HTMLButtonElement>("[data-ss-diff]")) b.setAttribute("aria-checked", String(b.dataset.ssDiff === diff));
+    for (const el of qa("[data-ss-notes]")) el.textContent = String(song.charts[el.dataset.ssNotes as Difficulty].length);
     for (const el of qa("[data-ss-best]")) {
-      const b = save.best[el.dataset.ssBest as Difficulty];
+      const b = bestsFor(song)[el.dataset.ssBest as Difficulty];
       el.textContent = b ? `${t.best} ${fmtInt.format(b.score)} · ${b.grade}${b.ap ? " ★" : b.fc ? " ✓" : ""}` : t.noBest;
     }
     q("[data-ss-speed-val]")!.textContent = String(save.speed);
@@ -89,6 +100,16 @@ export function mountSeoulSong(root: HTMLElement): void {
     hits.setAttribute("aria-pressed", String(save.hits));
     hits.textContent = save.hits ? t.on : t.off;
   };
+  const pickSong = (id: string) => {
+    if (!isSongId(id) || id === song.id) return;
+    song = SONGS[id];
+    save.song = id;
+    store(save);
+    audio.setUrl(songUrl(song));
+    renderer.song = song;
+    refreshMenu();
+  };
+  for (const b of qa<HTMLButtonElement>("[data-ss-song]")) b.addEventListener("click", () => pickSong(b.dataset.ssSong!));
   for (const b of qa<HTMLButtonElement>("[data-ss-diff]"))
     b.addEventListener("click", () => {
       diff = b.dataset.ssDiff as Difficulty;
@@ -124,6 +145,7 @@ export function mountSeoulSong(root: HTMLElement): void {
     const label = btn.textContent;
     if (!audio.ready) {
       btn.disabled = true;
+      for (const b of qa<HTMLButtonElement>("[data-ss-song]")) b.disabled = true;
       try {
         await audio.load((f) => (btn.textContent = `${t.loadingSong} ${Math.round(f * 100)}%`));
       } catch {
@@ -134,11 +156,13 @@ export function mountSeoulSong(root: HTMLElement): void {
       } finally {
         btn.disabled = false;
         btn.textContent = label;
+        for (const b of qa<HTMLButtonElement>("[data-ss-song]")) b.disabled = false;
       }
     }
     await audio.resume();
     diff = d;
-    engine = new RhythmEngine(d);
+    engine = new RhythmEngine(d, undefined, song);
+    renderer.song = song;
     audio.hitSounds = save.hits;
     audio.offset = save.offset / 1000;
     renderer.visible = visibleFor(save.speed);
@@ -239,7 +263,7 @@ export function mountSeoulSong(root: HTMLElement): void {
       // countdown during the lead-in
       hud.count.textContent = now < -0.05 ? String(Math.min(3, Math.ceil(-now / (LEAD / 3)))) : "";
       hud.hint.style.opacity = now < 4 ? "0.85" : "0";
-      if (!finished && (now > Math.max(SONG_END, engine.lastTime + 2.2) || (engine.finished && now > engine.lastTime + 1.4))) finish();
+      if (!finished && (now > Math.max(song.end, engine.lastTime + 2.2) || (engine.finished && now > engine.lastTime + 1.4))) finish();
     }
     renderer.draw(engine, now, dt, true);
     if (engine) {
@@ -247,12 +271,12 @@ export function mountSeoulSong(root: HTMLElement): void {
       const acc = Math.round(engine.accuracy * 100) / 100;
       if (acc !== shown.acc) hud.acc.textContent = `${fmtPct.format((shown.acc = acc))}%`;
       const inF = engine.inFever(now);
-      const fv = inF ? Math.max(0, (engine.feverUntil - now) / (16 * (60 / SONG_BPM))) : engine.fever;
+      const fv = inF ? Math.max(0, (engine.feverUntil - now) / (16 * (60 / song.bpm))) : engine.fever;
       if (Math.abs(fv - shown.fever) > 0.004) {
         hud.fever.style.width = `${((shown.fever = fv) * 100).toFixed(1)}%`;
         hud.feverBox.dataset.on = String(inF);
       }
-      const prog = Math.max(0, Math.min(1, now / SONG_END));
+      const prog = Math.max(0, Math.min(1, now / song.end));
       if (Math.abs(prog - shown.prog) > 0.002) hud.progress.style.width = `${((shown.prog = prog) * 100).toFixed(1)}%`;
     }
   }
@@ -262,15 +286,17 @@ export function mountSeoulSong(root: HTMLElement): void {
     finished = true;
     audio.fadeOut(1.6);
     const r = engine.result();
-    const prev = save.best[diff];
+    const bests = bestsFor(song);
+    const prev = bests[diff];
     const isBest = !prev || r.score > prev.score;
-    if (isBest) save.best[diff] = { score: r.score, acc: r.accuracy, grade: r.grade, fc: r.fullCombo, ap: r.allPerfect };
+    if (isBest) bests[diff] = { score: r.score, acc: r.accuracy, grade: r.grade, fc: r.fullCombo, ap: r.allPerfect };
     else if (prev) {
       prev.fc = prev.fc || r.fullCombo;
       prev.ap = prev.ap || r.allPerfect;
     }
     store(save);
     q("[data-ss-res-kicker]")!.textContent = `${t.results} · ${t.diffs[diff].name}`;
+    q("[data-ss-res-song]")!.textContent = songTitle(song, locale);
     const g = q("[data-ss-grade]")!;
     g.textContent = r.grade;
     g.dataset.g = r.grade;
@@ -304,7 +330,7 @@ export function mountSeoulSong(root: HTMLElement): void {
     if (mode !== "paused") return;
     setMode("play");
     // three quick counts on the beat before the song carries on
-    const beat = 60000 / SONG_BPM;
+    const beat = 60000 / song.bpm;
     resumeAt = performance.now() + beat * 3;
     let n = 3;
     hud.count.textContent = "3";
@@ -410,7 +436,7 @@ export function mountSeoulSong(root: HTMLElement): void {
     calRes.textContent = "";
     calUse.hidden = true;
     void audio.resume().then(() => new Promise((r) => setTimeout(r, 150))).then(() => {
-      calClicks = audio.metronome(16, SONG_BPM, 0.8);
+      calClicks = audio.metronome(16, song.bpm, 0.8);
       // flash the pad when each click reaches the speakers, not when it is scheduled
       const heardNow = audio.heard(performance.now());
       calClicks.forEach((ct) => {
@@ -482,10 +508,15 @@ export function mountSeoulSong(root: HTMLElement): void {
     get mode() {
       return mode;
     },
-    start: (d: Difficulty = "normal", opts: { auto?: boolean } = {}) => {
+    start: (d: Difficulty = "normal", opts: { auto?: boolean; song?: ClubSongId } = {}) => {
       autoplay = !!opts.auto;
+      if (opts.song) pickSong(opts.song);
       return start(d);
     },
+    get song() {
+      return song.id;
+    },
+    pickSong,
     auto: (on: boolean) => {
       autoplay = on;
     },
@@ -503,7 +534,7 @@ export function mountSeoulSong(root: HTMLElement): void {
           else engine.release(x.lane, x.t);
         }
       }
-      engine.update(SONG_END + 5);
+      engine.update(song.end + 5);
       finish();
     },
     destroy: () => cancelAnimationFrame(raf),

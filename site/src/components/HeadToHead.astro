@@ -1,6 +1,7 @@
 ---
 import TranslateButton from "./TranslateButton.astro";
 import { withBase } from "../lib/paths";
+import { clubPlaylistAttr } from "../lib/clubPlaylist";
 import { H2H_STRINGS } from "../h2h/i18n";
 import { OPPONENTS, OPPONENT_SLUGS, SQUAD, type Locale } from "../h2h/data";
 import { CARDS, bestFive, teamOvr } from "../h2h/ratings";
@@ -40,7 +41,7 @@ const groups = [
     </div>
   </header>
 
-  <section class="h2h-game" data-h2h-root data-locale={locale} data-assets={asset("")} data-play-assets={withBase("/play/")} data-music={withBase("/play/seoul-song-2024.mp3")}>
+  <section class="h2h-game" data-h2h-root data-locale={locale} data-assets={asset("")} data-play-assets={withBase("/play/")} data-music={clubPlaylistAttr()}>
     <div class="h2h-hud" data-h2h-hud hidden>
       <span class="h2h-hud-team"><span class="h2h-hud-head" data-side="home"></span><span>SEOUL E-LAND<small data-h2h-hud-player>서울 이랜드</small></span></span>
       <span class="h2h-clock" data-h2h-clock>0'</span>

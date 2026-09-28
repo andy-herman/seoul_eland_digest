@@ -130,7 +130,7 @@ export const YUT_STRINGS: Record<Locale, YutStrings> = {
     howTitle: "How to play",
     controlsTitle: "Controls",
     credits:
-      "Yut Nori is a traditional Korean game. Leoul, Lenyang and the song belong to Seoul E-Land FC; the other mascots belong to their clubs; all are used with permission.",
+      "Yut Nori is a traditional Korean game. Leoul, Lenyang and the songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver) belong to Seoul E-Land FC; the other mascots belong to their clubs; all are used with permission.",
     scoreboard: "Match score",
     throw: "Throw",
     throwHint: "Click, press Space, or flick up on the mat.",
@@ -224,7 +224,7 @@ export const YUT_STRINGS: Record<Locale, YutStrings> = {
     howTitle: "Como jogar",
     controlsTitle: "Controles",
     credits:
-      "Yut Nori é um jogo tradicional coreano. Leoul, Lenyang e a música pertencem ao Seoul E-Land FC; os outros mascotes pertencem aos seus clubes; todos são usados com permissão.",
+      "Yut Nori é um jogo tradicional coreano. Leoul, Lenyang e as músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) pertencem ao Seoul E-Land FC; os outros mascotes pertencem aos seus clubes; todos são usados com permissão.",
     scoreboard: "Placar da partida",
     throw: "Arremessar",
     throwHint: "Clique, aperte Espaço, ou deslize para cima no tapete.",

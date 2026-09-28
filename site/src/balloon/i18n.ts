@@ -234,9 +234,9 @@ const en: BalloonStrings = {
     lenyang: { kind: "The Jamsil cat", fact: "The cat from Jamsil Sports Complex who sneaked into the Seoul E-Land locker room after Leoul. The jersey was swiped on the way in." },
   },
   allGames: "All games",
-  credit: "Leoul, Lenyang and 서울의 노래 © Seoul E-Land FC. Every K League 2 club mascot is used with permission of its club (Gimhae FC 2008 and Gimpo FC use their city mascots).",
+  credit: "Leoul, Lenyang, 서울의 노래 and 사랑하는 나의 서울 이랜드 © Seoul E-Land FC. Every K League 2 club mascot is used with permission of its club (Gimhae FC 2008 and Gimpo FC use their city mascots).",
   artCredit: "Gameplay inspired by Crazy Arcade (Nexon); all art, maps and sounds are original. Mascot sprites made with AI image tools from official art; blocks, props and effects rendered in Blender.",
-  nowPlaying: "Now playing: 서울의 노래 (2024 ver), Seoul E-Land FC.",
+  nowPlaying: "Soundtrack: 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver), Seoul E-Land FC.",
   rotateTip: "Tip: on a phone, portrait works best.",
   cardUnlocked: (name) => `New card: ${name}`,
 };
@@ -391,9 +391,9 @@ const pt: BalloonStrings = {
     lenyang: { kind: "O gato de Jamsil", fact: "O gato do Complexo Esportivo de Jamsil que entrou escondido no vestiário do Seoul E-Land atrás do Leoul. A camisa foi surrupiada no caminho." },
   },
   allGames: "Todos os jogos",
-  credit: "Leoul, Lenyang e 서울의 노래 © Seoul E-Land FC. Todos os mascotes dos clubes da K League 2 são usados com permissão dos clubes (o Gimhae FC 2008 e o Gimpo FC usam os mascotes das cidades).",
+  credit: "Leoul, Lenyang, 서울의 노래 e 사랑하는 나의 서울 이랜드 © Seoul E-Land FC. Todos os mascotes dos clubes da K League 2 são usados com permissão dos clubes (o Gimhae FC 2008 e o Gimpo FC usam os mascotes das cidades).",
   artCredit: "Jogabilidade inspirada em Crazy Arcade (Nexon); toda a arte, os mapas e os sons são originais. Sprites dos mascotes feitos com ferramentas de IA a partir da arte oficial; blocos, objetos e efeitos renderizados no Blender.",
-  nowPlaying: "Tocando: 서울의 노래 (versão 2024), Seoul E-Land FC.",
+  nowPlaying: "Trilha: 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022), Seoul E-Land FC.",
   rotateTip: "Dica: no celular, o modo retrato funciona melhor.",
   cardUnlocked: (name) => `Nova figurinha: ${name}`,
 };

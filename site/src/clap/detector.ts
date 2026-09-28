@@ -80,6 +80,9 @@ const MAX_BURST = 0.15; // longer than this is a sustained noise (a hiss, a cymb
 const REF_WIN = 0.045; // latency estimates are not exact: compare with the song over +-45 ms
 const BLOCK = 0.05; // level reports and bleed-gain tracking
 const VOICE_SMOOTH = 0.02;
+// Until the gain is learned (the song has to be loud for a moment first), assume the speakers leak this
+// much: enough to hide a loud song leaking at -12 dB during a quiet intro, gone once the real gain is known.
+const PRIOR_GAIN = 0.06;
 const GAIN_Q = 0.35; // bleed gain = 35th percentile of mic/song energy ratio (the room only adds)
 const BLEED_CLAP = 4; // a clap must be this much louder than the loudest song transient nearby
 const BLEED_SHOUT = 2.5; // a shout must be this much louder than the song's voice band
@@ -301,8 +304,8 @@ export class ClapDetector {
     if (ref) {
       const j = Math.round(((t - this.refT0) * this.fs) / FRAME);
       if (j >= 0 && j < ref.eh.length) {
-        if (!Number.isNaN(this.gH)) bleedH = Math.exp(this.gH) * ref.ehMax[j];
-        if (!Number.isNaN(this.gV)) bleedV = Math.exp(this.gV) * ref.evMax[j];
+        bleedH = (Number.isNaN(this.gH) ? PRIOR_GAIN : Math.exp(this.gH)) * ref.ehMax[j];
+        bleedV = (Number.isNaN(this.gV) ? PRIOR_GAIN : Math.exp(this.gV)) * ref.evMax[j];
         this.blkMicH += eh;
         this.blkMicV += this.evS;
         this.blkSongH += ref.eh[j];

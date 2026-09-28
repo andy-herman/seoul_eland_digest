@@ -1,8 +1,25 @@
-// Background music (the club's 서울의 노래, streamed on first play) plus
+// Background music (the club's songs, streamed on first play and played as a playlist) plus
 // sound effects synthesised with Web Audio, so there is nothing else to load.
 
 const PREFS_KEY = "pp-audio-v1";
+const PLAYLIST_KEY = "sed-playlist-v1"; // shared by every game: which song the next visit starts on
 const MUSIC_VOLUME = 0.42;
+
+function nextStart(count: number): number {
+  try {
+    const n = Number(JSON.parse(localStorage.getItem(PLAYLIST_KEY) ?? "{}").next) || 0;
+    return ((n % count) + count) % count;
+  } catch {
+    return 0;
+  }
+}
+function rememberStart(index: number): void {
+  try {
+    localStorage.setItem(PLAYLIST_KEY, JSON.stringify({ next: index + 1 }));
+  } catch {
+    // Not fatal.
+  }
+}
 
 interface AudioPrefs {
   muted: boolean;
@@ -25,12 +42,19 @@ export class GameAudio {
   private readonly music: HTMLAudioElement;
   private musicWanted = false;
   private prefs: AudioPrefs;
+  private readonly tracks: string[];
+  private track: number;
 
-  constructor(private readonly musicUrl: string) {
+  /** `music` is one URL, a list of URLs, or a list joined with "|" (from a data attribute). */
+  constructor(music: string | readonly string[]) {
     this.prefs = loadPrefs();
+    this.tracks = (typeof music === "string" ? music.split("|") : [...music]).filter(Boolean);
+    this.track = this.tracks.length > 1 ? nextStart(this.tracks.length) : 0;
     this.music = new Audio();
     this.music.preload = "none";
-    this.music.loop = true;
+    // one song loops; a playlist moves on to the next song when one ends
+    this.music.loop = this.tracks.length === 1;
+    this.music.addEventListener("ended", () => this.nextTrack());
     // iOS ignores this (volume is read-only there). The music deliberately stays
     // a plain media element rather than going through Web Audio, because iPhones
     // mute Web Audio when the silent switch is on and the soundtrack would vanish.
@@ -43,6 +67,13 @@ export class GameAudio {
 
   get musicEnabled(): boolean {
     return this.prefs.music;
+  }
+
+  private nextTrack(): void {
+    if (this.tracks.length < 2) return;
+    this.track = (this.track + 1) % this.tracks.length;
+    this.music.src = this.tracks[this.track];
+    this.syncMusic();
   }
 
   /** Call from a user gesture: creates the AudioContext and allows playback. */
@@ -98,7 +129,10 @@ export class GameAudio {
   private syncMusic(): void {
     const play = this.musicWanted && this.prefs.music && !this.prefs.muted && !document.hidden;
     if (play) {
-      if (!this.music.src) this.music.src = this.musicUrl;
+      if (!this.music.src && this.tracks.length) {
+        this.music.src = this.tracks[this.track];
+        rememberStart(this.track); // the next visit starts on the following song
+      }
       void this.music.play().catch(() => {
         // Autoplay was blocked; the next user gesture calls startMusic again.
       });
