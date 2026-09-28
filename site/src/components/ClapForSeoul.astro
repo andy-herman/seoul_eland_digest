@@ -1,0 +1,283 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { withBase } from "../lib/paths";
+import { CLAP_STRINGS, type Locale } from "../clap/i18n";
+import { AI_TIER, OPPONENTS, OPPONENT_SLUGS } from "../h2h/data";
+import { fixtures } from "../data/matches";
+import { FIXTURE_SLUG } from "../takefive/rewrite";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = CLAP_STRINGS[locale];
+const isPt = locale === "pt";
+const upcoming = fixtures.filter((f) => f.result === "TBD" && FIXTURE_SLUG[f.opponent]).sort((a, b) => a.round - b.round)[0];
+const nextSlug = upcoming ? FIXTURE_SLUG[upcoming.opponent] : "gimpo-fc";
+const rivals = [...OPPONENT_SLUGS].sort((a, b) => (a === nextSlug ? -1 : b === nextSlug ? 1 : AI_TIER[a] - AI_TIER[b] || OPPONENTS[a].name.localeCompare(OPPONENTS[b].name)));
+const mascots = withBase("/play/h2h/mascot-heads/");
+---
+
+<div class="cs-page">
+  <header class="supporter-panel rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.65rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{t.heading} <span class="cs-ko">{t.ko}</span></h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
+      </div>
+      {isPt ? (
+        <TranslateButton href="/play/clap-for-seoul" code="EN" label={t.translateLabel} ariaLabel={t.translateAria} />
+      ) : (
+        <TranslateButton href="/pt/play/clap-for-seoul" code="PT" label={t.translateLabel} ariaLabel={t.translateAria} />
+      )}
+    </div>
+  </header>
+
+  <section
+    class="cs-game"
+    data-cs-root
+    data-mode="loading"
+    data-locale={locale}
+    data-song={withBase("/play/seoul-song-2024.mp3")}
+    data-rhythm={withBase("/play/rhythm/")}
+    data-play={withBase("/play/")}
+    data-mascots={mascots}
+    data-next-slug={nextSlug}
+  >
+    <div class="cs-stage" data-cs-screen="play">
+      <canvas data-cs-canvas aria-label={t.heading}></canvas>
+      <i class="cs-safe" data-cs-safe aria-hidden="true"></i>
+      <button type="button" class="cs-pause" data-cs-pause aria-label={t.pause}>II</button>
+      <div class="cs-pad">
+        <button type="button" class="cs-shout" data-cs-shout>{t.shout}<small>{isPt ? "segure" : "hold"}</small></button>
+        <button type="button" class="cs-clap" data-cs-clap>👏 {t.clap}</button>
+      </div>
+      <div class="cs-overlay" data-cs-screen="paused" hidden>
+        <div class="cs-card">
+          <h2>{t.paused}</h2>
+          <div class="cs-buttons">
+            <button type="button" class="cs-primary" data-cs-resume>{t.resume}</button>
+            <button type="button" data-cs-restart>{t.restart}</button>
+            <button type="button" data-cs-quit>{t.quit}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cs-screen cs-loading" data-cs-screen="loading"><p>{t.loading}</p></div>
+
+    <div class="cs-screen cs-menu" data-cs-screen="menu" hidden>
+      <div class="cs-poster" style={`--cs-bg: url(${withBase("/play/rhythm/stand-wide-bg.webp")}); --cs-a: url(${withBase("/play/rhythm/stand-wide-a.webp")}); --cs-tall: url(${withBase("/play/rhythm/stand-tall-bg.webp")}); --cs-tall-a: url(${withBase("/play/rhythm/stand-tall-a.webp")});`}>
+        <img class="cs-poster-l" src={withBase("/play/leoul-wave.webp")} alt="" width="440" height="600" />
+        <img class="cs-poster-r" src={withBase("/play/lenyang-jump.webp")} alt="" width="365" height="539" />
+        <div class="cs-poster-title"><b>{t.heading}</b><span>{t.ko}</span></div>
+        <div class="cs-poster-claps" aria-hidden="true"><i>👏</i><i>👏</i><i>👏</i><i>👏</i><i>👏</i></div>
+      </div>
+      <p class="cs-note" data-cs-note hidden></p>
+      <div class="cs-block">
+        <h2>{t.inputTitle}</h2>
+        <div class="cs-choices" role="radiogroup" aria-label={t.inputTitle}>
+          <button type="button" class="cs-choice" role="radio" aria-checked="true" data-cs-input="mic"><b>🎤 {t.micMode}</b><span>{t.micBlurb}</span></button>
+          <button type="button" class="cs-choice" role="radio" aria-checked="false" data-cs-input="tap"><b>👆 {t.tapMode}</b><span>{t.tapBlurb}</span></button>
+        </div>
+        <div class="cs-mic-row" data-cs-mic-row>
+          <label><span>{t.sensitivity}<small>{t.sensHint}</small></span><input type="range" min="0" max="100" value="60" data-cs-sens /></label>
+          <button type="button" class="cs-small" data-cs-cal>{t.calibrate}</button>
+        </div>
+      </div>
+      <div class="cs-block">
+        <h2>{t.levelTitle}</h2>
+        <div class="cs-choices" role="radiogroup" aria-label={t.levelTitle}>
+          <button type="button" class="cs-choice" role="radio" aria-checked="true" data-cs-level="casual"><b>{t.levels.casual.name}</b><span>{t.levels.casual.blurb}</span></button>
+          <button type="button" class="cs-choice" role="radio" aria-checked="false" data-cs-level="ultras"><b>{t.levels.ultras.name}</b><span>{t.levels.ultras.blurb}</span></button>
+        </div>
+      </div>
+      <div class="cs-block">
+        <h2>{t.rivalTitle}</h2>
+        <div class="cs-rivals" role="radiogroup" aria-label={t.rivalTitle}>
+          {rivals.map((slug) => (
+            <button type="button" class="cs-rival" role="radio" aria-checked="false" data-cs-rival={slug} data-next={String(slug === nextSlug)}>
+              <img src={`${mascots}${slug}.webp`} alt="" width="48" height="48" loading="lazy" />
+              <span class="cs-rv-t">
+                <b>{OPPONENTS[slug].name}</b>
+                <small>{OPPONENTS[slug].club}</small>
+                <small>
+                  {t.tiers[AI_TIER[slug]]} <em data-cs-rec></em> <em class="cs-rv-stars" data-cs-stars></em>
+                </small>
+                {slug === nextSlug && upcoming && <small class="cs-next">{t.nextMatch(upcoming.round)}</small>}
+              </span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div class="cs-go">
+        <button type="button" class="cs-primary cs-play" data-cs-go>▶ {t.kickOff}</button>
+        <p class="cs-privacy">{t.privacy}</p>
+      </div>
+    </div>
+
+    <div class="cs-screen cs-result" data-cs-screen="result" hidden>
+      <div class="cs-r-head">
+        <img class="cs-r-mascot" data-cs-r-mascot src={withBase("/play/leoul-celebrate.webp")} alt="" width="468" height="667" />
+        <div>
+          <p class="cs-kicker">{t.fullLine}</p>
+          <h2 class="cs-r-title" data-cs-r-title></h2>
+          <p class="cs-r-score"><span data-cs-r-score></span> <img data-cs-r-rival src={`${mascots}${nextSlug}.webp`} alt="" width="40" height="40" /></p>
+          <p class="cs-r-record" data-cs-r-record></p>
+        </div>
+      </div>
+      <dl class="cs-stats">
+        <div><dt>{t.accuracy}</dt><dd data-cs-r-acc></dd></div>
+        <div><dt>{t.perfects}</dt><dd data-cs-r-perfect></dd></div>
+        <div><dt>{t.claps}</dt><dd data-cs-r-claps></dd></div>
+        <div><dt>{t.loudest}</dt><dd data-cs-r-loud></dd></div>
+      </dl>
+      <ul class="cs-r-stars" data-cs-r-stars></ul>
+      <p class="cs-note" data-cs-r-bleed hidden>{t.bleedHint}</p>
+      <div class="cs-buttons">
+        <button type="button" class="cs-primary" data-cs-again>{t.again}</button>
+        <button type="button" data-cs-menu>{t.menu}</button>
+      </div>
+    </div>
+
+    <div class="cs-screen cs-cal" data-cs-screen="calibrate" hidden>
+      <h2>{t.calTitle}</h2>
+      <p>{t.calText}</p>
+      <button type="button" class="cs-primary" data-cs-cal-start>{t.calStart}</button>
+      <p class="cs-cal-res" data-cs-cal-res></p>
+      <button type="button" data-cs-cal-back>{t.calDone}</button>
+    </div>
+  </section>
+
+  <section class="cs-info">
+    <div>
+      <h2>{t.howTitle}</h2>
+      <ul>{t.how.map((line) => <li>{line}</li>)}</ul>
+    </div>
+    <div>
+      <h2>{t.controlsTitle}</h2>
+      <ul>{t.controls.map((line) => <li>{line}</li>)}</ul>
+    </div>
+    <p class="cs-credits">{t.privacy} {t.credits}</p>
+  </section>
+</div>
+
+<script>
+  import { mountClapForSeoul } from "../clap/main";
+  for (const root of document.querySelectorAll("[data-cs-root]")) mountClapForSeoul(root as HTMLElement);
+</script>
+
+<style is:global>
+  html.cs-lock-scroll, .cs-lock-scroll body { overflow: hidden; overscroll-behavior: none; }
+  .cs-page { display: grid; gap: 1rem; }
+  .cs-ko { display: inline-block; font-size: .62em; letter-spacing: 0; color: var(--color-gold, #f2b705); vertical-align: middle; }
+  .cs-game { position: relative; --ink: #0b1238; --gold: #ffc23a; --sky: #8fd8ff; color: #fff; scroll-margin-top: 5.5rem; }
+  .cs-game button { font: inherit; }
+  .cs-stage { position: relative; display: none; width: 100%; aspect-ratio: 16 / 9; max-height: calc(100vh - 7rem); border: 4px solid var(--ink); border-radius: 1.2rem; overflow: hidden; background: #070b24; box-shadow: 0 8px 0 var(--ink); }
+  .cs-game[data-mode="play"] .cs-stage, .cs-game[data-mode="paused"] .cs-stage { display: block; }
+  .cs-stage canvas { display: block; width: 100%; height: 100%; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .cs-pause { position: absolute; right: 1rem; top: 1rem; width: 2.6rem; height: 2.6rem; border-radius: 50%; border: 3px solid #fff; background: rgba(11, 18, 56, .75); color: #fff; font-weight: 900; cursor: pointer; z-index: 3; }
+  .cs-safe { position: absolute; inset: 0; visibility: hidden; pointer-events: none; padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+  .cs-pad { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; padding: 0 max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left)); pointer-events: none; z-index: 2; }
+  .cs-game[data-input="mic"] .cs-pad { display: none; }
+  .cs-pad button { pointer-events: auto; border: 4px solid var(--ink); border-radius: 50%; font-weight: 900; box-shadow: 0 5px 0 var(--ink); cursor: pointer; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .cs-clap { width: 7.4rem; height: 7.4rem; background: #ffe38a; color: #15182a; font-size: 1.15rem; }
+  .cs-shout { width: 5.8rem; height: 5.8rem; background: var(--sky); color: #15182a; font-size: 1rem; display: grid; place-content: center; line-height: 1.1; }
+  .cs-shout small { font-size: .65rem; font-weight: 800; opacity: .75; }
+  .cs-pad button[data-down="true"] { transform: translateY(3px) scale(.96); box-shadow: 0 2px 0 var(--ink); }
+  @media (pointer: fine) {
+    .cs-clap { width: 5.6rem; height: 5.6rem; font-size: .95rem; }
+    .cs-shout { width: 4.6rem; height: 4.6rem; font-size: .85rem; }
+  }
+  .cs-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(5, 8, 30, .6); z-index: 5; }
+  .cs-overlay[hidden], .cs-screen[hidden], .cs-note[hidden], .cs-mic-row[hidden] { display: none; }
+  .cs-card { display: grid; gap: 1rem; justify-items: center; padding: 1.4rem 1.8rem; border: 4px solid var(--ink); border-radius: 1.2rem; background: #fbf7ef; color: #15182a; box-shadow: 0 6px 0 var(--ink); }
+  .cs-card h2 { margin: 0; font-size: 1.6rem; font-weight: 900; text-transform: uppercase; }
+  .cs-buttons { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; }
+  .cs-buttons button, .cs-primary, .cs-small, .cs-cal > button { border: 3px solid var(--ink); border-radius: 999px; background: #fff; color: #15182a; font-weight: 900; padding: .55rem 1.2rem; box-shadow: 0 3px 0 var(--ink); cursor: pointer; }
+  .cs-primary { background: #ffe38a !important; }
+  .cs-buttons button:active, .cs-primary:active, .cs-choice:active, .cs-rival:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
+  .cs-screen { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 1rem; border: 4px solid var(--ink); border-radius: 1.2rem; background: #111a44; box-shadow: 0 8px 0 var(--ink); }
+  .cs-loading { min-height: 12rem; place-items: center; font-weight: 900; }
+  .cs-poster { position: relative; aspect-ratio: 16 / 6.2; border-radius: .9rem; overflow: hidden; border: 3px solid var(--ink); background-color: #070b24; background-image: var(--cs-a), var(--cs-bg); background-size: cover; background-position: center 45%; }
+  .cs-poster::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6, 10, 36, 0) 35%, rgba(6, 10, 36, .75)); }
+  .cs-poster > img { position: absolute; bottom: -5%; height: 92%; width: auto; z-index: 1; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .35)); animation: cs-bob .857s ease-in-out infinite; }
+  .cs-poster-l { left: 3%; }
+  .cs-poster-r { right: 4%; animation-delay: -.43s !important; }
+  @keyframes cs-bob { 50% { transform: translateY(-4%) scaleY(.97); } }
+  .cs-poster-title { position: absolute; left: 50%; bottom: 10%; transform: translateX(-50%); z-index: 2; display: grid; justify-items: center; width: max-content; max-width: 94%; text-align: center; line-height: 1; }
+  .cs-poster-title b { font-size: clamp(1.5rem, 5.6vw, 3.4rem); font-weight: 900; text-transform: uppercase; white-space: nowrap; text-shadow: 2px 0 0 var(--ink), -2px 0 0 var(--ink), 0 2px 0 var(--ink), 0 -2px 0 var(--ink), 2px 2px 0 var(--ink), -2px 2px 0 var(--ink), 2px -2px 0 var(--ink), -2px -2px 0 var(--ink), 0 5px 0 var(--ink); }
+  .cs-poster-title span { text-shadow: 0 3px 0 var(--ink); }
+  .cs-poster-title span { margin-top: .3rem; font-size: clamp(1rem, 3vw, 1.7rem); font-weight: 900; color: var(--gold); }
+  .cs-poster-claps { position: absolute; left: 50%; top: 12%; transform: translateX(-50%); z-index: 2; display: flex; gap: .5rem; font-size: clamp(1.1rem, 3vw, 2rem); }
+  .cs-poster-claps i { font-style: normal; animation: cs-clap 1.714s infinite; opacity: .25; }
+  .cs-poster-claps i:nth-child(1) { animation-delay: 0s; }
+  .cs-poster-claps i:nth-child(2) { animation-delay: .43s; }
+  .cs-poster-claps i:nth-child(3) { animation-delay: .857s; }
+  .cs-poster-claps i:nth-child(4) { animation-delay: 1.07s; }
+  .cs-poster-claps i:nth-child(5) { animation-delay: 1.29s; }
+  @keyframes cs-clap { 0% { opacity: 1; transform: scale(1.35); } 12% { opacity: .35; transform: scale(1); } 100% { opacity: .25; } }
+  @media (max-width: 699px) {
+    .cs-poster { aspect-ratio: 4 / 3; background-image: var(--cs-tall-a), var(--cs-tall); background-position: center 58%; }
+    .cs-poster > img { height: 56%; }
+  }
+  .cs-note { margin: 0; padding: .6rem .9rem; border-radius: .8rem; background: rgba(143, 216, 255, .15); font-weight: 800; }
+  .cs-note[data-bad="true"] { background: rgba(255, 110, 110, .2); }
+  .cs-block { display: grid; gap: .55rem; }
+  .cs-block h2 { margin: 0; font-size: .85rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; opacity: .85; }
+  .cs-choices { display: grid; gap: .6rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); }
+  .cs-choice { display: grid; gap: .25rem; text-align: left; padding: .75rem .95rem; border: 3px solid var(--ink); border-radius: 1rem; background: #1b2660; color: #fff; box-shadow: 0 4px 0 var(--ink); cursor: pointer; }
+  .cs-choice b { font-size: 1.1rem; }
+  .cs-choice span { font-size: .86rem; opacity: .9; line-height: 1.35; }
+  .cs-choice[aria-checked="true"], .cs-rival[aria-checked="true"] { background: #ffe38a; color: #15182a; }
+  .cs-mic-row { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; justify-content: space-between; padding: .6rem .9rem; border-radius: .9rem; background: rgba(255, 255, 255, .06); }
+  .cs-mic-row label { display: flex; flex-wrap: wrap; gap: .8rem; align-items: center; flex: 1; }
+  .cs-mic-row label > span { display: grid; font-weight: 800; }
+  .cs-mic-row small { font-weight: 500; opacity: .75; font-size: .8rem; }
+  .cs-mic-row input { flex: 1; min-width: 9rem; accent-color: var(--gold); }
+  .cs-rivals { display: grid; gap: .5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 14rem), 1fr)); }
+  .cs-rival { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .55rem; align-items: center; text-align: left; padding: .45rem .6rem; border: 3px solid var(--ink); border-radius: .9rem; background: #1b2660; color: #fff; box-shadow: 0 3px 0 var(--ink); cursor: pointer; }
+  .cs-rival img { width: 2.8rem; height: 2.8rem; object-fit: contain; }
+  .cs-rv-t { display: grid; min-width: 0; line-height: 1.2; }
+  .cs-rv-t b { font-size: .95rem; }
+  .cs-rv-t small { font-size: .72rem; opacity: .85; overflow-wrap: anywhere; }
+  .cs-rv-t em { font-style: normal; font-weight: 900; }
+  .cs-rv-stars { color: #d98a00; }
+  .cs-next { color: #ff8a3d; font-weight: 900; opacity: 1 !important; }
+  .cs-rival[aria-checked="true"] .cs-next { color: #b34700; }
+  .cs-go { display: grid; justify-items: center; gap: .5rem; }
+  .cs-play { font-size: 1.35rem; padding: .7rem 2.6rem !important; }
+  .cs-play:disabled { opacity: .7; }
+  .cs-privacy { margin: 0; max-width: 36rem; text-align: center; font-size: .78rem; opacity: .75; }
+  .cs-result { justify-items: stretch; }
+  .cs-r-head { display: flex; align-items: center; gap: 1rem; }
+  .cs-r-mascot { width: auto; height: clamp(6rem, 24vw, 10rem); }
+  .cs-kicker { margin: 0; font-size: .8rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .cs-r-title { margin: .1rem 0; font-size: clamp(2rem, 8vw, 3.2rem); font-weight: 900; line-height: 1; color: #ffe27a; text-shadow: 2px 0 0 var(--ink), -2px 0 0 var(--ink), 0 2px 0 var(--ink), 0 -2px 0 var(--ink), 2px 2px 0 var(--ink), -2px 2px 0 var(--ink), 2px -2px 0 var(--ink), -2px -2px 0 var(--ink), 0 5px 0 var(--ink); }
+  .cs-r-score { margin: .2rem 0; font-size: clamp(1rem, 4vw, 1.35rem); font-weight: 900; line-height: 1.25; }
+  .cs-r-score img { display: inline-block; width: 1.9em; height: 1.9em; margin: -.35em 0 -.35em .25em; vertical-align: middle; object-fit: contain; }
+  .cs-r-record { margin: 0; font-size: .85rem; opacity: .85; }
+  .cs-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr)); gap: .6rem; margin: 0; }
+  .cs-stats div { border-radius: .8rem; background: rgba(255, 255, 255, .07); padding: .6rem .8rem; }
+  .cs-stats dt { font-size: .72rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; opacity: .75; }
+  .cs-stats dd { margin: 0; font-size: 1.35rem; font-weight: 900; font-variant-numeric: tabular-nums; }
+  .cs-r-stars { margin: 0; padding: 0; list-style: none; display: grid; gap: .3rem; }
+  .cs-r-stars li { font-weight: 700; opacity: .6; }
+  .cs-r-stars li[data-on="true"] { opacity: 1; }
+  .cs-r-stars b { color: var(--gold); }
+  .cs-cal { justify-items: center; text-align: center; }
+  .cs-cal h2 { margin: 0; font-size: 1.4rem; font-weight: 900; text-transform: uppercase; }
+  .cs-cal p { margin: 0; max-width: 34rem; }
+  .cs-cal-res { font-size: 1.1rem; font-weight: 900; min-height: 1.5rem; }
+  .cs-info { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); padding: 1.1rem 1.3rem; border-radius: 1.2rem; background: color-mix(in srgb, var(--color-navy, #1b2446) 6%, transparent); }
+  .cs-info h2 { margin: 0 0 .4rem; font-size: .85rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+  .cs-info ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .3rem; font-size: .9rem; line-height: 1.5; }
+  .cs-credits { grid-column: 1 / -1; margin: 0; font-size: .8rem; opacity: .8; }
+  @media (pointer: coarse) {
+    .cs-game[data-mode="play"], .cs-game[data-mode="paused"] { position: fixed; inset: 0; z-index: 60; height: 100vh; height: 100dvh; background: #070b24; }
+    .cs-game[data-mode="play"] .cs-stage, .cs-game[data-mode="paused"] .cs-stage { position: absolute; inset: 0; width: 100%; height: 100%; max-height: none; aspect-ratio: auto; border: 0; border-radius: 0; box-shadow: none; }
+    .cs-pause { top: max(1rem, env(safe-area-inset-top)); right: max(1rem, env(safe-area-inset-right)); }
+  }
+</style>

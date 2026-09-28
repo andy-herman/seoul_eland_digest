@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import ClapForSeoul from "../../../components/ClapForSeoul.astro";
+import { CLAP_STRINGS } from "../../../clap/i18n";
+
+const t = CLAP_STRINGS.pt;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/clap/og-clap-pt.jpg" lang="pt">
+  <ClapForSeoul locale="pt" />
+</BaseLayout>

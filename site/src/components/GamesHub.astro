@@ -14,7 +14,7 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Oito jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      intro: "Nove jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
       newBadge: "Novo",
       play: "Jogar",
       credit:
@@ -23,7 +23,7 @@ const copy = isPortuguese
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Eight games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      intro: "Nine games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
       newBadge: "New",
       play: "Play",
       credit:
@@ -31,6 +31,17 @@ const copy = isPortuguese
     };
 
 const games = [
+  {
+    href: `${prefix}/play/clap-for-seoul`,
+    isNew: true,
+    title: "Clap for Seoul",
+    desc: isPortuguese
+      ? "O microfone é o controle. O Leoul puxa os gritos da arquibancada: bata 짝짝 짝짝짝 e grite 서울! no ritmo da música do clube, e cada grito certo empurra o time para o gol. Melhor com uma sala cheia de torcedores. Também dá para jogar tocando na tela."
+      : "The microphone is the controller. Leoul leads the chants from the supporters' end: clap 짝짝 짝짝짝 and shout 서울! on the beat of the club song, and every chant you land pushes the team toward goal. Best with a room full of fans. Tap mode works too.",
+    tags: isPortuguese ? ["Microfone", "Ritmo", "Para torcidas"] : ["Microphone", "Rhythm", "Watch parties"],
+    art: [{ src: withBase("/play/clap/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
+    accent: "clap",
+  },
   {
     href: `${prefix}/play/take-five`,
     isNew: true,
@@ -253,6 +264,10 @@ const games = [
 
   .games-card-paw .games-art {
     background: #0d3a8c;
+  }
+
+  .games-card-clap .games-art {
+    background: #070b24;
   }
 
   .games-card-h2h .games-art {
