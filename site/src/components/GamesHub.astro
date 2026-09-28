@@ -14,7 +14,7 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Cinco jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      intro: "Seis jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
       newBadge: "Novo",
       play: "Jogar",
       credit:
@@ -23,7 +23,7 @@ const copy = isPortuguese
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Five games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      intro: "Six games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
       newBadge: "New",
       play: "Play",
       credit:
@@ -31,6 +31,17 @@ const copy = isPortuguese
     };
 
 const games = [
+  {
+    href: `${prefix}/play/seoul-song`,
+    isNew: true,
+    title: "Seoul Song Rhythm",
+    desc: isPortuguese
+      ? "Um jogo de ritmo com 서울의 노래 (versão 2024). Toque tambor com o Leoul, o Lenyang e a torcida de Mokdong: acerte as notas, segure as longas e leve a arquibancada à febre, no Fácil, Normal ou Difícil."
+      : "A rhythm game to 서울의 노래 (2024 ver). Drum along with Leoul, Lenyang and the Mokdong supporters' end: hit the notes, hold the long ones and send the stand into fever, on Easy, Normal or Hard.",
+    tags: isPortuguese ? ["Ritmo", "3 níveis", "4 pistas"] : ["Rhythm", "3 levels", "4 lanes"],
+    art: [{ src: withBase("/play/rhythm/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
+    accent: "rhythm",
+  },
   {
     href: `${prefix}/play/mascot-kart`,
     isNew: true,
@@ -44,7 +55,7 @@ const games = [
   },
   {
     href: `${prefix}/play/head-to-head`,
-    isNew: true,
+    isNew: false,
     title: isPortuguese ? "Liga Cabeça a Cabeça" : "Head-to-Head League",
     desc: isPortuguese
       ? "Comande um time de cinco com o elenco real do Seoul E-Land 2026 contra os mascotes rivais. Passe, cruze, chute e cobre escanteios numa temporada de 16 jogos com tabela ao vivo."
@@ -208,6 +219,10 @@ const games = [
 
   .games-card-kart .games-art {
     background: #9ed6ff;
+  }
+
+  .games-card-rhythm .games-art {
+    background: #0b1238;
   }
 
   .games-card-h2h .games-art {

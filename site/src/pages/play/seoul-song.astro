@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SeoulSong from "../../components/SeoulSong.astro";
+import { RHYTHM_STRINGS } from "../../rhythm/i18n";
+
+const t = RHYTHM_STRINGS.en;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/rhythm/og-rhythm.jpg">
+  <SeoulSong locale="en" />
+</BaseLayout>

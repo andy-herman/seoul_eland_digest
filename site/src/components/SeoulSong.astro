@@ -1,0 +1,296 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { withBase } from "../lib/paths";
+import { RHYTHM_STRINGS, type Locale } from "../rhythm/i18n";
+import { CHARTS } from "../rhythm/charts";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = RHYTHM_STRINGS[locale];
+const isPt = locale === "pt";
+const diffs = [
+  { id: "easy", stars: 2 },
+  { id: "normal", stars: 5 },
+  { id: "hard", stars: 8 },
+] as const;
+const R = withBase("/play/rhythm/");
+---
+
+<div class="ss-page">
+  <header class="supporter-panel rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.65rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{t.heading} <span class="ss-ko">{t.ko}</span></h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
+      </div>
+      {isPt ? (
+        <TranslateButton href="/play/seoul-song" code="EN" label={t.translateLabel} ariaLabel={t.translateAria} />
+      ) : (
+        <TranslateButton href="/pt/play/seoul-song" code="PT" label={t.translateLabel} ariaLabel={t.translateAria} />
+      )}
+    </div>
+  </header>
+
+  <section class="ss-game" data-ss-root data-mode="loading" data-locale={locale} data-assets={R} data-play={withBase("/play/")} data-song={withBase("/play/seoul-song-2024.mp3")} style={`--ss-wide-bg: url(${R}stand-wide-bg.webp); --ss-wide-a: url(${R}stand-wide-a.webp); --ss-wide-b: url(${R}stand-wide-b.webp); --ss-tall-bg: url(${R}stand-tall-bg.webp); --ss-tall-a: url(${R}stand-tall-a.webp); --ss-tall-b: url(${R}stand-tall-b.webp);`}>
+    <div class="ss-stage" data-ss-stage>
+      <canvas data-ss-canvas aria-label={t.heading}></canvas>
+      <div class="ss-hud">
+        <div class="ss-progress"><i data-ss-progress></i></div>
+        <div class="ss-score"><small>{t.score}</small><b data-ss-score>0</b></div>
+        <div class="ss-acc"><small>{t.accuracy}</small><b data-ss-acc>100.00%</b></div>
+        <div class="ss-fever" data-ss-fever-box><span>{t.fever}</span><div><i data-ss-fever></i></div></div>
+        <button type="button" class="ss-pause" data-ss-pause aria-label={t.pause}>II</button>
+        <p class="ss-count" data-ss-count></p>
+        <p class="ss-hint" data-ss-hint></p>
+      </div>
+      <div class="ss-overlay" data-ss-screen="paused" hidden>
+        <div class="ss-card">
+          <h2>{t.paused}</h2>
+          <div class="ss-buttons">
+            <button type="button" class="ss-primary" data-ss-resume>{t.resume}</button>
+            <button type="button" data-ss-restart>{t.restart}</button>
+            <button type="button" data-ss-quit>{t.quit}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ss-screen ss-loading" data-ss-screen="loading">
+      <p>{t.loading}</p>
+    </div>
+
+    <div class="ss-screen ss-menu" data-ss-screen="menu" hidden>
+      <div class="ss-poster">
+        <img class="ss-poster-l" src={withBase("/play/leoul-celebrate.webp")} alt="" width="468" height="667" />
+        <img class="ss-poster-r" src={withBase("/play/lenyang-jump.webp")} alt="" width="365" height="539" />
+        <div class="ss-poster-title">
+          <b>{t.heading}</b>
+          <span>{t.ko}</span>
+        </div>
+      </div>
+      <div class="ss-diffs" role="radiogroup" aria-label={t.play}>
+        {diffs.map((d) => (
+          <button type="button" class="ss-diff" data-ss-diff={d.id} role="radio" aria-checked="false">
+            <span class="ss-diff-name">{t.diffs[d.id].name} <small>{t.diffs[d.id].ko}</small></span>
+            <span class="ss-stars" aria-hidden="true">{"★".repeat(d.stars)}<i>{"★".repeat(10 - d.stars)}</i></span>
+            <span class="ss-diff-blurb">{t.diffs[d.id].blurb}</span>
+            <span class="ss-diff-meta">{CHARTS[d.id].length} {t.notes} · <em data-ss-best={d.id}>{t.noBest}</em></span>
+          </button>
+        ))}
+      </div>
+      <div class="ss-go">
+        <button type="button" class="ss-primary ss-play" data-ss-play>▶ {t.play}</button>
+        <p class="ss-err" data-ss-err hidden>{t.audioError}</p>
+      </div>
+      <details class="ss-settings">
+        <summary>{t.settings}</summary>
+        <div class="ss-set">
+          <span>{t.speed}<small>{t.speedHint}</small></span>
+          <div class="ss-step"><button type="button" data-ss-speed="-1" aria-label="-">−</button><b data-ss-speed-val>5</b><button type="button" data-ss-speed="1" aria-label="+">+</button></div>
+        </div>
+        <div class="ss-set">
+          <span>{t.offset}<small>{t.offsetHint}</small></span>
+          <div class="ss-step"><button type="button" data-ss-offset="-5" aria-label="-">−</button><b data-ss-offset-val>0 ms</b><button type="button" data-ss-offset="5" aria-label="+">+</button></div>
+          <button type="button" class="ss-cal-btn" data-ss-cal>{t.calibrate}</button>
+        </div>
+        <div class="ss-set">
+          <span>{t.hitSounds}</span>
+          <button type="button" class="ss-toggle" data-ss-hits aria-pressed="true">{t.on}</button>
+        </div>
+      </details>
+    </div>
+
+    <div class="ss-screen ss-result" data-ss-screen="result" hidden>
+      <div class="ss-res-head">
+        <img class="ss-res-mascot" data-ss-res-mascot src={withBase("/play/leoul-celebrate.webp")} alt="" width="468" height="667" />
+        <div>
+          <p class="ss-kicker" data-ss-res-kicker></p>
+          <div class="ss-grade" data-ss-grade>S</div>
+          <p class="ss-res-text" data-ss-res-text></p>
+          <p class="ss-badges"><span data-ss-badge-new hidden>{t.newBest}</span><span data-ss-badge-fc hidden>{t.fullCombo}</span><span data-ss-badge-ap hidden>{t.allPerfect}</span></p>
+        </div>
+      </div>
+      <dl class="ss-stats">
+        <div><dt>{t.score}</dt><dd data-ss-r-score></dd></div>
+        <div><dt>{t.accuracy}</dt><dd data-ss-r-acc></dd></div>
+        <div><dt>{t.maxCombo}</dt><dd data-ss-r-combo></dd></div>
+      </dl>
+      <ul class="ss-counts">
+        <li data-j="perfect"><span>{t.judgments.perfect}</span><b data-ss-r-perfect></b></li>
+        <li data-j="great"><span>{t.judgments.great}</span><b data-ss-r-great></b></li>
+        <li data-j="good"><span>{t.judgments.good}</span><b data-ss-r-good></b></li>
+        <li data-j="miss"><span>{t.judgments.miss}</span><b data-ss-r-miss></b></li>
+      </ul>
+      <div class="ss-buttons">
+        <button type="button" class="ss-primary" data-ss-retry>{t.retry}</button>
+        <button type="button" data-ss-menu>{t.menu}</button>
+      </div>
+    </div>
+
+    <div class="ss-screen ss-cal" data-ss-screen="calibrate" hidden>
+      <h2>{t.calTitle}</h2>
+      <p>{t.calText}</p>
+      <button type="button" class="ss-cal-pad" data-ss-cal-pad>{t.calTap}</button>
+      <p class="ss-cal-res" data-ss-cal-res></p>
+      <div class="ss-buttons">
+        <button type="button" class="ss-primary" data-ss-cal-use hidden>{t.calDone}</button>
+        <button type="button" data-ss-cal-again>{t.calAgain}</button>
+        <button type="button" data-ss-cal-back>{t.menu}</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="ss-info">
+    <div>
+      <h2>{t.howTitle}</h2>
+      <ul>{t.how.map((line) => <li>{line}</li>)}</ul>
+    </div>
+    <div>
+      <h2>{t.controlsTitle}</h2>
+      <ul>{t.controls.map((line) => <li>{line}</li>)}</ul>
+    </div>
+    <p class="ss-credits">{t.credits}</p>
+  </section>
+</div>
+
+<script>
+  import { mountSeoulSong } from "../rhythm/main";
+  for (const root of document.querySelectorAll("[data-ss-root]")) mountSeoulSong(root as HTMLElement);
+</script>
+
+<style>
+  :global(.ss-lock-scroll) { overflow: hidden; }
+  .ss-page { display: grid; gap: 1rem; }
+  .ss-ko { display: inline-block; font-size: .62em; letter-spacing: 0; color: var(--color-gold, #f2b705); vertical-align: middle; }
+  .ss-game { position: relative; --ink: #0b1238; --gold: #ffc23a; --sky: #58c6ff; color: #fff; scroll-margin-top: 5.5rem; }
+  .ss-stage { position: relative; display: none; width: 100%; aspect-ratio: 16 / 9; border: 4px solid var(--ink); border-radius: 1.2rem; overflow: hidden; background: #070b24; box-shadow: 0 8px 0 var(--ink); container-type: size; }
+  .ss-game[data-mode="play"] .ss-stage, .ss-game[data-mode="paused"] .ss-stage { display: block; }
+  .ss-stage canvas { display: block; width: 100%; height: 100%; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+
+  .ss-hud { position: absolute; inset: 0; pointer-events: none; font-weight: 900; text-shadow: 0 .3cqh 0 var(--ink); font-variant-numeric: tabular-nums; }
+  .ss-progress { position: absolute; left: 0; right: 0; top: 0; height: .9cqh; background: rgba(255, 255, 255, .15); }
+  .ss-progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--gold), #fff3b0); }
+  .ss-score, .ss-acc { position: absolute; top: 2.4cqh; display: grid; line-height: 1; }
+  .ss-score { left: 2cqw; }
+  .ss-acc { right: 7.5cqw; justify-items: end; }
+  .ss-score small, .ss-acc small { font-size: 2.2cqh; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
+  .ss-score b { font-size: 6.2cqh; color: #fff; }
+  .ss-acc b { font-size: 4.4cqh; color: #bfe9ff; }
+  .ss-fever { position: absolute; left: 2cqw; top: 13cqh; display: flex; align-items: center; gap: .8cqw; font-size: 2.2cqh; text-transform: uppercase; letter-spacing: .1em; }
+  .ss-fever div { width: 16cqw; height: 1.6cqh; border-radius: 1cqh; background: rgba(255, 255, 255, .18); overflow: hidden; border: .25cqh solid rgba(255, 255, 255, .5); }
+  .ss-fever i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #ff9f1a, var(--gold)); transition: width .12s linear; }
+  .ss-fever[data-on="true"] i { background: linear-gradient(90deg, #fff3b0, var(--gold), #fff3b0); animation: ss-glow .43s ease-in-out infinite alternate; }
+  @keyframes ss-glow { to { filter: brightness(1.5); } }
+  .ss-pause { position: absolute; right: 1.6cqw; top: 2cqh; width: 7cqh; height: 7cqh; border-radius: 50%; border: .35cqh solid #fff; background: rgba(11, 18, 56, .75); color: #fff; font-weight: 900; font-size: 2.6cqh; pointer-events: auto; cursor: pointer; }
+  .ss-count { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%); margin: 0; font-size: 18cqh; color: var(--gold); -webkit-text-stroke: .5cqh var(--ink); }
+  .ss-hint { position: absolute; left: 50%; bottom: 2cqh; transform: translateX(-50%); margin: 0; font-size: 2.4cqh; opacity: .85; white-space: nowrap; }
+
+  .ss-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(5, 8, 30, .6); z-index: 5; }
+  .ss-overlay[hidden], .ss-screen[hidden] { display: none; }
+  .ss-card { display: grid; gap: 1rem; justify-items: center; padding: 1.4rem 1.8rem; border: 4px solid var(--ink); border-radius: 1.2rem; background: #fbf7ef; color: #15182a; box-shadow: 0 6px 0 var(--ink); }
+  .ss-card h2 { margin: 0; font-size: 1.6rem; font-weight: 900; text-transform: uppercase; }
+  .ss-buttons { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; }
+  .ss-game button { font: inherit; }
+  .ss-buttons button, .ss-primary, .ss-cal-btn, .ss-toggle, .ss-step button { border: 3px solid var(--ink); border-radius: 999px; background: #fff; color: #15182a; font-weight: 900; padding: .55rem 1.2rem; box-shadow: 0 3px 0 var(--ink); cursor: pointer; }
+  .ss-primary { background: #ffe38a !important; }
+  .ss-buttons button:active, .ss-primary:active, .ss-diff:active, .ss-step button:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
+
+  .ss-screen { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 1rem; border: 4px solid var(--ink); border-radius: 1.2rem; background: #111a44; box-shadow: 0 8px 0 var(--ink); }
+  .ss-loading { min-height: 12rem; place-items: center; font-weight: 900; }
+  .ss-poster { position: relative; aspect-ratio: 16 / 6.2; border-radius: .9rem; overflow: hidden; background-color: #070b24; background-image: var(--ss-wide-a), var(--ss-wide-b), var(--ss-wide-bg); background-size: cover; background-position: center 42%; border: 3px solid var(--ink); }
+  .ss-poster::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6, 10, 36, 0) 40%, rgba(6, 10, 36, .7)); }
+  .ss-poster img { position: absolute; bottom: -4%; height: 92%; width: auto; z-index: 1; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .35)); animation: ss-bob .857s ease-in-out infinite; }
+  .ss-poster-l { left: 3%; }
+  .ss-poster-r { right: 4%; animation-delay: -.43s !important; }
+  @keyframes ss-bob { 50% { transform: translateY(-4%) scaleY(.97); } }
+  .ss-poster-title { position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%); z-index: 2; display: grid; justify-items: center; text-align: center; line-height: 1; text-shadow: 0 4px 0 var(--ink); }
+  .ss-poster-title b { font-size: clamp(1.6rem, 5.6vw, 3.4rem); font-weight: 900; text-transform: uppercase; color: #fff; -webkit-text-stroke: 2px var(--ink); }
+  .ss-poster-title span { margin-top: .3rem; font-size: clamp(1rem, 3vw, 1.7rem); font-weight: 900; color: var(--gold); }
+  @media (max-width: 699px) {
+    .ss-poster { aspect-ratio: 4 / 3; background-image: var(--ss-tall-a), var(--ss-tall-b), var(--ss-tall-bg); background-position: center 58%; }
+    .ss-poster img { height: 58%; }
+  }
+  .ss-diffs { display: grid; gap: .7rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+  .ss-diff { display: grid; gap: .3rem; text-align: left; padding: .85rem 1rem; border: 3px solid var(--ink); border-radius: 1rem; background: #1b2660; color: #fff; box-shadow: 0 4px 0 var(--ink); cursor: pointer; }
+  .ss-diff[aria-checked="true"] { background: #ffe38a; color: #15182a; }
+  .ss-diff-name { font-size: 1.25rem; font-weight: 900; }
+  .ss-diff-name small { font-size: .8rem; opacity: .75; margin-left: .3rem; }
+  .ss-stars { color: var(--gold); letter-spacing: .08em; font-size: .9rem; }
+  .ss-diff[aria-checked="true"] .ss-stars { color: #d98a00; }
+  .ss-stars i { font-style: normal; opacity: .25; }
+  .ss-diff-blurb { font-size: .88rem; line-height: 1.35; opacity: .9; }
+  .ss-diff-meta { font-size: .8rem; font-weight: 800; opacity: .85; }
+  .ss-diff-meta em { font-style: normal; }
+  .ss-go { display: grid; justify-items: center; gap: .4rem; }
+  .ss-play { font-size: 1.35rem; padding: .7rem 2.6rem !important; }
+  .ss-err { margin: 0; color: #ffb3b3; font-weight: 800; }
+  .ss-settings { border-radius: .9rem; background: rgba(255, 255, 255, .06); padding: .6rem .9rem; }
+  .ss-settings summary { cursor: pointer; font-weight: 900; text-transform: uppercase; letter-spacing: .1em; font-size: .85rem; }
+  .ss-set { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem; padding: .6rem 0; border-top: 1px solid rgba(255, 255, 255, .1); }
+  .ss-set:first-of-type { border-top: 0; }
+  .ss-set > span { display: grid; font-weight: 800; }
+  .ss-set small { font-weight: 500; opacity: .75; font-size: .8rem; max-width: 30rem; }
+  .ss-step { display: flex; align-items: center; gap: .5rem; }
+  .ss-step button { width: 2.4rem; height: 2.4rem; padding: 0 !important; }
+  .ss-step b { min-width: 4.5rem; text-align: center; font-variant-numeric: tabular-nums; }
+  .ss-toggle[aria-pressed="false"] { background: #c9cbd6; }
+
+  .ss-result { justify-items: stretch; }
+  .ss-res-head { display: flex; align-items: center; gap: 1rem; min-width: 0; }
+  .ss-res-head > div { min-width: 0; }
+  .ss-res-mascot { width: auto; height: clamp(5.5rem, 22vw, 9rem); }
+  .ss-kicker { margin: 0; font-size: .8rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .ss-grade { font-size: 4.4rem; line-height: 1; font-weight: 900; color: #fff; -webkit-text-stroke: 3px var(--ink); text-shadow: 0 5px 0 var(--ink); }
+  .ss-grade[data-g="S"] { color: #ffe27a; }
+  .ss-grade[data-g="A"] { color: #9fe0ff; }
+  .ss-res-text { margin: .3rem 0 0; font-weight: 700; font-size: clamp(.85rem, 3.6vw, 1rem); }
+  .ss-stats dt { overflow-wrap: anywhere; }
+  .ss-badges { display: flex; flex-wrap: wrap; gap: .4rem; margin: .5rem 0 0; }
+  .ss-badges span { border-radius: 999px; background: #ffe38a; color: #15182a; font-size: .72rem; font-weight: 900; letter-spacing: .08em; padding: .2rem .6rem; text-transform: uppercase; }
+  .ss-badges span[hidden] { display: none; }
+  .ss-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .6rem; margin: 0; }
+  .ss-stats div { border-radius: .8rem; background: rgba(255, 255, 255, .07); padding: .6rem clamp(.45rem, 2vw, .8rem); }
+  .ss-stats dt { font-size: .75rem; font-weight: 800; text-transform: uppercase; letter-spacing: .1em; opacity: .75; }
+  .ss-stats dd { margin: 0; font-size: clamp(.85rem, 3.9vw, 1.35rem); font-weight: 900; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .ss-counts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; padding: 0; margin: 0; list-style: none; }
+  .ss-counts li { display: grid; justify-items: center; border-radius: .8rem; background: rgba(255, 255, 255, .06); padding: .5rem; font-weight: 800; }
+  .ss-counts li span { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; }
+  .ss-counts li b { font-size: 1.2rem; font-variant-numeric: tabular-nums; }
+  .ss-counts li[data-j="perfect"] span { color: #ffe27a; }
+  .ss-counts li[data-j="great"] span { color: #7fd7ff; }
+  .ss-counts li[data-j="good"] span { color: #8ff0a4; }
+  .ss-counts li[data-j="miss"] span { color: #c7cbe0; }
+
+  .ss-cal { justify-items: center; text-align: center; }
+  .ss-cal h2 { margin: 0; font-size: 1.4rem; font-weight: 900; text-transform: uppercase; }
+  .ss-cal p { margin: 0; max-width: 34rem; }
+  .ss-cal-pad { width: min(100%, 22rem); aspect-ratio: 2 / 1; border: 4px solid var(--ink); border-radius: 1.2rem; background: radial-gradient(circle, #ffe38a 0 40%, #ffc23a 41% 100%); color: #15182a; font-size: 1.3rem; font-weight: 900; box-shadow: 0 6px 0 var(--ink); cursor: pointer; touch-action: manipulation; }
+  .ss-cal-pad[data-beat="true"] { filter: brightness(1.25); }
+  .ss-cal-res { font-size: 1.2rem; font-weight: 900; min-height: 1.5rem; }
+
+  .ss-info { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); padding: 1.1rem 1.3rem; border-radius: 1.2rem; background: color-mix(in srgb, var(--color-navy, #1b2446) 6%, transparent); }
+  .ss-info h2 { margin: 0 0 .4rem; font-size: .85rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+  .ss-info ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .3rem; font-size: .9rem; line-height: 1.5; }
+  .ss-credits { grid-column: 1 / -1; margin: 0; font-size: .8rem; opacity: .8; }
+
+  @media (pointer: coarse) {
+    .ss-game[data-mode="play"], .ss-game[data-mode="paused"] { position: fixed; inset: 0; z-index: 60; height: 100vh; height: 100dvh; background: #070b24; }
+    .ss-game[data-mode="play"] .ss-stage, .ss-game[data-mode="paused"] .ss-stage { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; box-shadow: none; }
+    .ss-pause { top: max(2cqh, env(safe-area-inset-top)); }
+  }
+  @media (pointer: coarse) and (orientation: portrait) {
+    .ss-score b { font-size: 4.2cqh; }
+    .ss-acc b { font-size: 3cqh; }
+    .ss-score small, .ss-acc small { font-size: 1.6cqh; }
+    .ss-acc { right: 17cqw; }
+    .ss-pause { width: 5.5cqh; height: 5.5cqh; font-size: 2cqh; }
+    .ss-fever { top: 9.4cqh; left: 50%; transform: translateX(-50%); font-size: 1.6cqh; }
+    .ss-fever div { width: 34cqw; height: 1.2cqh; }
+    .ss-count { font-size: 12cqh; }
+    .ss-hint { font-size: 1.8cqh; bottom: 3cqh; }
+  }
+</style>

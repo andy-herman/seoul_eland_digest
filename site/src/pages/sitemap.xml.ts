@@ -23,6 +23,7 @@ const STATIC_PATHS = [
   "/play/balloon-battle",
   "/play/head-to-head",
   "/play/mascot-kart",
+  "/play/seoul-song",
   "/support",
   "/about",
   "/pt/",
@@ -40,6 +41,7 @@ const STATIC_PATHS = [
   "/pt/play/balloon-battle",
   "/pt/play/head-to-head",
   "/pt/play/mascot-kart",
+  "/pt/play/seoul-song",
 ];
 
 export async function GET(context: APIContext) {
