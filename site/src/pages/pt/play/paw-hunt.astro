@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PawHunt from "../../../components/PawHunt.astro";
+import { PAW_STRINGS } from "../../../paw/strings";
+const t = PAW_STRINGS.pt;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/paw/og-paw-pt.jpg" lang="pt">
+  <PawHunt locale="pt" />
+</BaseLayout>
