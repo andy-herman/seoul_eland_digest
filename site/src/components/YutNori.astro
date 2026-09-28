@@ -1,0 +1,130 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { withBase } from "../lib/paths";
+import { YUT_STRINGS, type Locale } from "../yut/i18n";
+interface Props { locale?: Locale }
+const { locale = "en" } = Astro.props;
+const t = YUT_STRINGS[locale];
+const isPt = locale === "pt";
+---
+<div class="yut-page">
+  <header class="supporter-panel rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.8rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{t.heading} <span class="yut-ko">{t.ko}</span></h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
+      </div>
+      {isPt ? <TranslateButton href="/play/yut-nori" code="EN" label={t.translateLabel} ariaLabel={t.translateAria} /> : <TranslateButton href="/pt/play/yut-nori" code="PT" label={t.translateLabel} ariaLabel={t.translateAria} />}
+    </div>
+  </header>
+
+  <section class="yut-game" data-yut-root data-locale={locale} data-mode="menu">
+    <div class="yut-screen yut-menu" data-yut-screen="menu">
+      <div class="yut-hero">
+        <img src={withBase("/play/leoul-ready.webp")} alt="" width="468" height="667" />
+        <div><b>{t.heading}</b><span>{t.ko}</span></div>
+        <img src={withBase("/play/lenyang-jump.webp")} alt="" width="365" height="539" />
+      </div>
+      <div class="yut-menu-grid">
+        <div class="yut-card">
+          <h2>{t.play}</h2>
+          <div class="yut-mode-row">
+            <button type="button" data-mode-choice aria-pressed="true">{t.rivalMode}</button>
+            <button type="button" data-mode-choice data-mode-pass aria-pressed="false">{t.passMode}</button>
+          </div>
+          <label>{t.pickRival}<select data-rival></select></label>
+          <label>AI<select data-level><option value="friendly">{t.friendly}</option><option value="pro">{t.pro}</option></select></label>
+          <button type="button" class="yut-primary" data-yut-play>▶ {t.play}</button>
+        </div>
+        <div class="yut-card yut-tips">
+          <h2>{t.throw}</h2>
+          <ul>{t.hints.map((h) => <li>{h}</li>)}</ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="yut-screen yut-play" data-yut-screen="play" hidden>
+      <div class="yut-topbar">
+        <div><small>{t.scoreboard}</small><b data-yut-score></b></div>
+        <div><small>{t.turn}</small><b data-yut-turn></b></div>
+        <button type="button" data-yut-menu>{t.menu}</button>
+      </div>
+      <div class="yut-arena">
+        <div class="yut-board-wrap"><canvas data-yut-board aria-label={t.heading}></canvas></div>
+        <aside class="yut-side">
+          <div class="yut-throw-box"><canvas data-yut-throw-canvas aria-label={t.throw}></canvas><button type="button" class="yut-primary" data-yut-throw>{t.throw}</button><p data-yut-last></p></div>
+          <div class="yut-panel"><h3>{t.queue}</h3><div class="yut-queue" data-yut-queue></div></div>
+          <div class="yut-panel"><h3>{t.bench}</h3><div class="yut-pieces" data-yut-pieces></div><p class="yut-confirm">{t.confirm}</p><button type="button" data-yut-cancel>{t.cancel}</button></div>
+          <p class="yut-message" data-yut-message></p>
+        </aside>
+      </div>
+    </div>
+
+    <div class="yut-screen yut-result" data-yut-screen="result" hidden>
+      <img src={withBase("/play/leoul-celebrate.webp")} alt="" width="468" height="667" />
+      <div><p class="eyebrow">{t.result}</p><h2 data-yut-result-title></h2><p data-yut-result-score></p><p data-yut-record></p><div class="yut-result-actions"><button type="button" class="yut-primary" data-yut-restart>{t.restart}</button><button type="button" data-yut-menu>{t.menu}</button></div></div>
+    </div>
+  </section>
+
+  <section class="yut-info">
+    <div><h2>{t.howTitle}</h2><ul>{t.how.map((line) => <li>{line}</li>)}</ul></div>
+    <div><h2>{t.controlsTitle}</h2><ul>{t.controls.map((line) => <li>{line}</li>)}</ul></div>
+    <p class="yut-credits">{t.credits}</p>
+  </section>
+</div>
+
+<script>
+  import { mountYutNori } from "../yut/main";
+  for (const root of document.querySelectorAll("[data-yut-root]")) mountYutNori(root as HTMLElement);
+</script>
+
+<style>
+  :global(.yut-lock-scroll) { overflow: hidden; }
+  .yut-page { display: grid; gap: 1rem; }
+  .yut-ko { color: #f2b705; font-size: .65em; letter-spacing: 0; }
+  .yut-game { --ink: #0b1238; --gold: #ffc83d; --blue: #58b7ff; color: #fff; scroll-margin-top: 5rem; }
+  .yut-screen { border: 4px solid var(--ink); border-radius: 1.2rem; background: #101a47; box-shadow: 0 8px 0 var(--ink); padding: 1rem; }
+  .yut-screen[hidden] { display: none; }
+  .yut-hero { position: relative; min-height: 15rem; display: grid; grid-template-columns: 1fr minmax(11rem, 1.2fr) 1fr; align-items: end; overflow: hidden; border: 3px solid var(--ink); border-radius: 1rem; background: radial-gradient(circle at 50% 35%, #1d9f5f, #126136 65%, #0c3a29); }
+  .yut-hero::before { content: ""; position: absolute; inset: 10% 8%; border: 5px solid rgba(255,255,255,.65); border-radius: .8rem; transform: perspective(500px) rotateX(55deg); }
+  .yut-hero img { position: relative; z-index: 1; max-height: 15rem; width: auto; filter: drop-shadow(0 8px 0 rgba(0,0,0,.3)); justify-self: center; }
+  .yut-hero div { position: relative; z-index: 2; align-self: center; text-align: center; display: grid; gap: .2rem; text-shadow: 0 4px 0 var(--ink); }
+  .yut-hero b { font-size: clamp(2rem, 7vw, 4.3rem); line-height: .9; font-weight: 1000; text-transform: uppercase; -webkit-text-stroke: 2px var(--ink); }
+  .yut-hero span { color: var(--gold); font-size: clamp(1.1rem, 3vw, 2rem); font-weight: 900; }
+  .yut-menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1rem; margin-top: 1rem; }
+  .yut-card { display: grid; gap: .85rem; padding: 1rem; border-radius: 1rem; background: rgba(255,255,255,.08); }
+  .yut-card h2, .yut-info h2 { margin: 0; font-size: 1.25rem; font-weight: 900; text-transform: uppercase; }
+  .yut-mode-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .yut-game button, .yut-game select { font: inherit; }
+  .yut-game button, .yut-card select { border: 3px solid var(--ink); border-radius: 999px; background: #fff; color: #15182a; font-weight: 900; padding: .55rem 1rem; box-shadow: 0 3px 0 var(--ink); cursor: pointer; }
+  .yut-game button:disabled { opacity: .45; cursor: not-allowed; }
+  .yut-game button[aria-pressed="true"], .yut-primary { background: #ffe38a !important; }
+  .yut-card label { display: grid; gap: .35rem; font-weight: 900; }
+  .yut-tips ul, .yut-info ul { margin: 0; padding-left: 1.1rem; line-height: 1.55; }
+  .yut-topbar { display: flex; justify-content: space-between; align-items: center; gap: .5rem; flex-wrap: wrap; margin-bottom: .8rem; }
+  .yut-topbar div { display: grid; }
+  .yut-topbar small { text-transform: uppercase; letter-spacing: .1em; opacity: .75; font-weight: 900; font-size: .72rem; }
+  .yut-topbar b { font-size: clamp(1rem, 4vw, 1.5rem); }
+  .yut-arena { display: grid; grid-template-columns: minmax(0, 1fr) minmax(16rem, .38fr); gap: .9rem; }
+  .yut-board-wrap { min-height: 32rem; border: 3px solid var(--ink); border-radius: 1rem; overflow: hidden; background: #166534; }
+  .yut-board-wrap canvas { display: block; width: 100%; height: 100%; min-height: 32rem; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .yut-side { display: grid; gap: .7rem; align-content: start; }
+  .yut-throw-box, .yut-panel { display: grid; gap: .5rem; padding: .75rem; border-radius: .9rem; background: rgba(255,255,255,.08); }
+  .yut-throw-box canvas { width: 100%; aspect-ratio: 16 / 8; border-radius: .8rem; background: linear-gradient(#22306b, #101a47); cursor: grab; }
+  .yut-throw-box p, .yut-message, .yut-confirm { margin: 0; font-weight: 800; }
+  .yut-panel h3 { margin: 0; text-transform: uppercase; letter-spacing: .1em; font-size: .8rem; opacity: .8; }
+  .yut-queue, .yut-pieces { display: flex; flex-wrap: wrap; gap: .45rem; }
+  :global(.yut-pill), :global(.yut-piece-choice) { padding: .45rem .7rem !important; font-size: .85rem; }
+  :global(.yut-pill[data-sel="true"]), :global(.yut-piece-choice[data-sel="true"]) { background: #8ff0b3 !important; }
+  .yut-message { min-height: 3rem; border-left: 4px solid var(--gold); padding-left: .7rem; color: #ffeaa4; }
+  .yut-result { grid-template-columns: auto minmax(0,1fr); align-items: center; gap: 1rem; }
+  .yut-result img { height: clamp(7rem, 25vw, 12rem); width: auto; }
+  .yut-result h2 { margin: .15rem 0; font-size: clamp(1.8rem, 7vw, 4rem); font-weight: 1000; text-transform: uppercase; }
+  .yut-result-actions { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .8rem; }
+  .yut-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1rem; padding: 1rem; border-radius: 1.2rem; background: #fbf7ef; color: #15182a; border: 4px solid #0b1238; box-shadow: 0 8px 0 #0b1238; }
+  .yut-credits { grid-column: 1 / -1; margin: 0; font-size: .9rem; font-weight: 700; }
+  @media (pointer: coarse) { .yut-game[data-mode="play"] { position: fixed; inset: 0; z-index: 80; min-height: 100dvh; padding: .45rem; background: #071433; overflow: auto; } }
+  @media (max-width: 760px) { .yut-hero { grid-template-columns: 1fr 1.4fr 1fr; min-height: 12rem; } .yut-hero img { max-height: 11rem; } .yut-arena { grid-template-columns: 1fr; } .yut-board-wrap, .yut-board-wrap canvas { min-height: min(72dvh, 33rem); } .yut-side { grid-template-columns: 1fr; } }
+  @media (max-height: 480px) and (orientation: landscape) { .yut-game[data-mode="play"] .yut-screen { padding: .35rem; } .yut-arena { grid-template-columns: minmax(0, 1fr) 18rem; } .yut-board-wrap, .yut-board-wrap canvas { min-height: calc(100dvh - 5rem); } .yut-throw-box canvas { aspect-ratio: 16 / 5; } }
+</style>

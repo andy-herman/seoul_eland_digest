@@ -1,0 +1,9 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import YutNori from "../../../components/YutNori.astro";
+import { YUT_STRINGS } from "../../../yut/i18n";
+const t = YUT_STRINGS.pt;
+---
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/yut/og-yut-pt.jpg" lang="pt">
+  <YutNori locale="pt" />
+</BaseLayout>
