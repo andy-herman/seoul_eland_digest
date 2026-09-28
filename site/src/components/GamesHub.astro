@@ -14,7 +14,7 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Dez jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha são as músicas do próprio clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022).",
+      intro: "Onze jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha são as músicas do próprio clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022).",
       newBadge: "Novo",
       play: "Jogar",
       credit:
@@ -23,7 +23,7 @@ const copy = isPortuguese
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Ten games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver).",
+      intro: "Eleven games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver).",
       newBadge: "New",
       play: "Play",
       credit:
@@ -31,6 +31,17 @@ const copy = isPortuguese
     };
 
 const games = [
+  {
+    href: `${prefix}/play/tifo-master`,
+    isNew: true,
+    title: "Tifo Master",
+    desc: isPortuguese
+      ? "Monte um mosaico de cartões para a arquibancada norte de Mokdong, cartão por cartão, e veja a torcida levantar tudo numa onda enquanto o Leoul conta 하나, 둘, 셋. Depois, na Conferência, ache os torcedores com o cartão errado antes do apito."
+      : "Design a card stunt for the Mokdong north stand, one card per fan, and watch the whole end raise it in a wave as Leoul counts 하나, 둘, 셋. Then play Card Check and find the fans holding the wrong card before kick-off.",
+    tags: isPortuguese ? ["Criação", "Mosaico 3D", "12 desafios"] : ["Create", "3D card stunt", "12 puzzles"],
+    art: [{ src: withBase("/play/tifo/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
+    accent: "tifo",
+  },
   {
     href: `${prefix}/play/yut-nori`,
     isNew: true,
@@ -283,6 +294,10 @@ const games = [
 
   .games-card-yut .games-art {
     background: #2a7f45;
+  }
+
+  .games-card-tifo .games-art {
+    background: #0a1730;
   }
 
   .games-card-h2h .games-art {

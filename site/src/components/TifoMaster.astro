@@ -1,6 +1,7 @@
 ---
 import TranslateButton from "./TranslateButton.astro";
 import { withBase } from "../lib/paths";
+import { clubPlaylistAttr } from "../lib/clubPlaylist";
 import { PALETTE, TIFO_STRINGS, type Locale } from "../tifo/data";
 
 interface Props { locale?: Locale }
@@ -21,7 +22,7 @@ const isPt = locale === "pt";
     </div>
   </header>
 
-  <section class="tf-game" data-tifo-root data-mode="menu" data-locale={locale} data-assets={withBase("/play/tifo/")} data-song={withBase("/play/seoul-song-2024.mp3")}>
+  <section class="tf-game" data-tifo-root data-mode="menu" data-locale={locale} data-assets={withBase("/play/tifo/")} data-song={clubPlaylistAttr()}>
     <div class="tf-screen tf-menu" data-tifo-screen="menu">
       <div class="tf-poster">
         <img src={withBase("/play/leoul-wave.webp")} alt="" width="350" height="480" />
