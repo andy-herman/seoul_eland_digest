@@ -143,21 +143,25 @@ export class YutThrowScene {
     const mark = new THREE.MeshBasicMaterial({ color: 0xcc1f2f });
     const eland = new THREE.MeshBasicMaterial({ color: 0x1b2446 });
     const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 2.65, 8, 14), bark);
+    body.userData.face = "dark";
     body.scale.set(1.25, 0.58, 1);
     body.rotation.z = Math.PI / 2;
     g.add(body);
     const face = new THREE.Mesh(new THREE.BoxGeometry(2.58, 0.03, 0.27), flat);
+    face.userData.face = "flat";
     face.position.y = -0.087;
     g.add(face);
     if (i === 0) {
       for (const r of [Math.PI / 4, -Math.PI / 4]) {
         const x = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.036, 0.05), mark);
+        x.userData.face = "flat";
         x.position.y = -0.112;
         x.rotation.y = r;
         g.add(x);
       }
     } else {
       const badge = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.034, 0.05), eland);
+      badge.userData.face = "flat";
       badge.position.set(-1.18, -0.112, 0);
       g.add(badge);
     }
@@ -170,6 +174,10 @@ export class YutThrowScene {
     for (let i = 0; i < this.sticks.length; i++) {
       const pose = this.poses[i];
       const stick = this.sticks[i];
+      stick.traverse((obj) => {
+        if (obj.userData.face === "flat") obj.visible = pose.flat;
+        if (obj.userData.face === "dark") obj.visible = !pose.flat;
+      });
       stick.position.set(pose.x, 0.18 + pose.y, (i - 1.5) * 0.98);
       stick.rotation.set((pose.flat ? Math.PI : 0) * ease + (1 - ease) * (5.5 + i), pose.rot * 0.2, pose.rot);
     }
@@ -209,7 +217,7 @@ export class YutThrowScene {
     this.roundRect(ctx, -1.45, -0.12, 2.9, 0.24, 0.12);
     ctx.fill();
     ctx.stroke();
-    if (pose.marked) {
+    if (pose.marked && pose.flat) {
       ctx.strokeStyle = "#cc1f2f";
       ctx.lineWidth = 0.045;
       ctx.beginPath();
