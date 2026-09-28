@@ -50,6 +50,7 @@ const AIR_DRAG = 0.16;
 const GROUND_DRAG = 0.996;
 const RESTITUTION = 0.5;
 const ZERO: FcInput = Object.freeze({ mx: 0, mz: 0, sprint: false, pass: false, shoot: false, lob: false, through: false });
+const HEADLINE_EVENTS: readonly FcEventType[] = ["goal", "corner", "freekick", "penalty", "throwin", "goalkick", "save", "catch", "post", "halftime", "fulltime", "kickoff"];
 
 type BallIntentKind = "pass" | "through" | "lob" | "cross" | "shot" | "clear" | "throw";
 interface BallIntent {
@@ -211,7 +212,7 @@ export class FcMatch {
   private event(type: FcEventType, side?: Side, index?: number, x = this.state.ball.x, z = this.state.ball.z): void {
     if (type === "header") this.headerCount++;
     this.state.events.push({ type, side, index, x, z });
-    this.state.banner = { key: type, t: 1.2 };
+    if (HEADLINE_EVENTS.includes(type)) this.state.banner = { key: type, t: 1.2 };
   }
 
   private updateMinute(): void {
@@ -235,6 +236,7 @@ export class FcMatch {
     this.state.ball.lastTouch = side;
     this.ballIntent = null;
     this.restartCounts[type]++;
+    if (type === "corner") this.state.stats[side].corners++;
     this.setPhase("restart");
     this.event(type, side, taker, spotX, spotZ);
     this.placePlayersForRestart();
@@ -453,8 +455,12 @@ export class FcMatch {
       p.vx *= 0.96;
       p.vz *= 0.96;
       const speed = len(p.vx, p.vz);
+      if (p.anim !== "header" && p.anim !== "dive") p.h = 0;
       if (!["kick", "tackle", "slide", "fallen", "header", "dive", "hold"].includes(p.anim)) p.anim = speed > 5.8 ? "sprint" : speed > 0.35 ? "run" : "idle";
-      if (p.animT > 0.45 && (p.anim === "kick" || p.anim === "tackle" || p.anim === "header")) p.anim = "idle";
+      if (p.animT > 0.45 && (p.anim === "kick" || p.anim === "tackle" || p.anim === "header")) {
+        p.anim = "idle";
+        p.h = 0;
+      }
       if (p.animT > 0.85 && p.anim === "slide") p.anim = "fallen";
       if (p.animT > 1.1 && p.anim === "fallen") p.anim = "idle";
     }
@@ -595,6 +601,7 @@ export class FcMatch {
     if (this.state.ball.h > 1.0 && this.state.ball.h < 2.5 && p.index > 0) {
       p.anim = "header";
       p.animT = 0;
+      p.h = clamp(this.state.ball.h * 0.55, 0.35, 1.15);
       this.event("header", p.side, p.index);
       if (this.ballIntent?.kind === "cross" || this.ballIntent?.kind === "lob") this.redirectHeader(p);
       else this.deflectFrom(p, 0.45);
