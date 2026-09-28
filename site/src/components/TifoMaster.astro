@@ -164,7 +164,7 @@ const isPt = locale === "pt";
   .tf-level:disabled { opacity: .45; }
   .tf-show { position: relative; min-height: 72vh; padding: 0; overflow: hidden; background: #071228; }
   .tf-show canvas { height: 72vh; border: 0; border-radius: .8rem; }
-  .tf-count { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; font-size: clamp(4rem, 15vw, 10rem); font-weight: 1000; color: var(--gold); text-shadow: 0 6px 0 #000; }
+  .tf-count { position: absolute; top: max(.7rem, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); min-width: 5.5rem; display: grid; place-items: center; pointer-events: none; border: 2px solid rgba(255, 194, 58, .55); border-radius: 999px; background: rgba(7, 18, 40, .72); padding: .25rem .9rem; font-size: clamp(1.15rem, 3.6vw, 2.1rem); line-height: 1; font-weight: 1000; color: var(--gold); text-shadow: 0 2px 0 #000; }
   .tf-showbar { position: absolute; left: 1rem; right: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); justify-content: center; }
   .tf-ref { position: absolute; left: 1rem; top: 1rem; width: min(18rem, 44vw); padding: .5rem; border: 3px solid var(--ink); border-radius: .9rem; background: rgba(255,255,255,.92); color: #10182f; font-weight: 900; pointer-events: none; }
   .tf-ref canvas { width: 100%; border: 0; border-radius: .4rem; }

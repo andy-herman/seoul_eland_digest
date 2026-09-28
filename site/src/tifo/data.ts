@@ -34,11 +34,8 @@ export interface SeatCell {
   reason: "seat" | "aisle" | "pillar";
 }
 
-function unavailableReason(col: number, row: number): "seat" | "aisle" | "pillar" {
-  if (col === 11 || col === 23 || col === 35) return "aisle";
-  const p1 = col >= 15 && col <= 16 && row >= 13;
-  const p2 = col >= 31 && col <= 32 && row >= 13;
-  return p1 || p2 ? "pillar" : "seat";
+function unavailableReason(_col: number, _row: number): "seat" | "aisle" | "pillar" {
+  return "seat";
 }
 
 export const SEAT_MAP: SeatCell[] = Array.from({ length: TIFO_CELLS }, (_, index) => {

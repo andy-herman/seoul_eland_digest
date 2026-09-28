@@ -375,6 +375,7 @@ export function mountTifoMaster(root: HTMLElement): void {
       openLevel: (id: string) => startCheck(id),
       errors: () => check?.errors ?? [],
       cardPoint: (index: number) => renderer?.screenOf(index) ?? null,
+      rayFirst: (index: number) => renderer?.rayFirst(index) ?? false,
       tap: (index: number) => { if (check) { tapCard(check, index, checkFrame); renderer?.setFrame(check.shown[checkFrame]); updateCheckHud(); } },
       skipTimers: () => { skipTimers = true; },
       share: () => encodeDesign(design),

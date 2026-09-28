@@ -39,11 +39,15 @@ export class TifoRenderer {
   constructor(private canvas: HTMLCanvasElement, private opts: TifoRendererOptions) {}
 
   private sx(col: number): number {
-    return (col - (TIFO_COLS - 1) / 2) * 0.8;
+    return (col - (TIFO_COLS - 1) / 2) * 0.82;
   }
 
   private sz(row: number): number {
-    return -row * 0.7;
+    return -row * 0.6;
+  }
+
+  private sy(row: number): number {
+    return row * 0.42;
   }
 
   async init(): Promise<void> {
@@ -54,7 +58,7 @@ export class TifoRenderer {
     this.renderer.outputColorSpace = THREE.SRGBColorSpace;
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color("#0a1730");
-    this.scene.fog = new THREE.Fog("#0a1730", 55, 105);
+    this.scene.fog = new THREE.Fog("#0a1730", 80, 150);
     this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 140);
     this.dummy = new THREE.Object3D();
     this.raycaster = new THREE.Raycaster();
@@ -81,13 +85,13 @@ export class TifoRenderer {
     const concrete = new THREE.MeshStandardMaterial({ color: "#66707c", roughness: 0.78 });
     const navy = new THREE.MeshStandardMaterial({ color: "#17234c", roughness: 0.7 });
     const gold = new THREE.MeshStandardMaterial({ color: "#ffc23a", emissive: "#392500", roughness: 0.5 });
-    const pitch = new THREE.MeshStandardMaterial({ color: "#286b3e", roughness: 0.9 });
-    add(new THREE.BoxGeometry(54, 0.08, 7), pitch, 0, -1.56, 5.1);
+    const pitch = new THREE.MeshStandardMaterial({ color: "#2b7544", roughness: 0.9 });
+    add(new THREE.BoxGeometry(58, 0.08, 7), pitch, 0, -0.55, 4.8);
     for (let r = 0; r < TIFO_ROWS; r++) {
       const z = this.sz(r);
-      const y = r * 0.18;
-      add(new THREE.BoxGeometry(41.2, 0.16, 0.64), concrete, 0, y - 0.18, z + 0.1);
-      add(new THREE.BoxGeometry(40.4, 0.08, 0.18), navy, 0, y, z - 0.2);
+      const y = this.sy(r);
+      add(new THREE.BoxGeometry(42, 0.16, 0.54), concrete, 0, y - 0.32, z - 0.18);
+      add(new THREE.BoxGeometry(41.2, 0.08, 0.16), navy, 0, y - 0.14, z - 0.36);
     }
     add(new THREE.BoxGeometry(44.5, 1.5, 0.35), concrete, 0, -0.8, 1.4);
     for (const [x, text] of [[-12, "SEOUL E-LAND FC"], [12, "레울파크"]] as const) {
@@ -95,22 +99,14 @@ export class TifoRenderer {
       const board = add(new THREE.PlaneGeometry(16.3, 0.88), new THREE.MeshBasicMaterial({ map: this.boardTexture(text), toneMapped: false }), x, -0.33, 1.085);
       board.rotation.x = 0;
     }
-    const aisleMat = new THREE.MeshStandardMaterial({ color: "#828b96", roughness: 0.9 });
-    for (const col of [11, 23, 35]) {
-      const x = this.sx(col);
-      add(new THREE.BoxGeometry(0.6, 4.0, 14.3), aisleMat, x, 1.1, -6.6, -0.08);
-    }
     const pillar = new THREE.MeshStandardMaterial({ color: "#253047", roughness: 0.65 });
-    for (const col of [15.5, 31.5]) {
-      const x = this.sx(col);
-      add(new THREE.CylinderGeometry(0.28, 0.34, 7.8, 12), pillar, x, 3.2, -11.0);
-    }
-    add(new THREE.BoxGeometry(45, 0.35, 4.8), pillar, 0, 5.2, -10.1, 0.05);
+    for (const x of [this.sx(-2), this.sx(TIFO_COLS + 1)]) add(new THREE.BoxGeometry(1.4, 4.4, 12.6), concrete, x, 2.6, -5.2, -0.08);
+    add(new THREE.BoxGeometry(46, 0.35, 4.2), pillar, 0, this.sy(TIFO_ROWS - 1) + 1.45, this.sz(TIFO_ROWS - 1) - 2.6, 0.05);
     for (const x of [-20, 20]) {
-      const pole = add(new THREE.CylinderGeometry(0.12, 0.12, 9, 10), pillar, x, 3.6, 3.4);
-      add(new THREE.SphereGeometry(0.7, 12, 8), new THREE.MeshBasicMaterial({ color: "#fff7bd" }), x, 7.9, 3.4);
+      const pole =       add(new THREE.CylinderGeometry(0.12, 0.12, 9, 10), pillar, x, 3.6, 5.4);
+      add(new THREE.SphereGeometry(0.7, 12, 8), new THREE.MeshBasicMaterial({ color: "#fff7bd" }), x, 7.9, 5.4);
       const flood = new THREE.PointLight("#fff7bd", 70, 72);
-      flood.position.set(x, 7.9, 3.4);
+      flood.position.set(x, 7.9, 5.4);
       this.scene.add(flood);
       void pole;
     }
@@ -148,18 +144,18 @@ export class TifoRenderer {
     this.cardToSeat = [...this.usable];
     this.usable.forEach((idx, i) => this.seatToCard.set(idx, i));
     const n = this.usable.length;
-    const fanGeo = new THREE.CapsuleGeometry(0.17, 0.42, 3, 8);
+    const fanGeo = new THREE.CapsuleGeometry(0.16, 0.42, 3, 8);
     const fanMat = new THREE.MeshStandardMaterial({ roughness: 0.72 });
     this.fans = new THREE.InstancedMesh(fanGeo, fanMat, n);
-    this.cards = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.66, 0.48), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, toneMapped: false }), n);
+    this.cards = new THREE.InstancedMesh(new THREE.PlaneGeometry(0.82, 0.62), new THREE.MeshBasicMaterial({ side: THREE.DoubleSide, toneMapped: false, fog: false }), n);
     const shirt = ["#1b2446", "#1b2446", "#1b2446", "#ffc23a", "#ffffff"];
     const c = new THREE.Color();
     for (let i = 0; i < n; i++) {
       const idx = this.usable[i], col = idx % TIFO_COLS, row = Math.floor(idx / TIFO_COLS);
       const x = this.sx(col);
       const z = this.sz(row);
-      const y = row * 0.18 + 0.48;
-      this.dummy.position.set(x, y, z - 0.08);
+      const y = this.sy(row) + 0.3;
+      this.dummy.position.set(x, y, z - 0.18);
       this.dummy.rotation.set(0, 0, 0);
       this.dummy.scale.set(1, 1, 1);
       this.dummy.updateMatrix();
@@ -195,7 +191,7 @@ export class TifoRenderer {
     const switchMs = SONG_STEP * 32 * 1000 / speed;
     const tick = () => {
       if (!this.active || this.disposed) return;
-      const t = (performance.now() - this.start) * speed / 1000;
+      const t = (performance.now() - this.start) * speed / 1000 - 1.85;
       this.applyCards(Math.min(1, t / 1.8));
       if (design.frames.length > 1 && performance.now() - this.start > switchMs * nextFrame) {
         this.frame = nextFrame % design.frames.length;
@@ -220,17 +216,17 @@ export class TifoRenderer {
   private applyCards(progress: number): void {
     const THREE = this.THREE;
     const color = new THREE.Color();
-    const now = progress * 2.6;
+    const now = Math.max(0, progress) * 2.6;
     for (let i = 0; i < this.cardToSeat.length; i++) {
       const idx = this.cardToSeat[i];
       const col = idx % TIFO_COLS, row = Math.floor(idx / TIFO_COLS);
       const x = this.sx(col);
-      const z = this.sz(row) - 0.08;
-      const y = row * 0.18 + 0.72 + Math.sin(performance.now() * 0.002 + i) * 0.015;
+      const y = this.sy(row) + 0.62 + Math.sin(performance.now() * 0.002 + i) * 0.012;
       const delay = (this.flipTiming(idx) - SONG_T0 - SONG_STEP * 12) * 0.45;
       const p = Math.max(0, Math.min(1, (now - delay) / 0.35));
       const eased = p * p * (3 - 2 * p);
-      this.dummy.position.set(x, y + eased * 0.34, z + eased * 0.03);
+      const z = this.sz(row) - 0.2 + eased * (0.58 - this.sz(row));
+      this.dummy.position.set(x, y + eased * 0.18, z);
       this.dummy.rotation.set(-Math.PI / 2 + eased * (Math.PI / 2), 0, 0);
       this.dummy.updateMatrix();
       this.cards.setMatrixAt(i, this.dummy.matrix);
@@ -239,6 +235,8 @@ export class TifoRenderer {
     }
     this.cards.instanceMatrix.needsUpdate = true;
     if (this.cards.instanceColor) this.cards.instanceColor.needsUpdate = true;
+    this.cards.computeBoundingSphere();
+    this.cards.computeBoundingBox();
   }
 
   private bindInput(): void {
@@ -258,7 +256,7 @@ export class TifoRenderer {
     this.canvas.addEventListener("click", (e) => {
       if (performance.now() - this.lastPickedAt > 120) this.pick(e as PointerEvent);
     });
-    this.canvas.addEventListener("wheel", (e) => { e.preventDefault(); this.dist = Math.max(22, Math.min(52, this.dist + e.deltaY * 0.02)); this.render(); }, { passive: false });
+    this.canvas.addEventListener("wheel", (e) => { e.preventDefault(); this.dist = Math.max(24, Math.min(90, this.dist + e.deltaY * 0.02)); this.render(); }, { passive: false });
   }
 
   private pick(e: PointerEvent): boolean {
@@ -292,7 +290,7 @@ export class TifoRenderer {
     const w = Math.max(1, Math.round(r.width));
     const h = Math.max(1, Math.round(r.height));
     this.camera.aspect = w / h;
-    this.camera.fov = w < h ? 106 : 52;
+    this.camera.fov = 42;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(w, h, false);
     this.render();
@@ -300,11 +298,20 @@ export class TifoRenderer {
 
   render(): void {
     if (this.disposed || !this.renderer) return;
-    const portrait = this.camera.aspect < 1;
-    const landscapePhone = this.camera.aspect > 1.6 && this.canvas.getBoundingClientRect().height < 520;
-    const d = portrait ? this.dist + 24 : landscapePhone ? this.dist - 18 : this.dist;
-    this.camera.position.set(Math.sin(this.yaw) * 13, portrait ? 7.2 + this.pitch * 7 : 6.7 + this.pitch * 7, 5.2 + d * 0.43);
-    this.camera.lookAt(0, 1.55 + this.pitch * 3, -6.3);
+    if (!this.dragging) {
+      this.yaw *= 0.92;
+      this.pitch *= 0.92;
+    }
+    const targetWidth = this.camera.aspect < 1 ? 0.95 : 0.92;
+    const worldWidth = (TIFO_COLS - 1) * 0.82 + 0.76;
+    const vFov = (this.camera.fov * Math.PI) / 180;
+    const hFov = 2 * Math.atan(Math.tan(vFov / 2) * this.camera.aspect);
+    const distance = worldWidth / (2 * targetWidth * Math.tan(hFov / 2));
+    const centerY = this.sy((TIFO_ROWS - 1) / 2) + 0.86;
+    const centerZ = 0.58;
+    const elevation = this.camera.aspect < 1 ? 0.16 : 0.24;
+    this.camera.position.set(Math.sin(this.yaw) * 8, centerY + distance * elevation + this.pitch * 4, centerZ + distance + this.dist * 0.04);
+    this.camera.lookAt(0, centerY + this.pitch * 2, centerZ);
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -318,10 +325,21 @@ export class TifoRenderer {
     const THREE = this.THREE;
     const col = index % TIFO_COLS;
     const row = Math.floor(index / TIFO_COLS);
-    const v = new THREE.Vector3(this.sx(col), row * 0.18 + 1.08, this.sz(row) - 0.05);
+    const v = new THREE.Vector3(this.sx(col), this.sy(row) + 0.8, 0.58);
     v.project(this.camera);
     const r = this.canvas.getBoundingClientRect();
     return { x: r.left + (v.x + 1) * 0.5 * r.width, y: r.top + (1 - (v.y + 1) * 0.5) * r.height };
+  }
+
+  rayFirst(index: number): boolean {
+    const p = this.screenOf(index);
+    const cardIndex = this.seatToCard.get(index);
+    if (!p || cardIndex == null) return false;
+    const r = this.canvas.getBoundingClientRect();
+    this.pointer.set(((p.x - r.left) / r.width) * 2 - 1, -((p.y - r.top) / r.height) * 2 + 1);
+    this.raycaster.setFromCamera(this.pointer, this.camera);
+    const hit = this.raycaster.intersectObject(this.cards)[0];
+    return hit?.instanceId === cardIndex;
   }
 
   dispose(): void {
