@@ -1,7 +1,7 @@
 import { GameAudio } from "../game/audio";
 import { allFixed, makeCheck, starsFor, tapCard, type CheckState } from "./check";
 import { decodeDesign, encodeDesign, loadDesignString, saveDesignString } from "./codec";
-import { GALLERY, PALETTE, PROGRESS_KEY, SAVE_KEY, SEAT_MAP, TIFO_CELLS, TIFO_COLS, TIFO_ROWS, TIFO_STRINGS, blankFrame, cloneDesign, type Locale, type TifoDesign, type Tool, type WaveMode } from "./data";
+import { GALLERY, PALETTE, PROGRESS_KEY, SAVE_KEY, SEAT_MAP, TIFO_CELLS, TIFO_COLS, TIFO_ROWS, TIFO_STRINGS, blankFrame, cloneDesign, designTitle, type Locale, type TifoDesign, type Tool, type WaveMode } from "./data";
 import { drawLine, drawRect, floodFill, paint, quantizeImageData, stampText } from "./editor";
 import type { TifoRenderer } from "./render";
 
@@ -84,6 +84,9 @@ export function mountTifoMaster(root: HTMLElement): void {
     if (mode !== "show" && mode !== "check3d") {
       renderer?.dispose();
       renderer = null;
+    } else if (!coarse) {
+      // on a desktop the stand is taller than what is left of the window below the header
+      root.querySelector(`[data-tifo-screen="${mode}"]`)?.scrollIntoView({ block: "center", behavior: "smooth" });
     }
     requestAnimationFrame(() => { drawGrid(); renderer?.resize(); });
   };
@@ -262,8 +265,8 @@ export function mountTifoMaster(root: HTMLElement): void {
       const card = document.createElement("article");
       card.className = "tf-mini";
       card.innerHTML = `<img alt="" src="${drawThumb(item.frames[0])}"><b></b><div><button data-act="edit">${t.edit}</button><button data-act="show">${t.show}</button></div>`;
-      card.querySelector("b")!.textContent = item.title;
-      card.querySelector<HTMLButtonElement>('[data-act="edit"]')!.onclick = () => { design = cloneDesign(item, "copy"); frameIndex = 0; $<HTMLInputElement>("[data-title]").value = design.title; setMode("designer"); drawGrid(); };
+      card.querySelector("b")!.textContent = designTitle(item, locale);
+      card.querySelector<HTMLButtonElement>('[data-act="edit"]')!.onclick = () => { design = { ...cloneDesign(item, "copy"), title: designTitle(item, locale) }; frameIndex = 0; $<HTMLInputElement>("[data-title]").value = design.title; setMode("designer"); drawGrid(); };
       card.querySelector<HTMLButtonElement>('[data-act="show"]')!.onclick = () => void openShow(item);
       g.appendChild(card);
     }
@@ -281,14 +284,22 @@ export function mountTifoMaster(root: HTMLElement): void {
     }
   }
 
-  function drawReference(frame: Uint8Array): void {
+  function drawReference(frame: Uint8Array, area?: { cols: number; rows: number }): void {
     const rctx = refCanvas.getContext("2d")!;
-    refCanvas.width = 240; refCanvas.height = 120;
-    rctx.fillStyle = "#071228"; rctx.fillRect(0, 0, 240, 120);
-    const cell = Math.min(240 / TIFO_COLS, 120 / TIFO_ROWS);
+    // square cells, like the stand shows them: 48 x 20 cells of 5 px
+    refCanvas.width = TIFO_COLS * 5; refCanvas.height = TIFO_ROWS * 5;
+    rctx.fillStyle = "#071228"; rctx.fillRect(0, 0, refCanvas.width, refCanvas.height);
+    const cell = 5;
     for (const seat of SEAT_MAP) {
       rctx.fillStyle = seat.usable ? PALETTE[frame[seat.index]].hex : "#3b4455";
       rctx.fillRect(seat.col * cell, seat.row * cell, Math.ceil(cell), Math.ceil(cell));
+    }
+    if (area && (area.cols < TIFO_COLS || area.rows < TIFO_ROWS)) {
+      // the part of the stand this level checks (the stand view frames the same block)
+      const x0 = Math.floor((TIFO_COLS - area.cols) / 2), y0 = Math.floor((TIFO_ROWS - area.rows) / 2);
+      rctx.strokeStyle = "#ff8a3d";
+      rctx.lineWidth = 2;
+      rctx.strokeRect(x0 * cell + 1, y0 * cell + 1, area.cols * cell - 2, area.rows * cell - 2);
     }
   }
   function renderLevels(): void {
@@ -300,7 +311,7 @@ export function mountTifoMaster(root: HTMLElement): void {
       const b = document.createElement("button");
       b.className = "tf-level";
       b.disabled = !open;
-      b.textContent = `${i + 1}. ${open ? "Card Check" : "🔒"} ${progress[`l${i + 1}`] ? "★".repeat(progress[`l${i + 1}`]) : ""}`;
+      b.textContent = `${i + 1}. ${open ? t.check : "🔒"} ${progress[`l${i + 1}`] ? "★".repeat(progress[`l${i + 1}`]) : ""}`;
       b.onclick = () => void startCheck(`l${i + 1}`);
       el.appendChild(b);
     }
@@ -309,11 +320,24 @@ export function mountTifoMaster(root: HTMLElement): void {
     audio.unlock(); audio.whistle();
     check = makeCheck(id);
     checkFrame = check.level.twoFrame ? 1 : 0;
-    drawReference(check.target.frames[checkFrame]);
+    drawReference(check.target.frames[checkFrame], check.level);
     setMode("check3d");
     const showCanvas = root.querySelector<HTMLCanvasElement>('[data-tifo-screen="check3d"] [data-tifo-show-canvas]')!;
     const { TifoRenderer } = await import("./render");
-    renderer = new TifoRenderer(showCanvas, { assets: root.dataset.assets!, onPick: (index) => {
+    // the target picture and the timer sit in a bar across the top: frame the stand below it
+    const refBar = root.querySelector<HTMLElement>('[data-tifo-screen="check3d"] .tf-ref')!;
+    const reserveTop = () => {
+      const c = showCanvas.getBoundingClientRect();
+      const r = refBar.getBoundingClientRect();
+      return c.height > 0 ? Math.max(0, Math.min(0.45, (r.bottom - c.top + 8) / c.height)) : 0;
+    };
+    const backBar = root.querySelector<HTMLElement>('[data-tifo-screen="check3d"] .tf-showbar')!;
+    const reserveBottom = () => {
+      const c = showCanvas.getBoundingClientRect();
+      const r = backBar.getBoundingClientRect();
+      return c.height > 0 ? Math.max(0, Math.min(0.3, (c.bottom - r.top + 8) / c.height)) : 0;
+    };
+    renderer = new TifoRenderer(showCanvas, { assets: root.dataset.assets!, reserveTop, reserveBottom, onPick: (index) => {
       if (!check) return;
       const ok = tapCard(check, index, checkFrame);
       if (ok) audio.card(); else audio.miss();
@@ -322,6 +346,7 @@ export function mountTifoMaster(root: HTMLElement): void {
       if (check && allFixed(check)) finishCheck();
     } });
     await renderer.init();
+    renderer.focus(check.level.cols, check.level.rows);
     renderer.setFrame(check.shown[checkFrame]);
     checkEnd = performance.now() + check.level.seconds * 1000;
     updateCheckHud();
@@ -345,7 +370,7 @@ export function mountTifoMaster(root: HTMLElement): void {
     const progress = JSON.parse(localStorage.getItem(PROGRESS_KEY) ?? "{}") as Record<string, number>;
     progress[check.level.id] = Math.max(progress[check.level.id] ?? 0, stars);
     localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
-    $("[data-check-result]").textContent = `${"★".repeat(stars)}${"☆".repeat(3 - stars)} · ${check.wrongTaps ? check.wrongTaps + " wrong taps" : t.noMistakes}`;
+    $("[data-check-result]").textContent = `${"★".repeat(stars)}${"☆".repeat(3 - stars)} · ${check.wrongTaps ? `${check.wrongTaps} ${locale === "pt" ? (check.wrongTaps === 1 ? "toque errado" : "toques errados") : check.wrongTaps === 1 ? "wrong tap" : "wrong taps"}` : t.noMistakes}`;
   }
   $<HTMLButtonElement>("[data-check-back]").addEventListener("click", () => { clearInterval(checkTimer); setMode("check"); renderLevels(); });
 
