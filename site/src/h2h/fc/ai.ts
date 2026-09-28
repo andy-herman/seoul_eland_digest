@@ -1,32 +1,25 @@
-import { BOX_DEPTH, BOX_W, GOAL_W, PITCH_L, PITCH_W, type FcPlayer, type Side } from "./types";
+import { BOX_DEPTH, BOX_W, GOAL_W, PITCH_L, PITCH_W, type FcBall, type FcPlayer, type Side } from "./types";
 
 export interface FcRatings {
   pace: number;
   shooting: number;
   passing: number;
+  dribbling: number;
   defending: number;
+  physical: number;
   gk: number;
 }
 
 export interface FcAiConfig {
   reaction: number;
-  decision: number;
-  pass: number;
-  shot: number;
+  decisionNoise: number;
+  passError: number;
+  shotError: number;
   press: number;
   speed: number;
-  gk: number;
+  gkReaction: number;
+  gkReach: number;
   foulCare: number;
-}
-
-export type AiActionKind = "dribble" | "pass" | "through" | "lob" | "cross" | "shoot" | "press" | "hold";
-
-export interface AiAction {
-  kind: AiActionKind;
-  target?: number;
-  tx?: number;
-  tz?: number;
-  sprint?: boolean;
 }
 
 export interface TeamAiContext {
@@ -34,31 +27,41 @@ export interface TeamAiContext {
   tier: 1 | 2 | 3 | 4;
   players: FcPlayer[];
   opponents: FcPlayer[];
-  ball: { x: number; z: number; h: number; owner: { side: Side; index: number } | null; vx: number; vz: number };
-  score: { home: number; away: number };
-  elapsed: number;
-  seconds: number;
-  rand: () => number;
+  ball: FcBall;
+  intent?: { side: Side; target: number | null; targetX: number; targetZ: number; kind: string } | null;
   ratings: FcRatings[];
+  rand: () => number;
+}
+
+export interface AiAction {
+  kind: "shoot" | "pass" | "through" | "lob" | "cross" | "dribble" | "chase" | "hold";
+  target?: number;
+  x?: number;
+  z?: number;
+  sprint?: boolean;
 }
 
 export const FC_AI: Record<1 | 2 | 3 | 4, FcAiConfig> = {
-  1: { reaction: 0.58, decision: 0.72, pass: 0.74, shot: 0.72, press: 0.72, speed: 0.94, gk: 0.7, foulCare: 0.55 },
-  2: { reaction: 0.44, decision: 0.86, pass: 0.84, shot: 0.83, press: 0.9, speed: 1, gk: 0.82, foulCare: 0.7 },
-  3: { reaction: 0.34, decision: 0.98, pass: 0.92, shot: 0.93, press: 1.04, speed: 1.03, gk: 0.92, foulCare: 0.82 },
-  4: { reaction: 0.26, decision: 1.08, pass: 0.98, shot: 1.02, press: 1.15, speed: 1.06, gk: 1, foulCare: 0.92 },
+  1: { reaction: 0.68, decisionNoise: 0.48, passError: 0.155, shotError: 0.19, press: 0.76, speed: 0.94, gkReaction: 0.32, gkReach: 1.75, foulCare: 0.45 },
+  2: { reaction: 0.5, decisionNoise: 0.32, passError: 0.105, shotError: 0.13, press: 0.94, speed: 1, gkReaction: 0.24, gkReach: 2.0, foulCare: 0.64 },
+  3: { reaction: 0.38, decisionNoise: 0.2, passError: 0.07, shotError: 0.085, press: 1.08, speed: 1.035, gkReaction: 0.18, gkReach: 2.22, foulCare: 0.78 },
+  4: { reaction: 0.28, decisionNoise: 0.12, passError: 0.045, shotError: 0.06, press: 1.18, speed: 1.055, gkReaction: 0.12, gkReach: 2.42, foulCare: 0.9 },
 };
 
 export function sideDir(side: Side): 1 | -1 {
   return side === "home" ? 1 : -1;
 }
 
-export function goalX(side: Side): number {
+export function attackGoalX(side: Side): number {
   return side === "home" ? PITCH_L : 0;
 }
 
 export function ownGoalX(side: Side): number {
   return side === "home" ? 0 : PITCH_L;
+}
+
+export function opposite(side: Side): Side {
+  return side === "home" ? "away" : "home";
 }
 
 export function clamp(v: number, lo: number, hi: number): number {
@@ -69,96 +72,131 @@ export function dist(a: { x: number; z: number }, b: { x: number; z: number }): 
   return Math.hypot(a.x - b.x, a.z - b.z);
 }
 
-export function norm(x: number, z: number): { x: number; z: number; d: number } {
-  const d = Math.hypot(x, z);
-  return d > 1e-6 ? { x: x / d, z: z / d, d } : { x: 1, z: 0, d: 0 };
+export function len(x: number, z: number): number {
+  return Math.hypot(x, z);
+}
+
+export function unit(x: number, z: number): { x: number; z: number; d: number } {
+  const d = len(x, z);
+  return d > 1e-7 ? { x: x / d, z: z / d, d } : { x: 1, z: 0, d: 0 };
+}
+
+export function angleNoise(rand: () => number, amount: number): number {
+  return (rand() - rand()) * amount;
 }
 
 export function formationSpot(side: Side, index: number, ballX: number, ballZ: number, attacking: boolean): { x: number; z: number } {
-  if (index === 0) return { x: side === "home" ? 2.2 : PITCH_L - 2.2, z: PITCH_W / 2 };
+  if (index === 0) return { x: side === "home" ? 2.1 : PITCH_L - 2.1, z: PITCH_W / 2 };
   const dir = sideDir(side);
-  const attackShift = attacking ? 6 : -3;
-  const baseX = side === "home" ? [0, 16, 18, 30, 40] : [0, PITCH_L - 16, PITCH_L - 18, PITCH_L - 30, PITCH_L - 40];
-  const lanes = [0, PITCH_W * 0.28, PITCH_W * 0.72, PITCH_W * 0.5, PITCH_W * 0.5];
-  const slide = clamp((ballX - PITCH_L / 2) * 0.32, -10, 10) * dir;
-  const widthPull = (ballZ - PITCH_W / 2) * (index === 4 ? 0.18 : 0.28);
-  return {
-    x: clamp(baseX[index] + slide + dir * attackShift, 1.5, PITCH_L - 1.5),
-    z: clamp(lanes[index] + widthPull, 3, PITCH_W - 3),
-  };
-}
-
-export function pickPassTarget(ctx: TeamAiContext, carrier: FcPlayer, progressive = true): number {
-  const dir = sideDir(ctx.side);
-  let best = -1;
-  let bestScore = -Infinity;
-  for (const p of ctx.players) {
-    if (p.index === 0 || p.index === carrier.index) continue;
-    const dx = (p.x - carrier.x) * dir;
-    const d = dist(carrier, p);
-    if (d < 3 || d > 34) continue;
-    const open = laneOpenness(carrier, p, ctx.opponents);
-    const progress = progressive ? dx * 0.16 : -Math.abs(dx) * 0.03;
-    const lane = 1.4 - Math.abs(p.z - carrier.z) / PITCH_W;
-    const score = open * 3 + progress + lane - d * 0.025 + ctx.rand() * 0.25;
-    if (score > bestScore) {
-      bestScore = score;
-      best = p.index;
-    }
-  }
-  if (best > 0) return best;
-  return ctx.players.filter((p) => p.index > 0 && p.index !== carrier.index).sort((a, b) => dist(carrier, a) - dist(carrier, b))[0]?.index ?? 1;
+  const lanes = [PITCH_W / 2, PITCH_W * 0.28, PITCH_W * 0.72, PITCH_W * 0.48, PITCH_W * 0.52];
+  const baseHome = [2, 15, 17, 29, 40];
+  const baseAway = [PITCH_L - 2, PITCH_L - 15, PITCH_L - 17, PITCH_L - 29, PITCH_L - 40];
+  const base = side === "home" ? baseHome[index] : baseAway[index];
+  const slide = clamp((ballX - PITCH_L / 2) * 0.34, -9.5, 9.5) * dir;
+  const phase = attacking ? 5.5 : -4;
+  const width = (ballZ - PITCH_W / 2) * (index === 4 ? 0.14 : 0.25);
+  return { x: clamp(base + slide + dir * phase, 1.4, PITCH_L - 1.4), z: clamp(lanes[index] + width, 3, PITCH_W - 3) };
 }
 
 export function laneOpenness(from: { x: number; z: number }, to: { x: number; z: number }, opponents: FcPlayer[]): number {
-  const lx = to.x - from.x;
-  const lz = to.z - from.z;
-  const len2 = lx * lx + lz * lz || 1;
-  let nearest = 8;
+  const vx = to.x - from.x;
+  const vz = to.z - from.z;
+  const l2 = vx * vx + vz * vz || 1;
+  let clearance = 7;
   for (const o of opponents) {
-    const t = clamp(((o.x - from.x) * lx + (o.z - from.z) * lz) / len2, 0, 1);
-    const px = from.x + lx * t;
-    const pz = from.z + lz * t;
-    nearest = Math.min(nearest, Math.hypot(o.x - px, o.z - pz));
+    if (o.index === 0) continue;
+    const t = clamp(((o.x - from.x) * vx + (o.z - from.z) * vz) / l2, 0, 1);
+    clearance = Math.min(clearance, Math.hypot(o.x - (from.x + vx * t), o.z - (from.z + vz * t)));
   }
-  return clamp(nearest / 5, 0, 1);
+  return clamp((clearance - 0.7) / 4.8, 0, 1);
+}
+
+export function pickPassTarget(ctx: TeamAiContext, carrier: FcPlayer, lead: boolean): number {
+  const dir = sideDir(ctx.side);
+  let best = -Infinity;
+  let chosen = ctx.players.find((p) => p.index > 0 && p.index !== carrier.index)?.index ?? 1;
+  for (const p of ctx.players) {
+    if (p.index === 0 || p.index === carrier.index) continue;
+    const d = dist(carrier, p);
+    const progress = (p.x - carrier.x) * dir;
+    const open = laneOpenness(carrier, p, ctx.opponents);
+    const space = nearestOpponentDistance(p, ctx.opponents) / 8;
+    const score = open * 2.1 + progress * (lead ? 0.075 : 0.045) + space - d * 0.018 + (ctx.rand() - 0.5) * FC_AI[ctx.tier].decisionNoise;
+    if (d > 3 && d < 36 && score > best) {
+      best = score;
+      chosen = p.index;
+    }
+  }
+  return chosen;
 }
 
 export function chooseOnBallAction(ctx: TeamAiContext, carrier: FcPlayer): AiAction {
   const cfg = FC_AI[ctx.tier];
   const dir = sideDir(ctx.side);
-  const goal = { x: goalX(ctx.side), z: PITCH_W / 2 };
+  const goal = { x: attackGoalX(ctx.side), z: PITCH_W / 2 };
   const goalDist = dist(carrier, goal);
-  const wide = carrier.z < 7 || carrier.z > PITCH_W - 7;
-  const boxX = ctx.side === "home" ? carrier.x > PITCH_L - BOX_DEPTH - 4 : carrier.x < BOX_DEPTH + 4;
-  const pressure = ctx.opponents.some((o) => o.index > 0 && dist(o, carrier) < 2.2);
+  const angle = Math.abs(carrier.z - PITCH_W / 2) / Math.max(8, goalDist);
+  const pressure = nearestOpponentDistance(carrier, ctx.opponents);
   const rating = ctx.ratings[carrier.index] ?? ctx.ratings[1];
-  const shootScore = (34 - goalDist) * 0.055 + rating.shooting * 0.9 + cfg.shot * 0.35 - (pressure ? 0.28 : 0) + ctx.rand() * 0.28;
-  if (goalDist < 16 && shootScore > 2.08) {
-    return { kind: "shoot", tx: goal.x, tz: clamp(goal.z + (ctx.rand() - 0.5) * GOAL_W * 0.75, goal.z - GOAL_W / 2, goal.z + GOAL_W / 2) };
-  }
-  if (wide && boxX && ctx.rand() < 0.34 + cfg.decision * 0.12) {
-    return { kind: "cross", tx: ctx.side === "home" ? PITCH_L - 6 : 6, tz: PITCH_W / 2 + (ctx.rand() - 0.5) * BOX_W * 0.45 };
-  }
+  const openShot = countLaneBlockers(carrier, goal, ctx.opponents) === 0;
+  const shootValue = (28 - goalDist) * 0.052 + rating.shooting * 0.85 - angle * 1.3 + (openShot ? 0.32 : -0.18) - (pressure < 2.1 ? 0.25 : 0) + (ctx.rand() - 0.5) * cfg.decisionNoise;
+  if (goalDist < 22 && shootValue > 1.25) return { kind: "shoot", x: goal.x, z: clamp(PITCH_W / 2 + (ctx.rand() - 0.5) * GOAL_W * 0.75, PITCH_W / 2 - GOAL_W / 2 + 0.2, PITCH_W / 2 + GOAL_W / 2 - 0.2) };
+
+  const wide = carrier.z < 7.5 || carrier.z > PITCH_W - 7.5;
+  const nearBox = ctx.side === "home" ? carrier.x > PITCH_L - BOX_DEPTH - 5 : carrier.x < BOX_DEPTH + 5;
+  if (wide && nearBox && ctx.rand() < 0.42 + rating.passing * 0.28) return { kind: "cross", x: attackGoalX(ctx.side) - dir * 6.5, z: PITCH_W / 2 + (ctx.rand() - 0.5) * BOX_W * 0.35 };
+
   const target = pickPassTarget(ctx, carrier, true);
   const receiver = ctx.players[target];
-  const open = receiver ? laneOpenness(carrier, receiver, ctx.opponents) : 0;
-  const passChance = 0.62 + cfg.pass * 0.20 + (pressure ? 0.18 : 0) + (open - 0.5) * 0.22;
-  if (receiver && ctx.rand() < passChance) {
-    const ahead = (receiver.x - carrier.x) * dir > 7 && ctx.rand() < 0.34 + cfg.decision * 0.06;
-    return ahead ? { kind: "through", target, tx: receiver.x + dir * 6, tz: receiver.z } : { kind: "pass", target, tx: receiver.x, tz: receiver.z };
+  if (receiver) {
+    const open = laneOpenness(carrier, receiver, ctx.opponents);
+    const progressive = (receiver.x - carrier.x) * dir > 3;
+    const passValue = open + (progressive ? 0.25 : 0) + (pressure < 2.2 ? 0.25 : 0) + rating.passing * 0.35 + (ctx.rand() - 0.5) * cfg.decisionNoise;
+    if (passValue > 0.95) {
+      const through = progressive && nearestOpponentDistance(receiver, ctx.opponents) > 3.2 && ctx.rand() < 0.34 + rating.passing * 0.22;
+      return through ? { kind: "through", target } : { kind: "pass", target };
+    }
   }
-  return { kind: "dribble", tx: clamp(carrier.x + dir * (8 + cfg.decision * 2), 1, PITCH_L - 1), tz: clamp(carrier.z + (ctx.rand() - 0.5) * 8, 2, PITCH_W - 2), sprint: !pressure };
+
+  return { kind: "dribble", x: clamp(carrier.x + dir * (8 + rating.dribbling * 6), 1.5, PITCH_L - 1.5), z: clamp(carrier.z + (ctx.rand() - 0.5) * 8, 2.5, PITCH_W - 2.5), sprint: pressure > 2.2 };
 }
 
-export function chooseDefensiveAction(ctx: TeamAiContext, player: FcPlayer): AiAction {
+export function chooseOffBallTarget(ctx: TeamAiContext, p: FcPlayer): AiAction {
   const owner = ctx.ball.owner;
-  const carrier = owner?.side === (ctx.side === "home" ? "away" : "home") ? ctx.opponents[owner.index] : null;
-  if (!carrier) {
-    return { kind: "hold", tx: formationSpot(ctx.side, player.index, ctx.ball.x, ctx.ball.z, false).x, tz: formationSpot(ctx.side, player.index, ctx.ball.x, ctx.ball.z, false).z };
+  const attacking = owner?.side === ctx.side;
+  if (!owner && ctx.intent?.side === ctx.side && ctx.intent.target === p.index) return { kind: "chase", x: ctx.intent.targetX, z: ctx.intent.targetZ, sprint: true };
+  if (!owner && p.index > 0) {
+    const sortedOwn = ctx.players.filter((q) => q.index > 0).sort((a, b) => dist(a, ctx.ball) - dist(b, ctx.ball));
+    const sortedOpp = ctx.opponents.filter((q) => q.index > 0).sort((a, b) => dist(a, ctx.ball) - dist(b, ctx.ball));
+    if (sortedOwn[0]?.index === p.index || dist(p, ctx.ball) < dist(sortedOpp[0] ?? p, ctx.ball) + 2.4) return { kind: "chase", x: ctx.ball.x, z: ctx.ball.z, sprint: true };
   }
-  const sorted = ctx.players.filter((p) => p.index > 0).sort((a, b) => dist(a, carrier) - dist(b, carrier));
-  if (sorted[0]?.index === player.index) return { kind: "press", tx: carrier.x, tz: carrier.z, sprint: true };
-  const spot = formationSpot(ctx.side, player.index, ctx.ball.x, ctx.ball.z, false);
-  return { kind: "hold", tx: (spot.x + carrier.x) / 2, tz: (spot.z + carrier.z) / 2 };
+  if (owner?.side === opposite(ctx.side)) {
+    const carrier = ctx.opponents[owner.index];
+    const pressOrder = ctx.players.filter((q) => q.index > 0).sort((a, b) => dist(a, carrier) - dist(b, carrier));
+    if (pressOrder[0]?.index === p.index) return { kind: "chase", x: carrier.x, z: carrier.z, sprint: true };
+    if (pressOrder[1]?.index === p.index) return { kind: "hold", x: (carrier.x + ownGoalX(ctx.side)) / 2, z: (carrier.z + PITCH_W / 2) / 2, sprint: false };
+  }
+  const spot = formationSpot(ctx.side, p.index, ctx.ball.x, ctx.ball.z, attacking);
+  if (attacking && p.index === 4) spot.x = clamp(spot.x + sideDir(ctx.side) * 5, 1.5, PITCH_L - 1.5);
+  return { kind: "hold", x: spot.x, z: spot.z, sprint: false };
+}
+
+export function nearestOpponentDistance(p: { x: number; z: number }, opponents: FcPlayer[]): number {
+  let best = 99;
+  for (const o of opponents) if (o.index > 0) best = Math.min(best, dist(p, o));
+  return best;
+}
+
+export function countLaneBlockers(from: { x: number; z: number }, to: { x: number; z: number }, opponents: FcPlayer[]): number {
+  const vx = to.x - from.x;
+  const vz = to.z - from.z;
+  const l2 = vx * vx + vz * vz || 1;
+  let c = 0;
+  for (const o of opponents) {
+    const t = clamp(((o.x - from.x) * vx + (o.z - from.z) * vz) / l2, 0, 1);
+    const px = from.x + vx * t;
+    const pz = from.z + vz * t;
+    if (Math.hypot(o.x - px, o.z - pz) < 1.3) c++;
+  }
+  return c;
 }

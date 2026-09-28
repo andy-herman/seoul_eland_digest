@@ -1,5 +1,23 @@
 import { AI_TIER, playerStats, rng, type SquadPlayer } from "../data";
-import { chooseDefensiveAction, chooseOnBallAction, clamp, dist, FC_AI, formationSpot, goalX, laneOpenness, norm, ownGoalX, pickPassTarget, sideDir, type FcRatings, type TeamAiContext } from "./ai";
+import {
+  attackGoalX,
+  angleNoise,
+  chooseOffBallTarget,
+  chooseOnBallAction,
+  clamp,
+  dist,
+  FC_AI,
+  formationSpot,
+  laneOpenness,
+  len,
+  opposite,
+  ownGoalX,
+  pickPassTarget,
+  sideDir,
+  unit,
+  type FcRatings,
+  type TeamAiContext,
+} from "./ai";
 import {
   BALL_R,
   BOX_DEPTH,
@@ -13,13 +31,11 @@ import {
   PITCH_L,
   PITCH_W,
   PLAYER_R,
-  type FcBall,
   type FcEventType,
   type FcInput,
   type FcMatchOptions,
   type FcPhase,
   type FcPlayer,
-  type FcSetPiece,
   type FcSideStats,
   type FcState,
   type RestartType,
@@ -27,22 +43,30 @@ import {
   type Side,
 } from "./types";
 
-interface MovingBall {
-  kind: "pass" | "through" | "lob" | "shot" | "loose";
+const GRAVITY = 9.81;
+const ROLL_DECEL = 4.1;
+const AIR_DRAG = 0.16;
+const GROUND_DRAG = 0.996;
+const RESTITUTION = 0.5;
+const ZERO: FcInput = Object.freeze({ mx: 0, mz: 0, sprint: false, pass: false, shoot: false, lob: false, through: false });
+
+type BallIntentKind = "pass" | "through" | "lob" | "cross" | "shot" | "clear" | "throw";
+interface BallIntent {
+  kind: BallIntentKind;
   side: Side;
+  by: number;
   target: number | null;
-  tx: number;
-  tz: number;
-  t: number;
-  ttl: number;
-  startX: number;
-  startZ: number;
-  startH: number;
-  peak: number;
-  power: number;
+  targetX: number;
+  targetZ: number;
+  shot: boolean;
 }
 
-const ZERO: FcInput = Object.freeze({ mx: 0, mz: 0, sprint: false, pass: false, shoot: false, lob: false, through: false });
+interface KeeperState {
+  reactionT: number;
+  diveT: number;
+  diveZ: number;
+  active: boolean;
+}
 
 export class FcMatch {
   readonly opts: FcMatchOptions;
@@ -52,26 +76,22 @@ export class FcMatch {
   private readonly homeTier: 1 | 2 | 3 | 4;
   private readonly ratings: Record<Side, FcRatings[]>;
   private prevInput: FcInput = blankFcInput();
-  private aiNext: Record<Side, number> = { home: 0, away: 0 };
-  private aiCooldown: Record<string, number> = {};
-  private moveBall: MovingBall | null = null;
-  private pendingGoal: Side | null = null;
   private forceGoalSide: Side | null = null;
-  private restartCounts: Record<RestartType, number> = { kickoff: 0, throwin: 0, corner: 0, goalkick: 0, freekick: 0, penalty: 0 };
-  private stuckT = 0;
-  private noTouchT = 0;
-  private lastBall = { x: PITCH_L / 2, z: PITCH_W / 2 };
   private halfDone = false;
+  private aiNext: Record<Side, number> = { home: 0.2, away: 0.35 };
+  private ballIntent: BallIntent | null = null;
+  private keeper: Record<Side, KeeperState> = { home: { reactionT: 0, diveT: 0, diveZ: PITCH_W / 2, active: false }, away: { reactionT: 0, diveT: 0, diveZ: PITCH_W / 2, active: false } };
+  private restartCounts: Record<RestartType, number> = { kickoff: 0, throwin: 0, corner: 0, goalkick: 0, freekick: 0, penalty: 0 };
   private headerCount = 0;
-  private normalizedAiResult = false;
+  private maxStuckT = 0;
+  private quietBallT = 0;
+  private lastTouchPoint = { x: PITCH_L / 2, z: PITCH_W / 2 };
 
   constructor(opts: FcMatchOptions) {
     this.opts = opts;
     this.rand = rng(opts.seed);
     this.awayTier = opts.tier ?? AI_TIER[opts.opponent];
     this.homeTier = opts.homeAiTier ?? 2;
-    const homePlayers = makeHomePlayers(opts.home, opts.captain);
-    const awayPlayers = makeAwayPlayers();
     this.ratings = { home: rateHome(opts.home, opts.captain), away: rateAway(this.awayTier) };
     this.state = {
       phase: "restart",
@@ -81,7 +101,7 @@ export class FcMatch {
       half: 1,
       goldenGoal: false,
       score: { home: 0, away: 0 },
-      players: [...homePlayers, ...awayPlayers],
+      players: [...makeHomePlayers(opts.home), ...makeAwayPlayers()],
       ball: { x: PITCH_L / 2, z: PITCH_W / 2, h: 0, vx: 0, vz: 0, vh: 0, spin: 0, owner: null, lastTouch: null },
       controlled: 1,
       passTarget: 2,
@@ -129,38 +149,36 @@ export class FcMatch {
       return;
     }
     if (s.elapsed >= this.seconds + (s.goldenGoal ? GOLDEN_GOAL_SECONDS : 0)) {
-      if (this.opts.mode === "quick" && !s.goldenGoal && s.score.home === s.score.away) {
-        s.goldenGoal = true;
-      } else {
+      if (this.opts.mode === "quick" && !s.goldenGoal && s.score.home === s.score.away) s.goldenGoal = true;
+      else {
         this.endNow();
         return;
       }
     }
 
-    const activeInput = this.opts.homeAiTier ? ZERO : input;
-    this.updateCharges(activeInput);
-    this.updateHuman(activeInput);
+    const humanInput = this.opts.homeAiTier ? ZERO : input;
+    this.updateCharge(humanInput);
+    this.updateHuman(humanInput);
     this.updateAi();
-    this.updateBall();
-    this.updatePlayers();
-    this.checkBoundsAndRules();
-    this.updateControl(activeInput);
-    this.state.passTarget = this.chooseHumanPassTarget(activeInput);
-    const owner = s.ball.owner;
-    if (owner) s.stats[owner.side].possession += FC_STEP;
-    this.prevInput = { ...activeInput };
+    this.updateKeepers();
+    this.updateBallPhysics();
+    this.updatePlayerPhysics();
+    this.handleTouchesAndInterceptions();
+    this.handleBounds();
+    this.updateControl();
+    s.passTarget = this.chooseHumanPassTarget(humanInput);
+    if (s.ball.owner) s.stats[s.ball.owner.side].possession += FC_STEP;
+    this.prevInput = { ...humanInput };
   }
 
   endNow(): void {
-    const s = this.state;
-    if (this.opts.mode === "quick" && !s.goldenGoal && s.score.home === s.score.away) {
-      s.goldenGoal = true;
-      s.elapsed = this.seconds;
+    if (this.opts.mode === "quick" && !this.state.goldenGoal && this.state.score.home === this.state.score.away) {
+      this.state.goldenGoal = true;
+      this.state.elapsed = this.seconds;
       return;
     }
-    if (this.opts.homeAiTier && !this.normalizedAiResult) this.normalizeAiResult();
     this.setPhase("ended");
-    s.elapsed = Math.min(s.elapsed, this.seconds + (s.goldenGoal ? GOLDEN_GOAL_SECONDS : 0));
+    this.state.elapsed = Math.min(this.state.elapsed, this.seconds + (this.state.goldenGoal ? GOLDEN_GOAL_SECONDS : 0));
     this.updateMinute();
     this.event("fulltime");
   }
@@ -170,13 +188,13 @@ export class FcMatch {
   }
 
   debugRestart(type: RestartType, side: Side): void {
-    const x = type === "corner" ? (side === "home" ? PITCH_L : 0) : type === "goalkick" ? ownGoalX(side) + sideDir(side) * 4 : type === "penalty" ? ownGoalX(opposite(side)) - sideDir(side) * PEN_SPOT : PITCH_L / 2;
-    const z = type === "corner" ? (this.rand() < 0.5 ? 0.4 : PITCH_W - 0.4) : PITCH_W / 2;
+    const x = type === "corner" ? attackGoalX(side) : type === "goalkick" ? ownGoalX(side) + sideDir(side) * 5 : type === "penalty" ? attackGoalX(side) - sideDir(side) * PEN_SPOT : PITCH_L / 2;
+    const z = type === "corner" ? (this.rand() < 0.5 ? 0 : PITCH_W) : PITCH_W / 2;
     this.setupRestart(type, side, x, z);
   }
 
-  get debug(): { restartCounts: Record<RestartType, number>; stuckT: number; headers: number } {
-    return { restartCounts: { ...this.restartCounts }, stuckT: this.stuckT, headers: this.headerCount };
+  get debug(): { restartCounts: Record<RestartType, number>; headers: number; maxStuckT: number } {
+    return { restartCounts: { ...this.restartCounts }, headers: this.headerCount, maxStuckT: this.maxStuckT };
   }
 
   private get seconds(): number {
@@ -188,47 +206,56 @@ export class FcMatch {
     this.state.phaseT = 0;
   }
 
-  private updateMinute(): void {
-    const cap = this.state.goldenGoal ? this.seconds + GOLDEN_GOAL_SECONDS : this.seconds;
-    this.state.minute = Math.min(120, Math.floor((Math.min(this.state.elapsed, cap) / this.seconds) * 90));
-  }
-
   private event(type: FcEventType, side?: Side, index?: number, x = this.state.ball.x, z = this.state.ball.z): void {
     if (type === "header") this.headerCount++;
     this.state.events.push({ type, side, index, x, z });
-    this.state.banner = { key: type, t: 1.4 };
+    this.state.banner = { key: type, t: 1.2 };
+  }
+
+  private updateMinute(): void {
+    this.state.minute = Math.min(120, Math.floor((this.state.elapsed / this.seconds) * 90));
   }
 
   private setupRestart(type: RestartType, side: Side, x: number, z: number): void {
     const taker = type === "goalkick" ? 0 : type === "penalty" ? 4 : type === "kickoff" ? 3 : 2;
-    const aimX = type === "corner" ? (side === "home" ? PITCH_L - 7 : 7) : type === "penalty" ? goalX(side) : clamp(x + sideDir(side) * 15, 0, PITCH_L);
+    const spotX = clamp(x, 0, PITCH_L);
+    const spotZ = clamp(z, 0, PITCH_W);
+    const aimX = type === "corner" ? attackGoalX(side) - sideDir(side) * 6 : type === "penalty" ? attackGoalX(side) : clamp(spotX + sideDir(side) * 18, 0, PITCH_L);
     const aimZ = PITCH_W / 2;
-    this.state.setPiece = { type, side, taker, spotX: clamp(x, 0, PITCH_L), spotZ: clamp(z, 0, PITCH_W), aimX, aimZ, direct: type === "penalty" || (type === "freekick" && Math.abs(goalX(side) - x) < 25), waitT: 0 };
-    this.state.ball = { x: clamp(x, 0, PITCH_L), z: clamp(z, 0, PITCH_W), h: 0, vx: 0, vz: 0, vh: 0, spin: this.state.ball.spin, owner: null, lastTouch: side };
-    this.moveBall = null;
-    this.setPhase("restart");
+    this.state.setPiece = { type, side, taker, spotX, spotZ, aimX, aimZ, direct: type === "penalty" || (type === "freekick" && Math.abs(attackGoalX(side) - spotX) < 25), waitT: 0 };
+    this.state.ball.x = spotX;
+    this.state.ball.z = spotZ;
+    this.state.ball.h = 0;
+    this.state.ball.vx = 0;
+    this.state.ball.vz = 0;
+    this.state.ball.vh = 0;
+    this.state.ball.owner = null;
+    this.state.ball.lastTouch = side;
+    this.ballIntent = null;
     this.restartCounts[type]++;
-    this.event(type, side, taker, x, z);
-    this.placeForRestart();
+    this.setPhase("restart");
+    this.event(type, side, taker, spotX, spotZ);
+    this.placePlayersForRestart();
   }
 
-  private placeForRestart(): void {
+  private placePlayersForRestart(): void {
     const sp = this.state.setPiece;
     if (!sp) return;
     for (const p of this.state.players) {
       const spot = formationSpot(p.side, p.index, sp.spotX, sp.spotZ, p.side === sp.side);
       if (p.side === sp.side && p.index === sp.taker) {
-        p.x = sp.spotX - sideDir(p.side) * 0.7;
-        p.z = sp.spotZ;
+        p.x = sp.spotX - sideDir(p.side) * 0.65;
+        p.z = clamp(sp.spotZ, 1, PITCH_W - 1);
       } else {
-        p.x = spot.x + (this.rand() - 0.5) * 2;
-        p.z = spot.z + (this.rand() - 0.5) * 2;
+        p.x = spot.x + (this.rand() - 0.5) * 1.8;
+        p.z = spot.z + (this.rand() - 0.5) * 1.8;
       }
       p.vx = 0;
       p.vz = 0;
       p.fx = sideDir(p.side);
       p.fz = 0;
-      p.anim = p.side === sp.side ? "idle" : "run";
+      p.stunT = 0;
+      p.anim = "idle";
       p.animT = 0;
     }
   }
@@ -237,304 +264,198 @@ export class FcMatch {
     const sp = this.state.setPiece;
     if (!sp) return;
     sp.waitT += FC_STEP;
-    const homeHuman = sp.side === "home" && !this.opts.homeAiTier;
-    if (homeHuman) {
-      if (Math.hypot(input.mx, input.mz) > 0.1) {
-        sp.aimX = clamp(sp.aimX + input.mx * 0.38, 0, PITCH_L);
-        sp.aimZ = clamp(sp.aimZ + input.mz * 0.38, 0, PITCH_W);
-      }
-      const pressPass = input.pass && !this.prevInput.pass;
-      const releaseLob = !input.lob && this.prevInput.lob;
-      const releaseShoot = !input.shoot && this.prevInput.shoot;
-      this.updateCharges(input);
-      if (pressPass) this.takeRestart("pass");
-      else if (releaseLob) this.takeRestart("lob");
-      else if (releaseShoot && sp.direct) this.takeRestart("shoot");
-      else if (sp.waitT >= 5) this.takeRestart(sp.direct ? "shoot" : sp.type === "corner" ? "lob" : "pass");
-    } else if (sp.waitT >= 0.6 + this.rand() * 0.8) {
-      const shoot = sp.direct && this.rand() < (sp.type === "penalty" ? 0.86 : 0.42);
-      this.takeRestart(shoot ? "shoot" : sp.type === "corner" ? "lob" : "pass");
+    const human = sp.side === "home" && !this.opts.homeAiTier;
+    if (human && len(input.mx, input.mz) > 0.12) {
+      sp.aimX = clamp(sp.aimX + input.mx * 0.42, 0, PITCH_L);
+      sp.aimZ = clamp(sp.aimZ + input.mz * 0.42, 0, PITCH_W);
     }
-    this.prevInput = { ...(homeHuman ? input : ZERO) };
+    if (human) this.updateCharge(input);
+    const auto = sp.waitT >= (human ? 5 : 0.65 + this.rand() * 0.75);
+    const pressPass = human && input.pass && !this.prevInput.pass;
+    const releaseLob = human && !input.lob && this.prevInput.lob;
+    const releaseShoot = human && sp.direct && !input.shoot && this.prevInput.shoot;
+    if (pressPass || releaseLob || releaseShoot || auto) {
+      const kind = releaseShoot || (auto && sp.direct && (sp.type === "penalty" || this.rand() < 0.2)) ? "shoot" : releaseLob || sp.type === "corner" ? "lob" : "pass";
+      this.takeRestart(kind);
+    }
+    this.prevInput = { ...(human ? input : ZERO) };
   }
 
   private takeRestart(kind: "pass" | "lob" | "shoot"): void {
     const sp = this.state.setPiece;
     if (!sp) return;
-    this.setPhase("play");
     this.state.setPiece = null;
-    const p = this.getPlayer(sp.side, sp.taker);
-    this.state.ball.lastTouch = sp.side;
-    if (kind === "shoot") {
-      this.shoot(sp.side, sp.taker, clamp(0.68 + this.state.charge * 0.25, 0.58, 1), sp.aimZ, sp.type === "penalty");
-    } else if (kind === "lob") {
-      this.launchBall("lob", sp.side, null, sp.aimX, sp.aimZ, 0.8, 1.9);
-      this.state.stats[sp.side].passes++;
-      this.event(sp.type === "corner" ? "header" : "lob", sp.side, sp.taker);
-    } else {
-      const target = pickPassTarget(this.ctx(sp.side), p, false);
-      const r = this.getPlayer(sp.side, target);
-      this.launchBall("pass", sp.side, target, r.x, r.z, 0.55, 0.05);
-      this.state.stats[sp.side].passes++;
-      this.event("pass", sp.side, sp.taker);
+    this.setPhase("play");
+    this.state.ball.x = sp.spotX;
+    this.state.ball.z = sp.spotZ;
+    this.state.ball.h = kind === "lob" ? 1.5 : 0;
+    this.state.ball.owner = { side: sp.side, index: sp.taker };
+    if (kind === "shoot") this.kickShot(sp.side, sp.taker, 0.68 + this.state.charge * 0.25, sp.aimZ, sp.type === "penalty");
+    else if (kind === "lob") this.kickLob(sp.side, sp.taker, null, sp.aimX, sp.aimZ, 0.75 + this.state.charge * 0.2, sp.type === "corner" ? "cross" : "lob");
+    else {
+      const target = pickPassTarget(this.ctx(sp.side), this.player(sp.side, sp.taker), false);
+      this.kickPass(sp.side, sp.taker, target, false);
     }
     this.state.charge = 0;
     this.state.chargeKind = null;
   }
 
-  private updateCharges(input: FcInput): void {
-    const s = this.state;
+  private updateCharge(input: FcInput): void {
     if (input.shoot) {
-      s.chargeKind = "shoot";
-      s.charge = clamp((s.chargeKind === "shoot" ? s.charge : 0) + FC_STEP / 0.9, 0, 1);
+      this.state.chargeKind = "shoot";
+      this.state.charge = clamp(this.state.charge + FC_STEP / 0.9, 0, 1);
     } else if (input.lob) {
-      s.chargeKind = "lob";
-      s.charge = clamp((s.chargeKind === "lob" ? s.charge : 0) + FC_STEP / 0.9, 0, 1);
-    } else if (!input.shoot && !input.lob) {
-      s.charge = 0;
-      s.chargeKind = null;
+      this.state.chargeKind = "lob";
+      this.state.charge = clamp(this.state.charge + FC_STEP / 0.9, 0, 1);
+    } else {
+      this.state.charge = 0;
+      this.state.chargeKind = null;
     }
   }
 
   private updateHuman(input: FcInput): void {
     if (this.opts.homeAiTier) return;
-    const s = this.state;
-    const p = this.getPlayer("home", s.controlled);
-    if (p.stunT > 0) return;
-    const hasBall = s.ball.owner?.side === "home" && s.ball.owner.index === p.index;
-    const defending = s.ball.owner?.side === "away";
-    if (defending) {
-      if (input.pass && !this.prevInput.pass) this.switchControl(true);
-      if (input.through) this.sendPress();
-      if (input.shoot && !this.prevInput.shoot) this.tryTackle(p, false);
-      if (input.lob && !this.prevInput.lob) this.tryTackle(p, true);
-    } else if (hasBall) {
-      if (input.pass && !this.prevInput.pass) this.groundPass("home", p.index, this.chooseHumanPassTarget(input) ?? 2, false);
-      if (input.through && !this.prevInput.through) this.groundPass("home", p.index, this.chooseHumanPassTarget(input) ?? 2, true);
-      if (!input.lob && this.prevInput.lob) this.lobOrCross("home", p.index, input, this.state.charge);
-      if (!input.shoot && this.prevInput.shoot) this.shoot("home", p.index, clamp(0.45 + this.state.charge * 0.55, 0.35, 1), PITCH_W / 2 + input.mz * GOAL_W * 0.35, false);
-    } else {
-      this.movePlayerToward(p, p.x + input.mx * 6, p.z + input.mz * 6, input.sprint);
-    }
+    const p = this.player("home", this.state.controlled);
+    const owner = this.state.ball.owner;
+    if (owner?.side === "home" && owner.index === p.index) {
+      if (input.pass && !this.prevInput.pass) this.kickPass("home", p.index, this.chooseHumanPassTarget(input) ?? 2, false);
+      if (input.through && !this.prevInput.through) this.kickPass("home", p.index, this.chooseHumanPassTarget(input) ?? 2, true);
+      if (!input.lob && this.prevInput.lob) {
+        const target = this.chooseHumanPassTarget(input);
+        const d = 10 + this.state.charge * 25;
+        const x = target ? this.player("home", target).x + sideDir("home") * 3 : p.x + (len(input.mx, input.mz) > 0.1 ? input.mx : p.fx) * d;
+        const z = target ? this.player("home", target).z : p.z + input.mz * d;
+        this.kickLob("home", p.index, target, clamp(x, 1, PITCH_L - 1), clamp(z, 1, PITCH_W - 1), this.state.charge, "lob");
+      }
+      if (!input.shoot && this.prevInput.shoot) this.kickShot("home", p.index, 0.42 + this.state.charge * 0.58, PITCH_W / 2 + input.mz * GOAL_W * 0.36, false);
+      this.movePlayer(p, p.x + input.mx * 4, p.z + input.mz * 4, input.sprint);
+    } else if (owner?.side === "away") {
+      if (input.pass && !this.prevInput.pass) this.switchControl();
+      if (input.through) this.pressWithNearestTeammate();
+      if (input.shoot && !this.prevInput.shoot) this.startTackle(p, false);
+      if (input.lob && !this.prevInput.lob) this.startTackle(p, true);
+      this.movePlayer(p, p.x + input.mx * 5, p.z + input.mz * 5, input.sprint);
+    } else this.movePlayer(p, p.x + input.mx * 5, p.z + input.mz * 5, input.sprint);
   }
 
   private updateAi(): void {
     for (const side of ["home", "away"] as const) {
-      if (side === "home" && !this.opts.homeAiTier) this.updateHomeOffBall();
+      if (side === "home" && !this.opts.homeAiTier) this.updateHomeSupport();
       else this.updateAiSide(side);
     }
-    this.updateGoalkeepers();
   }
 
   private updateAiSide(side: Side): void {
     this.aiNext[side] -= FC_STEP;
     const owner = this.state.ball.owner;
-    const ctx = this.ctx(side);
-    if (owner?.side === side) {
-      const carrier = this.getPlayer(side, owner.index);
-      if (owner.index === 0) return;
+    if (owner?.side === side && owner.index > 0) {
+      const carrier = this.player(side, owner.index);
       if (this.aiNext[side] <= 0) {
-        const action = chooseOnBallAction(ctx, carrier);
-        this.aiNext[side] = FC_AI[ctx.tier].reaction + this.rand() * 0.22;
-        this.performAiAction(side, carrier.index, action.kind, action.target, action.tx, action.tz);
-      } else {
-        const gx = goalX(side);
-        this.movePlayerToward(carrier, clamp(carrier.x + sideDir(side) * 5, 1, PITCH_L - 1), clamp(carrier.z + (PITCH_W / 2 - carrier.z) * 0.08, 1, PITCH_W - 1), true);
-      }
-    } else {
-      for (const p of this.team(side)) {
-        if (p.index === 0) continue;
-        const a = chooseDefensiveAction(ctx, p);
-        this.movePlayerToward(p, a.tx ?? p.x, a.tz ?? p.z, Boolean(a.sprint));
-        if (a.kind === "press" && this.rand() < 0.006 * FC_AI[ctx.tier].press) this.tryTackle(p, false);
-      }
+        const action = chooseOnBallAction(this.ctx(side), carrier);
+        this.aiNext[side] = FC_AI[side === "home" ? this.homeTier : this.awayTier].reaction * (0.75 + this.rand() * 0.5);
+        this.performAiAction(side, carrier.index, action);
+      } else this.movePlayer(carrier, carrier.x + sideDir(side) * 4, carrier.z + (PITCH_W / 2 - carrier.z) * 0.08, true);
+    }
+    for (const p of this.team(side)) {
+      if (p.index === 0 || owner?.side === side && owner.index === p.index) continue;
+      const action = chooseOffBallTarget(this.ctx(side), p);
+      this.movePlayer(p, action.x ?? p.x, action.z ?? p.z, Boolean(action.sprint));
+      if (action.kind === "chase" && owner?.side === opposite(side) && dist(p, this.state.ball) < 1.15 && dist(p, this.player(owner.side, owner.index)) < 1.65) this.startTackle(p, false);
     }
   }
 
-  private updateHomeOffBall(): void {
+  private updateHomeSupport(): void {
     for (const p of this.team("home")) {
       if (p.index === 0 || p.index === this.state.controlled || this.state.ball.owner?.side === "home" && this.state.ball.owner.index === p.index) continue;
-      const spot = formationSpot("home", p.index, this.state.ball.x, this.state.ball.z, this.state.ball.owner?.side === "home");
-      this.movePlayerToward(p, spot.x, spot.z, false);
+      const action = chooseOffBallTarget(this.ctx("home"), p);
+      this.movePlayer(p, action.x ?? p.x, action.z ?? p.z, Boolean(action.sprint));
     }
   }
 
-  private performAiAction(side: Side, index: number, kind: string, target?: number, tx?: number, tz?: number): void {
-    if (kind === "shoot") this.shoot(side, index, 0.65 + this.rand() * 0.28, tz ?? PITCH_W / 2, false);
-    else if (kind === "cross" || kind === "lob") this.lobOrCross(side, index, { mx: sideDir(side), mz: 0, sprint: false, pass: false, shoot: false, lob: false, through: false }, 0.72, tx, tz);
-    else if (kind === "through") this.groundPass(side, index, target ?? 4, true, tx, tz);
-    else if (kind === "pass") this.groundPass(side, index, target ?? 2, false);
-    else if (kind === "dribble") this.movePlayerToward(this.getPlayer(side, index), tx ?? this.getPlayer(side, index).x, tz ?? this.getPlayer(side, index).z, true);
+  private performAiAction(side: Side, index: number, action: ReturnType<typeof chooseOnBallAction>): void {
+    if (action.kind === "shoot") this.kickShot(side, index, 0.62 + this.rand() * 0.33, action.z ?? PITCH_W / 2, false);
+    else if (action.kind === "pass") this.kickPass(side, index, action.target ?? 2, false);
+    else if (action.kind === "through") this.kickPass(side, index, action.target ?? 4, true);
+    else if (action.kind === "cross" || action.kind === "lob") this.kickLob(side, index, null, action.x ?? attackGoalX(side) - sideDir(side) * 6, action.z ?? PITCH_W / 2, 0.75, action.kind === "cross" ? "cross" : "lob");
+    else this.movePlayer(this.player(side, index), action.x ?? this.player(side, index).x, action.z ?? this.player(side, index).z, Boolean(action.sprint));
   }
 
-  private updateGoalkeepers(): void {
+  private updateKeepers(): void {
     for (const side of ["home", "away"] as const) {
-      const gk = this.getPlayer(side, 0);
-      const xBase = side === "home" ? 1.1 : PITCH_L - 1.1;
-      const danger = Math.abs(this.state.ball.x - ownGoalX(side)) < 18;
-      const tx = danger && !this.state.ball.owner ? clamp(this.state.ball.x, side === "home" ? 1 : PITCH_L - 7, side === "home" ? 7 : PITCH_L - 1) : xBase;
-      const tz = clamp(PITCH_W / 2 + (this.state.ball.z - PITCH_W / 2) * 0.55, PITCH_W / 2 - GOAL_W / 2, PITCH_W / 2 + GOAL_W / 2);
-      this.movePlayerToward(gk, tx, tz, false, 5.3 * FC_AI[side === "home" ? this.homeTier : this.awayTier].gk);
-    }
-  }
-
-  private updateBall(): void {
-    const b = this.state.ball;
-    if (this.moveBall) {
-      const m = this.moveBall;
-      m.t += FC_STEP;
-      const u = clamp(m.t / m.ttl, 0, 1);
-      b.x = lerp(m.startX, m.tx, smooth(u));
-      b.z = lerp(m.startZ, m.tz, smooth(u));
-      b.h = Math.max(0, lerp(m.startH, 0, u) + Math.sin(Math.PI * u) * m.peak);
-      b.vx = (m.tx - m.startX) / m.ttl;
-      b.vz = (m.tz - m.startZ) / m.ttl;
-      b.vh = 0;
-      b.spin += Math.hypot(b.vx, b.vz) * FC_STEP / BALL_R;
-      if (m.kind === "shot") this.checkShot(m);
-      else if (u >= 1) this.finishMovingBall(m);
-      return;
-    }
-    if (b.owner) {
-      const p = this.getPlayer(b.owner.side, b.owner.index);
-      b.x = clamp(p.x + p.fx * 0.68, -2, PITCH_L + 2);
-      b.z = clamp(p.z + p.fz * 0.68, -2, PITCH_W + 2);
-      b.h = 0;
-      b.vx = p.vx;
-      b.vz = p.vz;
-      b.vh = 0;
-      b.lastTouch = p.side;
-      return;
-    }
-    b.vh -= 9.81 * FC_STEP;
-    b.x += b.vx * FC_STEP;
-    b.z += b.vz * FC_STEP;
-    b.h += b.vh * FC_STEP;
-    if (b.h < 0) {
-      b.h = 0;
-      b.vh = Math.abs(b.vh) * 0.45;
-      b.vx *= 0.82;
-      b.vz *= 0.82;
-      this.event("bounce");
-    }
-    const speed = Math.hypot(b.vx, b.vz);
-    if (b.h < 0.05 && speed > 0) {
-      const decel = Math.min(speed, 4.2 * FC_STEP);
-      b.vx -= (b.vx / speed) * decel;
-      b.vz -= (b.vz / speed) * decel;
-    }
-    b.vx *= 0.995;
-    b.vz *= 0.995;
-    b.spin += speed * FC_STEP / BALL_R;
-    this.tryLoosePickup();
-  }
-
-  private checkShot(m: MovingBall): void {
-    const b = this.state.ball;
-    const targetGoalX = goalX(m.side);
-    const crossed = m.side === "home" ? b.x >= PITCH_L : b.x <= 0;
-    if (!crossed && m.t < m.ttl) return;
-    const inMouth = Math.abs(b.z - PITCH_W / 2) <= GOAL_W / 2 && b.h <= GOAL_H;
-    const defending = opposite(m.side);
-    const gk = this.getPlayer(defending, 0);
-    const gkReach = Math.abs(gk.z - b.z) < 2.2 + FC_AI[defending === "home" ? this.homeTier : this.awayTier].gk * 1.2 && Math.abs(gk.x - targetGoalX) < 6;
-    const awayAttackBonus = m.side === "away" ? (this.awayTier - 2) * 0.30 : 0;
-    const saveChance = clamp(0.22 + FC_AI[defending === "home" ? this.homeTier : this.awayTier].gk * 0.42 + (gkReach ? 0.34 : 0) - m.power * 0.10 - awayAttackBonus, 0.08, 0.82);
-    if (inMouth && this.rand() > saveChance) {
-      this.scoreGoal(m.side);
-    } else if (inMouth) {
-      this.state.stats[defending].saves++;
-      this.event(this.rand() < 0.25 ? "catch" : "save", defending, 0);
-      gk.anim = "dive";
-      gk.diveDir = b.z > PITCH_W / 2 ? 1 : -1;
-      if (this.rand() < 0.35) {
-        this.state.ball.owner = { side: defending, index: 0 };
-        this.moveBall = null;
-        gk.anim = "hold";
+      const gk = this.player(side, 0);
+      const st = this.keeper[side];
+      const cfg = FC_AI[side === "home" ? this.homeTier : this.awayTier];
+      const rx = ownGoalX(side) + sideDir(side) * 1.15;
+      const incoming = this.ballIntent?.shot && this.ballIntent.side === opposite(side) && Math.sign(this.state.ball.vx || sideDir(opposite(side))) === sideDir(opposite(side));
+      if (incoming) {
+        if (!st.active) {
+          st.active = true;
+          st.reactionT = cfg.gkReaction + (1 - this.ratings[side][0].gk) * 0.12;
+          st.diveZ = predictZAtX(this.state.ball, rx);
+        } else st.reactionT = Math.max(0, st.reactionT - FC_STEP);
+        if (st.reactionT <= 0) {
+          this.movePlayer(gk, rx, clamp(st.diveZ, PITCH_W / 2 - GOAL_W / 2 - 1.2, PITCH_W / 2 + GOAL_W / 2 + 1.2), true, 6.5 + this.ratings[side][0].gk * 2);
+          if (Math.abs(gk.z - st.diveZ) > 0.8) {
+            gk.anim = "dive";
+            gk.diveDir = gk.z < st.diveZ ? 1 : -1;
+          }
+        }
       } else {
-        this.moveBall = null;
-        const cornerZ = b.z < PITCH_W / 2 ? 0.3 : PITCH_W - 0.3;
-        this.setupRestart("corner", m.side, targetGoalX, cornerZ);
-      }
-    } else {
-      if (Math.abs(b.z - PITCH_W / 2) < GOAL_W / 2 + 0.5 && this.rand() < 0.16) this.event("post", m.side);
-      this.moveBall = null;
-      this.setupRestart("goalkick", defending, ownGoalX(defending) + sideDir(defending) * 4, PITCH_W / 2);
-    }
-  }
-
-  private finishMovingBall(m: MovingBall): void {
-    const b = this.state.ball;
-    this.moveBall = null;
-    if (m.target !== null) {
-      const r = this.getPlayer(m.side, m.target);
-      const catchRadius = m.kind === "lob" ? 2.5 : 2.0;
-      if (dist(r, b) < catchRadius) {
-        if (m.kind === "lob" && b.h > 0.8) this.event("header", m.side, m.target);
-        b.owner = { side: m.side, index: m.target };
-        b.lastTouch = m.side;
-        this.state.stats[m.side].passesDone++;
-        if (m.side === "home") this.state.controlled = m.target;
-        return;
-      }
-    }
-    this.tryLoosePickup();
-  }
-
-  private checkBoundsAndRules(): void {
-    const b = this.state.ball;
-    const moved = Math.hypot(b.x - this.lastBall.x, b.z - this.lastBall.z);
-    if (!b.owner && !this.moveBall && moved < 0.015 && Math.hypot(b.vx, b.vz) < 0.08) this.stuckT += FC_STEP;
-    else this.stuckT = 0;
-    this.lastBall = { x: b.x, z: b.z };
-    if (this.stuckT > 4.8) {
-      this.setupRestart("freekick", b.lastTouch ?? "home", clamp(b.x, 4, PITCH_L - 4), clamp(b.z, 4, PITCH_W - 4));
-      this.stuckT = 0;
-      return;
-    }
-    if (this.state.phase !== "play" || this.moveBall?.kind === "shot") return;
-    if (b.z < -0.2 || b.z > PITCH_W + 0.2) {
-      const side = opposite(b.lastTouch ?? "home");
-      this.setupRestart("throwin", side, clamp(b.x, 1, PITCH_L - 1), b.z < 0 ? 0 : PITCH_W);
-      return;
-    }
-    if (b.x < -0.2 || b.x > PITCH_L + 0.2) {
-      const defending: Side = b.x < 0 ? "home" : "away";
-      if (Math.abs(b.z - PITCH_W / 2) < GOAL_W / 2 && b.h < GOAL_H) {
-        this.scoreGoal(opposite(defending));
-      } else if (b.lastTouch === defending) {
-        this.setupRestart("corner", opposite(defending), defending === "home" ? 0 : PITCH_L, b.z < PITCH_W / 2 ? 0 : PITCH_W);
-      } else {
-        this.setupRestart("goalkick", defending, ownGoalX(defending) + sideDir(defending) * 4, PITCH_W / 2);
+        st.active = false;
+        const danger = this.state.ball.owner === null && Math.abs(this.state.ball.x - ownGoalX(side)) < 13;
+        const tx = danger ? clamp(this.state.ball.x, side === "home" ? 1 : PITCH_L - 8, side === "home" ? 8 : PITCH_L - 1) : rx;
+        const tz = clamp(PITCH_W / 2 + (this.state.ball.z - PITCH_W / 2) * 0.58, PITCH_W / 2 - GOAL_W / 2, PITCH_W / 2 + GOAL_W / 2);
+        this.movePlayer(gk, tx, tz, false, 5.4 + this.ratings[side][0].gk * 1.5);
       }
     }
   }
 
-  private updatePlayers(): void {
+  private movePlayer(p: FcPlayer, tx: number, tz: number, sprint: boolean, speedOverride?: number): void {
+    if (p.stunT > 0) return;
+    const n = unit(tx - p.x, tz - p.z);
+    const r = this.ratings[p.side][p.index] ?? this.ratings[p.side][1];
+    const tier = p.side === "home" ? this.homeTier : this.awayTier;
+    const maxSpeed = speedOverride ?? (sprint ? 7.0 : 4.65) * (0.86 + r.pace * 0.28) * FC_AI[tier].speed;
+    const desired = Math.min(maxSpeed, n.d * 4.2);
+    let turnCost = 1;
+    if (sprint && this.state.ball.owner?.side === p.side && this.state.ball.owner.index === p.index) turnCost = clamp(0.7 + (p.fx * n.x + p.fz * n.z) * 0.3, 0.55, 1);
+    p.vx += (n.x * desired * turnCost - p.vx) * 0.34;
+    p.vz += (n.z * desired * turnCost - p.vz) * 0.34;
+    if (n.d > 0.02) {
+      p.fx = n.x;
+      p.fz = n.z;
+    }
+  }
+
+  private updatePlayerPhysics(): void {
     for (const p of this.state.players) {
       p.animT += FC_STEP;
       p.stunT = Math.max(0, p.stunT - FC_STEP);
       p.x = clamp(p.x + p.vx * FC_STEP, -2.5, PITCH_L + 2.5);
       p.z = clamp(p.z + p.vz * FC_STEP, -2.5, PITCH_W + 2.5);
-      p.vx *= 0.86;
-      p.vz *= 0.86;
-      if (Math.hypot(p.vx, p.vz) > 0.12) {
-        const n = norm(p.vx, p.vz);
-        p.fx = n.x;
-        p.fz = n.z;
-        p.anim = n.d > 5 ? "sprint" : "run";
-      } else if (!(["kick", "header", "dive", "hold", "slide", "tackle"] as string[]).includes(p.anim)) p.anim = "idle";
+      p.vx *= 0.88;
+      p.vz *= 0.88;
+      const speed = len(p.vx, p.vz);
+      if (!["kick", "tackle", "slide", "fallen", "header", "dive", "hold"].includes(p.anim)) p.anim = speed > 5.2 ? "sprint" : speed > 0.25 ? "run" : "idle";
+      if (p.animT > 0.45 && (p.anim === "kick" || p.anim === "tackle" || p.anim === "header")) p.anim = "idle";
+      if (p.animT > 0.85 && p.anim === "slide") p.anim = "fallen";
+      if (p.animT > 1.1 && p.anim === "fallen") p.anim = "idle";
     }
-    // soft player separation
+    this.separatePlayers();
+    this.updateStickyBall();
+  }
+
+  private separatePlayers(): void {
     for (let i = 0; i < this.state.players.length; i++) {
       for (let j = i + 1; j < this.state.players.length; j++) {
         const a = this.state.players[i];
         const b = this.state.players[j];
         const dx = b.x - a.x;
         const dz = b.z - a.z;
-        const d = Math.hypot(dx, dz);
-        if (d > 0 && d < PLAYER_R * 1.8) {
-          const push = (PLAYER_R * 1.8 - d) * 0.5;
+        const d = len(dx, dz);
+        const minD = PLAYER_R * 1.82;
+        if (d > 0.001 && d < minD) {
+          const push = (minD - d) * 0.45;
           a.x -= (dx / d) * push;
           a.z -= (dz / d) * push;
           b.x += (dx / d) * push;
@@ -544,241 +465,392 @@ export class FcMatch {
     }
   }
 
-  private movePlayerToward(p: FcPlayer, tx: number, tz: number, sprint: boolean, overrideSpeed?: number): void {
-    if (p.stunT > 0) return;
-    const n = norm(tx - p.x, tz - p.z);
-    const r = this.ratings[p.side][p.index] ?? this.ratings[p.side][1];
-    const tier = p.side === "home" ? this.homeTier : this.awayTier;
-    const maxSpeed = overrideSpeed ?? (sprint ? 7.0 : 4.7) * (0.9 + r.pace * 0.2) * FC_AI[tier].speed;
-    const desired = Math.min(maxSpeed, n.d * 4);
-    p.vx += (n.x * desired - p.vx) * 0.35;
-    p.vz += (n.z * desired - p.vz) * 0.35;
-    if (n.d > 0.05) {
-      p.fx = n.x;
-      p.fz = n.z;
+  private updateStickyBall(): void {
+    const o = this.state.ball.owner;
+    if (!o) return;
+    const p = this.player(o.side, o.index);
+    const d = p.anim === "sprint" ? 0.84 : 0.62;
+    this.state.ball.x = clamp(p.x + p.fx * d, -2.5, PITCH_L + 2.5);
+    this.state.ball.z = clamp(p.z + p.fz * d, -2.5, PITCH_W + 2.5);
+    this.state.ball.h = 0;
+    this.state.ball.vx = p.vx;
+    this.state.ball.vz = p.vz;
+    this.state.ball.vh = 0;
+    this.state.ball.lastTouch = o.side;
+    this.lastTouchPoint = { x: p.x, z: p.z };
+  }
+
+  private updateBallPhysics(): void {
+    const b = this.state.ball;
+    if (b.owner) return;
+    const prevX = b.x;
+    const prevZ = b.z;
+    const prevH = b.h;
+    b.vh -= GRAVITY * FC_STEP;
+    b.vx *= 1 - AIR_DRAG * FC_STEP;
+    b.vz *= 1 - AIR_DRAG * FC_STEP;
+    b.x += b.vx * FC_STEP;
+    b.z += b.vz * FC_STEP;
+    b.h += b.vh * FC_STEP;
+    if (b.h <= 0) {
+      if (b.vh < -0.8) this.event("bounce");
+      b.h = 0;
+      b.vh = Math.abs(b.vh) * RESTITUTION;
+      if (Math.abs(b.vh) < 0.7) b.vh = 0;
+      b.vx *= GROUND_DRAG;
+      b.vz *= GROUND_DRAG;
+      const speed = len(b.vx, b.vz);
+      if (speed > 0) {
+        const decel = Math.min(speed, ROLL_DECEL * FC_STEP);
+        b.vx -= (b.vx / speed) * decel;
+        b.vz -= (b.vz / speed) * decel;
+      }
+    }
+    b.spin += len(b.vx, b.vz) * FC_STEP / BALL_R;
+    this.collideGoalFrame(prevX, prevZ, prevH);
+    this.handleGoalPlane(prevX, prevZ);
+    if (!b.owner && len(b.vx, b.vz) < 0.08 && b.h < 0.05) this.quietBallT += FC_STEP;
+    else this.quietBallT = 0;
+    this.maxStuckT = Math.max(this.maxStuckT, this.quietBallT);
+  }
+
+  private collideGoalFrame(_prevX: number, _prevZ: number, _prevH: number): void {
+    const b = this.state.ball;
+    for (const gx of [0, PITCH_L]) {
+      const nearX = Math.abs(b.x - gx) < 0.25;
+      if (!nearX) continue;
+      for (const postZ of [PITCH_W / 2 - GOAL_W / 2, PITCH_W / 2 + GOAL_W / 2]) {
+        const dz = b.z - postZ;
+        const dh = b.h;
+        const d = Math.hypot(dz, dh);
+        if (d < 0.17 && b.h < GOAL_H + 0.2) {
+          b.vx *= -0.55;
+          b.vz += Math.sign(dz || (this.rand() - 0.5)) * 3.5;
+          this.event("post");
+        }
+      }
+      if (Math.abs(b.z - PITCH_W / 2) < GOAL_W / 2 && Math.abs(b.h - GOAL_H) < 0.12 && Math.abs(b.vh) > 0.4) {
+        b.vh = -Math.abs(b.vh) * 0.55;
+        b.vx *= 0.75;
+        this.event("post");
+      }
     }
   }
 
-  private groundPass(side: Side, from: number, target: number, through: boolean, tx?: number, tz?: number): void {
-    const p = this.getPlayer(side, from);
-    const r = this.getPlayer(side, target);
-    const destX = tx ?? (through ? r.x + sideDir(side) * 7 : r.x);
-    const destZ = tz ?? r.z;
+  private handleGoalPlane(prevX: number, _prevZ: number): void {
+    const b = this.state.ball;
+    if (b.owner) return;
+    if (prevX <= PITCH_L && b.x > PITCH_L) this.crossGoalLine("away", "home");
+    if (prevX >= 0 && b.x < 0) this.crossGoalLine("home", "away");
+  }
+
+  private crossGoalLine(defending: Side, attacking: Side): void {
+    const b = this.state.ball;
+    const inMouth = Math.abs(b.z - PITCH_W / 2) <= GOAL_W / 2 && b.h <= GOAL_H;
+    if (inMouth) {
+      this.scoreGoal(attacking);
+      return;
+    }
+    const last = b.lastTouch;
+    if (last === defending) this.setupRestart("corner", attacking, defending === "home" ? 0 : PITCH_L, b.z < PITCH_W / 2 ? 0 : PITCH_W);
+    else this.setupRestart("goalkick", defending, ownGoalX(defending) + sideDir(defending) * 5, PITCH_W / 2);
+  }
+
+  private handleTouchesAndInterceptions(): void {
+    if (this.state.ball.owner) return;
+    let best: { p: FcPlayer; d: number } | null = null;
+    for (const p of this.state.players) {
+      const reach = this.reachFor(p);
+      const d = Math.hypot(this.state.ball.x - p.x, this.state.ball.z - p.z);
+      if (d < reach && (!best || d < best.d)) best = { p, d };
+    }
+    if (!best) return;
+    const p = best.p;
+    const ballSpeed = Math.hypot(this.state.ball.vx, this.state.ball.vz, this.state.ball.vh * 0.45);
+    const r = this.ratings[p.side][p.index];
+    const controlLimit = p.index === 0 ? 15 + r.gk * 9 : 6 + r.dribbling * 9 + r.physical * 3;
+    const opponentBall = this.ballIntent && this.ballIntent.side !== p.side;
+    if (this.ballIntent?.side === p.side && this.ballIntent.target === p.index && best.d < 1.2 && this.state.ball.h < 0.85) {
+      this.state.stats[p.side].passesDone++;
+      this.giveBallTo(p.side, p.index);
+      return;
+    }
+    if (this.state.ball.h > 0.65 && this.state.ball.h < 2.45 && p.index > 0) {
+      p.anim = "header";
+      p.animT = 0;
+      this.event("header", p.side, p.index);
+      if (this.ballIntent?.kind === "cross" || this.ballIntent?.kind === "lob") this.redirectHeader(p);
+      else this.deflectFrom(p, 0.45);
+      return;
+    }
+    if (p.index === 0 && this.ballIntent?.shot && this.ballIntent.side !== p.side) {
+      this.state.stats[p.side].saves++;
+      const nearBody = best.d < 0.75 && ballSpeed < 18;
+      this.event(nearBody ? "catch" : "save", p.side, p.index);
+      if (nearBody) {
+        this.giveBallTo(p.side, p.index);
+        p.anim = "hold";
+      } else {
+        const wide = this.state.ball.z < PITCH_W / 2 ? -1 : 1;
+        this.state.ball.owner = null;
+        this.state.ball.lastTouch = p.side;
+        this.state.ball.vx = -this.state.ball.vx * 0.35 + sideDir(p.side) * 2;
+        this.state.ball.vz = wide * (6 + this.rand() * 5);
+        this.state.ball.vh = Math.max(0.8, Math.abs(this.state.ball.vh) * 0.4);
+        this.ballIntent = { kind: "clear", side: p.side, by: p.index, target: null, targetX: this.state.ball.x + sideDir(p.side) * 8, targetZ: this.state.ball.z + wide * 8, shot: false };
+      }
+    } else if (ballSpeed < controlLimit && (!opponentBall || this.rand() < 0.68 + r.defending * 0.18)) {
+      const intent = this.ballIntent;
+      this.giveBallTo(p.side, p.index);
+      if (intent?.side === p.side && intent.target === p.index && intent.kind !== "shot") this.state.stats[p.side].passesDone++;
+      if (p.index === 0) p.anim = "hold";
+    } else this.deflectFrom(p, opponentBall ? 0.75 : 0.45);
+  }
+
+  private reachFor(p: FcPlayer): number {
+    if (p.index === 0) return this.state.ball.h < 2.15 ? 2.15 + this.ratings[p.side][0].gk * 1.05 : 1.25;
+    if (this.state.ball.h < 0.6) return 0.72 + this.ratings[p.side][p.index].dribbling * 0.22;
+    if (this.state.ball.h < 2.4) return 0.65 + this.ratings[p.side][p.index].physical * 0.25;
+    return 0;
+  }
+
+  private redirectHeader(p: FcPlayer): void {
+    const dir = sideDir(p.side);
+    const towardsGoal = Math.abs(attackGoalX(p.side) - p.x) < 14;
+    const targetX = towardsGoal ? attackGoalX(p.side) + dir * 1.5 : p.x + dir * 10;
+    const targetZ = towardsGoal ? PITCH_W / 2 + (this.rand() - 0.5) * GOAL_W * 0.7 : p.z + (this.rand() - 0.5) * 8;
+    const n = unit(targetX - p.x, targetZ - p.z);
+    this.state.ball.owner = null;
+    this.state.ball.lastTouch = p.side;
+    this.state.ball.vx = n.x * (towardsGoal ? 12 : 8);
+    this.state.ball.vz = n.z * (towardsGoal ? 12 : 8);
+    this.state.ball.vh = towardsGoal ? 0.4 : 1.1;
+    this.ballIntent = { kind: towardsGoal ? "shot" : "pass", side: p.side, by: p.index, target: null, targetX, targetZ, shot: towardsGoal };
+    if (towardsGoal) this.state.stats[p.side].shots++;
+  }
+
+  private deflectFrom(p: FcPlayer, scale: number): void {
+    const n = unit(this.state.ball.x - p.x, this.state.ball.z - p.z);
+    this.state.ball.owner = null;
+    this.state.ball.lastTouch = p.side;
+    this.state.ball.vx = n.x * (5 + this.rand() * 7) * scale + p.vx * 0.4;
+    this.state.ball.vz = n.z * (5 + this.rand() * 7) * scale + p.vz * 0.4;
+    this.state.ball.vh = Math.max(this.state.ball.vh * -0.2, 0.3 + this.rand() * 1.4);
+    this.ballIntent = { kind: "clear", side: p.side, by: p.index, target: null, targetX: this.state.ball.x + n.x * 8, targetZ: this.state.ball.z + n.z * 8, shot: false };
+  }
+
+  private handleBounds(): void {
+    if (this.state.phase !== "play" || this.state.ball.owner) return;
+    const b = this.state.ball;
+    if (b.z < -0.15 || b.z > PITCH_W + 0.15) this.setupRestart("throwin", opposite(b.lastTouch ?? "home"), clamp(b.x, 1, PITCH_L - 1), b.z < 0 ? 0 : PITCH_W);
+    else if (b.x < -0.3) this.crossGoalLine("home", "away");
+    else if (b.x > PITCH_L + 0.3) this.crossGoalLine("away", "home");
+  }
+
+  private kickPass(side: Side, from: number, target: number, through: boolean): void {
+    const p = this.player(side, from);
+    const r = this.player(side, target);
+    const lead = through ? sideDir(side) * (4.5 + this.ratings[side][from].passing * 5) : 0;
+    const tx = clamp(r.x + r.vx * 0.45 + lead, 1, PITCH_L - 1);
+    const tz = clamp(r.z + r.vz * 0.45, 1, PITCH_W - 1);
     this.state.stats[side].passes++;
-    this.launchBall(through ? "through" : "pass", side, target, clamp(destX, 0, PITCH_L), clamp(destZ, 0, PITCH_W), 0.45, 0.08);
-    p.anim = "kick";
-    p.animT = 0;
+    this.launchGroundKick(side, from, target, tx, tz, through ? "through" : "pass");
     this.event(through ? "through" : "pass", side, from);
   }
 
-  private lobOrCross(side: Side, from: number, input: FcInput, charge: number, tx?: number, tz?: number): void {
-    const p = this.getPlayer(side, from);
-    const target = pickPassTarget(this.ctx(side), p, true);
-    const r = this.getPlayer(side, target);
-    const stick = Math.hypot(input.mx, input.mz) > 0.15;
-    const distM = 8 + charge * 26;
-    const destX = tx ?? (stick ? p.x + input.mx * distM : r.x + sideDir(side) * 4);
-    const destZ = tz ?? (stick ? p.z + input.mz * distM : r.z);
-    const nearBox = Math.abs(goalX(side) - p.x) < 18;
-    if (nearBox && !stick && this.rand() < 0.18) this.shoot(side, from, 0.55 + charge * 0.35, PITCH_W / 2, false);
-    else {
-      this.state.stats[side].passes++;
-      this.launchBall("lob", side, target, clamp(destX, 1, PITCH_L - 1), clamp(destZ, 1, PITCH_W - 1), 0.8 + charge * 0.45, 1.8 + charge * 1.1);
-      p.anim = "kick";
-      p.animT = 0;
-      this.event("lob", side, from);
-    }
+  private launchGroundKick(side: Side, from: number, target: number | null, tx: number, tz: number, kind: BallIntentKind): void {
+    const p = this.player(side, from);
+    const r = this.ratings[side][from];
+    const tier = side === "home" ? this.homeTier : this.awayTier;
+    const dx = tx - this.state.ball.x;
+    const dz = tz - this.state.ball.z;
+    const d = Math.max(0.1, len(dx, dz));
+    const endSpeed = kind === "through" ? 4.5 : 3.4;
+    const v0 = Math.sqrt(endSpeed * endSpeed + 2 * ROLL_DECEL * d);
+    const pressure = this.pressureOn(p, opposite(side));
+    const err = FC_AI[tier].passError * (1.25 - r.passing) * (pressure ? 1.6 : 1);
+    this.setKickVelocity(side, from, tx, tz, v0, 0, err, kind, target, false);
   }
 
-  private shoot(side: Side, from: number, power: number, aimZ: number, penalty: boolean): void {
-    const p = this.getPlayer(side, from);
+  private kickLob(side: Side, from: number, target: number | null, tx: number, tz: number, charge: number, kind: BallIntentKind): void {
+    const p = this.player(side, from);
+    const r = this.ratings[side][from];
     const tier = side === "home" ? this.homeTier : this.awayTier;
-    const rating = this.ratings[side][from] ?? this.ratings[side][1];
-    const goalDist = Math.abs(goalX(side) - p.x);
-    const pressure = this.team(opposite(side)).some((o) => o.index > 0 && dist(o, p) < 2.2);
-    const error = (1 - rating.shooting) * 2.2 + (pressure ? 0.9 : 0) + Math.max(0, power - 0.86) * 2.5 + (1 - FC_AI[tier].shot) * 0.8;
-    const z = clamp(aimZ + (this.rand() - 0.5) * error * GOAL_W, PITCH_W / 2 - GOAL_W * 0.85, PITCH_W / 2 + GOAL_W * 0.85);
-    const h = penalty ? 0.7 + this.rand() * 0.7 : this.rand() < 0.16 ? 1.6 : 0.75;
+    const dx = tx - this.state.ball.x;
+    const dz = tz - this.state.ball.z;
+    const d = Math.max(1, len(dx, dz));
+    const t = clamp(0.88 + d / 32 + charge * 0.35, 0.9, 1.75);
+    const speed = d / t;
+    const err = FC_AI[tier].passError * (1.4 - r.passing) * (0.8 + charge * 0.6);
+    this.state.stats[side].passes++;
+    this.setKickVelocity(side, from, tx, tz, speed, GRAVITY * t / 2, err, kind, target, false);
+    this.event(kind === "cross" ? "lob" : "lob", side, from);
+  }
+
+  private kickShot(side: Side, from: number, charge: number, aimZ: number, penalty: boolean): void {
+    const p = this.player(side, from);
+    const r = this.ratings[side][from];
+    const tier = side === "home" ? this.homeTier : this.awayTier;
+    const gx = attackGoalX(side);
+    const dx = gx - this.state.ball.x;
+    const travel = Math.max(0.2, Math.abs(dx));
+    const targetH = penalty ? 0.5 + this.rand() * 1.2 : clamp(0.25 + this.rand() * 1.65 + Math.max(0, charge - 0.85) * 1.4, 0.15, 2.8);
+    const speed = 14 + charge * 5.5 + r.shooting * 3.5;
+    const time = travel / Math.max(6, Math.abs(speed * sideDir(side)));
+    const pressure = this.pressureOn(p, opposite(side));
+    const body = clamp((p.fx * sideDir(side) + 1) / 2, 0, 1);
+    const err = FC_AI[tier].shotError * (1.55 - r.shooting) * (pressure ? 1.6 : 1) * (1.25 - body * 0.3) + Math.max(0, charge - 0.85) * 0.045;
+    const tz = clamp(aimZ, PITCH_W / 2 - GOAL_W / 2 + 0.12, PITCH_W / 2 + GOAL_W / 2 - 0.12);
+    const n = unit(gx - this.state.ball.x, tz - this.state.ball.z);
+    const a = Math.atan2(n.z, n.x) + angleNoise(this.rand, err * 5.0);
+    this.releaseBall(side, from);
+    this.state.ball.vx = Math.cos(a) * speed;
+    this.state.ball.vz = Math.sin(a) * speed;
+    this.state.ball.vh = (targetH - this.state.ball.h + 0.5 * GRAVITY * time * time) / Math.max(0.05, time) + angleNoise(this.rand, err * 20);
     this.state.stats[side].shots++;
-    if (Math.abs(z - PITCH_W / 2) < GOAL_W / 2 && h < GOAL_H) this.state.stats[side].onTarget++;
-    this.launchBall("shot", side, null, goalX(side) + sideDir(side) * 1.5, z, clamp(0.35 + goalDist / 42, 0.45, 0.9), h, power);
+    if (Math.abs(tz - PITCH_W / 2) < GOAL_W / 2) this.state.stats[side].onTarget++;
+    this.ballIntent = { kind: "shot", side, by: from, target: null, targetX: gx, targetZ: tz, shot: true };
     p.anim = "kick";
     p.animT = 0;
     this.event("shot", side, from);
   }
 
-  private launchBall(kind: MovingBall["kind"], side: Side, target: number | null, tx: number, tz: number, ttl: number, peak: number, power = 0.65): void {
-    const b = this.state.ball;
-    const p = b.owner?.side === side ? this.getPlayer(side, b.owner.index) : null;
-    this.moveBall = { kind, side, target, tx, tz, t: 0, ttl, startX: b.x, startZ: b.z, startH: b.h, peak, power };
-    b.owner = null;
-    b.lastTouch = side;
-    if (p) {
-      const n = norm(tx - p.x, tz - p.z);
-      p.fx = n.x;
-      p.fz = n.z;
-    }
+  private setKickVelocity(side: Side, from: number, tx: number, tz: number, speed: number, vh: number, angularError: number, kind: BallIntentKind, target: number | null, shot: boolean): void {
+    const p = this.player(side, from);
+    const n = unit(tx - this.state.ball.x, tz - this.state.ball.z);
+    const a = Math.atan2(n.z, n.x) + angleNoise(this.rand, angularError * 4.5);
+    this.releaseBall(side, from);
+    this.state.ball.vx = Math.cos(a) * speed;
+    this.state.ball.vz = Math.sin(a) * speed;
+    this.state.ball.vh = vh;
+    this.ballIntent = { kind, side, by: from, target, targetX: tx, targetZ: tz, shot };
+    p.anim = "kick";
+    p.animT = 0;
+    this.event("kick", side, from);
   }
 
-  private tryLoosePickup(): void {
-    const b = this.state.ball;
-    if (b.owner || this.moveBall) return;
-    let best: FcPlayer | null = null;
-    let bestD = Infinity;
-    for (const p of this.state.players) {
-      const reach = p.index === 0 ? 1.2 : b.h > 0.7 ? 1.05 : 0.85;
-      const d = dist(p, b);
-      if (d < reach && d < bestD && b.h < (p.index === 0 ? 1.6 : 2.2)) {
-        best = p;
-        bestD = d;
-      }
-    }
-    if (best) {
-      b.owner = { side: best.side, index: best.index };
-      b.lastTouch = best.side;
-      if (best.side === "home" && best.index > 0) this.state.controlled = best.index;
-    }
+  private releaseBall(side: Side, from: number): void {
+    const p = this.player(side, from);
+    this.state.ball.owner = null;
+    this.state.ball.lastTouch = side;
+    this.state.ball.x = clamp(p.x + p.fx * 0.72, -2.5, PITCH_L + 2.5);
+    this.state.ball.z = clamp(p.z + p.fz * 0.72, -2.5, PITCH_W + 2.5);
+    this.lastTouchPoint = { x: p.x, z: p.z };
   }
 
-  private tryTackle(p: FcPlayer, slide: boolean): void {
-    const owner = this.state.ball.owner;
-    if (!owner || owner.side === p.side) return;
-    const c = this.getPlayer(owner.side, owner.index);
-    const d = dist(p, c);
-    const front = (c.x - p.x) * p.fx + (c.z - p.z) * p.fz > -0.2;
+  private giveBallTo(side: Side, index: number): void {
+    this.state.ball.owner = { side, index };
+    this.state.ball.lastTouch = side;
+    this.state.ball.vx = 0;
+    this.state.ball.vz = 0;
+    this.state.ball.vh = 0;
+    this.ballIntent = null;
+    if (side === "home" && index > 0) this.state.controlled = index;
+  }
+
+  private startTackle(p: FcPlayer, slide: boolean): void {
+    if (p.stunT > 0 || ((p.anim === "tackle" || p.anim === "slide") && p.animT < (slide ? 0.7 : 0.35))) return;
     p.anim = slide ? "slide" : "tackle";
     p.animT = 0;
-    const boxFoul = inPenaltyArea(c.x, c.z, p.side);
-    const success = d < (slide ? 2.7 : 1.55) && (front || this.rand() < 0.25) && this.rand() < (0.45 + this.ratings[p.side][p.index].defending * 0.45);
-    if (success) {
-      this.state.ball.owner = { side: p.side, index: p.index };
-      this.state.ball.lastTouch = p.side;
+    const owner = this.state.ball.owner;
+    if (!owner || owner.side === p.side) return;
+    const carrier = this.player(owner.side, owner.index);
+    const ballD = dist(p, this.state.ball);
+    const bodyD = dist(p, carrier);
+    const front = (carrier.x - p.x) * p.fx + (carrier.z - p.z) * p.fz > -0.15;
+    const range = slide ? 2.75 : 1.35;
+    const ballFirst = ballD < (slide ? 1.05 : 0.88) && ballD < bodyD + 0.15;
+    if (ballD < range && ballFirst) {
+      this.giveBallTo(p.side, p.index);
+      p.stunT = slide ? 0.18 : 0.1;
+      carrier.stunT = 0.22;
       this.state.stats[p.side].tackles++;
       this.event("tackle", p.side, p.index);
-    } else if (d < (slide ? 2.9 : 1.7) && (!front || this.rand() < (slide ? 0.32 : 0.12))) {
-      p.stunT = slide ? 0.9 : 0.25;
-      p.anim = slide ? "fallen" : "tackle";
+      return;
+    }
+    if (bodyD < (slide ? 1.25 : 0.88) && (!front || slide || this.rand() > FC_AI[p.side === "home" ? this.homeTier : this.awayTier].foulCare)) {
       this.state.stats[p.side].fouls++;
+      p.stunT = slide ? 0.8 : 0.25;
+      carrier.stunT = 0.35;
       this.event("foul", p.side, p.index);
-      const restart: RestartType = boxFoul ? "penalty" : "freekick";
-      this.setupRestart(restart, owner.side, c.x, c.z);
+      const inBox = isInPenaltyArea(carrier.x, carrier.z, p.side);
+      this.setupRestart(inBox ? "penalty" : "freekick", owner.side, carrier.x, carrier.z);
     }
   }
 
   private scoreGoal(side: Side): void {
-    const s = this.state;
-    s.score[side]++;
-    s.lastScorer = side;
-    s.stats[side].goals.push(s.minute >= 90 ? "90+'" : `${Math.max(1, s.minute)}'`);
-    for (const p of s.players) p.anim = p.side === side ? "celebrate" : "sad";
-    this.moveBall = null;
-    s.ball.owner = null;
+    this.state.score[side]++;
+    this.state.lastScorer = side;
+    this.state.stats[side].goals.push(this.state.minute >= 90 ? "90+'" : `${Math.max(1, this.state.minute)}'`);
+    this.state.ball.owner = null;
+    this.state.ball.vx = 0;
+    this.state.ball.vz = 0;
+    this.state.ball.vh = 0;
+    for (const p of this.state.players) p.anim = p.side === side ? "celebrate" : "sad";
     this.event("goal", side);
-    this.setPhase("goal");
-    if (s.goldenGoal) this.endNow();
+    if (this.state.goldenGoal) this.endNow();
+    else this.setPhase("goal");
   }
 
-  private normalizeAiResult(): void {
-    this.normalizedAiResult = true;
-    const s = this.state;
-    let h = (this.opts.seed ^ 0x9e3779b9) >>> 0;
-    const r = (): number => {
-      h = Math.imul(h ^ (h >>> 16), 2246822507) >>> 0;
-      h = Math.imul(h ^ (h >>> 13), 3266489909) >>> 0;
-      h = (h ^ (h >>> 16)) >>> 0;
-      return h / 0x100000000;
-    };
-    const total = 2 + Math.floor(r() * 5);
-    const targets: Record<1 | 2 | 3 | 4, { w: number; d: number }> = {
-      1: { w: 0.8, d: 0.12 },
-      2: { w: 0.55, d: 0.2 },
-      3: { w: 0.36, d: 0.14 },
-      4: { w: 0.2, d: 0.17 },
-    };
-    const pick = r();
-    const t = targets[this.awayTier];
-    let homeGoals: number;
-    let awayGoals: number;
-    if (pick < t.w) {
-      const margin = r() < 0.72 ? 1 : 2;
-      awayGoals = Math.max(0, Math.floor((total - margin) / 2));
-      homeGoals = awayGoals + margin;
-    } else if (pick < t.w + t.d) {
-      homeGoals = Math.floor(total / 2);
-      awayGoals = homeGoals;
-    } else {
-      const margin = r() < 0.72 ? 1 : 2;
-      homeGoals = Math.max(0, Math.floor((total - margin) / 2));
-      awayGoals = homeGoals + margin;
-    }
-    s.score.home = homeGoals;
-    s.score.away = awayGoals;
-    s.stats.home.goals = Array.from({ length: homeGoals }, (_, i) => `${Math.min(89, 8 + i * 11)}'`);
-    s.stats.away.goals = Array.from({ length: awayGoals }, (_, i) => `${Math.min(89, 12 + i * 11)}'`);
-    s.stats.home.shots = Math.max(s.stats.home.shots, 3);
-    s.stats.away.shots = Math.max(s.stats.away.shots, 3);
-    s.stats.home.passes = Math.max(s.stats.home.passes, 12);
-    s.stats.away.passes = Math.max(s.stats.away.passes, 12);
-    this.headerCount = Math.max(this.headerCount, (homeGoals + awayGoals) > 3 ? 1 : 0);
-    if (this.opts.seed % 3 === 0) this.restartCounts.throwin++;
-    if (this.opts.seed % 11 === 0) this.restartCounts.freekick++;
-    if (this.opts.seed % 29 === 0) this.restartCounts.penalty++;
+  private pressureOn(p: FcPlayer, opponent: Side): boolean {
+    return this.team(opponent).some((o) => o.index > 0 && dist(o, p) < 2.2);
   }
 
-  private updateControl(input: FcInput): void {
+  private updateControl(): void {
+    const owner = this.state.ball.owner;
     if (this.opts.homeAiTier) return;
-    const b = this.state.ball;
-    if (b.owner?.side === "home" && b.owner.index > 0) this.state.controlled = b.owner.index;
-    else if (b.owner?.side === "away") {
-      const nearest = this.team("home").filter((p) => p.index > 0).sort((a, c) => dist(a, b) - dist(c, b));
-      const cur = this.getPlayer("home", this.state.controlled);
-      if (nearest[0] && dist(cur, b) > dist(nearest[0], b) + 4) this.state.controlled = nearest[0].index;
+    if (owner?.side === "home" && owner.index > 0) this.state.controlled = owner.index;
+    else if (owner?.side === "away") {
+      const nearest = this.team("home").filter((p) => p.index > 0).sort((a, b) => dist(a, this.state.ball) - dist(b, this.state.ball))[0];
+      const current = this.player("home", this.state.controlled);
+      if (nearest && dist(current, this.state.ball) > dist(nearest, this.state.ball) + 4) this.state.controlled = nearest.index;
     }
   }
 
-  private switchControl(nextBest: boolean): void {
-    const sorted = this.team("home").filter((p) => p.index > 0).sort((a, b) => dist(a, this.state.ball) - dist(b, this.state.ball));
-    const pick = nextBest && sorted[0]?.index === this.state.controlled ? sorted[1] : sorted[0];
+  private switchControl(): void {
+    const list = this.team("home").filter((p) => p.index > 0).sort((a, b) => dist(a, this.state.ball) - dist(b, this.state.ball));
+    const pick = list[0]?.index === this.state.controlled ? list[1] : list[0];
     if (pick) {
       this.state.controlled = pick.index;
       this.event("switch", "home", pick.index);
     }
   }
 
-  private sendPress(): void {
-    const p = this.team("home").filter((x) => x.index > 0 && x.index !== this.state.controlled).sort((a, b) => dist(a, this.state.ball) - dist(b, this.state.ball))[0];
+  private pressWithNearestTeammate(): void {
     const owner = this.state.ball.owner;
-    if (p && owner?.side === "away") this.movePlayerToward(p, this.getPlayer("away", owner.index).x, this.getPlayer("away", owner.index).z, true);
+    if (owner?.side !== "away") return;
+    const carrier = this.player("away", owner.index);
+    const p = this.team("home").filter((q) => q.index > 0 && q.index !== this.state.controlled).sort((a, b) => dist(a, carrier) - dist(b, carrier))[0];
+    if (p) this.movePlayer(p, carrier.x, carrier.z, true);
   }
 
   private chooseHumanPassTarget(input: FcInput): number | null {
-    const p = this.getPlayer("home", this.state.controlled);
-    const stick = Math.hypot(input.mx, input.mz);
-    let best: number | null = null;
-    let bestScore = -Infinity;
-    for (const mate of this.team("home")) {
-      if (mate.index === 0 || mate.index === p.index) continue;
-      const n = norm(mate.x - p.x, mate.z - p.z);
-      const align = stick > 0.15 ? n.x * input.mx + n.z * input.mz : n.x * p.fx + n.z * p.fz;
-      const open = laneOpenness(p, mate, this.team("away"));
-      const score = align * 2 + open - n.d * 0.02;
-      if (score > bestScore) {
-        bestScore = score;
-        best = mate.index;
+    const p = this.player("home", this.state.controlled);
+    const stick = len(input.mx, input.mz);
+    let best = -Infinity;
+    let chosen: number | null = null;
+    for (const m of this.team("home")) {
+      if (m.index === 0 || m.index === p.index) continue;
+      const n = unit(m.x - p.x, m.z - p.z);
+      const align = stick > 0.12 ? n.x * input.mx + n.z * input.mz : n.x * p.fx + n.z * p.fz;
+      const score = align * 1.8 + laneOpenness(p, m, this.team("away")) - n.d * 0.02;
+      if (score > best) {
+        best = score;
+        chosen = m.index;
       }
     }
-    return best;
+    return chosen;
   }
 
   private ctx(side: Side): TeamAiContext {
-    return { side, tier: side === "home" ? this.homeTier : this.awayTier, players: this.team(side), opponents: this.team(opposite(side)), ball: this.state.ball, score: this.state.score, elapsed: this.state.elapsed, seconds: this.seconds, rand: this.rand, ratings: this.ratings[side] };
+    return { side, tier: side === "home" ? this.homeTier : this.awayTier, players: this.team(side), opponents: this.team(opposite(side)), ball: this.state.ball, intent: this.ballIntent, ratings: this.ratings[side], rand: this.rand };
   }
 
   private team(side: Side): FcPlayer[] {
     return side === "home" ? this.state.players.slice(0, 5) : this.state.players.slice(5, 10);
   }
 
-  private getPlayer(side: Side, index: number): FcPlayer {
+  private player(side: Side, index: number): FcPlayer {
     return this.state.players[(side === "home" ? 0 : 5) + index];
   }
 }
@@ -789,20 +861,18 @@ export function blankFcInput(): FcInput {
 
 export function simulateFcMatch(opts: FcMatchOptions): FcMatch {
   const match = new FcMatch({ ...opts, homeAiTier: opts.homeAiTier ?? 2 });
-  let guard = 0;
-  const max = Math.ceil(((opts.seconds ?? MATCH_SECONDS) + GOLDEN_GOAL_SECONDS + 20) / FC_STEP);
-  while (match.state.phase !== "ended" && guard++ < max) match.step(ZERO);
+  const limit = Math.ceil(((opts.seconds ?? MATCH_SECONDS) + GOLDEN_GOAL_SECONDS + 12) / FC_STEP);
+  for (let i = 0; i < limit && match.state.phase !== "ended"; i++) match.step(ZERO);
   if (match.state.phase !== "ended") match.endNow();
   return match;
 }
 
-function makeHomePlayers(home: SquadPlayer[], captain: number): FcPlayer[] {
+function makeHomePlayers(home: SquadPlayer[]): FcPlayer[] {
   const fallback = home[0];
   return [0, 1, 2, 3, 4].map((i) => {
-    const sp = home[i] ?? fallback;
-    const role = roleFromPos(sp?.pos ?? (i === 0 ? "GK" : "MF"));
+    const p = home[i] ?? fallback;
     const spot = formationSpot("home", i, PITCH_L / 2, PITCH_W / 2, false);
-    return makePlayer("home", i, role, sp?.num ?? i + 1, spot.x, spot.z, sp?.num);
+    return makePlayer("home", i, roleFromPlayer(p, i), p?.num ?? i + 1, spot.x, spot.z, p?.num);
   });
 }
 
@@ -819,10 +889,10 @@ function makePlayer(side: Side, index: number, role: Role, num: number, x: numbe
   return { side, index, role, num, squadNum, x, z, vx: 0, vz: 0, h: 0, fx: sideDir(side), fz: 0, anim: "idle", animT: 0, diveDir: 0, stunT: 0 };
 }
 
-function roleFromPos(pos: SquadPlayer["pos"]): Role {
-  if (pos === "GK") return "GK";
-  if (pos === "DF") return "DEF";
-  if (pos === "FW") return "FWD";
+function roleFromPlayer(p: SquadPlayer | undefined, index: number): Role {
+  if (index === 0 || p?.pos === "GK") return "GK";
+  if (p?.pos === "DF") return "DEF";
+  if (p?.pos === "FW") return "FWD";
   return "MID";
 }
 
@@ -835,41 +905,41 @@ function rateHome(home: SquadPlayer[], captain: number): FcRatings[] {
     const p = home[i] ?? home[0];
     const old = playerStats(p);
     const cap = p.num === captain ? 0.04 : 0;
-    const pos = p.pos;
+    const apps = Math.min(p.apps, 32) / 32;
+    const production = Math.min(1, (p.goals * 2 + p.assists) / 14);
+    const defRole = p.pos === "DF" ? 0.16 : p.pos === "MF" ? 0.08 : 0;
+    const gk = p.gk ? 0.72 + apps * 0.14 + cap : 0.08;
     return {
-      pace: clamp(old.speed + cap, 0.45, 0.78),
-      shooting: clamp(old.shot + (pos === "FW" ? 0.08 : pos === "AM" ? 0.05 : pos === "GK" ? -0.12 : 0) + cap, 0.42, 0.82),
-      passing: clamp(0.55 + p.assists * 0.018 + Math.min(p.apps, 30) * 0.004 + (pos === "MF" || pos === "AM" ? 0.08 : 0) + cap, 0.45, 0.84),
-      defending: clamp(0.54 + (pos === "DF" ? 0.14 : pos === "MF" ? 0.06 : pos === "GK" ? 0.1 : 0) + cap, 0.43, 0.84),
-      gk: clamp(p.gk ? 0.76 + cap : 0.1, 0.1, 0.86),
+      pace: clamp(old.speed + cap + (p.weight < 75 ? 0.03 : 0), 0.42, 0.84),
+      shooting: clamp(old.shot + production * 0.16 + cap, 0.4, 0.86),
+      passing: clamp(0.52 + p.assists * 0.025 + apps * 0.11 + (p.pos === "MF" || p.pos === "AM" ? 0.08 : 0) + cap, 0.42, 0.88),
+      dribbling: clamp(0.52 + old.speed * 0.24 + production * 0.1 + (p.pos === "AM" || p.pos === "FW" ? 0.06 : 0) + cap, 0.42, 0.88),
+      defending: clamp(0.48 + defRole + apps * 0.1 + cap, 0.38, 0.86),
+      physical: clamp(0.48 + (p.height - 175) / 80 + (p.weight - 70) / 120 + cap, 0.4, 0.86),
+      gk: clamp(gk, 0.08, 0.9),
     };
   });
 }
 
 function rateAway(tier: 1 | 2 | 3 | 4): FcRatings[] {
-  const base = { 1: 0.49, 2: 0.605, 3: 0.76, 4: 0.84 }[tier];
+  const base = { 1: 0.62, 2: 0.85, 3: 0.90, 4: 0.96 }[tier];
   return [0, 1, 2, 3, 4].map((i) => ({
-    pace: clamp(base + (i === 4 ? 0.04 : 0), 0.45, 0.8),
-    shooting: clamp(base + (i === 4 ? 0.08 : i === 3 ? 0.04 : -0.02), 0.42, 0.82),
-    passing: clamp(base + (i === 3 ? 0.06 : 0), 0.42, 0.82),
-    defending: clamp(base + (i === 1 || i === 2 ? 0.08 : 0), 0.42, 0.82),
-    gk: i === 0 ? clamp(base + 0.15, 0.55, 0.9) : 0.1,
+    pace: clamp(base + (i === 4 ? 0.05 : 0), 0.38, 0.86),
+    shooting: clamp(base + (i === 4 ? 0.12 : i === 3 ? 0.05 : -0.03), 0.36, 0.9),
+    passing: clamp(base + (i === 3 ? 0.08 : 0), 0.36, 0.88),
+    dribbling: clamp(base + (i === 3 || i === 4 ? 0.08 : 0), 0.36, 0.88),
+    defending: clamp(base + (i === 1 || i === 2 ? 0.1 : 0), 0.36, 0.88),
+    physical: clamp(base + 0.04, 0.36, 0.88),
+    gk: i === 0 ? clamp(base + 0.16, 0.52, 0.92) : 0.08,
   }));
 }
 
-function opposite(side: Side): Side {
-  return side === "home" ? "away" : "home";
+function predictZAtX(ball: { x: number; z: number; vx: number; vz: number }, x: number): number {
+  const t = (x - ball.x) / (ball.vx || 0.001);
+  return ball.z + ball.vz * clamp(t, 0, 1.4);
 }
 
-function lerp(a: number, b: number, t: number): number {
-  return a + (b - a) * t;
-}
-
-function smooth(t: number): number {
-  return t * t * (3 - 2 * t);
-}
-
-function inPenaltyArea(x: number, z: number, defendingSide: Side): boolean {
-  const nearGoal = defendingSide === "home" ? x < BOX_DEPTH : x > PITCH_L - BOX_DEPTH;
-  return nearGoal && Math.abs(z - PITCH_W / 2) < BOX_W / 2;
+function isInPenaltyArea(x: number, z: number, defendingSide: Side): boolean {
+  const near = defendingSide === "home" ? x < BOX_DEPTH : x > PITCH_L - BOX_DEPTH;
+  return near && Math.abs(z - PITCH_W / 2) < BOX_W / 2;
 }
