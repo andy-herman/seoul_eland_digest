@@ -1,12 +1,15 @@
 // FC match controls: keyboard (WASD + J K L I, or arrows + Z X C V), a standard gamepad and a
 // floating touch joystick with four action buttons. Buttons are reported as held states; the
 // engine detects presses and releases itself, so very short taps are held for a few frames.
+// On touch there is no sprint button: pushing the stick to its rim sprints (like FC Mobile's auto sprint).
 import type { FcInput } from "./types";
 
 type Action = "pass" | "shoot" | "lob" | "through" | "sprint";
 
 const MIN_HOLD_MS = 70;
 const STICK_R = 52; // CSS px from the base centre to full tilt
+const SPRINT_ON = 0.8; // share of full tilt that starts an auto sprint
+const SPRINT_OFF = 0.72; // and the share that ends it, so it does not flicker at the edge
 
 const KEYS: Record<string, Action | "up" | "down" | "left" | "right"> = {
   KeyW: "up",
@@ -36,7 +39,7 @@ export class FcControls {
   private touch: Record<Action, boolean> = { pass: false, shoot: false, lob: false, through: false, sprint: false };
   private downAt: Record<Action, number> = { pass: 0, shoot: 0, lob: 0, through: 0, sprint: 0 };
   private releaseAt: Record<Action, number> = { pass: 0, shoot: 0, lob: 0, through: 0, sprint: 0 };
-  private stick = { x: 0, z: 0, id: -1, ox: 0, oy: 0 };
+  private stick = { x: 0, z: 0, id: -1, ox: 0, oy: 0, sprint: false };
   private padStart = false;
   private labels = new Map<Action, HTMLElement>();
   private labelText = new Map<Action, string>();
@@ -91,15 +94,22 @@ export class FcControls {
         }
         knob.style.transform = `translate(${dx}px, ${dy}px)`;
         const m = Math.min(1, d / STICK_R);
-        const k = m < 0.14 ? 0 : (m - 0.14) / 0.86 / Math.max(1e-6, m);
+        const sprint = m >= (this.stick.sprint ? SPRINT_OFF : SPRINT_ON);
+        if (sprint !== this.stick.sprint) {
+          this.stick.sprint = sprint;
+          zone.dataset.sprint = String(sprint);
+        }
+        // full length while sprinting, so the rim gives top speed; otherwise a dead zone, then analogue
+        const k = sprint ? 1 / Math.max(1e-6, m) : m < 0.14 ? 0 : (m - 0.14) / 0.86 / Math.max(1e-6, m);
         this.stick.x = (dx / STICK_R) * k;
         this.stick.z = (-dy / STICK_R) * k;
       };
       const end = (ev: PointerEvent) => {
         if (ev.pointerId !== this.stick.id) return;
-        this.stick = { x: 0, z: 0, id: -1, ox: 0, oy: 0 };
+        this.stick = { x: 0, z: 0, id: -1, ox: 0, oy: 0, sprint: false };
         knob.style.transform = "";
         zone.dataset.active = "false";
+        zone.dataset.sprint = "false";
         base.style.left = "";
         base.style.top = "";
       };
@@ -170,6 +180,7 @@ export class FcControls {
     if (this.stick.id !== -1) {
       input.mx = this.stick.x;
       input.mz = this.stick.z;
+      input.sprint ||= this.stick.sprint;
     }
     this.gamepad(input);
     return input;
