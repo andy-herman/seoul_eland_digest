@@ -44,8 +44,8 @@ export interface AiAction {
 export const FC_AI: Record<1 | 2 | 3 | 4, FcAiConfig> = {
   1: { reaction: 0.68, decisionNoise: 0.48, passError: 0.155, shotError: 0.19, press: 0.76, speed: 0.94, gkReaction: 0.32, gkReach: 1.75, foulCare: 0.45 },
   2: { reaction: 0.5, decisionNoise: 0.32, passError: 0.105, shotError: 0.13, press: 0.94, speed: 1, gkReaction: 0.24, gkReach: 2.0, foulCare: 0.64 },
-  3: { reaction: 0.62, decisionNoise: 0.5, passError: 0.2, shotError: 0.36, press: 0.68, speed: 0.94, gkReaction: 0.3, gkReach: 1.45, foulCare: 0.55 },
-  4: { reaction: 0.24, decisionNoise: 0.1, passError: 0.035, shotError: 0.045, press: 1.35, speed: 1.055, gkReaction: 0.05, gkReach: 4.0, foulCare: 0.92 },
+  3: { reaction: 0.46, decisionNoise: 0.26, passError: 0.12, shotError: 0.18, press: 0.88, speed: 0.99, gkReaction: 0.24, gkReach: 1.85, foulCare: 0.68 },
+  4: { reaction: 0.2, decisionNoise: 0.08, passError: 0.025, shotError: 0.035, press: 0.92, speed: 1.04, gkReaction: 0.04, gkReach: 4.8, foulCare: 0.94 },
 };
 
 export function sideDir(side: Side): 1 | -1 {
@@ -141,7 +141,7 @@ export function chooseOnBallAction(ctx: TeamAiContext, carrier: FcPlayer): AiAct
   const rating = ctx.ratings[carrier.index] ?? ctx.ratings[1];
   const openShot = countLaneBlockers(carrier, goal, ctx.opponents) === 0;
   const shootValue = (28 - goalDist) * 0.052 + rating.shooting * 0.85 - angle * 1.3 + (openShot ? 0.32 : -0.18) - (pressure < 2.1 ? 0.25 : 0) + (ctx.rand() - 0.5) * cfg.decisionNoise;
-  if (goalDist < 20 + ctx.tier * 1.0 && shootValue > 1.52 - ctx.tier * 0.07) return { kind: "shoot", x: goal.x, z: clamp(PITCH_W / 2 + (ctx.rand() - 0.5) * GOAL_W * 0.75, PITCH_W / 2 - GOAL_W / 2 + 0.2, PITCH_W / 2 + GOAL_W / 2 - 0.2) };
+  if (goalDist < 20 + ctx.tier * 1.0 && shootValue > 1.46 - ctx.tier * 0.065) return { kind: "shoot", x: goal.x, z: clamp(PITCH_W / 2 + (ctx.rand() - 0.5) * GOAL_W * 0.75, PITCH_W / 2 - GOAL_W / 2 + 0.2, PITCH_W / 2 + GOAL_W / 2 - 0.2) };
 
   const wide = carrier.z < 7.5 || carrier.z > PITCH_W - 7.5;
   const nearBox = ctx.side === "home" ? carrier.x > PITCH_L - BOX_DEPTH - 5 : carrier.x < BOX_DEPTH + 5;

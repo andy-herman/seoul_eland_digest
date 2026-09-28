@@ -1,5 +1,5 @@
 import { AI_TIER, rng, type SquadPlayer } from "../data";
-import { RIVAL_OVR, attrsFor, cardFor, roleOf } from "../ratings";
+import { attrsFor, cardFor, rivalAttrs, roleOf } from "../ratings";
 import {
   attackGoalX,
   angleNoise,
@@ -95,7 +95,7 @@ export class FcMatch {
     this.rand = rng(opts.seed);
     this.awayTier = opts.tier ?? AI_TIER[opts.opponent];
     this.homeTier = opts.homeAiTier ?? 2;
-    this.ratings = { home: rateHome(opts.home, opts.captain), away: rateAway(this.awayTier) };
+    this.ratings = { home: opts.mirror ? rateRival(this.homeTier) : rateHome(opts.home, opts.captain), away: rateRival(this.awayTier) };
     this.state = {
       phase: "restart",
       phaseT: 0,
@@ -634,7 +634,7 @@ export class FcMatch {
   private reachFor(p: FcPlayer): number {
     if (p.index === 0) {
       const st = this.keeper[p.side];
-      if (p.anim === "dive" && st.active && st.reactionT <= 0 && this.state.ball.h <= 2.35) return 0.45 + FC_AI[p.side === "home" ? this.homeTier : this.awayTier].gkReach * 0.1 + this.ratings[p.side][0].gk * 0.08;
+      if (p.anim === "dive" && st.active && st.reactionT <= 0 && this.state.ball.h <= 2.35) return 0.30 + FC_AI[p.side === "home" ? this.homeTier : this.awayTier].gkReach * 0.3 + this.ratings[p.side][0].gk * 0.1;
       return this.state.ball.h <= 2.3 ? 0.82 + this.ratings[p.side][0].gk * 0.12 : 0;
     }
     if (this.state.ball.h < 0.55) return 0.72 + this.ratings[p.side][p.index].dribbling * 0.22;
@@ -944,18 +944,19 @@ function rateHome(home: SquadPlayer[], captain: number): FcRatings[] {
   });
 }
 
-function rateAway(tier: 1 | 2 | 3 | 4): FcRatings[] {
-  const ovr = RIVAL_OVR[tier];
-  const base = clamp((ovr - 30) / 70 + Math.max(0, (ovr - 61) / 10) ** 2 * 0.12, 0.42, 0.9);
-  return [0, 1, 2, 3, 4].map((i) => ({
-    pace: clamp(base + (i === 4 ? 0.05 : 0), 0.38, 0.96),
-    shooting: clamp(base + (i === 4 ? 0.12 : i === 3 ? 0.05 : -0.03), 0.36, 0.97),
-    passing: clamp(base + (i === 3 ? 0.08 : 0), 0.36, 0.96),
-    dribbling: clamp(base + (i === 3 || i === 4 ? 0.08 : 0), 0.36, 0.96),
-    defending: clamp(base + (i === 1 || i === 2 ? 0.1 : 0), 0.36, 0.96),
-    physical: clamp(base + 0.04, 0.36, 0.96),
-    gk: i === 0 ? clamp(base + 0.16, 0.52, 0.97) : 0.08,
-  }));
+function rateRival(tier: 1 | 2 | 3 | 4): FcRatings[] {
+  return [0, 1, 2, 3, 4].map((i) => {
+    const attrs = rivalAttrs(tier, i);
+    return {
+      pace: clamp(attrs.pace, 0.08, 0.95),
+      shooting: clamp(attrs.shooting, 0.08, 0.95),
+      passing: clamp(attrs.passing, 0.08, 0.95),
+      dribbling: clamp(attrs.dribbling, 0.08, 0.95),
+      defending: clamp(attrs.defending, 0.08, 0.95),
+      physical: clamp(attrs.physical, 0.08, 0.95),
+      gk: clamp(attrs.gk, 0.08, 0.95),
+    };
+  });
 }
 
 function predictZAtX(ball: { x: number; z: number; vx: number; vz: number }, x: number): number {

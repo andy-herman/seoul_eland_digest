@@ -153,6 +153,7 @@ export interface FcMatchOptions {
   seed: number;
   tier?: 1 | 2 | 3 | 4; // defaults to AI_TIER[opponent]
   homeAiTier?: 1 | 2 | 3 | 4; // headless only: the AI also plays the home side, ignoring input
+  mirror?: boolean; // headless only: home side uses away-side ratings for structural symmetry tests
   seconds?: number; // defaults to MATCH_SECONDS
 }
 

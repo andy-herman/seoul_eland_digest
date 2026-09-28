@@ -1,9 +1,10 @@
 import { performance } from "node:perf_hooks";
-import { AI_TIER, OPPONENT_SLUGS, SQUAD, type SquadPlayer } from "../data";
+import { AI_TIER, OPPONENT_SLUGS, type SquadPlayer } from "../data";
+import { bestFive } from "../ratings";
 import { FcMatch, blankFcInput } from "./sim";
 import { FC_STEP, GOLDEN_GOAL_SECONDS, MATCH_SECONDS, PITCH_L, PITCH_W, type FcInput, type FcMatchOptions, type RestartType, type Side } from "./types";
 
-const home = pickHome();
+const home = bestFive(16);
 const AI_MATCHES = 150;
 const HUMAN_MATCHES = 40;
 const TEST_SECONDS = 100;
@@ -100,7 +101,7 @@ let allSaves = 0;
 let allHeaders = 0;
 const equal = blankTotals();
 for (let i = 0; i < AI_MATCHES; i++) {
-  const m = runAi({ opponent: OPPONENT_SLUGS[i % OPPONENT_SLUGS.length], tier: 2, homeAiTier: 2, seed: 10000 + i * 97 }, `equal-${i}`);
+  const m = runAi({ opponent: OPPONENT_SLUGS[i % OPPONENT_SLUGS.length], tier: 2, homeAiTier: 2, mirror: true, seed: 10000 + i * 97 }, `mirror-${i}`);
   addMatch(equal, m);
 }
 const equalSplit = equal.gf / Math.max(1, equal.gf + equal.ga);
@@ -179,7 +180,7 @@ const summary = {
 };
 console.log(JSON.stringify(summary, null, 2));
 
-function runAi(partial: Pick<FcMatchOptions, "opponent" | "seed" | "tier" | "homeAiTier">, label: string): FcMatch {
+function runAi(partial: Pick<FcMatchOptions, "opponent" | "seed" | "tier" | "homeAiTier" | "mirror">, label: string): FcMatch {
   const m = new FcMatch({ home, captain: home[4].num, kit: "home", mode: "ai", seconds: TEST_SECONDS, ...partial });
   return run(m, label, () => blankFcInput());
 }
@@ -265,15 +266,6 @@ function blankTotals(): Totals {
 
 function blankRestartCounts(): Record<RestartType, number> {
   return { kickoff: 0, throwin: 0, corner: 0, goalkick: 0, freekick: 0, penalty: 0 };
-}
-
-function pickHome(): SquadPlayer[] {
-  const gk = SQUAD.find((p) => p.pos === "GK") ?? SQUAD[0];
-  const def = SQUAD.find((p) => p.pos === "DF") ?? SQUAD[1];
-  const mf = SQUAD.find((p) => p.pos === "MF") ?? SQUAD[2];
-  const am = SQUAD.find((p) => p.pos === "AM") ?? SQUAD[3];
-  const fw = SQUAD.find((p) => p.pos === "FW") ?? SQUAD[4];
-  return [gk, def, mf, am, fw];
 }
 
 function assertFinite(m: FcMatch, label: string): void {
