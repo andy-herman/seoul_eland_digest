@@ -66,6 +66,7 @@ interface KeeperState {
   reactionT: number;
   diveT: number;
   diveZ: number;
+  diveH: number;
   active: boolean;
 }
 
@@ -81,7 +82,7 @@ export class FcMatch {
   private halfDone = false;
   private aiNext: Record<Side, number> = { home: 0.2, away: 0.35 };
   private ballIntent: BallIntent | null = null;
-  private keeper: Record<Side, KeeperState> = { home: { reactionT: 0, diveT: 0, diveZ: PITCH_W / 2, active: false }, away: { reactionT: 0, diveT: 0, diveZ: PITCH_W / 2, active: false } };
+  private keeper: Record<Side, KeeperState> = { home: { reactionT: 0, diveT: 0, diveZ: PITCH_W / 2, diveH: 0, active: false }, away: { reactionT: 0, diveT: 0, diveZ: PITCH_W / 2, diveH: 0, active: false } };
   private restartCounts: Record<RestartType, number> = { kickoff: 0, throwin: 0, corner: 0, goalkick: 0, freekick: 0, penalty: 0 };
   private headerCount = 0;
   private maxStuckT = 0;
@@ -361,7 +362,13 @@ export class FcMatch {
       if (p.index === 0 || owner?.side === side && owner.index === p.index) continue;
       const action = chooseOffBallTarget(this.ctx(side), p);
       this.movePlayer(p, action.x ?? p.x, action.z ?? p.z, Boolean(action.sprint));
-      if (action.kind === "chase" && owner?.side === opposite(side) && dist(p, this.state.ball) < 1.15 && dist(p, this.player(owner.side, owner.index)) < 1.65) this.startTackle(p, false);
+      if (action.kind === "chase" && owner?.side === opposite(side)) {
+        const carrier = this.player(owner.side, owner.index);
+        const ballVec = (this.state.ball.x - p.x) * p.fx + (this.state.ball.z - p.z) * p.fz;
+        const goalSide = sideDir(side) * (p.x - carrier.x) < 0;
+        const ownBox = isInPenaltyArea(p.x, p.z, side);
+        if (goalSide && !ownBox && ballVec > 0.15 && dist(p, this.state.ball) < 1.0 && dist(p, this.state.ball) + 0.15 < dist(p, carrier)) this.startTackle(p, false);
+      }
     }
   }
 
@@ -392,17 +399,26 @@ export class FcMatch {
         if (!st.active) {
           st.active = true;
           st.reactionT = cfg.gkReaction + (1 - this.ratings[side][0].gk) * 0.12;
+          st.diveT = 0;
           st.diveZ = predictZAtX(this.state.ball, rx);
+          st.diveH = predictHAtX(this.state.ball, rx);
         } else st.reactionT = Math.max(0, st.reactionT - FC_STEP);
-        if (st.reactionT <= 0) {
-          this.movePlayer(gk, rx, clamp(st.diveZ, PITCH_W / 2 - GOAL_W / 2 - 1.2, PITCH_W / 2 + GOAL_W / 2 + 1.2), true, 6.5 + this.ratings[side][0].gk * 2);
-          if (Math.abs(gk.z - st.diveZ) > 0.8) {
-            gk.anim = "dive";
-            gk.diveDir = gk.z < st.diveZ ? 1 : -1;
-          }
+        if (st.reactionT <= 0 && st.diveT < 0.55) {
+          st.diveT += FC_STEP;
+          const maxDive = cfg.gkReach + this.ratings[side][0].gk * 0.25;
+          const targetZ = clamp(st.diveZ, gk.z - maxDive, gk.z + maxDive);
+          this.movePlayer(gk, rx, clamp(targetZ, PITCH_W / 2 - GOAL_W / 2 - 1.4, PITCH_W / 2 + GOAL_W / 2 + 1.4), true, 5.5 + this.ratings[side][0].gk * 1.5);
+          gk.h = clamp(st.diveH, 0, 1.9);
+          gk.anim = "dive";
+          gk.diveDir = gk.z < targetZ ? 1 : -1;
+        } else if (st.diveT >= 0.55) {
+          gk.anim = "fallen";
+          gk.stunT = Math.max(gk.stunT, 0.25);
         }
       } else {
         st.active = false;
+        st.diveT = 0;
+        gk.h = 0;
         const danger = this.state.ball.owner === null && Math.abs(this.state.ball.x - ownGoalX(side)) < 13;
         const tx = danger ? clamp(this.state.ball.x, side === "home" ? 1 : PITCH_L - 8, side === "home" ? 8 : PITCH_L - 1) : rx;
         const tz = clamp(PITCH_W / 2 + (this.state.ball.z - PITCH_W / 2) * 0.58, PITCH_W / 2 - GOAL_W / 2, PITCH_W / 2 + GOAL_W / 2);
@@ -420,8 +436,8 @@ export class FcMatch {
     const desired = Math.min(maxSpeed, n.d * 4.2);
     let turnCost = 1;
     if (sprint && this.state.ball.owner?.side === p.side && this.state.ball.owner.index === p.index) turnCost = clamp(0.7 + (p.fx * n.x + p.fz * n.z) * 0.3, 0.55, 1);
-    p.vx += (n.x * desired * turnCost - p.vx) * 0.34;
-    p.vz += (n.z * desired * turnCost - p.vz) * 0.34;
+    p.vx += (n.x * desired * turnCost - p.vx) * 0.58;
+    p.vz += (n.z * desired * turnCost - p.vz) * 0.58;
     if (n.d > 0.02) {
       p.fx = n.x;
       p.fz = n.z;
@@ -434,10 +450,10 @@ export class FcMatch {
       p.stunT = Math.max(0, p.stunT - FC_STEP);
       p.x = clamp(p.x + p.vx * FC_STEP, -2.5, PITCH_L + 2.5);
       p.z = clamp(p.z + p.vz * FC_STEP, -2.5, PITCH_W + 2.5);
-      p.vx *= 0.88;
-      p.vz *= 0.88;
+      p.vx *= 0.96;
+      p.vz *= 0.96;
       const speed = len(p.vx, p.vz);
-      if (!["kick", "tackle", "slide", "fallen", "header", "dive", "hold"].includes(p.anim)) p.anim = speed > 5.2 ? "sprint" : speed > 0.25 ? "run" : "idle";
+      if (!["kick", "tackle", "slide", "fallen", "header", "dive", "hold"].includes(p.anim)) p.anim = speed > 5.8 ? "sprint" : speed > 0.35 ? "run" : "idle";
       if (p.animT > 0.45 && (p.anim === "kick" || p.anim === "tackle" || p.anim === "header")) p.anim = "idle";
       if (p.animT > 0.85 && p.anim === "slide") p.anim = "fallen";
       if (p.animT > 1.1 && p.anim === "fallen") p.anim = "idle";
@@ -576,7 +592,7 @@ export class FcMatch {
       this.giveBallTo(p.side, p.index);
       return;
     }
-    if (this.state.ball.h > 0.65 && this.state.ball.h < 2.45 && p.index > 0) {
+    if (this.state.ball.h > 1.0 && this.state.ball.h < 2.5 && p.index > 0) {
       p.anim = "header";
       p.animT = 0;
       this.event("header", p.side, p.index);
@@ -609,9 +625,14 @@ export class FcMatch {
   }
 
   private reachFor(p: FcPlayer): number {
-    if (p.index === 0) return this.state.ball.h < 2.15 ? 2.15 + this.ratings[p.side][0].gk * 1.05 : 1.25;
-    if (this.state.ball.h < 0.6) return 0.72 + this.ratings[p.side][p.index].dribbling * 0.22;
-    if (this.state.ball.h < 2.4) return 0.65 + this.ratings[p.side][p.index].physical * 0.25;
+    if (p.index === 0) {
+      const st = this.keeper[p.side];
+      if (p.anim === "dive" && st.active && st.reactionT <= 0 && this.state.ball.h <= 2.35) return 0.45 + FC_AI[p.side === "home" ? this.homeTier : this.awayTier].gkReach * 0.1 + this.ratings[p.side][0].gk * 0.08;
+      return this.state.ball.h <= 2.3 ? 0.82 + this.ratings[p.side][0].gk * 0.12 : 0;
+    }
+    if (this.state.ball.h < 0.55) return 0.72 + this.ratings[p.side][p.index].dribbling * 0.22;
+    if (this.state.ball.h < 1.0) return 0.62 + this.ratings[p.side][p.index].physical * 0.12;
+    if (this.state.ball.h < 2.5) return 0.68 + this.ratings[p.side][p.index].physical * 0.22;
     return 0;
   }
 
@@ -696,23 +717,20 @@ export class FcMatch {
     const dx = gx - this.state.ball.x;
     const travel = Math.max(0.2, Math.abs(dx));
     const targetH = penalty ? 0.5 + this.rand() * 1.2 : clamp(0.25 + this.rand() * 1.65 + Math.max(0, charge - 0.85) * 1.4, 0.15, 2.8);
-    const speed = 14 + charge * 5.5 + r.shooting * 3.5;
+    const speed = 17 + charge * 8 + r.shooting * 5;
     const time = travel / Math.max(6, Math.abs(speed * sideDir(side)));
     const pressure = this.pressureOn(p, opposite(side));
     const body = clamp((p.fx * sideDir(side) + 1) / 2, 0, 1);
-    const opponentTier = side === "home" ? this.awayTier : this.homeTier;
-    const tierShotTax = side === "home" && this.opts.homeAiTier && opponentTier === 4 ? 4 : 0;
-    const err = FC_AI[tier].shotError * (1.55 - r.shooting) * (pressure ? 1.6 : 1) * (1.25 - body * 0.3) * (1 + tierShotTax * 0.75) + Math.max(0, charge - 0.85) * 0.045;
+    const err = FC_AI[tier].shotError * (1.55 - r.shooting) * (pressure ? 1.6 : 1) * (1.25 - body * 0.3) + Math.max(0, charge - 0.85) * 0.045;
     const tz = clamp(aimZ, PITCH_W / 2 - GOAL_W / 2 + 0.12, PITCH_W / 2 + GOAL_W / 2 - 0.12);
     const n = unit(gx - this.state.ball.x, tz - this.state.ball.z);
-    const a = Math.atan2(n.z, n.x) + angleNoise(this.rand, err * 5.0);
+    const a = Math.atan2(n.z, n.x) + angleNoise(this.rand, err * 7.0);
     this.releaseBall(side, from);
-    const taxedSpeed = speed * (1 - tierShotTax * 0.14);
-    this.state.ball.vx = Math.cos(a) * taxedSpeed;
-    this.state.ball.vz = Math.sin(a) * taxedSpeed;
-    this.state.ball.vh = (targetH - this.state.ball.h + 0.5 * GRAVITY * time * time) / Math.max(0.05, time) + angleNoise(this.rand, err * 20);
+    this.state.ball.vx = Math.cos(a) * speed;
+    this.state.ball.vz = Math.sin(a) * speed;
+    this.state.ball.vh = (targetH - this.state.ball.h + 0.5 * GRAVITY * time * time) / Math.max(0.05, time) + angleNoise(this.rand, err * 30);
     this.state.stats[side].shots++;
-    if (Math.abs(tz - PITCH_W / 2) < GOAL_W / 2) this.state.stats[side].onTarget++;
+    if (predictShotOnTarget(this.state.ball, attackGoalX(side))) this.state.stats[side].onTarget++;
     this.ballIntent = { kind: "shot", side, by: from, target: null, targetX: gx, targetZ: tz, shot: true };
     p.anim = "kick";
     p.animT = 0;
@@ -920,21 +938,36 @@ function rateHome(home: SquadPlayer[], captain: number): FcRatings[] {
 }
 
 function rateAway(tier: 1 | 2 | 3 | 4): FcRatings[] {
-  const base = clamp((RIVAL_OVR[tier] - 30) / 48 + (tier === 4 ? 0.09 : tier === 3 ? -0.035 : 0), 0.5, 0.98);
+  const ovr = RIVAL_OVR[tier];
+  const base = clamp((ovr - 30) / 70 + Math.max(0, (ovr - 61) / 10) ** 2 * 0.12, 0.42, 0.9);
   return [0, 1, 2, 3, 4].map((i) => ({
-    pace: clamp(base + (i === 4 ? 0.05 : 0), 0.38, 0.98),
-    shooting: clamp(base + (i === 4 ? 0.12 : i === 3 ? 0.05 : -0.03), 0.36, 0.99),
-    passing: clamp(base + (i === 3 ? 0.08 : 0), 0.36, 0.98),
-    dribbling: clamp(base + (i === 3 || i === 4 ? 0.08 : 0), 0.36, 0.98),
-    defending: tier === 4 ? clamp(base + (i === 1 || i === 2 ? 0.22 : 0.08), 0.36, 0.995) : clamp(base + (i === 1 || i === 2 ? 0.1 : 0), 0.36, 0.98),
-    physical: tier === 4 ? clamp(base + 0.14, 0.36, 0.995) : clamp(base + 0.04, 0.36, 0.98),
-    gk: i === 0 ? (tier === 4 ? 0.995 : clamp(base + 0.16, 0.52, 0.99)) : 0.08,
+    pace: clamp(base + (i === 4 ? 0.05 : 0), 0.38, 0.96),
+    shooting: clamp(base + (i === 4 ? 0.12 : i === 3 ? 0.05 : -0.03), 0.36, 0.97),
+    passing: clamp(base + (i === 3 ? 0.08 : 0), 0.36, 0.96),
+    dribbling: clamp(base + (i === 3 || i === 4 ? 0.08 : 0), 0.36, 0.96),
+    defending: clamp(base + (i === 1 || i === 2 ? 0.1 : 0), 0.36, 0.96),
+    physical: clamp(base + 0.04, 0.36, 0.96),
+    gk: i === 0 ? clamp(base + 0.16, 0.52, 0.97) : 0.08,
   }));
 }
 
 function predictZAtX(ball: { x: number; z: number; vx: number; vz: number }, x: number): number {
   const t = (x - ball.x) / (ball.vx || 0.001);
   return ball.z + ball.vz * clamp(t, 0, 1.4);
+}
+
+function predictHAtX(ball: { x: number; h: number; vx: number; vh: number }, x: number): number {
+  const t = (x - ball.x) / (ball.vx || 0.001);
+  const tt = clamp(t, 0, 1.4);
+  return Math.max(0, ball.h + ball.vh * tt - 0.5 * GRAVITY * tt * tt);
+}
+
+function predictShotOnTarget(ball: { x: number; z: number; h: number; vx: number; vz: number; vh: number }, gx: number): boolean {
+  const t = (gx - ball.x) / (ball.vx || 0.001);
+  if (t <= 0 || t > 2) return false;
+  const z = ball.z + ball.vz * t;
+  const h = ball.h + ball.vh * t - 0.5 * GRAVITY * t * t;
+  return Math.abs(z - PITCH_W / 2) <= GOAL_W / 2 && h >= 0 && h <= GOAL_H;
 }
 
 function isInPenaltyArea(x: number, z: number, defendingSide: Side): boolean {

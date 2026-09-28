@@ -44,8 +44,8 @@ export interface AiAction {
 export const FC_AI: Record<1 | 2 | 3 | 4, FcAiConfig> = {
   1: { reaction: 0.68, decisionNoise: 0.48, passError: 0.155, shotError: 0.19, press: 0.76, speed: 0.94, gkReaction: 0.32, gkReach: 1.75, foulCare: 0.45 },
   2: { reaction: 0.5, decisionNoise: 0.32, passError: 0.105, shotError: 0.13, press: 0.94, speed: 1, gkReaction: 0.24, gkReach: 2.0, foulCare: 0.64 },
-  3: { reaction: 0.38, decisionNoise: 0.2, passError: 0.07, shotError: 0.085, press: 1.08, speed: 1.035, gkReaction: 0.18, gkReach: 2.22, foulCare: 0.78 },
-  4: { reaction: 0.28, decisionNoise: 0.12, passError: 0.045, shotError: 0.06, press: 1.18, speed: 1.055, gkReaction: 0.12, gkReach: 2.42, foulCare: 0.9 },
+  3: { reaction: 0.62, decisionNoise: 0.5, passError: 0.2, shotError: 0.36, press: 0.68, speed: 0.94, gkReaction: 0.3, gkReach: 1.45, foulCare: 0.55 },
+  4: { reaction: 0.24, decisionNoise: 0.1, passError: 0.035, shotError: 0.045, press: 1.35, speed: 1.055, gkReaction: 0.05, gkReach: 4.0, foulCare: 0.92 },
 };
 
 export function sideDir(side: Side): 1 | -1 {
@@ -92,10 +92,11 @@ export function formationSpot(side: Side, index: number, ballX: number, ballZ: n
   const baseHome = [2, 15, 17, 29, 40];
   const baseAway = [PITCH_L - 2, PITCH_L - 15, PITCH_L - 17, PITCH_L - 29, PITCH_L - 40];
   const base = side === "home" ? baseHome[index] : baseAway[index];
-  const slide = clamp((ballX - PITCH_L / 2) * 0.34, -9.5, 9.5) * dir;
-  const phase = attacking ? 5.5 : -4;
+  const slide = clamp((ballX - PITCH_L / 2) * 0.34, -9.5, 9.5);
+  const phase = (attacking ? 5.5 : -4) * dir;
+  const lane = side === "away" ? PITCH_W - lanes[index] : lanes[index];
   const width = (ballZ - PITCH_W / 2) * (index === 4 ? 0.14 : 0.25);
-  return { x: clamp(base + slide + dir * phase, 1.4, PITCH_L - 1.4), z: clamp(lanes[index] + width, 3, PITCH_W - 3) };
+  return { x: clamp(base + slide + phase, 1.4, PITCH_L - 1.4), z: clamp(lane + width, 3, PITCH_W - 3) };
 }
 
 export function laneOpenness(from: { x: number; z: number }, to: { x: number; z: number }, opponents: FcPlayer[]): number {
@@ -140,7 +141,7 @@ export function chooseOnBallAction(ctx: TeamAiContext, carrier: FcPlayer): AiAct
   const rating = ctx.ratings[carrier.index] ?? ctx.ratings[1];
   const openShot = countLaneBlockers(carrier, goal, ctx.opponents) === 0;
   const shootValue = (28 - goalDist) * 0.052 + rating.shooting * 0.85 - angle * 1.3 + (openShot ? 0.32 : -0.18) - (pressure < 2.1 ? 0.25 : 0) + (ctx.rand() - 0.5) * cfg.decisionNoise;
-  if (goalDist < 21 + ctx.tier * 1.8 && shootValue > 1.34 - ctx.tier * 0.11) return { kind: "shoot", x: goal.x, z: clamp(PITCH_W / 2 + (ctx.rand() - 0.5) * GOAL_W * 0.75, PITCH_W / 2 - GOAL_W / 2 + 0.2, PITCH_W / 2 + GOAL_W / 2 - 0.2) };
+  if (goalDist < 20 + ctx.tier * 1.0 && shootValue > 1.52 - ctx.tier * 0.07) return { kind: "shoot", x: goal.x, z: clamp(PITCH_W / 2 + (ctx.rand() - 0.5) * GOAL_W * 0.75, PITCH_W / 2 - GOAL_W / 2 + 0.2, PITCH_W / 2 + GOAL_W / 2 - 0.2) };
 
   const wide = carrier.z < 7.5 || carrier.z > PITCH_W - 7.5;
   const nearBox = ctx.side === "home" ? carrier.x > PITCH_L - BOX_DEPTH - 5 : carrier.x < BOX_DEPTH + 5;
