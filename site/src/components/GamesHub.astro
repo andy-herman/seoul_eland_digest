@@ -14,7 +14,7 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Nove jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      intro: "Dez jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
       newBadge: "Novo",
       play: "Jogar",
       credit:
@@ -23,7 +23,7 @@ const copy = isPortuguese
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Nine games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      intro: "Ten games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
       newBadge: "New",
       play: "Play",
       credit:
@@ -31,6 +31,17 @@ const copy = isPortuguese
     };
 
 const games = [
+  {
+    href: `${prefix}/play/yut-nori`,
+    isNew: true,
+    title: "Yut Nori FC",
+    desc: isPortuguese
+      ? "O jogo de tabuleiro tradicional da Coreia num campo de futebol. Jogue os bastões de 윷 no tapete, leve quatro peças do Seoul E-Land pelo 윷판, junte companheiros, dê carrinhos nos mascotes rivais e marque cruzando o canto do gol. Contra o computador ou com um amigo no mesmo aparelho."
+      : "Korea's traditional board game on a football pitch. Throw the 윷 sticks on the mat, race four Seoul E-Land pieces around the 윷판, stack teammates, tackle the rival mascots and score by crossing the goal corner. Against the computer or pass and play with a friend.",
+    tags: isPortuguese ? ["Tabuleiro", "Tradição coreana", "2 jogadores"] : ["Board game", "Korean tradition", "2 players"],
+    art: [{ src: withBase("/play/yut/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
+    accent: "yut",
+  },
   {
     href: `${prefix}/play/clap-for-seoul`,
     isNew: true,
@@ -268,6 +279,10 @@ const games = [
 
   .games-card-clap .games-art {
     background: #070b24;
+  }
+
+  .games-card-yut .games-art {
+    background: #2a7f45;
   }
 
   .games-card-h2h .games-art {
