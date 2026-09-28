@@ -1,0 +1,446 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { withBase } from "../lib/paths";
+import { TAKE5_STRINGS, type Locale } from "../takefive/i18n";
+import { LEVELS } from "../takefive/levels";
+import { rewriteLevels } from "../takefive/rewrite";
+import type { OpponentSlug } from "../h2h/data";
+import type { RewriteSeed } from "../takefive/main";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = TAKE5_STRINGS[locale];
+const isPt = locale === "pt";
+const chapters = (["school", "fives", "moments"] as const).map((c) => ({ id: c, levels: LEVELS.filter((l) => l.chapter === c) }));
+const seeds: RewriteSeed[] = rewriteLevels().map((r) => ({
+  id: r.id,
+  template: r.template,
+  mirrored: r.mirrored,
+  tier: r.tier,
+  opponent: r.opponent as OpponentSlug,
+  round: r.round,
+  date: r.date,
+  venue: r.venue,
+  opponentName: r.opponentName,
+  ours: r.ours,
+  theirs: r.theirs,
+  goal: r.goal,
+}));
+const heads = withBase("/play/h2h/heads/");
+const mascots = withBase("/play/h2h/mascot-heads/");
+const dateFmt = new Intl.DateTimeFormat(isPt ? "pt-BR" : "en-US", { day: "numeric", month: "short", timeZone: "UTC" });
+---
+
+<div class="t5-page">
+  <header class="supporter-panel rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.65rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{t.heading} <span class="t5-ko">{t.ko}</span></h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
+      </div>
+      {isPt ? (
+        <TranslateButton href="/play/take-five" code="EN" label={t.translateLabel} ariaLabel={t.translateAria} />
+      ) : (
+        <TranslateButton href="/pt/play/take-five" code="PT" label={t.translateLabel} ariaLabel={t.translateAria} />
+      )}
+    </div>
+  </header>
+
+  <section class="t5-game" data-t5-root data-mode="loading" data-locale={locale} data-heads={heads} data-mascots={mascots} data-song={withBase("/play/seoul-song-2024.mp3")}>
+    <script is:inline type="application/json" data-t5-rewrites set:html={JSON.stringify(seeds)} />
+
+    <div class="t5-screen t5-loading" data-t5-screen="loading"><p>{t.loading}</p></div>
+
+    <div class="t5-screen t5-menu" data-t5-screen="menu" hidden>
+      <div class="t5-poster">
+        <img class="t5-poster-l" src={withBase("/play/leoul-kick.webp")} alt="" width="440" height="560" />
+        <div class="t5-poster-board" aria-hidden="true">
+          <i class="t5-pb-route t5-pb-a"></i><i class="t5-pb-route t5-pb-b"></i><i class="t5-pb-route t5-pb-c"></i>
+          <img src={`${heads}7.webp`} alt="" width="64" height="64" class="t5-pb-h t5-pb-h1" />
+          <img src={`${heads}10.webp`} alt="" width="64" height="64" class="t5-pb-h t5-pb-h2" />
+          <img src={`${heads}22.webp`} alt="" width="64" height="64" class="t5-pb-h t5-pb-h3" />
+        </div>
+        <img class="t5-poster-r" src={withBase("/play/lenyang-ready.webp")} alt="" width="400" height="560" />
+        <div class="t5-poster-title"><b>{t.heading}</b><span>{t.ko}</span></div>
+      </div>
+      <p class="t5-err" data-t5-err hidden></p>
+      <div class="t5-tabs" role="tablist">
+        <button type="button" role="tab" aria-selected="true" data-t5-tab="campaign">{t.campaign} <small data-t5-total></small></button>
+        <button type="button" role="tab" aria-selected="false" data-t5-tab="rewrite">{t.rewrite} <small>{seeds.length}</small></button>
+      </div>
+      <div class="t5-panel" data-t5-panel="campaign" role="tabpanel">
+        {chapters.map((c) => (
+          <section class="t5-chapter">
+            <h2>{t.chapters[c.id].name}</h2>
+            <p>{t.chapters[c.id].blurb}</p>
+            <div class="t5-levels">
+              {c.levels.map((l) => (
+                <button type="button" class="t5-level" data-t5-level={l.id}>
+                  <span class="t5-lv-n">{l.n}</span>
+                  <img src={`${mascots}${l.opponent}.webp`} alt="" width="44" height="44" loading="lazy" />
+                  <span class="t5-lv-t">
+                    <b>{t.levels[l.id].title}</b>
+                    <small>{t.players(l.slots.length)} · {t.tiers[l.tier]}</small>
+                  </span>
+                  <span class="t5-lv-s" data-t5-stars>☆☆☆</span>
+                </button>
+              ))}
+            </div>
+          </section>
+        ))}
+      </div>
+      <div class="t5-panel" data-t5-panel="rewrite" role="tabpanel" hidden>
+        <p class="t5-rw-intro">{t.rewriteIntro}</p>
+        <div class="t5-levels t5-rw">
+          {seeds.map((s) => (
+            <button type="button" class="t5-level t5-rw-item" data-t5-level={s.id} data-result={s.ours > s.theirs ? "W" : s.ours === s.theirs ? "D" : "L"}>
+              <span class="t5-lv-n">R{s.round}</span>
+              <img src={`${mascots}${s.opponent}.webp`} alt="" width="44" height="44" loading="lazy" />
+              <span class="t5-lv-t">
+                <b>{t.scoreLine(s.ours, s.theirs, s.opponentName)}</b>
+                <small>{dateFmt.format(new Date(`${s.date}T00:00:00Z`))} · {t.rewriteGoal(s.goal, s.ours, s.theirs)} · {t.tiers[s.tier]}</small>
+              </span>
+              <span class="t5-lv-s" data-t5-stars>☆☆☆</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <div class="t5-screen t5-brief" data-t5-screen="brief" hidden>
+      <div class="t5-b-head">
+        <img data-t5-b-mascot src={`${mascots}paju-frontier.webp`} alt="" width="96" height="96" />
+        <div>
+          <p class="t5-kicker" data-t5-b-kicker></p>
+          <h2 data-t5-b-title></h2>
+          <p class="t5-b-opp"><span data-t5-b-opp></span> <em data-t5-b-tier></em></p>
+        </div>
+      </div>
+      <p class="t5-b-brief" data-t5-b-brief></p>
+      <div class="t5-b-squad" data-t5-b-squad></div>
+      <div class="t5-b-grid">
+        <div>
+          <h3>{t.objectivesTitle}</h3>
+          <ul class="t5-objs" data-t5-b-objs></ul>
+        </div>
+        <p class="t5-b-tip"><b>💡</b> <span data-t5-b-tip></span></p>
+      </div>
+      <p class="t5-b-meta" data-t5-b-meta></p>
+      <div class="t5-buttons">
+        <button type="button" class="t5-primary" data-t5-b-go>● {t.enterStudio}</button>
+        <button type="button" data-t5-b-back>{t.back}</button>
+      </div>
+    </div>
+
+    <div class="t5-studio" data-t5-studio data-phase="idle" hidden>
+      <div class="t5-top">
+        <button type="button" class="t5-icon" data-t5-s-back aria-label={t.menu}>←</button>
+        <p class="t5-s-title" data-t5-s-title></p>
+        <span class="t5-tag" data-t5-tag data-kind="idle"></span>
+        <span class="t5-clock" data-t5-clock>0.0 / 0.0 s</span>
+        <button type="button" class="t5-icon t5-lt" data-t5-discard aria-label={t.discard}>✕</button>
+        <button type="button" class="t5-icon t5-lt t5-lt-keep" data-t5-keep aria-label={t.keep}>✓</button>
+        <button type="button" class="t5-icon" data-t5-mute aria-label={t.sound}>🔊</button>
+      </div>
+      <div class="t5-board">
+        <canvas data-t5-canvas aria-label={t.heading}></canvas>
+        <p class="t5-count" data-t5-count></p>
+        <div class="t5-over" data-t5-complete hidden>
+          <div class="t5-card">
+            <p class="t5-kicker">{t.goalTitle}</p>
+            <div class="t5-c-stars" data-t5-c-stars></div>
+            <ul class="t5-objs" data-t5-c-objs></ul>
+            <p class="t5-c-stats" data-t5-c-stats></p>
+            <p class="t5-badge" data-t5-c-best hidden>{t.newBest}</p>
+            <div class="t5-buttons">
+              <button type="button" class="t5-primary" data-t5-c-next>{t.next} →</button>
+              <button type="button" data-t5-c-replay>▶ {t.watchReplay}</button>
+              <button type="button" data-t5-c-share>↗ {t.share}</button>
+              <button type="button" data-t5-c-close>{t.keepEditing}</button>
+            </div>
+            <p class="t5-c-msg" data-t5-c-share-msg></p>
+          </div>
+        </div>
+        <div class="t5-watchbar" data-t5-watchbar hidden>
+          <div>
+            <b data-t5-w-title></b>
+            <small data-t5-w-sub></small>
+          </div>
+          <div class="t5-buttons">
+            <button type="button" class="t5-primary" data-t5-w-try>{t.tryLevel}</button>
+            <button type="button" data-t5-w-again>▶ {t.watchAgain}</button>
+            <button type="button" data-t5-w-back>{t.back}</button>
+            <button type="button" data-t5-w-menu>{t.menu}</button>
+          </div>
+        </div>
+      </div>
+      <div class="t5-side">
+        <p class="t5-status" data-t5-status></p>
+        <div class="t5-tracks" data-t5-tracks></div>
+        <div class="t5-scrub"><input type="range" min="0" max="600" value="0" step="1" data-t5-scrub aria-label={t.play} /><small data-t5-takes></small></div>
+        <div class="t5-transport">
+          <button type="button" class="t5-rec" data-t5-record><i></i><span>{t.record}</span> <small data-t5-rec-who></small></button>
+          <button type="button" data-t5-punch><span>{t.punchIn("0.0")}</span></button>
+          <button type="button" data-t5-play data-playing="false">▶ <span>{t.play}</span></button>
+          <button type="button" data-t5-undo>↶ {t.undo}</button>
+          <button type="button" data-t5-clear>✕ {t.clear}</button>
+          <button type="button" class="t5-toggle" data-t5-slow aria-pressed="false">🐢 {t.slow}</button>
+          <button type="button" class="t5-toggle" data-t5-routes aria-pressed="true">〰 {t.routes}</button>
+          <button type="button" class="t5-coach" data-t5-coach hidden>🎓 {t.coach}</button>
+        </div>
+        <div class="t5-live">
+          <button type="button" class="t5-primary" data-t5-keep>✓ {t.keep}</button>
+          <button type="button" data-t5-discard>✕ {t.discard}</button>
+        </div>
+        <p class="t5-keys">{t.keysLive}</p>
+      </div>
+      <div class="t5-pad" aria-hidden="true">
+        <div class="t5-stick" data-t5-stick><i data-t5-knob></i></div>
+        <div class="t5-kicks">
+          <button type="button" data-t5-kick="lob" tabindex="-1">{t.lob}</button>
+          <button type="button" data-t5-kick="shot" tabindex="-1">{t.shoot}</button>
+          <button type="button" data-t5-kick="pass" tabindex="-1">{t.pass}</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="t5-info">
+    <div>
+      <h2>{t.howTitle}</h2>
+      <ul>{t.how.map((line) => <li>{line}</li>)}</ul>
+    </div>
+    <div>
+      <h2>{t.controlsTitle}</h2>
+      <ul>{t.controls.map((line) => <li>{line}</li>)}</ul>
+    </div>
+    <p class="t5-credits">{t.credits}</p>
+  </section>
+</div>
+
+<script>
+  import { mountTakeFive } from "../takefive/main";
+  for (const root of document.querySelectorAll("[data-t5-root]")) mountTakeFive(root as HTMLElement);
+</script>
+
+<style is:global>
+  .t5-lock-scroll { overflow: hidden; }
+  .t5-page { display: grid; gap: 1rem; }
+  .t5-ko { display: inline-block; font-size: .62em; letter-spacing: 0; color: var(--color-gold, #f2b705); vertical-align: middle; }
+  .t5-game { position: relative; --ink: #0b1238; --gold: #ffc23a; --sky: #8fd8ff; --rec: #ff4d5e; color: #fff; scroll-margin-top: 5.5rem; }
+  .t5-game button { font: inherit; }
+  .t5-screen { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; padding: 1rem; border: 4px solid var(--ink); border-radius: 1.2rem; background: #11243a; box-shadow: 0 8px 0 var(--ink); }
+  .t5-screen[hidden], .t5-studio[hidden], .t5-over[hidden], .t5-watchbar[hidden], .t5-panel[hidden], .t5-err[hidden] { display: none; }
+  .t5-loading { min-height: 12rem; place-items: center; font-weight: 900; }
+  .t5-buttons { display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; }
+  .t5-buttons button, .t5-transport button, .t5-live button, .t5-tabs button { border: 3px solid var(--ink); border-radius: 999px; background: #fff; color: #15182a; font-weight: 900; padding: .5rem 1.05rem; box-shadow: 0 3px 0 var(--ink); cursor: pointer; }
+  .t5-primary { background: #ffe38a !important; }
+  .t5-game button:disabled { opacity: .45; cursor: default; }
+  .t5-buttons button:not(:disabled):active, .t5-transport button:not(:disabled):active, .t5-live button:active, .t5-level:not(:disabled):active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
+  .t5-kicker { margin: 0; font-size: .78rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .t5-err { margin: 0; padding: .6rem .9rem; border-radius: .8rem; background: #5a1f2a; font-weight: 800; }
+
+  /* menu */
+  .t5-poster { position: relative; aspect-ratio: 16 / 6; border-radius: .9rem; overflow: hidden; border: 3px solid var(--ink); background: repeating-linear-gradient(0deg, #2a7f45 0 12%, #2f8a4c 12% 24%); }
+  .t5-poster::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6, 12, 36, 0) 35%, rgba(6, 12, 36, .72)); }
+  .t5-poster > img { position: absolute; bottom: -6%; height: 96%; width: auto; z-index: 2; filter: drop-shadow(0 6px 0 rgba(0, 0, 0, .35)); }
+  .t5-poster-l { left: 2%; }
+  .t5-poster-r { right: 3%; }
+  .t5-poster-board { position: absolute; inset: 8% 24% 22%; border: 2px solid rgba(255, 255, 255, .8); border-top: 0; }
+  .t5-poster-board::before { content: ""; position: absolute; left: 30%; right: 30%; top: 0; height: 30%; border: 2px solid rgba(255, 255, 255, .8); border-top: 0; }
+  .t5-pb-route { position: absolute; height: 0; border-top: 3px dashed rgba(255, 255, 255, .85); transform-origin: left center; }
+  .t5-pb-a { left: 18%; top: 78%; width: 34%; transform: rotate(-24deg); }
+  .t5-pb-b { left: 50%; top: 58%; width: 26%; transform: rotate(-58deg); border-color: var(--gold); }
+  .t5-pb-c { left: 62%; top: 20%; width: 18%; transform: rotate(160deg); border-color: var(--sky); }
+  .t5-pb-h { position: absolute; width: 11%; height: auto; aspect-ratio: 1; border-radius: 50%; background: #1b2446; border: 3px solid var(--gold); object-fit: contain; animation: t5-bob 1.6s ease-in-out infinite; }
+  .t5-pb-h1 { left: 12%; top: 64%; }
+  .t5-pb-h2 { left: 46%; top: 44%; animation-delay: -.5s; }
+  .t5-pb-h3 { left: 62%; top: 10%; animation-delay: -1s; }
+  @keyframes t5-bob { 50% { transform: translateY(-8%); } }
+  .t5-poster-title { position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); z-index: 3; display: grid; justify-items: center; line-height: 1; text-shadow: 0 4px 0 var(--ink); }
+  .t5-poster-title b { font-size: clamp(1.7rem, 6vw, 3.6rem); font-weight: 900; text-transform: uppercase; -webkit-text-stroke: 2px var(--ink); }
+  .t5-poster-title span { margin-top: .25rem; font-size: clamp(1rem, 3vw, 1.7rem); font-weight: 900; color: var(--gold); }
+  @media (max-width: 699px) {
+    .t5-poster { aspect-ratio: 4 / 3; }
+    .t5-poster > img { height: 62%; }
+    .t5-poster-board { inset: 6% 8% 30%; }
+  }
+  .t5-tabs { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .t5-tabs button { background: #1b2f4d; color: #fff; }
+  .t5-tabs button[aria-selected="true"] { background: #ffe38a; color: #15182a; }
+  .t5-tabs small { font-size: .75em; opacity: .8; margin-left: .25rem; }
+  .t5-chapter { display: grid; gap: .45rem; }
+  .t5-chapter + .t5-chapter { margin-top: .6rem; }
+  .t5-chapter h2 { margin: 0; font-size: 1.05rem; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; }
+  .t5-chapter p, .t5-rw-intro { margin: 0; font-size: .88rem; opacity: .85; }
+  .t5-levels { display: grid; gap: .55rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); }
+  .t5-level { display: grid; grid-template-columns: auto auto minmax(0, 1fr) auto; align-items: center; gap: .6rem; padding: .55rem .75rem; text-align: left; border: 3px solid var(--ink); border-radius: 1rem; background: #1b2f4d; color: #fff; box-shadow: 0 4px 0 var(--ink); cursor: pointer; }
+  .t5-level[data-done="true"] { background: #203d33; }
+  .t5-level[data-locked="true"] { filter: grayscale(.8); }
+  .t5-lv-n { display: grid; place-items: center; min-width: 2rem; height: 2rem; padding: 0 .3rem; border-radius: 999px; background: var(--gold); color: #15182a; font-weight: 900; font-size: .85rem; }
+  .t5-level img { width: 2.6rem; height: 2.6rem; object-fit: contain; }
+  .t5-lv-t { display: grid; min-width: 0; }
+  .t5-lv-t b { font-size: .98rem; line-height: 1.15; overflow-wrap: break-word; }
+  .t5-rw { grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); }
+  .t5-lv-t small { font-size: .74rem; opacity: .8; }
+  .t5-lv-s { color: var(--gold); font-size: .9rem; letter-spacing: .06em; white-space: nowrap; }
+  .t5-rw-item[data-result="L"] .t5-lv-n { background: #ff8f8f; }
+  .t5-rw-item[data-result="D"] .t5-lv-n { background: #c9d4e8; }
+  .t5-rw-item[data-result="W"] .t5-lv-n { background: #9df0b0; }
+
+  /* brief */
+  .t5-brief { max-width: 46rem; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  .t5-b-head { display: flex; gap: 1rem; align-items: center; }
+  .t5-b-head img { width: 5.5rem; height: 5.5rem; object-fit: contain; border-radius: 50%; background: rgba(255, 255, 255, .08); }
+  .t5-b-head h2 { margin: .2rem 0; font-size: clamp(1.3rem, 5vw, 1.9rem); font-weight: 900; line-height: 1.1; }
+  .t5-b-opp { margin: 0; font-size: .88rem; opacity: .9; }
+  .t5-b-opp em { font-style: normal; font-weight: 900; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; padding: .1rem .5rem; border-radius: 999px; background: #9df0b0; color: #15182a; }
+  .t5-b-opp em[data-tier="2"] { background: #ffe38a; }
+  .t5-b-opp em[data-tier="3"] { background: #ffb36b; }
+  .t5-b-opp em[data-tier="4"] { background: #ff8f8f; }
+  .t5-b-brief { margin: 0; font-size: 1rem; line-height: 1.5; }
+  .t5-b-squad { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .t5-b-squad span { display: inline-flex; align-items: center; gap: .35rem; padding: .2rem .6rem .2rem .2rem; border-radius: 999px; background: rgba(255, 255, 255, .09); font-size: .82rem; }
+  .t5-b-squad img { width: 1.9rem; height: 1.9rem; border-radius: 50%; background: #1b2446; object-fit: contain; }
+  .t5-b-grid { display: grid; gap: .8rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); }
+  .t5-b-grid h3 { margin: 0 0 .35rem; font-size: .8rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; opacity: .8; }
+  .t5-objs { margin: 0; padding: 0; list-style: none; display: grid; gap: .3rem; }
+  .t5-objs li { display: flex; gap: .5rem; align-items: baseline; font-weight: 700; }
+  .t5-objs b { color: var(--gold); min-width: 1.1rem; }
+  .t5-objs li[data-got="false"] b { color: #9aa3b8; }
+  .t5-b-tip { margin: 0; padding: .7rem .9rem; border-radius: .9rem; background: rgba(255, 255, 255, .07); font-size: .9rem; line-height: 1.45; }
+  .t5-b-meta { margin: 0; text-align: center; font-size: .85rem; opacity: .8; }
+
+  /* studio */
+  .t5-studio { display: grid; grid-template-columns: minmax(0, 1fr) minmax(15rem, 19rem); grid-template-rows: auto minmax(0, 1fr) auto; grid-template-areas: "top top" "board side" "pad side"; gap: .6rem; padding: .6rem; border: 4px solid var(--ink); border-radius: 1.2rem; background: #0e1d33; box-shadow: 0 8px 0 var(--ink); }
+  .t5-top { grid-area: top; display: flex; align-items: center; gap: .6rem; min-width: 0; }
+  .t5-icon { flex: none; width: 2.3rem; height: 2.3rem; border: 3px solid var(--ink); border-radius: 50%; background: #fff; color: #15182a; font-weight: 900; box-shadow: 0 2px 0 var(--ink); cursor: pointer; }
+  .t5-s-title { flex: 1; min-width: 0; margin: 0; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .t5-tag { flex: none; padding: .15rem .55rem; border-radius: 999px; background: rgba(255, 255, 255, .12); font-size: .72rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+  .t5-tag[data-kind="rec"] { background: var(--rec); animation: t5-blink 1s steps(2) infinite; }
+  .t5-tag[data-kind="play"] { background: #2d7ff9; }
+  @keyframes t5-blink { 50% { opacity: .55; } }
+  .t5-clock { flex: none; font-variant-numeric: tabular-nums; font-weight: 800; font-size: .88rem; }
+  .t5-board { grid-area: board; position: relative; min-height: 0; aspect-ratio: 42.4 / 38.6; width: min(100%, calc((100vh - 9.5rem) * 42.4 / 38.6)); margin: 0 auto; border-radius: .8rem; overflow: hidden; background: #1d5a33; }
+  .t5-board canvas { display: block; width: 100%; height: 100%; touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .t5-count { position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); margin: 0; font-size: clamp(3rem, 14vw, 7rem); font-weight: 900; color: var(--gold); -webkit-text-stroke: 3px var(--ink); pointer-events: none; }
+  .t5-over { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(5, 10, 30, .55); z-index: 5; padding: .6rem; }
+  .t5-card { display: grid; gap: .6rem; justify-items: center; max-width: 26rem; padding: 1rem 1.2rem; border: 4px solid var(--ink); border-radius: 1.2rem; background: #fbf7ef; color: #15182a; box-shadow: 0 6px 0 var(--ink); text-align: center; }
+  .t5-card .t5-kicker { font-size: 1.5rem; color: #d98a00; }
+  .t5-c-stars { font-size: 2.4rem; letter-spacing: .1em; line-height: 1; }
+  .t5-c-stars i { font-style: normal; color: #d7d9e2; -webkit-text-stroke: 2px var(--ink); }
+  .t5-c-stars i[data-on="true"] { color: var(--gold); animation: t5-pop .5s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .t5-c-stars i:nth-child(2) { animation-delay: .15s; }
+  .t5-c-stars i:nth-child(3) { animation-delay: .3s; }
+  @keyframes t5-pop { from { transform: scale(0); } }
+  .t5-card .t5-objs { text-align: left; }
+  .t5-card .t5-objs b { color: #1e9e52; }
+  .t5-card .t5-objs li[data-got="false"] { opacity: .6; }
+  .t5-card .t5-objs li[data-got="false"] b { color: #c0392b; }
+  .t5-c-stats { margin: 0; font-weight: 800; font-size: .88rem; }
+  .t5-badge { margin: 0; border-radius: 999px; background: #ffe38a; padding: .15rem .6rem; font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; }
+  .t5-badge[hidden] { display: none; }
+  .t5-c-msg { margin: 0; min-height: 1em; font-size: .82rem; font-weight: 800; }
+  .t5-card .t5-buttons button[hidden] { display: none; }
+  .t5-watchbar { position: absolute; left: .5rem; right: .5rem; bottom: .5rem; z-index: 4; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem; padding: .55rem .7rem; border-radius: .9rem; background: rgba(11, 18, 56, .82); }
+  .t5-watchbar > div:first-child { display: grid; min-width: 0; }
+  .t5-watchbar small { opacity: .85; }
+  .t5-watchbar button[hidden] { display: none; }
+  .t5-side { grid-area: side; display: flex; flex-direction: column; gap: .6rem; min-width: 0; }
+  .t5-status { margin: 0; min-height: 2.6em; padding: .45rem .6rem; border-radius: .7rem; background: rgba(255, 255, 255, .07); font-size: .84rem; font-weight: 700; line-height: 1.35; }
+  .t5-status[data-bad="true"] { background: rgba(255, 77, 94, .2); }
+  .t5-tracks { display: grid; gap: .4rem; }
+  .t5-track { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: .5rem; padding: .3rem .55rem .3rem .3rem; border: 2px solid transparent; border-radius: .8rem; background: rgba(255, 255, 255, .08); color: #fff; text-align: left; cursor: pointer; }
+  .t5-track[aria-pressed="true"] { border-color: var(--gold); background: rgba(255, 194, 58, .16); }
+  .t5-track img { width: 2.2rem; height: 2.2rem; border-radius: 50%; background: #1b2446; object-fit: contain; }
+  .t5-tn { display: grid; min-width: 0; line-height: 1.15; }
+  .t5-tn b { font-size: .88rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .t5-tn small { font-size: .72rem; opacity: .7; }
+  .t5-track em { font-style: normal; font-size: .7rem; font-weight: 900; white-space: nowrap; opacity: .85; }
+  .t5-track em[data-state="rec"] { color: #9df0b0; }
+  .t5-track em[data-state="paradox"] { color: #ff8f8f; }
+  .t5-scrub { display: flex; align-items: center; gap: .5rem; }
+  .t5-scrub input { flex: 1; accent-color: var(--gold); }
+  .t5-scrub small { font-size: .75rem; opacity: .8; white-space: nowrap; }
+  .t5-transport { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .t5-transport button { padding: .4rem .8rem; font-size: .84rem; }
+  .t5-rec { background: #ffe0e3 !important; }
+  .t5-rec i { display: inline-block; width: .7rem; height: .7rem; margin-right: .35rem; border-radius: 50%; background: var(--rec); vertical-align: -.05rem; }
+  .t5-rec small { font-weight: 700; opacity: .75; }
+  .t5-toggle[aria-pressed="true"] { background: #d7f5ff !important; }
+  .t5-coach[hidden] { display: none; }
+  .t5-live { display: none; gap: .4rem; flex-wrap: wrap; }
+  .t5-keys { margin: 0; font-size: .74rem; opacity: .7; line-height: 1.4; }
+  .t5-studio[data-phase="record"] .t5-transport, .t5-studio[data-phase="countdown"] .t5-transport, .t5-studio[data-phase="record"] .t5-scrub, .t5-studio[data-phase="countdown"] .t5-scrub { display: none; }
+  .t5-studio[data-phase="record"] .t5-live, .t5-studio[data-phase="countdown"] .t5-live { display: flex; }
+  .t5-game[data-mode="watch"] .t5-side { display: none; }
+  .t5-game[data-mode="watch"] .t5-studio { grid-template-columns: minmax(0, 1fr); grid-template-areas: "top" "board"; }
+  .t5-pad { grid-area: pad; display: none; }
+
+  /* touch controls */
+  .t5-stick { position: relative; width: 8.5rem; height: 8.5rem; border-radius: 50%; background: rgba(255, 255, 255, .1); border: 3px solid rgba(255, 255, 255, .3); touch-action: none; }
+  .t5-stick i { position: absolute; left: 50%; top: 50%; width: 3.4rem; height: 3.4rem; margin: -1.7rem 0 0 -1.7rem; border-radius: 50%; background: #fff; box-shadow: 0 3px 0 var(--ink); pointer-events: none; }
+  .t5-kicks { display: grid; grid-template-columns: repeat(2, auto); grid-template-rows: auto auto; gap: .5rem; align-items: end; }
+  .t5-kicks button { width: 4.4rem; height: 4.4rem; border-radius: 50%; border: 3px solid var(--ink); font-weight: 900; font-size: .84rem; box-shadow: 0 3px 0 var(--ink); touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
+  .t5-kicks [data-t5-kick="pass"] { grid-column: 2; grid-row: 1 / span 2; width: 5.6rem; height: 5.6rem; background: #fff; color: #15182a; align-self: center; }
+  .t5-kicks [data-t5-kick="shot"] { grid-column: 1; grid-row: 2; background: var(--gold); color: #15182a; }
+  .t5-kicks [data-t5-kick="lob"] { grid-column: 1; grid-row: 1; background: var(--sky); color: #15182a; }
+  .t5-kicks button[data-down="true"] { transform: translateY(2px) scale(.96); box-shadow: 0 1px 0 var(--ink); }
+  @media (pointer: fine) {
+    .t5-game[data-touch="true"] .t5-studio[data-phase="record"] .t5-pad, .t5-game[data-touch="true"] .t5-studio[data-phase="countdown"] .t5-pad { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  }
+
+  @media (max-width: 899px) and (pointer: fine) {
+    .t5-studio { grid-template-columns: minmax(0, 1fr); grid-template-areas: "top" "board" "side" "pad"; }
+  }
+
+  @media (pointer: coarse) {
+    .t5-game[data-mode="studio"], .t5-game[data-mode="watch"] { position: fixed; inset: 0; z-index: 60; background: #0e1d33; }
+    .t5-game[data-mode="studio"] .t5-studio, .t5-game[data-mode="watch"] .t5-studio { position: absolute; inset: 0; border: 0; border-radius: 0; box-shadow: none; padding: max(.4rem, env(safe-area-inset-top)) max(.4rem, env(safe-area-inset-right)) max(.4rem, env(safe-area-inset-bottom)) max(.4rem, env(safe-area-inset-left)); gap: .4rem; }
+    .t5-board { max-height: none; width: 100%; }
+    .t5-studio[data-phase="record"] .t5-pad, .t5-studio[data-phase="countdown"] .t5-pad { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .t5-keys { display: none; }
+  }
+  @media (pointer: coarse) and (orientation: portrait) {
+    .t5-studio { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr) auto; grid-template-areas: "top" "board" "side"; }
+    .t5-studio[data-phase="record"], .t5-studio[data-phase="countdown"] { grid-template-areas: "top" "board" "pad"; }
+    .t5-studio[data-phase="record"] .t5-side, .t5-studio[data-phase="countdown"] .t5-side { display: none; }
+    .t5-board { width: 100%; height: auto; max-height: 100%; aspect-ratio: auto; }
+    .t5-tracks { display: flex; gap: .35rem; overflow-x: auto; scrollbar-width: none; }
+    .t5-track { flex: 0 0 auto; grid-template-columns: auto auto; padding: .25rem .45rem .25rem .25rem; }
+    .t5-track em { grid-column: 1 / -1; }
+    .t5-tn small { display: none; }
+    .t5-track img { width: 1.9rem; height: 1.9rem; }
+    .t5-status { min-height: 0; font-size: .78rem; padding: .35rem .5rem; }
+    .t5-transport button { padding: .35rem .65rem; font-size: .78rem; }
+    .t5-pad { padding: .3rem .6rem max(.5rem, env(safe-area-inset-bottom)); }
+    .t5-s-title { font-size: .85rem; }
+  }
+  @media (pointer: coarse) and (orientation: landscape) {
+    .t5-studio { grid-template-columns: minmax(12rem, 16rem) minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); grid-template-areas: "top top" "side board"; }
+    .t5-studio[data-phase="record"], .t5-studio[data-phase="countdown"] { grid-template-columns: minmax(9rem, 1fr) auto minmax(9rem, 1fr); grid-template-areas: "top top top" "stick board kicks"; }
+    .t5-studio[data-phase="record"] .t5-side, .t5-studio[data-phase="countdown"] .t5-side { display: none; }
+    .t5-board { height: 100%; width: auto; max-width: 100%; }
+    .t5-side { overflow-y: auto; }
+    .t5-studio[data-phase="record"] .t5-pad, .t5-studio[data-phase="countdown"] .t5-pad { display: contents; }
+    .t5-studio[data-phase="record"] .t5-stick, .t5-studio[data-phase="countdown"] .t5-stick { grid-area: stick; align-self: end; justify-self: center; margin-bottom: max(.8rem, env(safe-area-inset-bottom)); }
+    .t5-studio[data-phase="record"] .t5-kicks, .t5-studio[data-phase="countdown"] .t5-kicks { grid-area: kicks; align-self: end; justify-self: center; margin-bottom: max(.8rem, env(safe-area-inset-bottom)); }
+    .t5-status { font-size: .76rem; }
+    .t5-transport button { padding: .32rem .6rem; font-size: .76rem; }
+  }
+  /* keep and discard stay reachable on phones while recording: they sit in the top bar */
+  .t5-lt { display: none; }
+  .t5-lt-keep { background: #ffe38a; }
+  @media (pointer: coarse) {
+    .t5-studio[data-phase="record"] .t5-lt, .t5-studio[data-phase="countdown"] .t5-lt { display: inline-grid; place-items: center; }
+  }
+
+  .t5-info { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); padding: 1.1rem 1.3rem; border-radius: 1.2rem; background: color-mix(in srgb, var(--color-navy, #1b2446) 6%, transparent); }
+  .t5-info h2 { margin: 0 0 .4rem; font-size: .85rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; }
+  .t5-info ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .3rem; font-size: .9rem; line-height: 1.5; }
+  .t5-credits { grid-column: 1 / -1; margin: 0; font-size: .8rem; opacity: .8; }
+</style>
