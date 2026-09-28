@@ -154,15 +154,13 @@ function traits(p: SquadPlayer): Six {
   return t;
 }
 
-function buildCard(p: SquadPlayer): FcCard {
-  const seed: Seed = SEEDS[p.num] ?? { ovr: 55, pos: p.gk ? "GK" : p.pos === "DF" ? "CB" : p.pos === "FW" ? "ST" : p.pos === "AM" ? "CAM" : "CM" };
+function makeCard(num: number, seed: Seed, tr: Six): FcCard {
   const prof = PROFILE[seed.pos];
-  const tr = seed.pos === "GK" ? ([0, 0, 0, 0, 0, 0] as Six) : traits(p);
   const keys = ["pac", "sho", "pas", "dri", "def", "phy"] as const;
   const face = seed.face ?? (keys.map((k, i) => clamp(Math.round(seed.ovr + prof[i] + tr[i] + (seed.delta?.[k] ?? 0)), 20, 95)) as Six);
   const outfield: Six = seed.pos === "GK" ? [40 + Math.round((seed.ovr - 50) * 0.3), 18, 30 + Math.round((seed.ovr - 50) * 0.8), 25, 18, 45 + Math.round((seed.ovr - 50) * 0.6)] : face;
   const card: FcCard = {
-    num: p.num,
+    num,
     ovr: seed.ovr,
     pos: seed.pos,
     alt: seed.alt ?? [],
@@ -182,6 +180,11 @@ function buildCard(p: SquadPlayer): FcCard {
   return card;
 }
 
+function buildCard(p: SquadPlayer): FcCard {
+  const seed: Seed = SEEDS[p.num] ?? { ovr: 55, pos: p.gk ? "GK" : p.pos === "DF" ? "CB" : p.pos === "FW" ? "ST" : p.pos === "AM" ? "CAM" : "CM" };
+  return makeCard(p.num, seed, seed.pos === "GK" ? [0, 0, 0, 0, 0, 0] : traits(p));
+}
+
 export const CARDS: Record<number, FcCard> = Object.fromEntries(SQUAD.map((p) => [p.num, buildCard(p)]));
 
 export function cardFor(num: number): FcCard {
@@ -192,10 +195,13 @@ export function cardFor(num: number): FcCard {
 
 const unit = (s: number): number => clamp((s - 30) / 60, 0, 1);
 
-export function attrsFor(num: number): FcAttrs {
-  const c = cardFor(num);
+function attrsOf(c: FcCard): FcAttrs {
   const gk = c.gk ? unit((c.gk.div + c.gk.han + c.gk.ref + c.gk.pos) / 4) : 0.15;
   return { pace: unit(c.pac), shooting: unit(c.sho), passing: unit(c.pas), dribbling: unit(c.dri), defending: unit(c.def), physical: unit(c.phy), gk };
+}
+
+export function attrsFor(num: number): FcAttrs {
+  return attrsOf(cardFor(num));
 }
 
 // Detailed position to engine role
@@ -238,3 +244,18 @@ export function teamOvr(players: SquadPlayer[]): number {
 
 // Rival mascot squads: OVR by AI tier (1 easiest).
 export const RIVAL_OVR: Record<1 | 2 | 3 | 4, number> = { 1: 61, 2: 64, 3: 67, 4: 71 };
+
+// The rival five (engine index 0..4, numbers 1, 4, 6, 8, 9) as cards on the same scale as the home
+// cards: same position profiles, no personal traits, the rival OVR plus a small role offset.
+const RIVAL_POS: FcPos[] = ["GK", "CB", "CB", "CM", "ST"];
+const RIVAL_NUMS = [1, 4, 6, 8, 9];
+const RIVAL_ROLE_OFFSET = [0, 0, -1, 0, 1];
+
+export function rivalCard(tier: 1 | 2 | 3 | 4, index: number): FcCard {
+  const i = clamp(Math.round(index), 0, 4);
+  return makeCard(RIVAL_NUMS[i], { ovr: RIVAL_OVR[tier] + RIVAL_ROLE_OFFSET[i], pos: RIVAL_POS[i] }, [0, 0, 0, 0, 0, 0]);
+}
+
+export function rivalAttrs(tier: 1 | 2 | 3 | 4, index: number): FcAttrs {
+  return attrsOf(rivalCard(tier, index));
+}
