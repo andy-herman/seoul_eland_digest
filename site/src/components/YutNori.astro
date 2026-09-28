@@ -140,12 +140,12 @@ const mascots = withBase("/play/h2h/mascot-heads/");
             </div>
           </section>
 
-          <section class="yut-panel">
+          <section class="yut-panel yut-queue-panel">
             <h3>{t.queue}</h3>
             <div class="yut-queue" data-yut-queue></div>
           </section>
 
-          <section class="yut-panel">
+          <section class="yut-panel yut-move-panel">
             <h3>{t.confirm}</h3>
             <div class="yut-moves" data-yut-moves></div>
             <button type="button" data-yut-cancel>{t.cancel}</button>
@@ -160,7 +160,7 @@ const mascots = withBase("/play/h2h/mascot-heads/");
               <div class="yut-row" data-yut-home="0"></div>
             </div>
             <div class="yut-team-row">
-              <b>{t.rivalMode}</b>
+              <b data-yut-team-name="1">{t.rivalMode}</b>
               <small>{t.bench}</small>
               <div class="yut-row" data-yut-bench="1"></div>
               <small>{t.home}</small>
@@ -210,7 +210,7 @@ const mascots = withBase("/play/h2h/mascot-heads/");
 </script>
 
 <style is:global>
-  .yut-lock-scroll { overflow: hidden; }
+  html.yut-lock-scroll, body.yut-lock-scroll { width: 100%; height: 100dvh; overflow: hidden; overscroll-behavior: none; }
   .yut-page { display: grid; gap: 1rem; }
   .yut-ko { display: inline-block; font-size: .62em; letter-spacing: 0; color: var(--color-gold, #f2b705); vertical-align: middle; }
   .yut-game { --ink: #0b1238; --gold: #ffc23a; --navy: #1b2446; --cream: #fff7d6; color: #fff; scroll-margin-top: 5.5rem; }
@@ -261,9 +261,9 @@ const mascots = withBase("/play/h2h/mascot-heads/");
   .yut-scorebox, .yut-turnbox { display: grid; padding: .48rem .75rem; border: 2px solid rgba(255, 255, 255, .22); border-radius: .85rem; background: rgba(255, 255, 255, .08); }
   .yut-scorebox small, .yut-turnbox small, .yut-panel h3, .yut-team-row small { text-transform: uppercase; letter-spacing: .1em; opacity: .76; font-size: .68rem; font-weight: 1000; }
   .yut-scorebox b { font-size: clamp(1rem, 3vw, 1.55rem); }
-  .yut-arena { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .4fr); gap: .75rem; }
-  .yut-board-panel { position: relative; min-height: 38rem; border: 3px solid var(--ink); border-radius: 1rem; overflow: hidden; background: #126136; }
-  .yut-board-panel canvas { display: block; width: 100%; height: 100%; min-height: 38rem; touch-action: none; user-select: none; -webkit-user-select: none; }
+  .yut-arena { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .4fr); align-items: start; gap: .75rem; }
+  .yut-board-panel { position: relative; height: min(62dvh, 38rem); min-height: 0; border: 3px solid var(--ink); border-radius: 1rem; overflow: hidden; background: #126136; }
+  .yut-board-panel canvas { display: block; width: 100%; height: 100%; min-height: 0; touch-action: none; user-select: none; -webkit-user-select: none; }
   .yut-commentary { position: absolute; left: .75rem; right: .75rem; bottom: .75rem; margin: 0; padding: .65rem .8rem; border-left: 5px solid var(--gold); border-radius: .75rem; background: rgba(7, 20, 51, .82); color: #fff7c2; font-weight: 900; }
   .yut-side { display: grid; gap: .6rem; align-content: start; }
   .yut-throw-box, .yut-panel, .yut-teams { display: grid; gap: .55rem; padding: .7rem; border-radius: .9rem; background: rgba(255, 255, 255, .08); }
@@ -281,11 +281,10 @@ const mascots = withBase("/play/h2h/mascot-heads/");
   .yut-teams { grid-template-columns: 1fr; }
   .yut-team-row { display: grid; grid-template-columns: 1fr; gap: .28rem; }
   .yut-team-row b { font-size: .9rem; }
-  .yut-row-token, .yut-mini-token { position: relative; display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 999px; background: var(--token); border: 4px solid var(--rim); overflow: hidden; box-shadow: 0 3px 0 var(--ink); padding: 0; }
+  .yut-row-token, .yut-mini-token { position: relative; display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 999px; background-color: var(--token); background-repeat: no-repeat; border: 4px solid var(--rim); overflow: hidden; box-shadow: 0 3px 0 var(--ink); padding: 0; }
   button.yut-row-token { cursor: pointer; }
   .yut-row-token-home { opacity: .86; filter: saturate(.8); }
-  .yut-row-token img, .yut-mini-token img { width: 100%; height: 100%; border-radius: 999px; object-fit: contain; }
-  .yut-row-token img.yut-front-crop, .yut-mini-token img.yut-front-crop { width: 300%; max-width: none; height: 100%; object-fit: cover; object-position: right center; transform: translateX(-66%); }
+  .yut-row-token img, .yut-mini-token img { display: none; }
   .yut-row-token i, .yut-mini-token i { position: absolute; right: 0; top: 0; min-width: 19px; height: 19px; display: grid; place-items: center; border-radius: 999px; background: #ef4444; color: #fff; font-size: .66rem; font-style: normal; font-weight: 1000; box-shadow: 0 0 0 2px #fff; }
   .yut-row-token i:empty, .yut-mini-token i:empty { display: none; }
 
@@ -303,15 +302,207 @@ const mascots = withBase("/play/h2h/mascot-heads/");
   .yut-credits { grid-column: 1 / -1; margin: 0; font-size: .9rem; font-weight: 800; }
 
   @media (pointer: coarse) {
-    .yut-game[data-mode="play"] { position: fixed; z-index: 80; inset: 0; min-height: 100dvh; padding: max(.45rem, env(safe-area-inset-top)) max(.45rem, env(safe-area-inset-right)) max(.45rem, env(safe-area-inset-bottom)) max(.45rem, env(safe-area-inset-left)); background: #071433; overflow: auto; }
-    .yut-game[data-mode="play"] .yut-play { min-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - .9rem); border-radius: .9rem; box-shadow: none; }
+    .yut-game[data-mode="play"] {
+      position: fixed;
+      z-index: 80;
+      inset: 0;
+      width: 100vw;
+      height: 100dvh;
+      padding: max(.35rem, env(safe-area-inset-top)) max(.35rem, env(safe-area-inset-right)) max(.35rem, env(safe-area-inset-bottom)) max(.35rem, env(safe-area-inset-left));
+      background: #071433;
+      overflow: hidden;
+      contain: layout paint size;
+    }
+    .yut-game[data-mode="play"] .yut-play {
+      display: flex;
+      flex-direction: column;
+      gap: .35rem;
+      width: 100%;
+      height: calc(100dvh - max(.35rem, env(safe-area-inset-top)) - max(.35rem, env(safe-area-inset-bottom)));
+      min-height: 0;
+      padding: .35rem;
+      border-width: 0;
+      border-radius: .85rem;
+      box-shadow: none;
+      overflow: hidden;
+    }
+    .yut-game[data-mode="play"] .yut-topbar {
+      flex: 0 0 auto;
+      grid-template-columns: 38px minmax(0, 1fr) auto 54px;
+      gap: .28rem;
+      margin: 0;
+    }
+    .yut-game[data-mode="play"] .yut-icon {
+      min-width: 38px;
+      min-height: 36px;
+      padding: .25rem .45rem !important;
+      font-size: .72rem;
+    }
+    .yut-game[data-mode="play"] .yut-scorebox,
+    .yut-game[data-mode="play"] .yut-turnbox {
+      min-height: 36px;
+      padding: .22rem .45rem;
+      border-radius: .55rem;
+    }
+    .yut-game[data-mode="play"] .yut-scorebox small,
+    .yut-game[data-mode="play"] .yut-turnbox small,
+    .yut-game[data-mode="play"] .yut-panel h3,
+    .yut-game[data-mode="play"] .yut-team-row small {
+      font-size: .52rem;
+      letter-spacing: .08em;
+    }
+    .yut-game[data-mode="play"] .yut-scorebox b,
+    .yut-game[data-mode="play"] .yut-turnbox b {
+      font-size: .72rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .yut-game[data-mode="play"] .yut-arena {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: minmax(0, 1fr) auto;
+      grid-template-columns: 1fr;
+      gap: .35rem;
+      overflow: hidden;
+    }
+    .yut-game[data-mode="play"] .yut-board-panel {
+      min-height: 0;
+      aspect-ratio: 1 / 1;
+      width: min(100%, 58dvh);
+      max-height: 58dvh;
+      justify-self: center;
+      border-width: 2px;
+      border-radius: .75rem;
+    }
+    .yut-game[data-mode="play"] .yut-board-panel canvas {
+      min-height: 0;
+      height: 100%;
+    }
+    .yut-game[data-mode="play"] .yut-commentary {
+      left: .35rem;
+      right: .35rem;
+      bottom: .35rem;
+      max-height: 2.35rem;
+      padding: .34rem .48rem;
+      border-left-width: 4px;
+      border-radius: .5rem;
+      font-size: .78rem;
+      line-height: 1.15;
+      overflow: hidden;
+    }
+    .yut-game[data-mode="play"] .yut-side {
+      min-height: 0;
+      display: grid;
+      grid-template-columns: 12.5rem minmax(0, 1fr);
+      grid-template-rows: auto minmax(0, 1fr);
+      gap: .3rem;
+      overflow: hidden;
+    }
+    .yut-game[data-mode="play"] .yut-throw-box {
+      grid-column: 1;
+      grid-template-columns: 6.5rem auto;
+      align-items: center;
+      padding: .32rem;
+      border-radius: .65rem;
+      gap: .35rem;
+    }
+    .yut-game[data-mode="play"] .yut-throw-box canvas {
+      width: 6.2rem;
+      height: 3.95rem;
+      aspect-ratio: auto;
+      border-radius: .55rem;
+    }
+    .yut-game[data-mode="play"] .yut-throw-actions {
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .3rem;
+      min-width: 0;
+    }
+    .yut-game[data-mode="play"] .yut-throw-actions button {
+      min-width: 5.2rem;
+      min-height: 42px;
+      padding: .42rem .7rem !important;
+    }
+    .yut-game[data-mode="play"] .yut-throw-actions p {
+      min-width: 0;
+      font-size: .74rem;
+      line-height: 1.1;
+      max-height: 2.2rem;
+      overflow: hidden;
+    }
+    .yut-game[data-mode="play"] .yut-panel,
+    .yut-game[data-mode="play"] .yut-teams {
+      padding: .32rem;
+      border-radius: .65rem;
+      gap: .22rem;
+    }
+    .yut-game[data-mode="play"] .yut-queue-panel {
+      grid-column: 2;
+      grid-row: 1;
+      min-width: 0;
+      min-height: 4.55rem;
+    }
+    .yut-game[data-mode="play"] .yut-move-panel {
+      display: none;
+    }
+    .yut-game[data-mode="play"] .yut-queue,
+    .yut-game[data-mode="play"] .yut-row {
+      gap: .25rem;
+      min-height: 1.8rem;
+    }
+    .yut-game[data-mode="play"] .yut-chip {
+      min-height: 34px;
+      padding: .25rem .45rem !important;
+      font-size: .72rem;
+    }
+    .yut-game[data-mode="play"] .yut-chip b {
+      font-size: .95rem;
+    }
+    .yut-game[data-mode="play"] .yut-teams {
+      grid-column: 1 / -1;
+      grid-row: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      min-height: 0;
+    }
+    .yut-game[data-mode="play"] .yut-team-row {
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: .12rem .3rem;
+      align-content: start;
+    }
+    .yut-game[data-mode="play"] .yut-team-row b {
+      grid-column: 1 / -1;
+      font-size: .72rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .yut-game[data-mode="play"] .yut-team-row small {
+      align-self: center;
+    }
+    .yut-game[data-mode="play"] .yut-row-token,
+    .yut-game[data-mode="play"] .yut-mini-token {
+      width: 31px;
+      height: 31px;
+      border-width: 3px;
+      box-shadow: 0 2px 0 var(--ink);
+    }
+    .yut-game[data-mode="play"] .yut-row-token i,
+    .yut-game[data-mode="play"] .yut-mini-token i {
+      min-width: 15px;
+      height: 15px;
+      font-size: .55rem;
+    }
   }
 
   @media (max-width: 900px) {
     .yut-menu-grid { grid-template-columns: 1fr; }
     .yut-throw-table { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .yut-arena { grid-template-columns: 1fr; }
-    .yut-board-panel, .yut-board-panel canvas { min-height: min(62dvh, 35rem); }
+    .yut-board-panel { height: min(62dvh, 35rem); }
     .yut-result { grid-template-columns: 1fr; }
     .yut-poster-leoul { left: -5%; }
     .yut-poster-lenyang { right: -7%; }
@@ -326,12 +517,78 @@ const mascots = withBase("/play/h2h/mascot-heads/");
     .yut-poster-lenyang { height: 66%; }
   }
 
+  @media (pointer: coarse) and (max-width: 540px) {
+    .yut-game[data-mode="play"] .yut-topbar { grid-template-columns: 38px minmax(0, 1fr) minmax(4.5rem, 5.7rem) 54px; }
+    .yut-game[data-mode="play"] .yut-turnbox { grid-column: auto; min-width: 0; }
+  }
+
   @media (max-height: 480px) and (orientation: landscape) {
     .yut-game[data-mode="play"] .yut-play { padding: .35rem; }
     .yut-topbar { margin-bottom: .35rem; }
-    .yut-arena { grid-template-columns: minmax(0, 1fr) minmax(17rem, .44fr); }
-    .yut-board-panel, .yut-board-panel canvas { min-height: calc(100dvh - 4.6rem); }
-    .yut-throw-box canvas { aspect-ratio: 16 / 5.6; }
+    .yut-game[data-mode="play"] .yut-arena {
+      grid-template-columns: minmax(0, 1fr) 18rem;
+      grid-template-rows: minmax(0, 1fr);
+    }
+    .yut-game[data-mode="play"] .yut-board-panel {
+      width: 100%;
+      height: 100%;
+      max-height: none;
+      aspect-ratio: auto;
+    }
+    .yut-game[data-mode="play"] .yut-board-panel,
+    .yut-game[data-mode="play"] .yut-board-panel canvas { min-height: 0; }
+    .yut-game[data-mode="play"] .yut-side {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto minmax(0, 1fr);
+    }
+    .yut-game[data-mode="play"] .yut-throw-box {
+      grid-column: 1;
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .yut-game[data-mode="play"] .yut-throw-box canvas {
+      width: 100%;
+      height: 3.45rem;
+      aspect-ratio: auto;
+    }
+    .yut-game[data-mode="play"] .yut-throw-actions {
+      grid-template-columns: auto;
+      align-content: center;
+    }
+    .yut-game[data-mode="play"] .yut-throw-actions p {
+      display: none;
+    }
+    .yut-game[data-mode="play"] .yut-throw-actions button {
+      min-width: 5rem;
+      min-height: 40px;
+      padding: .35rem .65rem !important;
+    }
+    .yut-game[data-mode="play"] .yut-queue-panel {
+      grid-column: 1;
+      grid-row: 2;
+      min-height: 3rem;
+    }
+    .yut-game[data-mode="play"] .yut-teams {
+      grid-column: 1;
+      grid-row: 3;
+      grid-template-columns: 1fr;
+      align-content: start;
+      overflow: hidden;
+    }
+    .yut-game[data-mode="play"] .yut-teams .yut-team-row {
+      grid-template-columns: 1fr;
+      gap: .1rem;
+    }
+    .yut-game[data-mode="play"] .yut-teams .yut-team-row b {
+      font-size: .72rem;
+    }
+    .yut-game[data-mode="play"] .yut-teams .yut-team-row small {
+      display: none;
+    }
+    .yut-game[data-mode="play"] .yut-row-token,
+    .yut-game[data-mode="play"] .yut-mini-token {
+      width: 28px;
+      height: 28px;
+    }
     .yut-commentary { font-size: .82rem; padding: .45rem .6rem; }
   }
 </style>

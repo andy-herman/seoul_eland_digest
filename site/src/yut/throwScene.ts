@@ -22,10 +22,10 @@ export class YutThrowScene {
   private webgl = false;
   private ctx: CanvasRenderingContext2D | null = null;
   private poses: StickPose[] = [
-    { x: -0.9, y: 0, rot: -0.18, flat: false, marked: true },
-    { x: -0.3, y: 0.05, rot: 0.12, flat: false, marked: false },
-    { x: 0.35, y: -0.02, rot: -0.06, flat: false, marked: false },
-    { x: 0.95, y: 0.05, rot: 0.18, flat: false, marked: false },
+    { x: -1.45, y: 0, rot: -0.1, flat: false, marked: true },
+    { x: -0.48, y: 0.03, rot: 0.08, flat: false, marked: false },
+    { x: 0.5, y: -0.02, rot: -0.06, flat: false, marked: false },
+    { x: 1.48, y: 0.04, rot: 0.11, flat: false, marked: false },
   ];
 
   constructor(private readonly canvas: HTMLCanvasElement) {
@@ -97,7 +97,7 @@ export class YutThrowScene {
         const t = Math.min(1, (performance.now() - start) / 1160);
         const ease = 1 - (1 - t) ** 3;
         this.poses = final.map((flat, i) => ({
-          x: (i - 1.5) * 0.72 + Math.sin(t * 9 + i) * 0.28 * (1 - ease),
+          x: (i - 1.5) * 0.98 + Math.sin(t * 9 + i) * 0.28 * (1 - ease),
           y: Math.sin(Math.PI * t) * (1.05 + i * 0.08) + Math.sin(t * 18 + i) * 0.05 * (1 - t),
           rot: -0.18 + i * 0.12 + Math.sin(t * 10 + i) * 0.75 * (1 - ease),
           flat,
@@ -119,8 +119,8 @@ export class YutThrowScene {
   private initThree(THREE: Three): void {
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
-    this.camera.position.set(0, 2.55, 3.85);
+    this.camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+    this.camera.position.set(0, 4.25, 3.45);
     this.camera.lookAt(0, 0, 0);
     this.scene.add(new THREE.HemisphereLight(0xfff3d7, 0x4a2b10, 2.4));
     const key = new THREE.DirectionalLight(0xffffff, 1.35);
@@ -141,6 +141,7 @@ export class YutThrowScene {
     const bark = new THREE.MeshToonMaterial({ color: i === 0 ? 0x8b552c : 0x73431f });
     const flat = new THREE.MeshToonMaterial({ color: 0xf6d69f });
     const mark = new THREE.MeshBasicMaterial({ color: 0xcc1f2f });
+    const eland = new THREE.MeshBasicMaterial({ color: 0x1b2446 });
     const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 1.85, 8, 14), bark);
     body.scale.set(1.25, 0.58, 1);
     body.rotation.z = Math.PI / 2;
@@ -156,7 +157,7 @@ export class YutThrowScene {
         g.add(x);
       }
     } else {
-      const badge = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.034, 0.05), mark);
+      const badge = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.034, 0.05), eland);
       badge.position.set(-0.62, -0.112, 0);
       g.add(badge);
     }
@@ -169,7 +170,7 @@ export class YutThrowScene {
     for (let i = 0; i < this.sticks.length; i++) {
       const pose = this.poses[i];
       const stick = this.sticks[i];
-      stick.position.set(pose.x, 0.18 + pose.y, -0.15 + Math.sin(i) * 0.18);
+      stick.position.set(pose.x, 0.18 + pose.y, (i - 1.5) * 0.32);
       stick.rotation.set((pose.flat ? Math.PI : 0) * ease + (1 - ease) * (5.5 + i), pose.rot * 0.2, pose.rot);
     }
     this.renderer.render(this.scene, this.camera);

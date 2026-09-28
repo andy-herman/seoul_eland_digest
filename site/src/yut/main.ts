@@ -202,6 +202,7 @@ export function mountYutNori(root: HTMLElement): void {
     root.dataset.mode = name;
     for (const el of qa("[data-yut-screen]")) el.hidden = el.dataset.yutScreen !== name;
     document.body.classList.toggle("yut-lock-scroll", coarse && name === "play");
+    document.documentElement.classList.toggle("yut-lock-scroll", coarse && name === "play");
     if (name === "play") {
       ensureThrower();
       startLoop();
@@ -280,6 +281,8 @@ export function mountYutNori(root: HTMLElement): void {
     q("[data-yut-turn]").textContent = labelTeam(state.turn);
     q("[data-yut-message]").textContent = message;
     q("[data-yut-result-card]").textContent = resultCard;
+    const rivalLabel = mode === "pass" ? t.passAndPlayTeam[1] : `${OPPONENTS[rival].name} · ${OPPONENTS[rival].club}`;
+    q('[data-yut-team-name="1"]').textContent = rivalLabel;
     q<HTMLButtonElement>("[data-yut-throw]").disabled = busy || !state.mustThrow || state.winner !== null || (mode === "rival" && state.turn === 1);
     q<HTMLButtonElement>("[data-yut-mute]").textContent = audio.muted ? t.unmute : t.mute;
     renderChips();
@@ -377,10 +380,11 @@ export function mountYutNori(root: HTMLElement): void {
       drawCssToken(node, token, team, 1);
       bench.append(node);
     }
-    for (let i = 0; i < state.teams[team].home; i++) {
+    const homeCount = state.teams[team].home;
+    if (homeCount > 0) {
       const node = document.createElement("span");
       node.className = "yut-row-token yut-row-token-home";
-      drawCssToken(node, tokenFor(team, i), team, 1);
+      drawCssToken(node, tokenFor(team, 0), team, homeCount);
       home.append(node);
     }
   };
@@ -390,9 +394,11 @@ export function mountYutNori(root: HTMLElement): void {
     const color = team === 0 ? SEOUL : rivalColor;
     (node as HTMLElement).style.setProperty("--token", color);
     (node as HTMLElement).style.setProperty("--rim", team === 0 ? GOLD : "#ffffff");
+    (node as HTMLElement).style.backgroundImage = `url("${token.src}")`;
+    (node as HTMLElement).style.backgroundSize = token.crop === "front-third" ? "300% 100%" : "185% 185%";
+    (node as HTMLElement).style.backgroundPosition = token.crop === "front-third" ? "right center" : "center";
     node.innerHTML = `<img alt="" width="44" height="44"><i>${count > 1 ? `×${count}` : ""}</i>`;
     node.querySelector("img")!.src = token.src;
-    if (token.crop === "front-third") node.querySelector("img")!.classList.add("yut-front-crop");
   };
 
   const render = () => {
@@ -522,6 +528,7 @@ export function mountYutNori(root: HTMLElement): void {
     ctx.shadowColor = "rgba(255,194,58,.5)";
     ctx.shadowBlur = 15;
     const start = preview.from === "bench" ? stationPoint("A", w, h) : stationPoint(preview.from, w, h);
+    ctx.setLineDash([1, 15]);
     ctx.beginPath();
     ctx.moveTo(start[0], start[1]);
     for (const st of preview.path) {
@@ -529,10 +536,20 @@ export function mountYutNori(root: HTMLElement): void {
       ctx.lineTo(x, y);
     }
     ctx.stroke();
+    ctx.setLineDash([]);
     ctx.restore();
     if (preview.to !== "home") {
       const [x, y] = stationPoint(preview.to, w, h);
       const pulse = 1 + Math.sin(performance.now() / 130) * 0.08;
+      ctx.save();
+      ctx.strokeStyle = GOLD;
+      ctx.lineWidth = 5;
+      ctx.shadowColor = "rgba(255,194,58,.75)";
+      ctx.shadowBlur = 12;
+      ctx.beginPath();
+      ctx.arc(x, y, 33 * pulse, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
       ctx.save();
       ctx.globalAlpha = 0.72;
       drawToken(tokenFor(state.turn, 0), state.turn, x, y, 1, 23 * pulse, true);
@@ -869,6 +886,7 @@ export function mountYutNori(root: HTMLElement): void {
     effects = [];
     confetti = [];
     screen("play");
+    if (!coarse) root.scrollIntoView({ block: "start", behavior: "smooth" });
     audio.unlock();
     audio.startMusic();
     render();
