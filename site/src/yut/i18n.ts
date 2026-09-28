@@ -45,6 +45,7 @@ export interface YutStrings {
   scoreboard: string;
   throw: string;
   throwHint: string;
+  touchThrowHint: string;
   throwAgain: string;
   queue: string;
   bench: string;
@@ -133,6 +134,7 @@ export const YUT_STRINGS: Record<Locale, YutStrings> = {
     scoreboard: "Match score",
     throw: "Throw",
     throwHint: "Click, press Space, or flick up on the mat.",
+    touchThrowHint: "Tap Throw or flick up on the mat.",
     throwAgain: "Throw again!",
     queue: "Throw queue",
     bench: "Bench",
@@ -226,6 +228,7 @@ export const YUT_STRINGS: Record<Locale, YutStrings> = {
     scoreboard: "Placar da partida",
     throw: "Arremessar",
     throwHint: "Clique, aperte Espaço, ou deslize para cima no tapete.",
+    touchThrowHint: "Toque em Arremessar ou deslize para cima no tapete.",
     throwAgain: "Jogue de novo!",
     queue: "Fila de arremessos",
     bench: "Banco",

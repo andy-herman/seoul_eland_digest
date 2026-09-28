@@ -312,7 +312,7 @@ export function mountYutNori(root: HTMLElement): void {
       button.title = `${copy.roman}, ${copy.meaning}, ${info.steps}`;
       queue.append(button);
     }
-    if (!state.queue.length) queue.textContent = state.mustThrow ? t.throwHint : t.noMoves;
+    if (!state.queue.length) queue.textContent = state.mustThrow ? (coarse ? t.touchThrowHint : t.throwHint) : t.noMoves;
   };
 
   const renderMoveButtons = () => {
@@ -1030,6 +1030,13 @@ export function mountYutNori(root: HTMLElement): void {
         state.mustThrow = false;
         selectedThrow = id;
         render();
+      },
+      showThrow: async (id: ThrowId) => {
+        screen("play");
+        ensureThrower();
+        resultCard = resultText(id);
+        render();
+        await thrower!.animate(THROW_INFO[id]);
       },
       captureSetup: () => {
         state = newGame(44);

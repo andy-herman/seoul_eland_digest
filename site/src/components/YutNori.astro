@@ -128,8 +128,8 @@ const mascots = withBase("/play/h2h/mascot-heads/");
       <div class="yut-arena">
         <section class="yut-board-panel">
           <canvas data-yut-board aria-label={t.heading}></canvas>
-          <p class="yut-commentary" data-yut-message></p>
         </section>
+        <p class="yut-commentary" data-yut-message></p>
 
         <aside class="yut-side">
           <section class="yut-throw-box">
@@ -150,24 +150,24 @@ const mascots = withBase("/play/h2h/mascot-heads/");
             <div class="yut-moves" data-yut-moves></div>
             <button type="button" data-yut-cancel>{t.cancel}</button>
           </section>
-
-          <section class="yut-teams">
-            <div class="yut-team-row">
-              <b>Seoul E-Land</b>
-              <small>{t.bench}</small>
-              <div class="yut-row" data-yut-bench="0"></div>
-              <small>{t.home}</small>
-              <div class="yut-row" data-yut-home="0"></div>
-            </div>
-            <div class="yut-team-row">
-              <b data-yut-team-name="1">{t.rivalMode}</b>
-              <small>{t.bench}</small>
-              <div class="yut-row" data-yut-bench="1"></div>
-              <small>{t.home}</small>
-              <div class="yut-row" data-yut-home="1"></div>
-            </div>
-          </section>
         </aside>
+
+        <section class="yut-teams">
+          <div class="yut-team-row">
+            <b>Seoul E-Land</b>
+            <small>{t.bench}</small>
+            <div class="yut-row" data-yut-bench="0"></div>
+            <small>{t.home}</small>
+            <div class="yut-row" data-yut-home="0"></div>
+          </div>
+          <div class="yut-team-row">
+            <b data-yut-team-name="1">{t.rivalMode}</b>
+            <small>{t.bench}</small>
+            <div class="yut-row" data-yut-bench="1"></div>
+            <small>{t.home}</small>
+            <div class="yut-row" data-yut-home="1"></div>
+          </div>
+        </section>
       </div>
     </div>
 
@@ -261,11 +261,11 @@ const mascots = withBase("/play/h2h/mascot-heads/");
   .yut-scorebox, .yut-turnbox { display: grid; padding: .48rem .75rem; border: 2px solid rgba(255, 255, 255, .22); border-radius: .85rem; background: rgba(255, 255, 255, .08); }
   .yut-scorebox small, .yut-turnbox small, .yut-panel h3, .yut-team-row small { text-transform: uppercase; letter-spacing: .1em; opacity: .76; font-size: .68rem; font-weight: 1000; }
   .yut-scorebox b { font-size: clamp(1rem, 3vw, 1.55rem); }
-  .yut-arena { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .4fr); align-items: start; gap: .75rem; }
-  .yut-board-panel { position: relative; height: min(62dvh, 38rem); min-height: 0; border: 3px solid var(--ink); border-radius: 1rem; overflow: hidden; background: #126136; }
+  .yut-arena { display: grid; grid-template-columns: minmax(0, 1fr) minmax(18rem, .4fr); grid-template-areas: "board side" "comment side" "teams side"; align-items: start; gap: .55rem .75rem; }
+  .yut-board-panel { grid-area: board; position: relative; height: min(53dvh, 32rem); min-height: 0; border: 3px solid var(--ink); border-radius: 1rem; overflow: hidden; background: #126136; }
   .yut-board-panel canvas { display: block; width: 100%; height: 100%; min-height: 0; touch-action: none; user-select: none; -webkit-user-select: none; }
-  .yut-commentary { position: absolute; left: .75rem; right: .75rem; bottom: .75rem; margin: 0; padding: .65rem .8rem; border-left: 5px solid var(--gold); border-radius: .75rem; background: rgba(7, 20, 51, .82); color: #fff7c2; font-weight: 900; }
-  .yut-side { display: grid; gap: .6rem; align-content: start; }
+  .yut-commentary { grid-area: comment; margin: 0; padding: .58rem .75rem; border-left: 5px solid var(--gold); border-radius: .75rem; background: rgba(7, 20, 51, .92); color: #fff7c2; font-weight: 900; }
+  .yut-side { grid-area: side; display: grid; gap: .5rem; align-content: start; }
   .yut-throw-box, .yut-panel, .yut-teams { display: grid; gap: .55rem; padding: .7rem; border-radius: .9rem; background: rgba(255, 255, 255, .08); }
   .yut-throw-box canvas { width: 100%; aspect-ratio: 16 / 9; border-radius: .8rem; background: radial-gradient(circle at 50% 45%, #c7975e, #6f431d); touch-action: none; cursor: grab; }
   .yut-throw-actions p { flex: 1; min-width: 8rem; margin: 0; color: #ffeaa4; font-weight: 900; }
@@ -278,9 +278,10 @@ const mascots = withBase("/play/h2h/mascot-heads/");
   .yut-move b, .yut-move small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .yut-move small { opacity: .72; font-size: .72rem; }
   .yut-muted { margin: 0; opacity: .8; font-weight: 800; }
-  .yut-teams { grid-template-columns: 1fr; }
-  .yut-team-row { display: grid; grid-template-columns: 1fr; gap: .28rem; }
+  .yut-teams { grid-area: teams; grid-template-columns: 1fr 1fr; }
+  .yut-team-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: .24rem .45rem; }
   .yut-team-row b { font-size: .9rem; }
+  .yut-team-row b { grid-column: 1 / -1; }
   .yut-row-token, .yut-mini-token { position: relative; display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 999px; background-color: var(--token); background-repeat: no-repeat; border: 4px solid var(--rim); overflow: hidden; box-shadow: 0 3px 0 var(--ink); padding: 0; }
   button.yut-row-token { cursor: pointer; }
   .yut-row-token-home { opacity: .86; filter: saturate(.8); }
@@ -362,16 +363,18 @@ const mascots = withBase("/play/h2h/mascot-heads/");
       flex: 1 1 auto;
       min-height: 0;
       display: grid;
-      grid-template-rows: minmax(0, 1fr) auto;
       grid-template-columns: 1fr;
+      grid-template-rows: minmax(0, 1fr) auto auto auto;
+      grid-template-areas: "board" "comment" "side" "teams";
       gap: .35rem;
       overflow: hidden;
     }
     .yut-game[data-mode="play"] .yut-board-panel {
       min-height: 0;
       aspect-ratio: 1 / 1;
-      width: min(100%, 58dvh);
-      max-height: 58dvh;
+      width: min(100%, 51dvh);
+      height: auto;
+      max-height: 51dvh;
       justify-self: center;
       border-width: 2px;
       border-radius: .75rem;
@@ -381,11 +384,8 @@ const mascots = withBase("/play/h2h/mascot-heads/");
       height: 100%;
     }
     .yut-game[data-mode="play"] .yut-commentary {
-      left: .35rem;
-      right: .35rem;
-      bottom: .35rem;
-      max-height: 2.35rem;
-      padding: .34rem .48rem;
+      max-height: 2.05rem;
+      padding: .32rem .48rem;
       border-left-width: 4px;
       border-radius: .5rem;
       font-size: .78rem;
@@ -393,6 +393,7 @@ const mascots = withBase("/play/h2h/mascot-heads/");
       overflow: hidden;
     }
     .yut-game[data-mode="play"] .yut-side {
+      grid-area: side;
       min-height: 0;
       display: grid;
       grid-template-columns: 12.5rem minmax(0, 1fr);
@@ -461,8 +462,7 @@ const mascots = withBase("/play/h2h/mascot-heads/");
       font-size: .95rem;
     }
     .yut-game[data-mode="play"] .yut-teams {
-      grid-column: 1 / -1;
-      grid-row: 2;
+      grid-area: teams;
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: stretch;
@@ -501,8 +501,8 @@ const mascots = withBase("/play/h2h/mascot-heads/");
   @media (max-width: 900px) {
     .yut-menu-grid { grid-template-columns: 1fr; }
     .yut-throw-table { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .yut-arena { grid-template-columns: 1fr; }
-    .yut-board-panel { height: min(62dvh, 35rem); }
+    .yut-arena { grid-template-columns: 1fr; grid-template-areas: "board" "comment" "side" "teams"; }
+    .yut-board-panel { height: min(54dvh, 34rem); }
     .yut-result { grid-template-columns: 1fr; }
     .yut-poster-leoul { left: -5%; }
     .yut-poster-lenyang { right: -7%; }
@@ -527,7 +527,8 @@ const mascots = withBase("/play/h2h/mascot-heads/");
     .yut-topbar { margin-bottom: .35rem; }
     .yut-game[data-mode="play"] .yut-arena {
       grid-template-columns: minmax(0, 1fr) 18rem;
-      grid-template-rows: minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr) auto auto;
+      grid-template-areas: "board side" "comment side" "teams side";
     }
     .yut-game[data-mode="play"] .yut-board-panel {
       width: 100%;
@@ -568,9 +569,8 @@ const mascots = withBase("/play/h2h/mascot-heads/");
       min-height: 3rem;
     }
     .yut-game[data-mode="play"] .yut-teams {
-      grid-column: 1;
-      grid-row: 3;
-      grid-template-columns: 1fr;
+      grid-area: teams;
+      grid-template-columns: 1fr 1fr;
       align-content: start;
       overflow: hidden;
     }

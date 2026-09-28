@@ -22,10 +22,10 @@ export class YutThrowScene {
   private webgl = false;
   private ctx: CanvasRenderingContext2D | null = null;
   private poses: StickPose[] = [
-    { x: -1.45, y: 0, rot: -0.1, flat: false, marked: true },
-    { x: -0.48, y: 0.03, rot: 0.08, flat: false, marked: false },
-    { x: 0.5, y: -0.02, rot: -0.06, flat: false, marked: false },
-    { x: 1.48, y: 0.04, rot: 0.11, flat: false, marked: false },
+    { x: 0, y: 0, rot: 0, flat: false, marked: true },
+    { x: 0, y: 0.03, rot: 0, flat: false, marked: false },
+    { x: 0, y: -0.02, rot: 0, flat: false, marked: false },
+    { x: 0, y: 0.04, rot: 0, flat: false, marked: false },
   ];
 
   constructor(private readonly canvas: HTMLCanvasElement) {
@@ -97,9 +97,9 @@ export class YutThrowScene {
         const t = Math.min(1, (performance.now() - start) / 1160);
         const ease = 1 - (1 - t) ** 3;
         this.poses = final.map((flat, i) => ({
-          x: (i - 1.5) * 0.98 + Math.sin(t * 9 + i) * 0.28 * (1 - ease),
+          x: Math.sin(t * 9 + i) * 0.28 * (1 - ease),
           y: Math.sin(Math.PI * t) * (1.05 + i * 0.08) + Math.sin(t * 18 + i) * 0.05 * (1 - t),
-          rot: -0.18 + i * 0.12 + Math.sin(t * 10 + i) * 0.75 * (1 - ease),
+          rot: Math.sin(t * 10 + i) * 0.75 * (1 - ease),
           flat,
           marked: i === 0,
         }));
@@ -119,8 +119,8 @@ export class YutThrowScene {
   private initThree(THREE: Three): void {
     this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
     this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-    this.camera.position.set(0, 4.25, 3.45);
+    this.camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
+    this.camera.position.set(0, 8.6, 0.65);
     this.camera.lookAt(0, 0, 0);
     this.scene.add(new THREE.HemisphereLight(0xfff3d7, 0x4a2b10, 2.4));
     const key = new THREE.DirectionalLight(0xffffff, 1.35);
@@ -142,23 +142,23 @@ export class YutThrowScene {
     const flat = new THREE.MeshToonMaterial({ color: 0xf6d69f });
     const mark = new THREE.MeshBasicMaterial({ color: 0xcc1f2f });
     const eland = new THREE.MeshBasicMaterial({ color: 0x1b2446 });
-    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 1.85, 8, 14), bark);
+    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 2.65, 8, 14), bark);
     body.scale.set(1.25, 0.58, 1);
     body.rotation.z = Math.PI / 2;
     g.add(body);
-    const face = new THREE.Mesh(new THREE.BoxGeometry(1.82, 0.03, 0.27), flat);
+    const face = new THREE.Mesh(new THREE.BoxGeometry(2.58, 0.03, 0.27), flat);
     face.position.y = -0.087;
     g.add(face);
     if (i === 0) {
       for (const r of [Math.PI / 4, -Math.PI / 4]) {
-        const x = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.036, 0.05), mark);
+        const x = new THREE.Mesh(new THREE.BoxGeometry(0.92, 0.036, 0.05), mark);
         x.position.y = -0.112;
         x.rotation.y = r;
         g.add(x);
       }
     } else {
-      const badge = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.034, 0.05), eland);
-      badge.position.set(-0.62, -0.112, 0);
+      const badge = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.034, 0.05), eland);
+      badge.position.set(-1.18, -0.112, 0);
       g.add(badge);
     }
     this.scene!.add(g);
@@ -170,7 +170,7 @@ export class YutThrowScene {
     for (let i = 0; i < this.sticks.length; i++) {
       const pose = this.poses[i];
       const stick = this.sticks[i];
-      stick.position.set(pose.x, 0.18 + pose.y, (i - 1.5) * 0.32);
+      stick.position.set(pose.x, 0.18 + pose.y, (i - 1.5) * 0.98);
       stick.rotation.set((pose.flat ? Math.PI : 0) * ease + (1 - ease) * (5.5 + i), pose.rot * 0.2, pose.rot);
     }
     this.renderer.render(this.scene, this.camera);
@@ -190,37 +190,37 @@ export class YutThrowScene {
     ctx.fillRect(0, 0, w, h);
     ctx.save();
     ctx.translate(w / 2, h * 0.58);
-    ctx.scale(Math.min(w / 5.8, h / 3.2), Math.min(w / 5.8, h / 3.2));
+    ctx.scale(Math.min(w / 5.8, h / 3.4), Math.min(w / 5.8, h / 3.4));
     ctx.fillStyle = "rgba(255, 238, 184, .22)";
     ctx.beginPath();
     ctx.ellipse(0, 0.2, 2.65, 1.05, 0, 0, Math.PI * 2);
     ctx.fill();
-    for (let i = 0; i < this.poses.length; i++) this.drawStick2d(ctx, this.poses[i]);
+    for (let i = 0; i < this.poses.length; i++) this.drawStick2d(ctx, this.poses[i], i);
     ctx.restore();
   }
 
-  private drawStick2d(ctx: CanvasRenderingContext2D, pose: StickPose): void {
+  private drawStick2d(ctx: CanvasRenderingContext2D, pose: StickPose, lane: number): void {
     ctx.save();
-    ctx.translate(pose.x, -pose.y * 0.7);
+    ctx.translate(pose.x, (lane - 1.5) * 0.48 - pose.y * 0.7);
     ctx.rotate(pose.rot);
     ctx.fillStyle = pose.flat ? "#f6d69f" : "#73431f";
     ctx.strokeStyle = "#2b1607";
     ctx.lineWidth = 0.04;
-    this.roundRect(ctx, -0.58, -0.12, 1.16, 0.24, 0.12);
+    this.roundRect(ctx, -1.45, -0.12, 2.9, 0.24, 0.12);
     ctx.fill();
     ctx.stroke();
     if (pose.marked) {
       ctx.strokeStyle = "#cc1f2f";
       ctx.lineWidth = 0.045;
       ctx.beginPath();
-      ctx.moveTo(-0.25, -0.08);
-      ctx.lineTo(0.25, 0.08);
-      ctx.moveTo(0.25, -0.08);
-      ctx.lineTo(-0.25, 0.08);
+      ctx.moveTo(-0.35, -0.08);
+      ctx.lineTo(0.35, 0.08);
+      ctx.moveTo(0.35, -0.08);
+      ctx.lineTo(-0.35, 0.08);
       ctx.stroke();
     } else if (pose.flat) {
       ctx.fillStyle = "#1b2446";
-      ctx.fillRect(-0.45, -0.025, 0.18, 0.05);
+      ctx.fillRect(-1.12, -0.025, 0.22, 0.05);
     }
     ctx.restore();
   }
