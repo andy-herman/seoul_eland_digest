@@ -14,7 +14,7 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Sete jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      intro: "Oito jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
       newBadge: "Novo",
       play: "Jogar",
       credit:
@@ -23,7 +23,7 @@ const copy = isPortuguese
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Seven games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      intro: "Eight games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
       newBadge: "New",
       play: "Play",
       credit:
@@ -43,8 +43,19 @@ const games = [
     accent: "take5",
   },
   {
-    href: `${prefix}/play/seoul-song`,
+    href: `${prefix}/play/paw-hunt`,
     isNew: true,
+    title: isPortuguese ? "A Caça às Patinhas da Lenyang" : "Lenyang's Paw Hunt",
+    desc: isPortuguese
+      ? "Uma caça ao tesouro pelo site inteiro. A Lenyang deixou 21 patinhas escondidas no Digest: resolva as charadas, ache as páginas, toque nas patinhas e ganhe o certificado de Detetive Lenyang."
+      : "A treasure hunt across the whole site. Lenyang left 21 paw prints hidden around the Digest: solve the riddles, find the pages, tap the paws and earn a Detective Lenyang certificate.",
+    tags: isPortuguese ? ["Caça ao tesouro", "21 charadas", "3 capítulos"] : ["Treasure hunt", "21 riddles", "3 chapters"],
+    art: [{ src: withBase("/play/paw/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
+    accent: "paw",
+  },
+  {
+    href: `${prefix}/play/seoul-song`,
+    isNew: false,
     title: "Seoul Song Rhythm",
     desc: isPortuguese
       ? "Um jogo de ritmo com 서울의 노래 (versão 2024). Toque tambor com o Leoul, o Lenyang e a torcida de Mokdong: acerte as notas, segure as longas e leve a arquibancada à febre, no Fácil, Normal ou Difícil."
@@ -238,6 +249,10 @@ const games = [
 
   .games-card-take5 .games-art {
     background: #2a7f45;
+  }
+
+  .games-card-paw .games-art {
+    background: #0d3a8c;
   }
 
   .games-card-h2h .games-art {
