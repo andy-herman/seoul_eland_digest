@@ -1,32 +1,245 @@
-import * as THREE from "three";
-import { type ThrowResult } from "./model";
+import type { ThrowResult } from "./model";
+
+type Three = typeof import("three");
+
+interface StickPose {
+  x: number;
+  y: number;
+  rot: number;
+  flat: boolean;
+  marked: boolean;
+}
 
 export class YutThrowScene {
-  private renderer: THREE.WebGLRenderer; private scene = new THREE.Scene(); private camera = new THREE.PerspectiveCamera(36, 1, 0.1, 100); private sticks: THREE.Group[] = []; private raf = 0; private start = 0; onClack: ((n: number) => void) | null = null;
-  constructor(private canvas: HTMLCanvasElement) {
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-    this.renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); this.camera.position.set(0, 4.2, 7.5); this.camera.lookAt(0, 0, 0);
-    this.scene.add(new THREE.HemisphereLight(0xffffff, 0x4a330f, 2.1));
-    const mat = new THREE.Mesh(new THREE.CylinderGeometry(2.7, 2.9, 0.08, 48), new THREE.MeshToonMaterial({ color: 0xb98b54 })); mat.scale.z = 0.7; mat.rotation.x = Math.PI / 2; this.scene.add(mat);
-    for (let i = 0; i < 4; i++) this.sticks.push(this.makeStick(i));
-    this.resize(); addEventListener("resize", () => this.resize()); this.drawIdle();
-  }
-  private makeStick(i: number): THREE.Group {
-    const g = new THREE.Group(); const wood = new THREE.MeshToonMaterial({ color: i === 0 ? 0xd8a05f : 0xc58b48 }); const dark = new THREE.MeshBasicMaterial({ color: 0x2a1608 });
-    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.12, 1.18, 6, 12), wood); body.scale.set(1.25, 0.55, 1); body.rotation.z = Math.PI / 2; g.add(body);
-    const flat = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.018, 0.18), new THREE.MeshBasicMaterial({ color: 0xf0cf9b })); flat.position.y = -0.075; g.add(flat);
-    if (i === 0) { for (const r of [Math.PI / 4, -Math.PI / 4]) { const x = new THREE.Mesh(new THREE.BoxGeometry(0.55, 0.022, 0.035), dark); x.position.y = -0.09; x.rotation.y = r; g.add(x); } }
-    g.position.x = (i - 1.5) * 0.56; g.position.y = 0.15; g.rotation.set(0.2, 0.1 * i, -0.15 + i * 0.1); this.scene.add(g); return g;
-  }
-  resize(): void { const r = this.canvas.getBoundingClientRect(); const w = Math.max(1, r.width), h = Math.max(1, r.height); this.renderer.setSize(w, h, false); this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); }
-  animate(outcome: ThrowResult): Promise<void> {
+  onClack: ((power: number) => void) | null = null;
+  private raf = 0;
+  private three: Three | null = null;
+  private renderer: import("three").WebGLRenderer | null = null;
+  private scene: import("three").Scene | null = null;
+  private camera: import("three").PerspectiveCamera | null = null;
+  private sticks: import("three").Group[] = [];
+  private resizeHandler = () => this.resize();
+  private webgl = false;
+  private ctx: CanvasRenderingContext2D | null = null;
+  private poses: StickPose[] = [
+    { x: -0.9, y: 0, rot: -0.18, flat: false, marked: true },
+    { x: -0.3, y: 0.05, rot: 0.12, flat: false, marked: false },
+    { x: 0.35, y: -0.02, rot: -0.06, flat: false, marked: false },
+    { x: 0.95, y: 0.05, rot: 0.18, flat: false, marked: false },
+  ];
+
+  constructor(private readonly canvas: HTMLCanvasElement) {
+    addEventListener("resize", this.resizeHandler);
     this.resize();
-    this.start = performance.now(); cancelAnimationFrame(this.raf); let clacked = false;
+  }
+
+  async warm(): Promise<void> {
+    if (this.webgl || this.renderer) return;
+    try {
+      const three = await import("three");
+      const test = this.canvas.getContext("webgl2") ?? this.canvas.getContext("webgl");
+      if (!test) throw new Error("WebGL unavailable");
+      this.three = three;
+      this.initThree(three);
+      this.webgl = true;
+      this.renderThree();
+    } catch {
+      this.webgl = false;
+      this.ctx = this.canvas.getContext("2d");
+      this.draw2d();
+    }
+  }
+
+  dispose(): void {
+    cancelAnimationFrame(this.raf);
+    removeEventListener("resize", this.resizeHandler);
+    for (const stick of this.sticks) {
+      stick.traverse((obj) => {
+        const mesh = obj as import("three").Mesh;
+        mesh.geometry?.dispose?.();
+        const material = mesh.material as import("three").Material | import("three").Material[] | undefined;
+        if (Array.isArray(material)) material.forEach((m) => m.dispose());
+        else material?.dispose?.();
+      });
+    }
+    this.renderer?.dispose();
+  }
+
+  resize(): void {
+    const box = this.canvas.getBoundingClientRect();
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    const w = Math.max(1, Math.round(box.width * dpr));
+    const h = Math.max(1, Math.round(box.height * dpr));
+    if (this.canvas.width !== w || this.canvas.height !== h) {
+      this.canvas.width = w;
+      this.canvas.height = h;
+    }
+    if (this.renderer && this.camera) {
+      this.renderer.setPixelRatio(dpr);
+      this.renderer.setSize(box.width, box.height, false);
+      this.camera.aspect = Math.max(0.1, box.width / Math.max(1, box.height));
+      this.camera.updateProjectionMatrix();
+      this.renderThree();
+    } else {
+      this.ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
+      if (this.ctx) this.draw2d();
+    }
+  }
+
+  async animate(outcome: ThrowResult): Promise<void> {
+    await this.warm();
+    cancelAnimationFrame(this.raf);
+    const start = performance.now();
+    let clacked = false;
+    const final = this.faces(outcome);
     return new Promise((resolve) => {
-      const tick = () => { const t = Math.min(1, (performance.now() - this.start) / 1150); const ease = 1 - (1 - t) ** 3; const flats = this.faces(outcome); this.sticks.forEach((s, i) => { s.position.y = 0.15 + Math.sin(Math.PI * t) * (1.5 + i * 0.08) + Math.max(0, Math.sin(t * 24 + i) * 0.04 * (1 - t)); s.position.x = (i - 1.5) * 0.56 + Math.sin(t * 7 + i) * 0.18 * (1 - t); const target = flats[i] ? Math.PI : 0; s.rotation.x = (1 - ease) * (7 + i * 1.7) + ease * target; s.rotation.z = -0.25 + i * 0.16 + Math.sin(t * 11 + i) * 0.5 * (1 - t); }); this.renderer.render(this.scene, this.camera); if (!clacked && t > 0.72) { clacked = true; this.onClack?.(outcome.extra ? 1.4 : 1); } if (t < 1) this.raf = requestAnimationFrame(tick); else resolve(); };
+      const tick = () => {
+        const t = Math.min(1, (performance.now() - start) / 1160);
+        const ease = 1 - (1 - t) ** 3;
+        this.poses = final.map((flat, i) => ({
+          x: (i - 1.5) * 0.72 + Math.sin(t * 9 + i) * 0.28 * (1 - ease),
+          y: Math.sin(Math.PI * t) * (1.05 + i * 0.08) + Math.sin(t * 18 + i) * 0.05 * (1 - t),
+          rot: -0.18 + i * 0.12 + Math.sin(t * 10 + i) * 0.75 * (1 - ease),
+          flat,
+          marked: i === 0,
+        }));
+        if (this.webgl) this.renderThree(ease);
+        else this.draw2d();
+        if (!clacked && t > 0.74) {
+          clacked = true;
+          this.onClack?.(outcome.extra ? 1.35 : 1);
+        }
+        if (t < 1) this.raf = requestAnimationFrame(tick);
+        else resolve();
+      };
       tick();
     });
   }
-  private faces(o: ThrowResult): boolean[] { if (o.id === "back") return [true, false, false, false]; if (o.id === "do") return [false, true, false, false]; if (o.id === "gae") return [true, false, true, false]; if (o.id === "geol") return [true, true, true, false]; if (o.id === "yut") return [true, true, true, true]; return [false, false, false, false]; }
-  private drawIdle(): void { this.renderer.render(this.scene, this.camera); }
+
+  private initThree(THREE: Three): void {
+    this.renderer = new THREE.WebGLRenderer({ canvas: this.canvas, antialias: true, alpha: true });
+    this.scene = new THREE.Scene();
+    this.camera = new THREE.PerspectiveCamera(34, 1, 0.1, 100);
+    this.camera.position.set(0, 2.55, 3.85);
+    this.camera.lookAt(0, 0, 0);
+    this.scene.add(new THREE.HemisphereLight(0xfff3d7, 0x4a2b10, 2.4));
+    const key = new THREE.DirectionalLight(0xffffff, 1.35);
+    key.position.set(2.5, 5, 2);
+    this.scene.add(key);
+
+    const mat = new THREE.Mesh(new THREE.CylinderGeometry(2.05, 2.22, 0.08, 72), new THREE.MeshToonMaterial({ color: 0xb98b54 }));
+    mat.rotation.x = Math.PI / 2;
+    mat.scale.set(1.35, 0.9, 1);
+    this.scene.add(mat);
+
+    this.sticks = [0, 1, 2, 3].map((i) => this.makeStick(THREE, i));
+    this.resize();
+  }
+
+  private makeStick(THREE: Three, i: number): import("three").Group {
+    const g = new THREE.Group();
+    const bark = new THREE.MeshToonMaterial({ color: i === 0 ? 0x8b552c : 0x73431f });
+    const flat = new THREE.MeshToonMaterial({ color: 0xf6d69f });
+    const mark = new THREE.MeshBasicMaterial({ color: 0xcc1f2f });
+    const body = new THREE.Mesh(new THREE.CapsuleGeometry(0.16, 1.85, 8, 14), bark);
+    body.scale.set(1.25, 0.58, 1);
+    body.rotation.z = Math.PI / 2;
+    g.add(body);
+    const face = new THREE.Mesh(new THREE.BoxGeometry(1.82, 0.03, 0.27), flat);
+    face.position.y = -0.087;
+    g.add(face);
+    if (i === 0) {
+      for (const r of [Math.PI / 4, -Math.PI / 4]) {
+        const x = new THREE.Mesh(new THREE.BoxGeometry(0.82, 0.036, 0.05), mark);
+        x.position.y = -0.112;
+        x.rotation.y = r;
+        g.add(x);
+      }
+    } else {
+      const badge = new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.034, 0.05), mark);
+      badge.position.set(-0.62, -0.112, 0);
+      g.add(badge);
+    }
+    this.scene!.add(g);
+    return g;
+  }
+
+  private renderThree(ease = 1): void {
+    if (!this.three || !this.renderer || !this.scene || !this.camera) return;
+    for (let i = 0; i < this.sticks.length; i++) {
+      const pose = this.poses[i];
+      const stick = this.sticks[i];
+      stick.position.set(pose.x, 0.18 + pose.y, -0.15 + Math.sin(i) * 0.18);
+      stick.rotation.set((pose.flat ? Math.PI : 0) * ease + (1 - ease) * (5.5 + i), pose.rot * 0.2, pose.rot);
+    }
+    this.renderer.render(this.scene, this.camera);
+  }
+
+  private draw2d(): void {
+    const dpr = Math.min(2, devicePixelRatio || 1);
+    if (!this.ctx) return;
+    const w = this.canvas.width / dpr;
+    const h = this.canvas.height / dpr;
+    const ctx = this.ctx;
+    ctx.clearRect(0, 0, w, h);
+    const grad = ctx.createLinearGradient(0, 0, 0, h);
+    grad.addColorStop(0, "#4b2f15");
+    grad.addColorStop(1, "#b78852");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+    ctx.save();
+    ctx.translate(w / 2, h * 0.58);
+    ctx.scale(Math.min(w / 5.8, h / 3.2), Math.min(w / 5.8, h / 3.2));
+    ctx.fillStyle = "rgba(255, 238, 184, .22)";
+    ctx.beginPath();
+    ctx.ellipse(0, 0.2, 2.65, 1.05, 0, 0, Math.PI * 2);
+    ctx.fill();
+    for (let i = 0; i < this.poses.length; i++) this.drawStick2d(ctx, this.poses[i]);
+    ctx.restore();
+  }
+
+  private drawStick2d(ctx: CanvasRenderingContext2D, pose: StickPose): void {
+    ctx.save();
+    ctx.translate(pose.x, -pose.y * 0.7);
+    ctx.rotate(pose.rot);
+    ctx.fillStyle = pose.flat ? "#f6d69f" : "#73431f";
+    ctx.strokeStyle = "#2b1607";
+    ctx.lineWidth = 0.04;
+    this.roundRect(ctx, -0.58, -0.12, 1.16, 0.24, 0.12);
+    ctx.fill();
+    ctx.stroke();
+    if (pose.marked) {
+      ctx.strokeStyle = "#cc1f2f";
+      ctx.lineWidth = 0.045;
+      ctx.beginPath();
+      ctx.moveTo(-0.25, -0.08);
+      ctx.lineTo(0.25, 0.08);
+      ctx.moveTo(0.25, -0.08);
+      ctx.lineTo(-0.25, 0.08);
+      ctx.stroke();
+    } else if (pose.flat) {
+      ctx.fillStyle = "#1b2446";
+      ctx.fillRect(-0.45, -0.025, 0.18, 0.05);
+    }
+    ctx.restore();
+  }
+
+  private roundRect(ctx: CanvasRenderingContext2D, x: number, y: number, w: number, h: number, r: number): void {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  private faces(outcome: ThrowResult): boolean[] {
+    if (outcome.id === "back") return [true, false, false, false];
+    if (outcome.id === "do") return [false, true, false, false];
+    if (outcome.id === "gae") return [true, false, true, false];
+    if (outcome.id === "geol") return [true, true, true, false];
+    if (outcome.id === "yut") return [true, true, true, true];
+    return [false, false, false, false];
+  }
 }
