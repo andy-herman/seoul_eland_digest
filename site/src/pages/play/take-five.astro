@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TakeFive from "../../components/TakeFive.astro";
+import { TAKE5_STRINGS } from "../../takefive/i18n";
+
+const t = TAKE5_STRINGS.en;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/take5/og-take5.jpg">
+  <TakeFive locale="en" />
+</BaseLayout>

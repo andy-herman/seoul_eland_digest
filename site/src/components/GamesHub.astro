@@ -14,7 +14,7 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Seis jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      intro: "Sete jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
       newBadge: "Novo",
       play: "Jogar",
       credit:
@@ -23,7 +23,7 @@ const copy = isPortuguese
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Six games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      intro: "Seven games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
       newBadge: "New",
       play: "Play",
       credit:
@@ -31,6 +31,17 @@ const copy = isPortuguese
     };
 
 const games = [
+  {
+    href: `${prefix}/play/take-five`,
+    isNew: true,
+    title: "Take Five",
+    desc: isPortuguese
+      ? "Um jogo de futebol de um jogador só. Grave o passe, depois a corrida para recebê-lo, depois a finalização: cada tomada volta como eco e o gol inteiro sai de você. 12 fases e todos os jogos de 2026 para reescrever contra os mascotes rivais."
+      : "A one-player five-a-side. Record the pass, then the run to meet it, then the finish: every take plays back as an echo, so the whole goal is yours. 12 levels plus every 2026 match to rewrite against the rival mascots.",
+    tags: isPortuguese ? ["Quebra-cabeça", "12 fases", "26 jogos reais"] : ["Puzzle", "12 levels", "26 real matches"],
+    art: [{ src: withBase("/play/take5/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
+    accent: "take5",
+  },
   {
     href: `${prefix}/play/seoul-song`,
     isNew: true,
@@ -44,7 +55,7 @@ const games = [
   },
   {
     href: `${prefix}/play/mascot-kart`,
-    isNew: true,
+    isNew: false,
     title: "Mascot Kart",
     desc: isPortuguese
       ? "Uma corrida de kart no estilo KartRider. Faça drift, use turbos e jogue balões d'água com o Leoul ou o Lenyang contra os outros 16 mascotes da K League 2, em duas copas e oito pistas de Mokdong a Busan."
@@ -223,6 +234,10 @@ const games = [
 
   .games-card-rhythm .games-art {
     background: #0b1238;
+  }
+
+  .games-card-take5 .games-art {
+    background: #2a7f45;
   }
 
   .games-card-h2h .games-art {
