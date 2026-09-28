@@ -1,0 +1,406 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { withBase } from "../lib/paths";
+import { KART_STRINGS, type Locale } from "../kart/i18n";
+
+interface Props {
+  locale?: Locale;
+}
+
+const { locale = "en" } = Astro.props;
+const t = KART_STRINGS[locale];
+const isPt = locale === "pt";
+const cupTracks = { seoul: ["mokdong", "hangang", "namsan", "suwon"], korea: ["busan", "jinhae", "gwangyang", "daegu"] };
+---
+
+<div class="kart-page">
+  <header class="supporter-panel kart-hero rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.65rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{t.heading}</h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
+      </div>
+      {isPt ? (
+        <TranslateButton href="/play/mascot-kart" code="EN" label={t.translateLabel} ariaLabel={t.translateAria} />
+      ) : (
+        <TranslateButton href="/pt/play/mascot-kart" code="PT" label={t.translateLabel} ariaLabel={t.translateAria} />
+      )}
+    </div>
+  </header>
+
+  <section class="kart-game" data-kart-root data-mode="loading" data-locale={locale} data-assets={withBase("/play/kart/")} data-play={withBase("/play/")} data-music={withBase("/play/seoul-song-2024.mp3")}>
+    <div class="kart-stage" data-kart-stage>
+      <canvas data-kart-canvas aria-label={t.heading}></canvas>
+      <div class="kh" data-kh>
+        <div class="kh-rank"><b data-kh-rank>1</b><small data-kh-suffix>st</small><span data-kh-of>/9</span></div>
+        <div class="kh-lap"><span>{t.lap}</span> <b data-kh-lap>1/3</b><em data-kh-time>0:00.00</em><em class="kh-laptime" data-kh-laptime></em></div>
+        <canvas class="kh-map" data-kh-map width="200" height="200"></canvas>
+        <div class="kh-bottom">
+          <div class="kh-items" data-kh-items><i data-kh-slot="0"></i><i data-kh-slot="1"></i></div>
+          <div class="kh-gauge" data-kh-gauge><div class="kh-gauge-bar"><i data-kh-fill></i></div><span class="kh-boosters"><i data-kh-b="0"></i><i data-kh-b="1"></i></span></div>
+          <div class="kh-speed"><b data-kh-speed>0</b><small>km/h</small></div>
+        </div>
+        <div class="kh-lights" data-kh-lights hidden><i></i><i></i><i></i></div>
+        <p class="kh-banner" data-kh-banner></p>
+        <p class="kh-toast" data-kh-toast></p>
+        <p class="kh-warn" data-kh-warn></p>
+        <div class="kh-lines" data-kh-lines></div>
+        <p class="kh-hint" data-kh-hint></p>
+        <div class="kh-buttons">
+          <button type="button" data-kart-music aria-label={t.music}>♪</button>
+          <button type="button" data-kart-pause aria-label={t.pause}>II</button>
+        </div>
+      </div>
+      <div class="kart-overlay kart-pause" data-kart-screen="paused" hidden>
+        <div class="kart-card">
+          <p class="kart-title">{t.paused}</p>
+          <div class="kart-actions">
+            <button type="button" class="kart-primary" data-kart-resume>{t.resume}</button>
+            <button type="button" data-kart-restart>{t.restart}</button>
+            <button type="button" data-kart-quit>{t.quit}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kart-screen kart-loading" data-kart-screen="loading">
+      <div class="kart-spinner"></div>
+      <p>{t.loading}</p>
+    </div>
+
+    <div class="kart-screen kart-menu" data-kart-screen="menu" hidden>
+      <div class="kart-logo">
+        <span class="kart-logo-top">SEOUL E-LAND DIGEST</span>
+        <span class="kart-logo-main">MASCOT <b>KART</b></span>
+        <span class="kart-logo-sub">{t.menuTagline}</span>
+      </div>
+      <div class="kart-mascots" aria-hidden="true">
+        <span class="kart-face" data-face="leoul"></span>
+        <span class="kart-face" data-face="lenyang"></span>
+      </div>
+      <div class="kart-modes">
+        <button type="button" class="kart-mode" data-kart-go="gp"><b>🏆 {t.gp}</b><small>{t.gpHint}</small></button>
+        <button type="button" class="kart-mode" data-kart-go="quick"><b>🏁 {t.quick}</b><small>{t.quickHint}</small></button>
+        <button type="button" class="kart-mode" data-kart-go="tt"><b>⏱️ {t.tt}</b><small>{t.ttHint}</small></button>
+      </div>
+      <div class="kart-options">
+        <div class="kart-opt">
+          <span>{t.modeLabel}</span>
+          <div class="kart-seg" data-kart-seg="mode">
+            <button type="button" data-v="speed">{t.modes.speed}</button>
+            <button type="button" data-v="item">{t.modes.item}</button>
+          </div>
+          <small data-kart-seg-hint="mode"></small>
+        </div>
+        <div class="kart-opt">
+          <span>{t.diffLabel}</span>
+          <div class="kart-seg" data-kart-seg="diff">
+            <button type="button" data-v="rookie">{t.diffs.rookie}</button>
+            <button type="button" data-v="l1">{t.diffs.l1}</button>
+            <button type="button" data-v="pro">{t.diffs.pro}</button>
+          </div>
+          <small data-kart-seg-hint="diff"></small>
+        </div>
+        <button type="button" class="kart-music-toggle" data-kart-music-menu>♪ {t.music}</button>
+      </div>
+    </div>
+
+    <div class="kart-screen" data-kart-screen="driver" hidden>
+      <p class="kart-title">{t.chooseDriver}</p>
+      <div class="kart-drivers">
+        {(["leoul", "lenyang"] as const).map((id) => (
+          <button type="button" class="kart-driver" data-kart-driver={id}>
+            <span class="kart-face kart-face-big" data-face={id}></span>
+            <b>{t.drivers[id].name}</b>
+            <small>{t.drivers[id].blurb}</small>
+          </button>
+        ))}
+      </div>
+      <button type="button" class="kart-back" data-kart-back>{t.back}</button>
+    </div>
+
+    <div class="kart-screen" data-kart-screen="cup" hidden>
+      <p class="kart-title">{t.chooseCup}</p>
+      <div class="kart-cups">
+        {(["seoul", "korea"] as const).map((cup) => (
+          <button type="button" class="kart-cup" data-kart-cup={cup}>
+            <b>{t.cups[cup].name} <em data-kart-trophy={cup}></em></b>
+            <span class="kart-cup-tracks">
+              {cupTracks[cup].map((tr) => (
+                <span class="kart-chip">
+                  <canvas data-kart-thumb={tr} width="96" height="64"></canvas>
+                  <small>{t.tracks[tr].name}</small>
+                </span>
+              ))}
+            </span>
+            <small>{t.cups[cup].field}</small>
+          </button>
+        ))}
+      </div>
+      <button type="button" class="kart-back" data-kart-back>{t.back}</button>
+    </div>
+
+    <div class="kart-screen" data-kart-screen="track" hidden>
+      <p class="kart-title">{t.chooseTrack}</p>
+      <div class="kart-tracks">
+        {[...cupTracks.seoul, ...cupTracks.korea].map((tr) => (
+          <button type="button" class="kart-track" data-kart-track={tr}>
+            <canvas data-kart-thumb={tr} width="192" height="120"></canvas>
+            <b>{t.tracks[tr].name}</b>
+            <span class="kart-ko">{t.tracks[tr].ko}</span>
+            <small>{t.tracks[tr].blurb}</small>
+            <em data-kart-record={tr}></em>
+          </button>
+        ))}
+      </div>
+      <button type="button" class="kart-back" data-kart-back>{t.back}</button>
+    </div>
+
+    <div class="kart-screen kart-results" data-kart-screen="result" hidden>
+      <p class="kart-kicker" data-kart-res-kicker></p>
+      <p class="kart-title" data-kart-res-title>{t.results}</p>
+      <p class="kart-sub" data-kart-res-sub></p>
+      <ol class="kart-table" data-kart-res-rows></ol>
+      <div class="kart-actions">
+        <button type="button" class="kart-primary" data-kart-res-next>{t.next}</button>
+        <button type="button" data-kart-res-retry>{t.retry}</button>
+        <button type="button" data-kart-res-menu>{t.menu}</button>
+      </div>
+    </div>
+
+    <div class="kart-screen kart-podium" data-kart-screen="podium" hidden>
+      <p class="kart-kicker" data-kart-pod-cup></p>
+      <p class="kart-title" data-kart-pod-title></p>
+      <div class="kart-steps">
+        <div class="kart-step" data-step="2"><span class="kart-face kart-face-big" data-pod-face="2"></span><b data-pod-name="2"></b><i>2</i></div>
+        <div class="kart-step" data-step="1"><img class="kart-cupimg" data-kart-cupimg alt="" width="120" height="135" /><span class="kart-face kart-face-big" data-pod-face="1"></span><b data-pod-name="1"></b><i>1</i></div>
+        <div class="kart-step" data-step="3"><span class="kart-face kart-face-big" data-pod-face="3"></span><b data-pod-name="3"></b><i>3</i></div>
+      </div>
+      <p class="kart-sub" data-kart-pod-text></p>
+      <ol class="kart-table" data-kart-pod-rows></ol>
+      <div class="kart-actions">
+        <button type="button" class="kart-primary" data-kart-pod-again>{t.retry}</button>
+        <button type="button" data-kart-pod-menu>{t.menu}</button>
+      </div>
+      <div class="kart-confetti" data-kart-confetti aria-hidden="true"></div>
+    </div>
+
+    <div class="kart-touch" data-kart-touch hidden>
+      <div class="kt-left">
+        <button type="button" class="kt-btn kt-steer" data-kart-btn="left" aria-label="Left">◀</button>
+        <button type="button" class="kt-btn kt-steer" data-kart-btn="right" aria-label="Right">▶</button>
+      </div>
+      <div class="kt-right">
+        <button type="button" class="kt-btn kt-brake" data-kart-btn="brake">BRAKE</button>
+        <button type="button" class="kt-btn kt-item" data-kart-btn="item">ITEM</button>
+        <button type="button" class="kt-btn kt-drift" data-kart-btn="drift">DRIFT</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="kart-info">
+    <div>
+      <h2>{t.howTitle}</h2>
+      <ul>{t.how.map((line) => <li>{line}</li>)}</ul>
+    </div>
+    <div>
+      <h2>{t.controlsTitle}</h2>
+      <ul>{t.controls.map((line) => <li>{line}</li>)}</ul>
+    </div>
+    <p class="kart-credits">{t.credits}</p>
+  </section>
+</div>
+
+<script>
+  import { mountMascotKart } from "../kart/main";
+  for (const root of document.querySelectorAll("[data-kart-root]")) mountMascotKart(root as HTMLElement);
+</script>
+
+<style>
+  :global(.kart-lock-scroll) { overflow: hidden; }
+  .kart-page { display: grid; gap: 1rem; }
+  .kart-game { position: relative; --navy: #1b2446; --gold: #f2b705; --ink: #111a33; color: #111827; }
+  .kart-stage { position: relative; display: none; width: 100%; aspect-ratio: 16 / 9; border: 4px solid var(--ink); border-radius: 1.2rem; overflow: hidden; background: #8fd3ff; box-shadow: 0 8px 0 var(--ink); container-type: size; }
+  .kart-game[data-mode="race"] .kart-stage, .kart-game[data-mode="paused"] .kart-stage { display: block; }
+  .kart-stage canvas[data-kart-canvas] { display: block; width: 100%; height: 100%; touch-action: none; }
+
+  /* HUD */
+  .kh { position: absolute; inset: 0; pointer-events: none; color: #fff; font-weight: 900; text-shadow: 0 .35cqh 0 var(--ink), 0 0 1.2cqh rgba(0, 0, 0, .45); font-variant-numeric: tabular-nums; }
+  .kh-rank { position: absolute; left: 2.2cqw; top: 1.6cqh; display: flex; align-items: baseline; line-height: 1; }
+  .kh-rank b { font-size: 11cqh; color: #ffd64a; -webkit-text-stroke: .35cqh var(--ink); }
+  .kh-rank small { font-size: 4.2cqh; margin-left: .3cqw; color: #ffd64a; }
+  .kh-rank span { font-size: 3.6cqh; margin-left: .6cqw; opacity: .9; }
+  .kh-lap { position: absolute; left: 50%; top: 1.8cqh; transform: translateX(-50%); display: grid; justify-items: center; font-size: 3.4cqh; line-height: 1.1; }
+  .kh-lap b { font-size: 5.4cqh; }
+  .kh-lap em { font-style: normal; font-size: 3cqh; opacity: .95; }
+  .kh-laptime { color: #ffd64a; min-height: 3cqh; }
+  .kh-map { position: absolute; right: 1.6cqw; top: 1.6cqh; width: 24cqh; height: 24cqh; opacity: .92; }
+  .kh-bottom { position: absolute; left: 50%; bottom: 2cqh; transform: translateX(-50%); display: flex; align-items: flex-end; gap: 2cqw; }
+  .kh-items { display: flex; gap: 1cqw; }
+  .kh-items i { display: grid; place-items: center; width: 11cqh; height: 11cqh; border-radius: 1.8cqh; border: .45cqh solid #fff; background: rgba(17, 26, 51, .55); font-style: normal; font-size: 7cqh; line-height: 1; text-shadow: none; }
+  .kh-items i:nth-child(2) { width: 8cqh; height: 8cqh; font-size: 5cqh; align-self: flex-end; opacity: .9; }
+  .kh-items i[data-spin="true"] { animation: kh-pulse .12s linear infinite; }
+  .kh-gauge { display: grid; gap: .6cqh; justify-items: center; }
+  .kh-gauge-bar { width: 26cqw; height: 2.4cqh; border-radius: 99px; border: .35cqh solid #fff; background: rgba(17, 26, 51, .6); overflow: hidden; }
+  .kh-gauge-bar i { display: block; height: 100%; width: calc(var(--g, 0) * 100%); background: linear-gradient(90deg, #ffb300, #ff4d00); }
+  .kh-gauge[data-full="true"] .kh-gauge-bar i { background: linear-gradient(90deg, #22c55e, #facc15); }
+  .kh-boosters { display: flex; gap: .8cqw; }
+  .kh-boosters i { width: 5.4cqh; height: 5.4cqh; border-radius: 50%; border: .35cqh solid #fff; background: rgba(17, 26, 51, .55); }
+  .kh-boosters i[data-on="true"] { background: radial-gradient(circle at 40% 35%, #fff3b0, #ff7a00 55%, #d63a00); box-shadow: 0 0 1.4cqh #ff7a00; }
+  .kh-speed { display: grid; justify-items: end; line-height: 1; }
+  .kh-speed b { font-size: 6.4cqh; font-style: italic; }
+  .kh-speed small { font-size: 2.4cqh; }
+  .kh-lights { position: absolute; left: 50%; top: 18cqh; transform: translateX(-50%); display: flex; gap: 1.4cqw; padding: 1.2cqh 1.6cqw; border-radius: 99px; background: rgba(17, 26, 51, .85); border: .4cqh solid #fff; }
+  .kh-lights[hidden] { display: none; }
+  .kh-lights i { width: 6.5cqh; height: 6.5cqh; border-radius: 50%; background: #3b1a1a; border: .35cqh solid #111; }
+  .kh-lights i[data-on="red"] { background: #ff3b3b; box-shadow: 0 0 2cqh #ff3b3b; }
+  .kh-lights i[data-on="green"] { background: #37e27b; box-shadow: 0 0 2cqh #37e27b; }
+  .kh-banner { position: absolute; left: 0; right: 0; top: 34cqh; margin: 0; text-align: center; font-size: 14cqh; color: #ffd64a; -webkit-text-stroke: .5cqh var(--ink); letter-spacing: .02em; }
+  .kh-banner:empty { display: none; }
+  .kh-banner[data-pop="true"] { animation: kh-pop .45s cubic-bezier(.2, 1.6, .4, 1) both; }
+  .kh-toast { position: absolute; left: 0; right: 0; top: 58cqh; margin: 0; text-align: center; font-size: 5.4cqh; color: #fff; }
+  .kh-toast[data-kind="blue"] { color: #7dd3fc; }
+  .kh-toast[data-kind="bad"] { color: #fca5a5; }
+  .kh-toast:empty { display: none; }
+  .kh-warn { position: absolute; left: 0; right: 0; top: 24cqh; margin: 0; text-align: center; font-size: 6cqh; color: #ff5a5a; animation: kh-blink .6s steps(2) infinite; }
+  .kh-warn:empty { display: none; }
+  .kh-hint { position: absolute; left: 0; right: 0; bottom: 17cqh; margin: 0; text-align: center; font-size: 2.8cqh; }
+  .kh-hint:empty { display: none; }
+  .kh-lines { position: absolute; inset: 0; opacity: 0; transition: opacity .25s; background: repeating-conic-gradient(from 0deg at 50% 55%, rgba(255, 255, 255, 0) 0deg 5deg, rgba(255, 255, 255, .22) 5.5deg 6deg); -webkit-mask: radial-gradient(circle at 50% 55%, transparent 32%, #000 70%); mask: radial-gradient(circle at 50% 55%, transparent 32%, #000 70%); }
+  .kh-lines[data-on="true"] { opacity: 1; animation: kh-rot 1.2s linear infinite; }
+  .kh-buttons { position: absolute; right: 1.6cqw; top: 27.5cqh; display: grid; gap: 1cqh; pointer-events: auto; }
+  .kh-buttons button { width: 7.2cqh; height: 7.2cqh; min-width: 34px; min-height: 34px; border-radius: 50%; border: 3px solid var(--ink); background: #fff7de; color: var(--ink); font-weight: 1000; font-size: max(.8rem, 3cqh); box-shadow: 0 3px 0 var(--ink); text-shadow: none; }
+  .kh-buttons button[data-off="true"] { opacity: .5; }
+  @keyframes kh-pop { from { transform: scale(.3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes kh-pulse { 50% { transform: scale(1.08); } }
+  @keyframes kh-blink { 50% { opacity: .35; } }
+  @keyframes kh-rot { to { transform: rotate(6deg); } }
+
+  /* screens */
+  .kart-screen { position: relative; display: grid; gap: .9rem; justify-items: center; padding: clamp(1rem, 3vw, 2rem); border: 4px solid var(--ink); border-radius: 1.2rem; box-shadow: 0 8px 0 var(--ink); background: radial-gradient(130% 90% at 50% 0%, #2f4aa0 0%, #1b2446 55%, #111a33 100%); color: #fff; text-align: center; overflow: hidden; }
+  .kart-screen[hidden] { display: none; }
+  .kart-title { margin: 0; font-size: clamp(1.4rem, 4vw, 2.3rem); font-weight: 1000; text-transform: uppercase; letter-spacing: .02em; }
+  .kart-kicker { margin: 0; font-size: .85rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .kart-sub { margin: 0; max-width: 40rem; color: #dbe4ff; font-weight: 700; }
+  .kart-loading { min-height: 18rem; align-content: center; }
+  .kart-spinner { width: 3.5rem; height: 3.5rem; border-radius: 50%; border: .5rem solid rgba(255, 255, 255, .2); border-top-color: var(--gold); animation: kh-spin .9s linear infinite; }
+  @keyframes kh-spin { to { transform: rotate(360deg); } }
+  .kart-logo { display: grid; justify-items: center; line-height: .95; }
+  .kart-logo-top { font-size: .8rem; letter-spacing: .3em; font-weight: 900; color: #c7d2fe; }
+  .kart-logo-main { font-size: clamp(2.6rem, 10vw, 5.2rem); font-weight: 1000; font-style: italic; letter-spacing: -.02em; color: #fff; text-shadow: 0 6px 0 #0a1024, 0 0 30px rgba(242, 183, 5, .35); -webkit-text-stroke: 2px #0a1024; }
+  .kart-logo-main b { color: var(--gold); }
+  .kart-logo-sub { margin-top: .4rem; font-weight: 900; color: var(--gold); }
+  .kart-mascots { display: flex; gap: 1rem; }
+  .kart-face { display: block; width: 5rem; height: 5rem; border-radius: 50%; border: 4px solid #fff; background-color: #dbeafe; background-size: 300% 100%; background-position: 100% 0; box-shadow: 0 5px 0 rgba(0, 0, 0, .35); }
+  .kart-face-big { width: 7rem; height: 7rem; }
+  .kart-modes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; width: min(100%, 52rem); }
+  .kart-mode, .kart-driver, .kart-cup, .kart-track { display: grid; gap: .3rem; justify-items: center; align-content: start; padding: 1rem .8rem; border: 3px solid #fff; border-radius: 1rem; background: rgba(255, 255, 255, .1); color: #fff; box-shadow: 0 5px 0 #0a1024; transition: transform .1s, background .1s; }
+  .kart-mode:hover, .kart-driver:hover, .kart-cup:hover, .kart-track:hover, .kart-mode:focus-visible, .kart-driver:focus-visible, .kart-cup:focus-visible, .kart-track:focus-visible { transform: translateY(-3px); background: rgba(242, 183, 5, .22); }
+  .kart-mode b { font-size: 1.2rem; }
+  .kart-mode small, .kart-driver small, .kart-cup small, .kart-track small { color: #dbe4ff; font-weight: 700; line-height: 1.35; }
+  .kart-options { display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-start; gap: 1rem 1.6rem; }
+  .kart-opt { display: grid; gap: .35rem; justify-items: center; max-width: 18rem; }
+  .kart-opt > span { font-size: .8rem; font-weight: 900; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+  .kart-opt small { color: #c7d2fe; font-weight: 700; min-height: 2.4em; }
+  .kart-seg { display: flex; border: 3px solid #fff; border-radius: 99px; overflow: hidden; }
+  .kart-seg button { padding: .45rem .95rem; font-weight: 900; color: #fff; background: transparent; }
+  .kart-seg button[aria-pressed="true"] { background: var(--gold); color: var(--ink); }
+  .kart-music-toggle, .kart-back, .kart-actions button { padding: .55rem 1.1rem; border: 3px solid #fff; border-radius: 99px; font-weight: 900; color: #fff; background: rgba(255, 255, 255, .1); box-shadow: 0 4px 0 #0a1024; }
+  .kart-music-toggle[data-off="true"] { opacity: .55; text-decoration: line-through; }
+  .kart-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem; }
+  .kart-actions .kart-primary { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+  .kart-actions button[hidden] { display: none; }
+  .kart-drivers { display: grid; grid-template-columns: repeat(2, minmax(0, 15rem)); gap: 1rem; }
+  .kart-driver b { font-size: 1.4rem; }
+  .kart-cups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; width: min(100%, 56rem); }
+  .kart-cup b { font-size: 1.3rem; }
+  .kart-cup em { font-style: normal; }
+  .kart-cup-tracks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .4rem; width: 100%; }
+  .kart-chip { display: grid; gap: .2rem; justify-items: center; }
+  .kart-chip canvas { width: 100%; height: auto; border-radius: .5rem; background: rgba(0, 0, 0, .25); }
+  .kart-chip small { font-size: .68rem; }
+  .kart-tracks { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; width: min(100%, 60rem); }
+  .kart-track canvas { width: 100%; height: auto; border-radius: .6rem; background: rgba(0, 0, 0, .25); }
+  .kart-track b { font-size: .98rem; line-height: 1.15; }
+  .kart-ko { font-size: .78rem; font-weight: 800; color: var(--gold); }
+  .kart-track em { font-style: normal; font-size: .75rem; color: #86efac; font-weight: 900; }
+  .kart-table { display: grid; gap: .3rem; width: min(100%, 34rem); margin: 0; padding: 0; list-style: none; }
+  .kart-table :global(li) { display: grid; grid-template-columns: 2.2rem 2.4rem minmax(0, 1fr) auto auto; align-items: center; gap: .55rem; padding: .35rem .6rem; border-radius: .7rem; background: rgba(255, 255, 255, .1); font-weight: 800; text-align: left; }
+  .kart-table :global(li[data-me="true"]) { background: rgba(242, 183, 5, .35); outline: 2px solid var(--gold); }
+  .kart-table :global(li > b) { font-size: 1.1rem; color: var(--gold); text-align: center; }
+  .kart-table :global(li .kart-face) { display: block; width: 2.3rem; height: 2.3rem; border: 2px solid #fff; border-radius: 50%; background-size: 300% 100%; background-position: 100% 0; background-repeat: no-repeat; box-shadow: none; }
+  .kart-table :global(li span) { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .kart-table :global(li small) { display: block; font-size: .7rem; color: #c7d2fe; }
+  .kart-table :global(li em) { font-style: normal; font-variant-numeric: tabular-nums; }
+  .kart-table :global(li i) { font-style: normal; color: var(--gold); min-width: 2.2rem; text-align: right; }
+  .kart-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 9rem)); align-items: end; gap: .6rem; }
+  .kart-step { position: relative; display: grid; justify-items: center; gap: .3rem; }
+  .kart-step i { display: grid; place-items: center; width: 100%; font-style: normal; font-size: 1.6rem; font-weight: 1000; color: var(--ink); background: linear-gradient(#ffe27a, var(--gold)); border: 3px solid #fff; border-radius: .6rem .6rem 0 0; }
+  .kart-step[data-step="1"] i { height: 6rem; }
+  .kart-step[data-step="2"] i { height: 4.3rem; background: linear-gradient(#f1f5f9, #b8c2d0); }
+  .kart-step[data-step="3"] i { height: 3.2rem; background: linear-gradient(#f3c09a, #c27a45); }
+  .kart-step b { font-size: .9rem; }
+  .kart-cupimg { width: 5.5rem; height: auto; filter: drop-shadow(0 .4rem 0 rgba(0, 0, 0, .35)); }
+  .kart-podium[data-trophy="none"] .kart-cupimg { display: none; }
+  .kart-confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .kart-confetti :global(i) { position: absolute; top: -1rem; width: .55rem; height: .9rem; border-radius: 2px; animation: kart-fall linear forwards; }
+  @keyframes kart-fall { to { transform: translateY(40rem) rotate(540deg); } }
+  .kart-overlay { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(10, 16, 36, .62); z-index: 5; }
+  .kart-overlay[hidden] { display: none; }
+  .kart-card { display: grid; gap: 1rem; justify-items: center; padding: 1.4rem 1.8rem; border: 4px solid #fff; border-radius: 1.2rem; background: #1b2446; color: #fff; }
+  .kart-info { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 2rem; padding: 1rem 1.2rem; border-radius: 1.2rem; background: rgba(255, 255, 255, .04); }
+  .kart-info h2 { margin: 0 0 .4rem; font-size: 1.05rem; font-weight: 900; text-transform: uppercase; }
+  .kart-info ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .35rem; font-size: .92rem; line-height: 1.5; }
+  .kart-credits { grid-column: 1 / -1; margin: 0; font-size: .78rem; line-height: 1.5; opacity: .8; }
+
+  /* touch controls */
+  .kart-touch { display: none; }
+  .kart-touch[hidden] { display: none !important; }
+  .kt-btn { display: grid; place-items: center; border-radius: 50%; border: 3px solid rgba(255, 255, 255, .9); color: #fff; font-weight: 1000; background: rgba(17, 26, 51, .55); touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; text-shadow: 0 2px 0 #0a1024; }
+  .kt-btn[data-down="true"] { transform: scale(.94); background: rgba(242, 183, 5, .65); }
+  .kt-steer { width: 76px; height: 76px; font-size: 1.8rem; }
+  .kt-drift { width: 88px; height: 88px; font-size: .95rem; background: rgba(37, 99, 235, .7); }
+  .kt-item { width: 70px; height: 70px; font-size: .85rem; background: rgba(234, 88, 12, .7); }
+  .kt-brake { width: 54px; height: 54px; font-size: .62rem; }
+
+  @media (max-width: 760px) {
+    .kart-modes { grid-template-columns: 1fr; }
+    .kart-tracks { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .kart-cups { grid-template-columns: 1fr; }
+    .kart-info { grid-template-columns: 1fr; }
+    .kart-table :global(li) { grid-template-columns: 1.8rem 2.1rem minmax(0, 1fr) auto auto; gap: .4rem; }
+  }
+  @media (pointer: coarse) {
+    .kart-game[data-mode="race"], .kart-game[data-mode="paused"] { position: fixed; inset: 0; z-index: 60; height: 100vh; height: 100dvh; background: #07112d; }
+    .kart-game[data-mode="race"] .kart-stage, .kart-game[data-mode="paused"] .kart-stage { position: absolute; inset: 0; width: 100%; height: 100%; aspect-ratio: auto; border: 0; border-radius: 0; box-shadow: none; }
+    .kart-game[data-mode="race"] .kart-touch, .kart-game[data-mode="paused"] .kart-touch { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end; padding: 0 max(.6rem, env(safe-area-inset-right)) max(.8rem, env(safe-area-inset-bottom)) max(.6rem, env(safe-area-inset-left)); pointer-events: none; z-index: 4; }
+    .kt-left, .kt-right { display: flex; align-items: flex-end; gap: .6rem; pointer-events: auto; }
+    .kt-right { display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; gap: .4rem .5rem; align-items: end; }
+    .kt-item { grid-column: 2; grid-row: 1; justify-self: center; }
+    .kt-brake { grid-column: 1; grid-row: 2; }
+    .kt-drift { grid-column: 2; grid-row: 2; }
+    .kh-hint { bottom: auto; top: 30cqh; }
+  }
+  @media (pointer: coarse) and (orientation: landscape) {
+    .kh-bottom { bottom: 3cqh; transform: translateX(-50%) scale(.85); }
+  }
+  @media (pointer: coarse) and (orientation: portrait) {
+    .kh-rank b { font-size: 7cqh; }
+    .kh-map { width: 15cqh; height: 15cqh; }
+    .kh-lap { font-size: 2.2cqh; }
+    .kh-lap b { font-size: 3.4cqh; }
+    .kh-bottom { bottom: auto; top: 15.5cqh; transform: translateX(-50%) scale(.9); }
+    .kh-lights { top: 24cqh; }
+    .kh-items i { width: 7cqh; height: 7cqh; font-size: 4.4cqh; }
+    .kh-items i:nth-child(2) { width: 5.5cqh; height: 5.5cqh; font-size: 3.4cqh; }
+    .kh-speed b { font-size: 4cqh; }
+    .kh-gauge-bar { width: 34cqw; height: 1.6cqh; }
+    .kh-boosters i { width: 3.6cqh; height: 3.6cqh; }
+    .kh-banner { font-size: 8cqh; top: 33cqh; }
+    .kh-toast { font-size: 3.4cqh; top: 44cqh; }
+    .kh-lights i { width: 4.4cqh; height: 4.4cqh; }
+    .kh-buttons { top: 18cqh; }
+    .kh-buttons button { width: 5cqh; height: 5cqh; }
+  }
+</style>

@@ -16,9 +16,11 @@
     "astro": "^5.0.0",
     "remark-wiki-link": "^2.0.1",
     "tailwindcss": "^4.0.0",
+    "three": "^0.186.1",
     "typescript": "^5.6.0"
   },
   "devDependencies": {
-    "@types/node": "^25.6.0"
+    "@types/node": "^25.6.0",
+    "@types/three": "^0.186.0"
   }
 }

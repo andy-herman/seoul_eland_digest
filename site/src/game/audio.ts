@@ -19,9 +19,9 @@ function loadPrefs(): AudioPrefs {
 }
 
 export class GameAudio {
-  private ctx: AudioContext | null = null;
-  private out: GainNode | null = null;
-  private noise: AudioBuffer | null = null;
+  protected ctx: AudioContext | null = null;
+  protected out: GainNode | null = null;
+  protected noise: AudioBuffer | null = null;
   private readonly music: HTMLAudioElement;
   private musicWanted = false;
   private prefs: AudioPrefs;
@@ -115,7 +115,7 @@ export class GameAudio {
     }
   }
 
-  private ready(): { ctx: AudioContext; out: GainNode } | null {
+  protected ready(): { ctx: AudioContext; out: GainNode } | null {
     if (this.prefs.muted || !this.ctx || !this.out || this.ctx.state !== "running") return null;
     return { ctx: this.ctx, out: this.out };
   }

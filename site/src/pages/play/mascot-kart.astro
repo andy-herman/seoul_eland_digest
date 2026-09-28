@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import MascotKart from "../../components/MascotKart.astro";
+import { KART_STRINGS } from "../../kart/i18n";
+
+const t = KART_STRINGS.en;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/kart/og-kart.jpg">
+  <MascotKart locale="en" />
+</BaseLayout>
