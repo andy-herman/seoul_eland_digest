@@ -140,7 +140,7 @@ export function chooseOnBallAction(ctx: TeamAiContext, carrier: FcPlayer): AiAct
   const rating = ctx.ratings[carrier.index] ?? ctx.ratings[1];
   const openShot = countLaneBlockers(carrier, goal, ctx.opponents) === 0;
   const shootValue = (28 - goalDist) * 0.052 + rating.shooting * 0.85 - angle * 1.3 + (openShot ? 0.32 : -0.18) - (pressure < 2.1 ? 0.25 : 0) + (ctx.rand() - 0.5) * cfg.decisionNoise;
-  if (goalDist < 22 && shootValue > 1.25) return { kind: "shoot", x: goal.x, z: clamp(PITCH_W / 2 + (ctx.rand() - 0.5) * GOAL_W * 0.75, PITCH_W / 2 - GOAL_W / 2 + 0.2, PITCH_W / 2 + GOAL_W / 2 - 0.2) };
+  if (goalDist < 21 + ctx.tier * 1.8 && shootValue > 1.34 - ctx.tier * 0.11) return { kind: "shoot", x: goal.x, z: clamp(PITCH_W / 2 + (ctx.rand() - 0.5) * GOAL_W * 0.75, PITCH_W / 2 - GOAL_W / 2 + 0.2, PITCH_W / 2 + GOAL_W / 2 - 0.2) };
 
   const wide = carrier.z < 7.5 || carrier.z > PITCH_W - 7.5;
   const nearBox = ctx.side === "home" ? carrier.x > PITCH_L - BOX_DEPTH - 5 : carrier.x < BOX_DEPTH + 5;

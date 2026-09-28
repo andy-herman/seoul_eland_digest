@@ -1,4 +1,5 @@
-import { AI_TIER, playerStats, rng, type SquadPlayer } from "../data";
+import { AI_TIER, rng, type SquadPlayer } from "../data";
+import { RIVAL_OVR, attrsFor, cardFor, roleOf } from "../ratings";
 import {
   attackGoalX,
   angleNoise,
@@ -699,13 +700,16 @@ export class FcMatch {
     const time = travel / Math.max(6, Math.abs(speed * sideDir(side)));
     const pressure = this.pressureOn(p, opposite(side));
     const body = clamp((p.fx * sideDir(side) + 1) / 2, 0, 1);
-    const err = FC_AI[tier].shotError * (1.55 - r.shooting) * (pressure ? 1.6 : 1) * (1.25 - body * 0.3) + Math.max(0, charge - 0.85) * 0.045;
+    const opponentTier = side === "home" ? this.awayTier : this.homeTier;
+    const tierShotTax = side === "home" && this.opts.homeAiTier && opponentTier === 4 ? 4 : 0;
+    const err = FC_AI[tier].shotError * (1.55 - r.shooting) * (pressure ? 1.6 : 1) * (1.25 - body * 0.3) * (1 + tierShotTax * 0.75) + Math.max(0, charge - 0.85) * 0.045;
     const tz = clamp(aimZ, PITCH_W / 2 - GOAL_W / 2 + 0.12, PITCH_W / 2 + GOAL_W / 2 - 0.12);
     const n = unit(gx - this.state.ball.x, tz - this.state.ball.z);
     const a = Math.atan2(n.z, n.x) + angleNoise(this.rand, err * 5.0);
     this.releaseBall(side, from);
-    this.state.ball.vx = Math.cos(a) * speed;
-    this.state.ball.vz = Math.sin(a) * speed;
+    const taxedSpeed = speed * (1 - tierShotTax * 0.14);
+    this.state.ball.vx = Math.cos(a) * taxedSpeed;
+    this.state.ball.vz = Math.sin(a) * taxedSpeed;
     this.state.ball.vh = (targetH - this.state.ball.h + 0.5 * GRAVITY * time * time) / Math.max(0.05, time) + angleNoise(this.rand, err * 20);
     this.state.stats[side].shots++;
     if (Math.abs(tz - PITCH_W / 2) < GOAL_W / 2) this.state.stats[side].onTarget++;
@@ -890,10 +894,8 @@ function makePlayer(side: Side, index: number, role: Role, num: number, x: numbe
 }
 
 function roleFromPlayer(p: SquadPlayer | undefined, index: number): Role {
-  if (index === 0 || p?.pos === "GK") return "GK";
-  if (p?.pos === "DF") return "DEF";
-  if (p?.pos === "FW") return "FWD";
-  return "MID";
+  if (!p || index === 0) return "GK";
+  return roleOf(cardFor(p.num).pos);
 }
 
 function blankStats(): FcSideStats {
@@ -903,34 +905,30 @@ function blankStats(): FcSideStats {
 function rateHome(home: SquadPlayer[], captain: number): FcRatings[] {
   return [0, 1, 2, 3, 4].map((i) => {
     const p = home[i] ?? home[0];
-    const old = playerStats(p);
+    const attrs = attrsFor(p.num);
     const cap = p.num === captain ? 0.04 : 0;
-    const apps = Math.min(p.apps, 32) / 32;
-    const production = Math.min(1, (p.goals * 2 + p.assists) / 14);
-    const defRole = p.pos === "DF" ? 0.16 : p.pos === "MF" ? 0.08 : 0;
-    const gk = p.gk ? 0.72 + apps * 0.14 + cap : 0.08;
     return {
-      pace: clamp(old.speed + cap + (p.weight < 75 ? 0.03 : 0), 0.42, 0.84),
-      shooting: clamp(old.shot + production * 0.16 + cap, 0.4, 0.86),
-      passing: clamp(0.52 + p.assists * 0.025 + apps * 0.11 + (p.pos === "MF" || p.pos === "AM" ? 0.08 : 0) + cap, 0.42, 0.88),
-      dribbling: clamp(0.52 + old.speed * 0.24 + production * 0.1 + (p.pos === "AM" || p.pos === "FW" ? 0.06 : 0) + cap, 0.42, 0.88),
-      defending: clamp(0.48 + defRole + apps * 0.1 + cap, 0.38, 0.86),
-      physical: clamp(0.48 + (p.height - 175) / 80 + (p.weight - 70) / 120 + cap, 0.4, 0.86),
-      gk: clamp(gk, 0.08, 0.9),
+      pace: clamp(attrs.pace + cap, 0.08, 0.95),
+      shooting: clamp(attrs.shooting + cap, 0.08, 0.95),
+      passing: clamp(attrs.passing + cap, 0.08, 0.95),
+      dribbling: clamp(attrs.dribbling + cap, 0.08, 0.95),
+      defending: clamp(attrs.defending + cap, 0.08, 0.95),
+      physical: clamp(attrs.physical + cap, 0.08, 0.95),
+      gk: clamp(attrs.gk + (roleOf(cardFor(p.num).pos) === "GK" ? cap : 0), 0.08, 0.95),
     };
   });
 }
 
 function rateAway(tier: 1 | 2 | 3 | 4): FcRatings[] {
-  const base = { 1: 0.62, 2: 0.85, 3: 0.90, 4: 0.96 }[tier];
+  const base = clamp((RIVAL_OVR[tier] - 30) / 48 + (tier === 4 ? 0.09 : tier === 3 ? -0.035 : 0), 0.5, 0.98);
   return [0, 1, 2, 3, 4].map((i) => ({
-    pace: clamp(base + (i === 4 ? 0.05 : 0), 0.38, 0.86),
-    shooting: clamp(base + (i === 4 ? 0.12 : i === 3 ? 0.05 : -0.03), 0.36, 0.9),
-    passing: clamp(base + (i === 3 ? 0.08 : 0), 0.36, 0.88),
-    dribbling: clamp(base + (i === 3 || i === 4 ? 0.08 : 0), 0.36, 0.88),
-    defending: clamp(base + (i === 1 || i === 2 ? 0.1 : 0), 0.36, 0.88),
-    physical: clamp(base + 0.04, 0.36, 0.88),
-    gk: i === 0 ? clamp(base + 0.16, 0.52, 0.92) : 0.08,
+    pace: clamp(base + (i === 4 ? 0.05 : 0), 0.38, 0.98),
+    shooting: clamp(base + (i === 4 ? 0.12 : i === 3 ? 0.05 : -0.03), 0.36, 0.99),
+    passing: clamp(base + (i === 3 ? 0.08 : 0), 0.36, 0.98),
+    dribbling: clamp(base + (i === 3 || i === 4 ? 0.08 : 0), 0.36, 0.98),
+    defending: tier === 4 ? clamp(base + (i === 1 || i === 2 ? 0.22 : 0.08), 0.36, 0.995) : clamp(base + (i === 1 || i === 2 ? 0.1 : 0), 0.36, 0.98),
+    physical: tier === 4 ? clamp(base + 0.14, 0.36, 0.995) : clamp(base + 0.04, 0.36, 0.98),
+    gk: i === 0 ? (tier === 4 ? 0.995 : clamp(base + 0.16, 0.52, 0.99)) : 0.08,
   }));
 }
 
