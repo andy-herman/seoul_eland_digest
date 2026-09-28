@@ -61,6 +61,10 @@ interface BallIntent {
   targetX: number;
   targetZ: number;
   shot: boolean;
+  ignoreSide: Side;
+  ignoreIndex: number;
+  ignoreT: number;
+  headerTouches: string[];
 }
 
 interface KeeperState {
@@ -370,6 +374,11 @@ export class FcMatch {
         const goalSide = sideDir(side) * (p.x - carrier.x) < 0;
         const ownBox = isInPenaltyArea(p.x, p.z, side);
         if (goalSide && !ownBox && ballVec > 0.15 && dist(p, this.state.ball) < 1.0 && dist(p, this.state.ball) + 0.15 < dist(p, carrier)) this.startTackle(p, false);
+        else if (!ownBox && dist(p, carrier) < 0.75 && this.rand() < 0.0018 * (5 - (side === "home" ? this.homeTier : this.awayTier))) {
+          this.state.stats[p.side].fouls++;
+          this.event("foul", p.side, p.index);
+          this.setupRestart("freekick", owner.side, carrier.x, carrier.z);
+        }
       }
     }
   }
@@ -505,6 +514,7 @@ export class FcMatch {
 
   private updateBallPhysics(): void {
     const b = this.state.ball;
+    if (this.ballIntent) this.ballIntent.ignoreT = Math.max(0, this.ballIntent.ignoreT - FC_STEP);
     if (b.owner) return;
     const prevX = b.x;
     const prevZ = b.z;
@@ -583,6 +593,7 @@ export class FcMatch {
     if (this.state.ball.owner) return;
     let best: { p: FcPlayer; d: number } | null = null;
     for (const p of this.state.players) {
+      if (this.isIgnoredKicker(p)) continue;
       const reach = this.reachFor(p);
       const d = Math.hypot(this.state.ball.x - p.x, this.state.ball.z - p.z);
       if (d < reach && (!best || d < best.d)) best = { p, d };
@@ -593,12 +604,15 @@ export class FcMatch {
     const r = this.ratings[p.side][p.index];
     const controlLimit = p.index === 0 ? 15 + r.gk * 9 : 6 + r.dribbling * 9 + r.physical * 3;
     const opponentBall = this.ballIntent && this.ballIntent.side !== p.side;
-    if (this.ballIntent?.side === p.side && this.ballIntent.target === p.index && best.d < 1.2 && this.state.ball.h < 0.85) {
+    if (this.ballIntent?.side === p.side && ["pass", "through", "throw"].includes(this.ballIntent.kind) && best.d < 1.25 && this.state.ball.h < 0.85) {
       this.state.stats[p.side].passesDone++;
       this.giveBallTo(p.side, p.index);
       return;
     }
-    if (this.state.ball.h > 1.0 && this.state.ball.h < 2.5 && p.index > 0) {
+    const headerKey = `${p.side}:${p.index}`;
+    const headerFlight = this.ballIntent && ["lob", "cross", "clear"].includes(this.ballIntent.kind);
+    if (headerFlight && this.state.ball.vh < 0.6 && this.state.ball.h > 1.05 && this.state.ball.h < 2.5 && p.index > 0 && !this.ballIntent!.headerTouches.includes(headerKey)) {
+      this.ballIntent!.headerTouches.push(headerKey);
       p.anim = "header";
       p.animT = 0;
       p.h = clamp(this.state.ball.h * 0.55, 0.35, 1.15);
@@ -621,7 +635,7 @@ export class FcMatch {
         this.state.ball.vx = -this.state.ball.vx * 0.35 + sideDir(p.side) * 2;
         this.state.ball.vz = wide * (6 + this.rand() * 5);
         this.state.ball.vh = Math.max(0.8, Math.abs(this.state.ball.vh) * 0.4);
-        this.ballIntent = { kind: "clear", side: p.side, by: p.index, target: null, targetX: this.state.ball.x + sideDir(p.side) * 8, targetZ: this.state.ball.z + wide * 8, shot: false };
+        this.setBallIntent("clear", p.side, p.index, null, this.state.ball.x + sideDir(p.side) * 8, this.state.ball.z + wide * 8, false);
       }
     } else if (ballSpeed < controlLimit && (!opponentBall || this.rand() < 0.68 + r.defending * 0.18)) {
       const intent = this.ballIntent;
@@ -654,7 +668,7 @@ export class FcMatch {
     this.state.ball.vx = n.x * (towardsGoal ? 12 : 8);
     this.state.ball.vz = n.z * (towardsGoal ? 12 : 8);
     this.state.ball.vh = towardsGoal ? 0.4 : 1.1;
-    this.ballIntent = { kind: towardsGoal ? "shot" : "pass", side: p.side, by: p.index, target: null, targetX, targetZ, shot: towardsGoal };
+    this.setBallIntent(towardsGoal ? "shot" : "pass", p.side, p.index, null, targetX, targetZ, towardsGoal);
     if (towardsGoal) this.state.stats[p.side].shots++;
   }
 
@@ -665,7 +679,7 @@ export class FcMatch {
     this.state.ball.vx = n.x * (5 + this.rand() * 7) * scale + p.vx * 0.4;
     this.state.ball.vz = n.z * (5 + this.rand() * 7) * scale + p.vz * 0.4;
     this.state.ball.vh = Math.max(this.state.ball.vh * -0.2, 0.3 + this.rand() * 1.4);
-    this.ballIntent = { kind: "clear", side: p.side, by: p.index, target: null, targetX: this.state.ball.x + n.x * 8, targetZ: this.state.ball.z + n.z * 8, shot: false };
+    this.setBallIntent("clear", p.side, p.index, null, this.state.ball.x + n.x * 8, this.state.ball.z + n.z * 8, false);
   }
 
   private handleBounds(): void {
@@ -674,6 +688,16 @@ export class FcMatch {
     if (b.z < -0.15 || b.z > PITCH_W + 0.15) this.setupRestart("throwin", opposite(b.lastTouch ?? "home"), clamp(b.x, 1, PITCH_L - 1), b.z < 0 ? 0 : PITCH_W);
     else if (b.x < -0.3) this.crossGoalLine("home", "away");
     else if (b.x > PITCH_L + 0.3) this.crossGoalLine("away", "home");
+  }
+
+  private setBallIntent(kind: BallIntentKind, side: Side, by: number, target: number | null, targetX: number, targetZ: number, shot: boolean): void {
+    this.ballIntent = { kind, side, by, target, targetX, targetZ, shot, ignoreSide: side, ignoreIndex: by, ignoreT: 0.3, headerTouches: [] };
+  }
+
+  private isIgnoredKicker(p: FcPlayer): boolean {
+    const intent = this.ballIntent;
+    if (!intent || p.side !== intent.ignoreSide || p.index !== intent.ignoreIndex) return false;
+    return intent.ignoreT > 0 || dist(p, this.state.ball) < 1.6;
   }
 
   private kickPass(side: Side, from: number, target: number, through: boolean): void {
@@ -738,7 +762,7 @@ export class FcMatch {
     this.state.ball.vh = (targetH - this.state.ball.h + 0.5 * GRAVITY * time * time) / Math.max(0.05, time) + angleNoise(this.rand, err * 30);
     this.state.stats[side].shots++;
     if (predictShotOnTarget(this.state.ball, attackGoalX(side))) this.state.stats[side].onTarget++;
-    this.ballIntent = { kind: "shot", side, by: from, target: null, targetX: gx, targetZ: tz, shot: true };
+    this.setBallIntent("shot", side, from, null, gx, tz, true);
     p.anim = "kick";
     p.animT = 0;
     this.event("shot", side, from);
@@ -752,7 +776,7 @@ export class FcMatch {
     this.state.ball.vx = Math.cos(a) * speed;
     this.state.ball.vz = Math.sin(a) * speed;
     this.state.ball.vh = vh;
-    this.ballIntent = { kind, side, by: from, target, targetX: tx, targetZ: tz, shot };
+    this.setBallIntent(kind, side, from, target, tx, tz, shot);
     p.anim = "kick";
     p.animT = 0;
     this.event("kick", side, from);
@@ -797,12 +821,20 @@ export class FcMatch {
       this.event("tackle", p.side, p.index);
       return;
     }
-    if (bodyD < (slide ? 1.25 : 0.88) && (!front || slide || this.rand() > FC_AI[p.side === "home" ? this.homeTier : this.awayTier].foulCare)) {
+    const humanControlled = p.side === "home" && !this.opts.homeAiTier && p.index === this.state.controlled;
+    const cfg = FC_AI[p.side === "home" ? this.homeTier : this.awayTier];
+    const inBox = isInPenaltyArea(carrier.x, carrier.z, p.side);
+    let foulChance = 0;
+    if (humanControlled) {
+      foulChance = slide ? (ballD > 1.15 && bodyD < 1.05 ? 0.32 : 0.05) : (!front && len(p.vx, p.vz) > 5.8 ? 0.12 : 0.025);
+    } else {
+      foulChance = inBox ? 0.015 : (front ? 0.04 : 0.16) * (1.15 - cfg.foulCare);
+    }
+    if (bodyD < (slide ? 1.25 : 0.88) && this.rand() < foulChance) {
       this.state.stats[p.side].fouls++;
       p.stunT = slide ? 0.8 : 0.25;
       carrier.stunT = 0.35;
       this.event("foul", p.side, p.index);
-      const inBox = isInPenaltyArea(carrier.x, carrier.z, p.side);
       this.setupRestart(inBox ? "penalty" : "freekick", owner.side, carrier.x, carrier.z);
     }
   }

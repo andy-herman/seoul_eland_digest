@@ -140,8 +140,13 @@ export function chooseOnBallAction(ctx: TeamAiContext, carrier: FcPlayer): AiAct
   const pressure = nearestOpponentDistance(carrier, ctx.opponents);
   const rating = ctx.ratings[carrier.index] ?? ctx.ratings[1];
   const openShot = countLaneBlockers(carrier, goal, ctx.opponents) === 0;
-  const shootValue = (28 - goalDist) * 0.052 + rating.shooting * 0.85 - angle * 1.3 + (openShot ? 0.32 : -0.18) - (pressure < 2.1 ? 0.25 : 0) + (ctx.rand() - 0.5) * cfg.decisionNoise;
-  if (goalDist < 20 + ctx.tier * 1.0 && shootValue > 1.46 - ctx.tier * 0.065) return { kind: "shoot", x: goal.x, z: clamp(PITCH_W / 2 + (ctx.rand() - 0.5) * GOAL_W * 0.75, PITCH_W / 2 - GOAL_W / 2 + 0.2, PITCH_W / 2 + GOAL_W / 2 - 0.2) };
+  const shootValue = (27 - goalDist) * 0.052 + rating.shooting * 0.85 - angle * 1.3 + (openShot ? 0.32 : -0.18) - (pressure < 2.1 ? 0.25 : 0) + (ctx.rand() - 0.5) * cfg.decisionNoise;
+  if (goalDist < 20 + ctx.tier * 1.0 && shootValue > 1.46 - ctx.tier * 0.065) {
+    const keeper = ctx.opponents[0];
+    const farSign = keeper.z <= PITCH_W / 2 ? 1 : -1;
+    const margin = GOAL_W * (0.34 + ctx.tier * 0.035);
+    return { kind: "shoot", x: goal.x, z: clamp(PITCH_W / 2 + farSign * margin + (ctx.rand() - 0.5) * GOAL_W * (0.42 - ctx.tier * 0.055), PITCH_W / 2 - GOAL_W / 2 + 0.15, PITCH_W / 2 + GOAL_W / 2 - 0.15) };
+  }
 
   const wide = carrier.z < 7.5 || carrier.z > PITCH_W - 7.5;
   const nearBox = ctx.side === "home" ? carrier.x > PITCH_L - BOX_DEPTH - 5 : carrier.x < BOX_DEPTH + 5;
@@ -153,7 +158,7 @@ export function chooseOnBallAction(ctx: TeamAiContext, carrier: FcPlayer): AiAct
     const open = laneOpenness(carrier, receiver, ctx.opponents);
     const progressive = (receiver.x - carrier.x) * dir > 3;
     const passValue = open + (progressive ? 0.25 : 0) + (pressure < 2.2 ? 0.25 : 0) + rating.passing * 0.35 + (ctx.rand() - 0.5) * cfg.decisionNoise;
-    if (passValue > 0.95) {
+    if (passValue > 0.72) {
       const through = progressive && nearestOpponentDistance(receiver, ctx.opponents) > 3.2 && ctx.rand() < 0.34 + rating.passing * 0.22;
       return through ? { kind: "through", target } : { kind: "pass", target };
     }
