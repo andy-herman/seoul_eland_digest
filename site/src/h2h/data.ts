@@ -29,12 +29,6 @@ export interface SquadPlayer {
   expr: string;
 }
 
-export interface PlayerStats {
-  speed: number;
-  jump: number;
-  shot: number;
-}
-
 export interface MascotMetrics {
   cell: number;
   foot: number;
@@ -81,25 +75,6 @@ export const RIVAL_STRENGTH: Record<OpponentSlug, number> = {
   "paju-frontier": 57,
 };
 
-export const POWER_ARCHETYPE: Record<OpponentSlug, "fire" | "lob" | "freeze"> = {
-  "ansan-greeners": "fire",
-  "busan-ipark": "freeze",
-  "cheonan-city": "lob",
-  "chungbuk-cheongju": "fire",
-  "chungnam-asan": "lob",
-  "daegu-fc": "freeze",
-  "gimhae-fc": "lob",
-  "gimpo-fc": "fire",
-  "gyeongnam-fc": "fire",
-  "hwaseong-fc": "lob",
-  "jeonnam-dragons": "fire",
-  "paju-frontier": "freeze",
-  "seongnam-fc": "freeze",
-  "suwon-fc": "lob",
-  "suwon-samsung-bluewings": "fire",
-  "yongin-fc": "freeze",
-};
-
 export const AI_TIER: Record<OpponentSlug, 1 | 2 | 3 | 4> = {
   "paju-frontier": 1,
   "yongin-fc": 1,
@@ -118,28 +93,6 @@ export const AI_TIER: Record<OpponentSlug, 1 | 2 | 3 | 4> = {
   "busan-ipark": 4,
   "suwon-samsung-bluewings": 4,
 };
-
-export function playerStats(player: SquadPlayer): PlayerStats {
-  const posBoost = {
-    GK: { speed: -0.04, jump: 0.08, shot: -0.08 },
-    DF: { speed: -0.02, jump: 0.06, shot: -0.03 },
-    MF: { speed: 0.02, jump: 0, shot: 0.02 },
-    AM: { speed: 0.07, jump: 0, shot: 0.06 },
-    FW: { speed: 0.06, jump: 0.03, shot: 0.08 },
-  }[player.pos];
-  const heightJump = (player.height - 182) / 180;
-  const production = Math.min(1, (player.goals * 2 + player.assists + Math.min(player.apps, 24) / 8) / 18);
-  const senior = player.captain || player.vice ? 0.02 : 0;
-  return {
-    speed: clamp01(0.56 + posBoost.speed + (player.weight < 76 ? 0.04 : 0) - (player.height > 190 ? 0.025 : 0) + senior),
-    jump: clamp01(0.56 + posBoost.jump + heightJump + senior),
-    shot: clamp01(0.55 + posBoost.shot + production * 0.18 + senior),
-  };
-}
-
-function clamp01(v: number): number {
-  return Math.max(0.45, Math.min(0.72, v));
-}
 
 export function seedFromString(input: string): number {
   let h = 2166136261;

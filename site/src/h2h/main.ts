@@ -1,40 +1,20 @@
 // Dev server: cd site && npx astro dev --port 4322 --host 127.0.0.1
-// QA hook: add ?qa to expose window.__h2h with { match, startQuick, startSeason, simulateAiMatch, season }.
+// QA hook: add ?qa to expose window.__h2h (match, state, startQuick, endNow, forceGoal, debugRestart, ...).
 
-import { SQUAD, OPPONENTS, SEOUL_TEAM, type Kit, type OpponentSlug, type SquadPlayer } from "./data";
+import { SQUAD, OPPONENTS, SEOUL_TEAM, AI_TIER, type Kit, type OpponentSlug, type SquadPlayer } from "./data";
 import { applyRound, newSeason, sortRows, validateTable, type SeasonState, type TeamRow } from "./league";
-import { H2HMatch, STEP, WORLD_W, blankInput, headCenter, type Body, type InputState } from "./sim";
-import { H2HRenderer, type H2HImages } from "./render";
-import { H2HControls } from "./input";
+import { FcMatch, blankFcInput, simulateFcMatch } from "./fc/sim";
+import { FC_STEP, type FcEvent, type FcState, type RestartType, type Side } from "./fc/types";
+import { FcRenderer, type FcRenderImages } from "./fc/render";
+import { FcControls } from "./fc/input";
 import { H2HAudio } from "./audio";
 import { H2H_STRINGS, type EndVariant } from "./i18n";
+import { RIVAL_OVR, bestFive, cardFor, teamOvr, type FcCard } from "./ratings";
 
 const SAVE_KEY = "h2h-save-v1";
-const VS_MS = 2000;
-const RESULT_DELAY_MS = 1100;
+const VS_MS = 2200;
+const RESULT_DELAY_MS = 1300;
 const CONFETTI = ["#ffd64a", "#ffffff", "#1b2446", "#f97316", "#38bdf8", "#f472b6"];
-
-interface SideTally {
-  kicks: number;
-  headers: number;
-  power: number;
-  goals: string[];
-}
-
-interface MatchTally {
-  left: SideTally;
-  right: SideTally;
-  territory: number;
-  playT: number;
-  prevHeader: { left: number; right: number };
-  prevKickHit: { left: boolean; right: boolean };
-  prevScore: { left: number; right: number };
-}
-
-function newTally(): MatchTally {
-  const side = (): SideTally => ({ kicks: 0, headers: 0, power: 0, goals: [] });
-  return { left: side(), right: side(), territory: 0, playT: 0, prevHeader: { left: 0, right: 0 }, prevKickHit: { left: false, right: false }, prevScore: { left: 0, right: 0 } };
-}
 
 function clubShort(club: string): string {
   return club.replace(/\s*FC\b/g, "").replace(/\s+/g, " ").trim();
@@ -94,6 +74,10 @@ function loadImage(src: string): Promise<HTMLImageElement | undefined> {
   });
 }
 
+function stars(n: number): string {
+  return "★".repeat(n) + "☆".repeat(Math.max(0, 5 - n));
+}
+
 export function mountHeadToHead(root: HTMLElement): void {
   const locale = root.dataset.locale === "pt" ? "pt" : "en";
   const t = H2H_STRINGS[locale];
@@ -103,12 +87,14 @@ export function mountHeadToHead(root: HTMLElement): void {
   const qa = <T extends HTMLElement = HTMLElement>(sel: string) => [...root.querySelectorAll<T>(sel)];
   const canvas = q<HTMLCanvasElement>("[data-h2h-canvas]")!;
   const audio = new H2HAudio(root.dataset.music ?? `${playAssets}seoul-song-2024.mp3`);
-  const controls = new H2HControls(root);
+  const controls = new FcControls(root);
   const save = loadSave();
   let selected = SQUAD.find((p) => p.num === save.selected) ?? SQUAD[0];
   let season = save.season ?? newSeason(selected, 2026 + selected.num);
-  let match: H2HMatch | null = null;
-  let renderer: H2HRenderer | null = null;
+  let match: FcMatch | null = null;
+  let renderer: FcRenderer | null = null;
+  let lineup: SquadPlayer[] = bestFive(selected.num);
+  let matchMeta: { opponent: OpponentSlug; kit: Kit; mode: "league" | "quick" } = { opponent: "ansan-greeners", kit: "home", mode: "quick" };
   let mode: "loading" | "select" | "season" | "quick" | "match" | "paused" | "result" | "end" = "loading";
   let quickKit: Kit = "home";
   let last = performance.now();
@@ -120,10 +106,11 @@ export function mountHeadToHead(root: HTMLElement): void {
   let vsHold = false;
   let vsTimer = 0;
   let qaPaused = false;
-  let tally = newTally();
   let resultTimer = 0;
+  let hintKey = "";
   let lastQuick: { opponent: OpponentSlug; kit: Kit } | null = null;
-  const compactLandscape = window.matchMedia("(orientation: landscape) and (max-height: 520px)");
+  const coarse = window.matchMedia("(pointer: coarse)");
+  const portrait = window.matchMedia("(orientation: portrait)");
 
   function show(next: typeof mode): void {
     mode = next;
@@ -132,7 +119,9 @@ export function mountHeadToHead(root: HTMLElement): void {
     q("[data-h2h-touch]")!.hidden = next !== "match";
     q("[data-h2h-hud]")!.hidden = !(next === "match" || next === "paused");
     document.body.classList.toggle("h2h-lock-scroll", next === "match" || next === "paused");
-    if (next === "match" || next === "paused") layout();
+    controls.enabled = next === "match";
+    if (next !== "match") controls.reset();
+    if (next === "match" || next === "paused") requestAnimationFrame(layout);
     if (next === "paused") {
       const score = q("[data-h2h-pause-score]");
       if (score) score.textContent = `${q("[data-h2h-score]")?.textContent ?? "0 : 0"} · ${q("[data-h2h-clock]")?.textContent ?? ""}`;
@@ -149,29 +138,65 @@ export function mountHeadToHead(root: HTMLElement): void {
     if (top < 72 || (big && top > window.innerHeight * 0.3)) screen.scrollIntoView({ block: "start" });
   }
 
+  function cardLine(card: FcCard): string {
+    return `${t.footLabel(card.foot)} · ${t.skillMoves} ${stars(card.skill)} · ${t.weakFoot} ${stars(card.weak)}`;
+  }
+
+  function fillCard(card: FcCard, player: SquadPlayer): void {
+    const el = q("[data-fc-card]");
+    if (!el) return;
+    el.dataset.color = card.color;
+    q("[data-fc-ovr]")!.textContent = String(card.ovr);
+    q("[data-fc-pos]")!.textContent = t.posLabel(card.pos);
+    const art = q<HTMLImageElement>("[data-fc-art]");
+    if (art) art.src = `${assets}stickers/${player.num}-home.webp`;
+    q("[data-fc-name]")!.textContent = player.ko;
+    q("[data-fc-sub]")!.textContent = `#${player.num} ${player.en}`;
+    const labels = card.gk ? t.gkLabels : t.faceLabels;
+    const values = card.gk ? [card.gk.div, card.gk.han, card.gk.kic, card.gk.ref, card.gk.spd, card.gk.pos] : [card.pac, card.sho, card.pas, card.dri, card.def, card.phy];
+    const stats = q("[data-fc-stats]")!;
+    stats.textContent = "";
+    labels.forEach((label, i) => {
+      const row = document.createElement("div");
+      const v = values[i];
+      row.dataset.tier = v >= 75 ? "hi" : v >= 60 ? "mid" : "lo";
+      row.innerHTML = `<dd>${v}</dd><dt>${label}</dt>`;
+      stats.append(row);
+    });
+    q("[data-fc-meta]")!.textContent = cardLine(card);
+    const styles = q("[data-fc-styles]")!;
+    styles.textContent = card.styles.length ? `${t.playStyles}: ${card.styles.join(" · ")}` : "";
+    styles.hidden = !card.styles.length;
+  }
+
+  function fillLineup(): void {
+    lineup = bestFive(selected.num);
+    const list = q("[data-fc-lineup]");
+    if (list) {
+      list.textContent = "";
+      for (const p of lineup) {
+        const c = cardFor(p.num);
+        const li = document.createElement("li");
+        if (p.num === selected.num) li.dataset.captain = "true";
+        li.dataset.color = c.color;
+        li.innerHTML = `<img src="${assets}thumbs/${p.num}.webp" alt="" width="40" height="40" loading="lazy" /><span><b>${p.ko}</b><small>#${p.num} ${p.en}</small></span><em><strong>${c.ovr}</strong>${t.posLabel(c.pos)}</em>`;
+        list.append(li);
+      }
+    }
+    const ovr = q("[data-fc-team-ovr]");
+    if (ovr) ovr.textContent = String(teamOvr(lineup));
+  }
+
   function syncSelected(): void {
     for (const b of qa<HTMLButtonElement>("[data-h2h-player]")) {
       const on = Number(b.dataset.h2hPlayer) === selected.num;
       b.setAttribute("aria-pressed", String(on));
     }
     q("[data-h2h-selected]")!.textContent = `#${selected.num} ${selected.ko} · ${selected.en}`;
-    const img = q<HTMLImageElement>("[data-h2h-preview-img]");
-    if (img) img.src = `${assets}stickers/${selected.num}-home.webp`;
     const line = q("[data-h2h-preview-line]");
     if (line) line.textContent = t.seasonLine(selected.goals, selected.assists, selected.apps);
-    const bars = q("[data-h2h-preview-bars]");
-    if (bars) {
-      const stats = SQUAD.find((p) => p.num === selected.num);
-      bars.textContent = "";
-      if (stats) {
-        const values = [stats.goals / 12 + 0.35, stats.height / 210, (stats.goals * 2 + stats.assists + stats.apps / 8) / 28];
-        for (const v of values) {
-          const s = document.createElement("span");
-          s.style.setProperty("--v", String(Math.max(0.25, Math.min(0.9, v))));
-          bars.append(s);
-        }
-      }
-    }
+    fillCard(cardFor(selected.num), selected);
+    fillLineup();
   }
 
   function seoulRank(): number {
@@ -304,36 +329,51 @@ export function mountHeadToHead(root: HTMLElement): void {
     show("end");
   }
 
-  async function buildRenderer(opponent: OpponentSlug, kit: Kit): Promise<void> {
-    const head = await loadImage(`${assets}heads/${selected.num}.webp`);
-    const playerStrip = await loadImage(`${assets}players/${selected.num}-${kit}.webp`);
-    const sticker = await loadImage(`${assets}stickers/${selected.num}-${kit}.webp`);
-    const mascot = await loadImage(`${assets}mascots/${opponent}.webp`);
-    const stadium =
+  async function buildRenderer(players: SquadPlayer[], opponent: OpponentSlug, kit: Kit): Promise<void> {
+    const [strips, mascot, stadium] = await Promise.all([
+      Promise.all(players.map((p) => loadImage(`${assets}players/${p.num}-${kit}.webp`))),
+      loadImage(`${assets}mascots/${opponent}.webp`),
       kit === "home"
-        ? await loadImage(`${assets}stadium/mokdong.webp`)
-        : (await loadImage(`${assets}stadium/away-${opponent}.webp`)) ?? (await loadImage(`${assets}stadium/away.webp`));
-    const ball = await loadImage(`${playAssets}ball.webp`);
-    const images: H2HImages = { playerHead: head, playerStrip, playerSticker: sticker, mascot, stadium, ball };
-    renderer = new H2HRenderer(canvas, images, locale);
-    if (match) match.images = images;
+        ? loadImage(`${assets}stadium/mokdong.webp`)
+        : loadImage(`${assets}stadium/away-${opponent}.webp`).then((img) => img ?? loadImage(`${assets}stadium/away.webp`)),
+    ]);
+    const images: FcRenderImages = { strips, stripKeys: players.map((p) => `${p.num}-${kit}`), mascot, stadium };
+    renderer = new FcRenderer(
+      canvas,
+      images,
+      {
+        banner: t.fcBanners,
+        goal: t.goalBanner,
+        homeNames: players.map((p) => p.en),
+        homeNums: players.map((p) => p.num),
+        rivalName: OPPONENTS[opponent].name,
+      },
+      opponent,
+    );
     layout();
   }
 
   function layout(): void {
-    const box = q("[data-h2h-stage]")!;
-    let width = box.clientWidth;
-    if (compactLandscape.matches && (mode === "match" || mode === "paused")) {
-      width = Math.min(box.clientWidth, box.clientHeight * 16 / 9);
-    }
-    renderer?.resize(Math.max(300, width));
+    if (!renderer) return;
+    const stage = q("[data-h2h-stage]")!;
+    const inMatch = mode === "match" || mode === "paused";
+    if (coarse.matches && inMatch) {
+      const w = stage.clientWidth;
+      const h = stage.clientHeight;
+      if (portrait.matches) {
+        if (h >= w * 1.25) renderer.resize(w, "tall");
+        else renderer.resize(Math.min(w, h), "square");
+      } else renderer.resize(Math.min(w, h * 16 / 9), "wide");
+    } else renderer.resize(Math.max(260, stage.clientWidth), "wide");
   }
 
-  async function startMatch(opponent: OpponentSlug, kit: Kit, matchMode: "league" | "quick" | "ai" = "league"): Promise<void> {
+  async function startMatch(opponent: OpponentSlug, kit: Kit, matchMode: "league" | "quick"): Promise<void> {
     audio.unlock();
     audio.startMusic();
-    match = new H2HMatch({ player: selected, opponent, kit, mode: matchMode, seed: Date.now() % 100000 });
-    await buildRenderer(opponent, kit);
+    lineup = bestFive(selected.num);
+    matchMeta = { opponent, kit, mode: matchMode };
+    match = new FcMatch({ home: lineup, captain: selected.num, opponent, kit, mode: matchMode, seed: (Date.now() ^ Math.floor(Math.random() * 0x7fffffff)) >>> 0 });
+    await buildRenderer(lineup, opponent, kit);
     const playerHud = q("[data-h2h-hud-player]");
     if (playerHud) playerHud.textContent = `${selected.ko} · ${selected.en}`;
     const rivalName = q("[data-h2h-hud-rival-name]");
@@ -348,8 +388,9 @@ export function mountHeadToHead(root: HTMLElement): void {
       rivalAvatar.style.backgroundColor = OPPONENTS[opponent].color;
     }
     resultPending = false;
+    hintKey = "";
+    acc = 0;
     window.clearTimeout(resultTimer);
-    tally = newTally();
     if (matchMode === "quick") lastQuick = { opponent, kit };
     show("match");
     showVs(opponent, kit, matchMode);
@@ -359,7 +400,7 @@ export function mountHeadToHead(root: HTMLElement): void {
     return kit === "home" ? t.venueHome : t.venueAway(OPPONENTS[opponent].club);
   }
 
-  function showVs(opponent: OpponentSlug, kit: Kit, matchMode: "league" | "quick" | "ai"): void {
+  function showVs(opponent: OpponentSlug, kit: Kit, matchMode: "league" | "quick"): void {
     const vs = q<HTMLElement>("[data-h2h-vs]");
     if (!vs) return;
     const o = OPPONENTS[opponent];
@@ -367,12 +408,12 @@ export function mountHeadToHead(root: HTMLElement): void {
     const playerImg = q<HTMLImageElement>("[data-h2h-vs-player]");
     if (playerImg) playerImg.src = `${assets}stickers/${selected.num}-${kit}.webp`;
     q("[data-h2h-vs-player-name]")!.textContent = `#${selected.num} ${selected.ko}`;
-    q("[data-h2h-vs-player-sub]")!.textContent = `${selected.en} · ${selected.pos}`;
+    q("[data-h2h-vs-player-sub]")!.textContent = `${selected.en} · ${t.posLabel(cardFor(selected.num).pos)} · OVR ${teamOvr(lineup)}`;
     const rivalImg = q<HTMLImageElement>("[data-h2h-vs-rival]");
     if (rivalImg) rivalImg.src = `${assets}mascot-heads/${opponent}.webp`;
     q("[data-h2h-vs-rival-club]")!.textContent = o.club;
     q("[data-h2h-vs-rival-name]")!.textContent = o.korean;
-    q("[data-h2h-vs-rival-sub]")!.textContent = `${o.name} · ${o.kind[locale]}`;
+    q("[data-h2h-vs-rival-sub]")!.textContent = `${o.name} · OVR ${RIVAL_OVR[AI_TIER[opponent]]}`;
     const meta = q("[data-h2h-vs-meta]");
     if (meta) meta.textContent = matchMode === "league" ? `${t.roundOf(season.round + 1)} · ${venue(opponent, kit)}` : `${t.quickMatch} · ${venue(opponent, kit)}`;
     vs.hidden = true;
@@ -390,6 +431,12 @@ export function mountHeadToHead(root: HTMLElement): void {
     vsActive = false;
     window.clearTimeout(vsTimer);
   }
+
+  function pauseToggle(): void {
+    if (mode === "match") show("paused");
+    else if (mode === "paused") show("match");
+  }
+  controls.onPause = pauseToggle;
 
   for (const b of qa<HTMLButtonElement>("[data-h2h-player]")) b.addEventListener("click", () => {
     selected = SQUAD.find((p) => p.num === Number(b.dataset.h2hPlayer)) ?? selected;
@@ -431,7 +478,7 @@ export function mountHeadToHead(root: HTMLElement): void {
   for (const b of qa<HTMLButtonElement>("[data-h2h-quick]")) b.addEventListener("click", () => {
     void startMatch(b.dataset.h2hQuick as OpponentSlug, quickKit, "quick");
   });
-  q("[data-h2h-pause]")?.addEventListener("click", () => show(mode === "paused" ? "match" : "paused"));
+  q("[data-h2h-pause]")?.addEventListener("click", pauseToggle);
   q("[data-h2h-mute]")?.addEventListener("click", () => {
     audio.setMuted(!audio.muted);
     const btn = q("[data-h2h-mute]");
@@ -439,7 +486,7 @@ export function mountHeadToHead(root: HTMLElement): void {
   });
   q("[data-h2h-resume]")?.addEventListener("click", () => show("match"));
   q("[data-h2h-result-continue]")?.addEventListener("click", () => {
-    if (match?.mode === "quick") {
+    if (matchMeta.mode === "quick") {
       show("quick");
       return;
     }
@@ -451,58 +498,77 @@ export function mountHeadToHead(root: HTMLElement): void {
     if (lastQuick) void startMatch(lastQuick.opponent, lastQuick.kit, "quick");
   });
   q("[data-h2h-menu]")?.addEventListener("click", () => {
-    if (match?.phase === "ended") return;
-    if (match?.mode === "quick") {
+    if (match?.state.phase === "ended") return;
+    match = null;
+    if (matchMeta.mode === "quick") {
       show("quick");
       return;
     }
     renderSeason();
     show("season");
   });
-  window.addEventListener("resize", layout);
+  window.addEventListener("resize", () => requestAnimationFrame(layout));
+  portrait.addEventListener?.("change", () => requestAnimationFrame(layout));
   window.addEventListener("keydown", (e) => {
     if (vsActive && !vsHold) {
       hideVs();
       return;
     }
-    if ((e.key === "p" || e.key === "Escape") && (mode === "match" || mode === "paused")) show(mode === "match" ? "paused" : "match");
+    if ((e.key === "p" || e.key === "Escape") && (mode === "match" || mode === "paused")) pauseToggle();
   });
   root.addEventListener("pointerdown", () => {
     if (vsActive && !vsHold) hideVs();
   });
+  document.addEventListener("visibilitychange", () => {
+    audio.suspend(document.hidden);
+    if (document.hidden && mode === "match") show("paused");
+  });
 
-  function updateHud(): void {
-    if (!match) return;
-    q("[data-h2h-clock]")!.textContent = match.goldenGoal ? "GG" : `${Math.floor(match.clock / 60)}:${String(Math.ceil(match.clock % 60)).padStart(2, "0")}`;
-    q("[data-h2h-score]")!.textContent = `${match.score.left} : ${match.score.right}`;
-    q("[data-h2h-power]")!.style.setProperty("--p", String(match.left.power));
-    q("[data-h2h-rival-power]")!.style.setProperty("--p", String(match.right.power));
+  function minuteLabel(s: FcState): string {
+    if (s.phase === "halftime") return t.halfTimeShort;
+    if (s.goldenGoal || s.minute >= 90) return "90+'";
+    return `${Math.max(0, s.minute)}'`;
   }
 
-  function track(m: H2HMatch): void {
-    for (const side of ["left", "right"] as const) {
-      const b = m[side];
-      if (b.headerT > tally.prevHeader[side] + 0.001) tally[side].headers += 1;
-      tally.prevHeader[side] = b.headerT;
-      if (b.kickHit && !tally.prevKickHit[side]) tally[side].kicks += 1;
-      tally.prevKickHit[side] = b.kickHit;
-      while (m.score[side] > tally.prevScore[side]) {
-        tally.prevScore[side] += 1;
-        tally[side].goals.push(m.goldenGoal ? "90+'" : `${Math.max(1, Math.min(90, Math.ceil(m.elapsed)))}'`);
-      }
-    }
-    for (const ev of m.events) if (ev.type === "power" && ev.by) tally[ev.by].power += 1;
-    if (m.phase === "play") {
-      tally.playT += STEP;
-      if (m.ball.x > WORLD_W / 2) tally.territory += STEP;
+  function updateHud(s: FcState): void {
+    q("[data-h2h-clock]")!.textContent = minuteLabel(s);
+    q("[data-h2h-score]")!.textContent = `${s.score.home} : ${s.score.away}`;
+  }
+
+  function updateTouch(s: FcState): void {
+    const sp = s.setPiece;
+    const homeSetPiece = s.phase === "restart" && sp && sp.side === "home";
+    if (homeSetPiece && sp) controls.setLabels(t.btnSetPiece(sp.type, sp.direct));
+    else if (s.ball.owner?.side === "away") controls.setLabels(t.btnDefend);
+    else controls.setLabels(t.btnAttack);
+    const hint = q("[data-h2h-hint]");
+    if (!hint) return;
+    const key = homeSetPiece && sp ? `${sp.type}-${sp.direct}` : "";
+    if (key === hintKey) return;
+    hintKey = key;
+    hint.hidden = !key;
+    if (key && sp) {
+      q("[data-h2h-hint-text]")!.textContent = t.setPieceHint(sp.type as RestartType, sp.direct);
     }
   }
 
-  function setStat(key: string, home: number, rival: number, suffix = ""): void {
+  function sounds(events: FcEvent[]): void {
+    for (const ev of events) {
+      if (ev.type === "pass" || ev.type === "through" || ev.type === "lob") audio.boot();
+      else if (ev.type === "shot" || ev.type === "header") audio.kick();
+      else if (ev.type === "goal") audio.goal();
+      else if (ev.type === "save" || ev.type === "catch") audio.save();
+      else if (ev.type === "post") audio.post();
+      else if (ev.type === "tackle") audio.slide();
+      else if (ev.type === "foul" || ev.type === "halftime" || ev.type === "fulltime") audio.whistle();
+    }
+  }
+
+  function setStat(key: string, homeText: string, rivalText: string, home: number, rival: number): void {
     const row = q(`[data-h2h-stat='${key}']`);
     if (!row) return;
-    row.querySelector("[data-h2h-stat-home]")!.textContent = `${home}${suffix}`;
-    row.querySelector("[data-h2h-stat-rival]")!.textContent = `${rival}${suffix}`;
+    row.querySelector("[data-h2h-stat-home]")!.textContent = homeText;
+    row.querySelector("[data-h2h-stat-rival]")!.textContent = rivalText;
     row.style.setProperty("--l", "0.5");
     const share = home + rival > 0 ? home / (home + rival) : 0.5;
     requestAnimationFrame(() => requestAnimationFrame(() => row.style.setProperty("--l", share.toFixed(3))));
@@ -511,18 +577,19 @@ export function mountHeadToHead(root: HTMLElement): void {
   function finishResult(): void {
     if (!match || resultPending) return;
     resultPending = true;
-    audio.whistle();
     const done = match;
     window.clearTimeout(resultTimer);
     resultTimer = window.setTimeout(() => showResult(done), RESULT_DELAY_MS);
   }
 
-  function showResult(m: H2HMatch): void {
-    const o = OPPONENTS[m.opponent];
-    const gf = m.score.left;
-    const ga = m.score.right;
+  function showResult(m: FcMatch): void {
+    const s = m.state;
+    const { opponent, kit } = matchMeta;
+    const o = OPPONENTS[opponent];
+    const gf = s.score.home;
+    const ga = s.score.away;
     const outcome = gf > ga ? "win" : gf === ga ? "draw" : "loss";
-    const league = m.mode === "league";
+    const league = matchMeta.mode === "league";
     const round = season.round + 1;
     if (league) {
       season = applyRound(season, gf, ga);
@@ -533,26 +600,30 @@ export function mountHeadToHead(root: HTMLElement): void {
     screen.dataset.outcome = outcome;
     screen.style.setProperty("--rival", o.color);
     q("[data-h2h-result-banner]")!.textContent = t.banner[outcome];
-    q("[data-h2h-result-meta]")!.textContent = league ? `${t.roundOf(round)} · ${venue(m.opponent, m.kit)}` : `${t.quickMatch} · ${venue(m.opponent, m.kit)}`;
+    q("[data-h2h-result-meta]")!.textContent = league ? `${t.roundOf(round)} · ${venue(opponent, kit)}` : `${t.quickMatch} · ${venue(opponent, kit)}`;
     const homeImg = q<HTMLImageElement>("[data-h2h-result-home-img]");
     if (homeImg) homeImg.src = `${assets}heads/${selected.num}.webp`;
     q("[data-h2h-result-home-name]")!.textContent = `#${selected.num} ${selected.ko}`;
     const rivalImg = q<HTMLImageElement>("[data-h2h-result-rival-img]");
-    if (rivalImg) rivalImg.src = `${assets}mascot-heads/${m.opponent}.webp`;
+    if (rivalImg) rivalImg.src = `${assets}mascot-heads/${opponent}.webp`;
     q("[data-h2h-result-rival-name]")!.textContent = `${o.name} ${o.korean}`;
-    q("[data-h2h-result-home-goals]")!.textContent = tally.left.goals.length ? `⚽ ${tally.left.goals.join(" ")}` : "";
-    q("[data-h2h-result-rival-goals]")!.textContent = tally.right.goals.length ? `⚽ ${tally.right.goals.join(" ")}` : "";
+    q("[data-h2h-result-home-goals]")!.textContent = s.stats.home.goals.length ? `⚽ ${s.stats.home.goals.join(" ")}` : "";
+    q("[data-h2h-result-rival-goals]")!.textContent = s.stats.away.goals.length ? `⚽ ${s.stats.away.goals.join(" ")}` : "";
     q("[data-h2h-result-score]")!.textContent = `${gf} : ${ga}`;
     const pts = gf > ga ? 3 : gf === ga ? 1 : 0;
     const pill = q("[data-h2h-result-points]")!;
     pill.textContent = t.pointsShort(pts);
     pill.hidden = !league;
     q("[data-h2h-result-line]")!.textContent = outcome === "win" ? t.winLine(`#${selected.num} ${selected.ko}`) : outcome === "loss" ? t.lossLine(o.name) : t.drawLine;
-    setStat("kicks", tally.left.kicks, tally.right.kicks);
-    setStat("headers", tally.left.headers, tally.right.headers);
-    setStat("power", tally.left.power, tally.right.power);
-    const terr = tally.playT > 0 ? Math.round((tally.territory / tally.playT) * 100) : 50;
-    setStat("territory", terr, 100 - terr, "%");
+    const h = s.stats.home;
+    const a = s.stats.away;
+    const possTotal = h.possession + a.possession;
+    const poss = possTotal > 0 ? Math.round((h.possession / possTotal) * 100) : 50;
+    setStat("possession", `${poss}%`, `${100 - poss}%`, poss, 100 - poss);
+    setStat("shots", `${h.shots} (${h.onTarget})`, `${a.shots} (${a.onTarget})`, h.shots, a.shots);
+    setStat("passes", `${h.passesDone}/${h.passes}`, `${a.passesDone}/${a.passes}`, h.passesDone, a.passesDone);
+    setStat("tackles", String(h.tackles), String(a.tackles), h.tackles, a.tackles);
+    setStat("corners", String(h.corners), String(a.corners), h.corners, a.corners);
     const mini = q("[data-h2h-result-mini]")!;
     mini.hidden = !league;
     if (league) {
@@ -574,36 +645,43 @@ export function mountHeadToHead(root: HTMLElement): void {
       });
     }
     const rematch = q("[data-h2h-rematch]");
-    if (rematch) rematch.hidden = m.mode !== "quick";
+    if (rematch) rematch.hidden = matchMeta.mode !== "quick";
     confetti(q("[data-h2h-result-confetti]"), outcome === "win" ? 46 : 0);
     if (outcome === "win") audio.levelUp();
     else if (outcome === "loss") audio.miss();
     show("result");
   }
 
+  function stepMatch(m: FcMatch, n: number): void {
+    for (let i = 0; i < n; i++) {
+      m.step(controls.frame());
+      renderer?.onEvents(m.state.events, m.state);
+      sounds(m.state.events);
+      if (m.state.phase === "ended") {
+        finishResult();
+        break;
+      }
+    }
+  }
+
   function frame(now: number): void {
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
-    if (mode === "match" && match && !vsActive && !qaPaused) {
+    const running = mode === "match" && match && !vsActive && !qaPaused;
+    if (running && match) {
       acc += dt;
-      while (acc >= STEP) {
-        const ai = match.aiInput("right", STEP);
-        match.step(STEP, controls.frame(), ai);
-        track(match);
-        for (const ev of match.events) {
-          if (ev.type === "kick") audio.boot();
-          if (ev.type === "goal") audio.goal();
-          if (ev.type === "power") audio.powerShot();
-          if (ev.type === "pickup") audio.pickup();
-          if (ev.type === "post") audio.post();
-        }
-        if (match.phase === "ended") finishResult();
-        acc -= STEP;
+      let steps = 0;
+      while (acc >= FC_STEP && steps < 5) {
+        stepMatch(match, 1);
+        acc -= FC_STEP;
+        steps++;
       }
+      if (steps >= 5) acc = 0;
     }
-    if (match && (mode === "match" || mode === "paused")) {
-      renderer?.draw(match);
-      updateHud();
+    if (match && renderer && (mode === "match" || mode === "paused")) {
+      renderer.draw(match.state, running ? dt : 0);
+      updateHud(match.state);
+      updateTouch(match.state);
     }
     raf = requestAnimationFrame(frame);
   }
@@ -612,14 +690,20 @@ export function mountHeadToHead(root: HTMLElement): void {
   renderSeason();
   show("select");
   raf = requestAnimationFrame(frame);
-  document.addEventListener("visibilitychange", () => audio.suspend(document.hidden));
 
+  const toSide = (side: string): Side => (side === "left" || side === "home" ? "home" : "away");
   const api = {
     get match() {
       return match;
     },
+    get state() {
+      return match?.state ?? null;
+    },
     get season() {
       return season;
+    },
+    get lineup() {
+      return lineup.map((p) => p.num);
     },
     startSeason: () => {
       season = newSeason(selected, 2026 + selected.num);
@@ -629,30 +713,25 @@ export function mountHeadToHead(root: HTMLElement): void {
     },
     startQuick: (opponent: OpponentSlug = "ansan-greeners", kit: Kit = "home") => startMatch(opponent, kit, "quick"),
     simulateAiMatch: (seed = 1, opponent: OpponentSlug = "ansan-greeners") => simulateAiMatch(selected, opponent, seed),
-    hitboxes: () => hitboxes(match),
-    debug: (on: boolean) => {
-      renderer?.setDebug(!!on);
-      if (match) renderer?.draw(match);
-    },
     pause: (on: boolean) => {
       qaPaused = !!on;
-      if (match) renderer?.draw(match);
+    },
+    step: (n = 1) => {
+      if (match) stepMatch(match, n);
     },
     endNow: () => {
-      if (match) {
-        match.elapsed = 90;
-        match.step(STEP, blankInput(), blankInput());
-        track(match);
-      }
-    },
-    forceGoal: (side: "left" | "right") => {
       if (!match) return;
-      match.ball.x = side === "left" ? 1510 : 90;
-      match.ball.y = 705;
-      match.ball.vx = side === "left" ? 360 : -360;
-      match.ball.vy = 0;
-      match.step(STEP, blankInput(), blankInput());
-      track(match);
+      match.endNow();
+      stepMatch(match, 1);
+      if (match.state.phase === "ended") finishResult();
+    },
+    forceGoal: (side: string) => {
+      if (!match) return;
+      match.forceGoal(toSide(side));
+      stepMatch(match, 1);
+    },
+    debugRestart: (type: RestartType, side: string = "home") => {
+      match?.debugRestart(type, toSide(side));
     },
     setSeasonRound: (n: number) => {
       season.round = Math.max(0, Math.min(16, Math.floor(n)));
@@ -676,42 +755,12 @@ export function mountHeadToHead(root: HTMLElement): void {
       renderSeason();
       showEnd();
     },
+    blankInput: () => blankFcInput(),
     destroy: () => cancelAnimationFrame(raf),
   };
   if (new URLSearchParams(location.search).has("qa")) (window as unknown as { __h2h?: typeof api }).__h2h = api;
 }
 
-export function simulateAiMatch(player: SquadPlayer, opponent: OpponentSlug, seed: number): H2HMatch {
-  const m = new H2HMatch({ player, opponent, kit: "home", mode: "ai", seed });
-  m.start();
-  let guard = 0;
-  while (m.phase !== "ended" && guard++ < 60 * 260) {
-    const left = m.aiInput("left", STEP);
-    const right = m.aiInput("right", STEP);
-    m.step(STEP, left, right);
-  }
-  return m;
-}
-
-export function makeBlankInput(): InputState {
-  return blankInput();
-}
-
-function hitboxes(match: H2HMatch | null) {
-  if (!match) return null;
-  const body = (b: Body) => {
-    const h = headCenter(b);
-    return {
-      x: b.x - b.w / 2,
-      y: b.y - b.h,
-      w: b.w,
-      h: b.h,
-      head: { x: h.x, y: h.y, r: b.headR * (b.bigHeadT > 0 ? 1.3 : 1) },
-    };
-  };
-  return {
-    left: body(match.left),
-    right: body(match.right),
-    ball: { x: match.ball.x, y: match.ball.y, r: match.ball.r },
-  };
+export function simulateAiMatch(player: SquadPlayer, opponent: OpponentSlug, seed: number): FcMatch {
+  return simulateFcMatch({ home: bestFive(player.num), captain: player.num, opponent, kit: "home", mode: "ai", seed });
 }

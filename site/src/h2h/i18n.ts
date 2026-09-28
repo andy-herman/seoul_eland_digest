@@ -1,4 +1,13 @@
 import type { Locale } from "./data";
+import type { FcEventType, RestartType } from "./fc/types";
+import type { FcPos } from "./ratings";
+
+export interface FcButtonLabels {
+  pass: string;
+  shoot: string;
+  lob: string;
+  through: string;
+}
 
 export type EndVariant = "champion" | "runnerUp" | "playoff" | "mid" | "relegation";
 
@@ -87,24 +96,50 @@ export interface H2HStrings {
   zoneRelegation: string;
   roundShort: (n: number) => string;
   vsLabel: (opponent: string) => string;
+  statPossession: string;
+  statShots: string;
+  statPasses: string;
+  statTackles: string;
+  statCorners: string;
+  goalBanner: string;
+  fcBanners: Partial<Record<FcEventType, string>>;
+  btnAttack: FcButtonLabels;
+  btnDefend: FcButtonLabels;
+  btnSetPiece: (type: RestartType, direct: boolean) => FcButtonLabels;
+  sprint: string;
+  setPieceHint: (type: RestartType, direct: boolean) => string;
+  keysHint: string;
+  faceLabels: [string, string, string, string, string, string];
+  gkLabels: [string, string, string, string, string, string];
+  posLabel: (pos: FcPos) => string;
+  footLabel: (foot: "L" | "R") => string;
+  skillMoves: string;
+  weakFoot: string;
+  playStyles: string;
+  yourFive: string;
+  teamOvr: string;
+  cardNote: string;
+  halfTimeShort: string;
   controls: string;
   credits: string;
 }
 
+const PT_POS = { GK: "GOL", CB: "ZAG", LB: "LE", RB: "LD", LWB: "ALE", RWB: "ALD", CDM: "VOL", CM: "MC", CAM: "MEI", LM: "ME", RM: "MD", LW: "PE", RW: "PD", CF: "SA", ST: "ATA" };
+
 export const H2H_STRINGS: Record<Locale, H2HStrings> = {
   en: {
     pageTitle: "Head-to-Head League | Seoul E-Land Digest",
-    pageDescription: "A Head Soccer style Seoul E-Land game: pick a 2026 player and play a 16-match K League 2 mascot season.",
+    pageDescription: "An arcade five-a-side Seoul E-Land game: lead the real 2026 squad against the K League 2 mascots, pass, cross, shoot and take corners through a 16-match season.",
     eyebrow: "New browser game",
     heading: "Head-to-Head League",
-    intro: "Pick a 2026 Seoul E-Land player, take on the mascots of the other K League 2 clubs, and climb a live 17-team table.",
+    intro: "Pick a 2026 Seoul E-Land player to captain a five-a-side team of the real squad. Pass, cross, shoot and take corners against the mascots of the other K League 2 clubs, and climb a live 17-team table.",
     loading: "Inflating the match ball...",
     translateLabel: "Português",
     translateAria: "Play in Portuguese",
     season: "League season",
     quick: "Quick match",
     playerSelect: "Choose your player",
-    playerHelp: "Every player is viable. Speed, jump and shot are derived from position, height and 2026 production.",
+    playerHelp: "Your pick captains the team and plays in the five. Every player has an FC-style card from 2026 form and past EA ratings.",
     seasonLine: (g, a, apps) => `2026: ${g} goals, ${a} assists, ${apps} apps`,
     nextFixture: "Next fixture",
     table: "League table",
@@ -177,23 +212,55 @@ export const H2H_STRINGS: Record<Locale, H2HStrings> = {
     zoneRelegation: "Relegation playoff",
     roundShort: (n) => `R${n}`,
     vsLabel: (opponent) => `vs ${opponent}`,
-    controls: "Keyboard: A/D or arrows move, W/↑ jump, S/↓/Space kick, F/Shift power, P/Esc pause. On phones, use the buttons around the pitch.",
+    statPossession: "Possession",
+    statShots: "Shots (on target)",
+    statPasses: "Passes completed",
+    statTackles: "Tackles won",
+    statCorners: "Corners",
+    goalBanner: "GOAL!",
+    fcBanners: { corner: "Corner", freekick: "Free kick", penalty: "Penalty!", throwin: "Throw-in", goalkick: "Goal kick", save: "Save!", catch: "Caught!", post: "Off the post!", halftime: "Half time", fulltime: "Full time", kickoff: "Kick off" },
+    btnAttack: { pass: "Pass", shoot: "Shoot", lob: "Lob", through: "Through" },
+    btnDefend: { pass: "Switch", shoot: "Tackle", lob: "Slide", through: "Press" },
+    btnSetPiece: (type, direct) => (type === "penalty" ? { pass: "-", shoot: "Shoot", lob: "-", through: "-" } : { pass: type === "throwin" ? "Throw" : "Short", shoot: direct ? "Shoot" : "-", lob: type === "corner" ? "Cross" : type === "throwin" ? "Long" : "Long ball", through: "-" }),
+    sprint: "Sprint",
+    setPieceHint: (type, direct) =>
+      ({
+        corner: "Corner: aim with the stick, hold Lob and release to cross. Pass plays it short.",
+        freekick: direct ? "Free kick in range: aim, then hold Shoot and release. Pass plays it short, Lob crosses." : "Free kick: aim, then Pass short or hold Lob for a long ball.",
+        penalty: "Penalty: aim across the goal, then hold Shoot and release.",
+        throwin: "Throw-in: aim with the stick, then Pass. Lob throws it long.",
+        goalkick: "Goal kick: aim, then Pass short or hold Lob to go long.",
+        kickoff: "Kick off: press Pass to start.",
+      })[type] + " It plays itself after 5 seconds.",
+    keysHint: "Keys: J pass · K shoot · L lob · I through · Shift sprint",
+    faceLabels: ["PAC", "SHO", "PAS", "DRI", "DEF", "PHY"],
+    gkLabels: ["DIV", "HAN", "KIC", "REF", "SPD", "POS"],
+    posLabel: (pos) => pos,
+    footLabel: (foot) => (foot === "L" ? "Left foot" : "Right foot"),
+    skillMoves: "Skill moves",
+    weakFoot: "Weak foot",
+    playStyles: "PlayStyles",
+    yourFive: "Your five",
+    teamOvr: "Team OVR",
+    cardNote: "Fan-made FC-style ratings from 2026 form and past EA SPORTS FC cards, not official EA data.",
+    halfTimeShort: "HT",
+    controls: "Keyboard: WASD or the arrows move, Shift sprints. J or Z passes (switches player when defending), K, X or Space shoots (tackles), L or C lobs and crosses (slide tackle), I or V plays a through ball (sends a teammate to press). Hold Shoot or Lob for more power. P or Esc pauses. Gamepad: A pass, B shoot, X lob, Y through, RT sprint. On phones and tablets: the stick on the left, the four buttons on the right.",
     credits:
-      "Players and kits from Seoul E-Land FC's 2026 squad and New Balance Gradient of Motion kits. Player characters drawn with Kling AI from the club's 2026 profile photos. Mascots belong to Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008 and Gimhae City, Gimpo FC and Gimpo City, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings and Yongin FC, and are used with permission. Song 서울의 노래 (2024 ver.) used with Seoul E-Land FC's permission. Fan-made game, not an official club product.",
+      "Players and kits from Seoul E-Land FC's 2026 squad and New Balance Gradient of Motion kits. Player characters drawn with Kling AI from the club's 2026 profile photos. Mascots belong to Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008 and Gimhae City, Gimpo FC and Gimpo City, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings and Yongin FC, and are used with permission. Song 서울의 노래 (2024 ver.) used with Seoul E-Land FC's permission. Player ratings are fan-made FC-style cards, not official EA SPORTS FC data. Fan-made game, not an official club product.",
   },
   pt: {
     pageTitle: "Liga Cabeça a Cabeça | Seoul E-Land Digest",
-    pageDescription: "Um jogo no estilo Head Soccer do Seoul E-Land: escolha um jogador de 2026 e dispute uma temporada contra os mascotes da K League 2.",
+    pageDescription: "Um futebol de cinco em estilo arcade do Seoul E-Land: comande o elenco real de 2026 contra os mascotes da K League 2, com passes, cruzamentos, chutes e escanteios em 16 rodadas.",
     eyebrow: "Novo jogo no navegador",
     heading: "Liga Cabeça a Cabeça",
-    intro: "Escolha um jogador do Seoul E-Land 2026, enfrente os mascotes dos outros clubes da K League 2 e suba numa tabela com 17 times.",
+    intro: "Escolha um jogador do Seoul E-Land 2026 para ser o capitão de um time de cinco com o elenco real. Passe, cruze, chute e cobre escanteios contra os mascotes dos outros clubes da K League 2 e suba numa tabela com 17 times.",
     loading: "Enchendo a bola do jogo...",
     translateLabel: "English",
     translateAria: "Jogar em inglês",
     season: "Temporada da liga",
     quick: "Jogo rápido",
     playerSelect: "Escolha o jogador",
-    playerHelp: "Todos são competitivos. Velocidade, salto e chute vêm de posição, altura e produção em 2026.",
+    playerHelp: "Seu escolhido é o capitão e joga no quinteto. Cada jogador tem uma carta no estilo FC com base em 2026 e em notas antigas da EA.",
     seasonLine: (g, a, apps) => `2026: ${g} gols, ${a} assistências, ${apps} jogos`,
     nextFixture: "Próximo jogo",
     table: "Tabela da liga",
@@ -266,8 +333,40 @@ export const H2H_STRINGS: Record<Locale, H2HStrings> = {
     zoneRelegation: "Play-off de rebaixamento",
     roundShort: (n) => `R${n}`,
     vsLabel: (opponent) => `contra ${opponent}`,
-    controls: "Teclado: A/D ou setas movem, W/↑ pula, S/↓/Espaço chuta, F/Shift usa o especial, P/Esc pausa. No celular, use os botões em volta do campo.",
+    statPossession: "Posse de bola",
+    statShots: "Chutes (no gol)",
+    statPasses: "Passes certos",
+    statTackles: "Desarmes",
+    statCorners: "Escanteios",
+    goalBanner: "GOL!",
+    fcBanners: { corner: "Escanteio", freekick: "Falta", penalty: "Pênalti!", throwin: "Lateral", goalkick: "Tiro de meta", save: "Defesa!", catch: "Segurou!", post: "Na trave!", halftime: "Intervalo", fulltime: "Fim de jogo", kickoff: "Saída de bola" },
+    btnAttack: { pass: "Passe", shoot: "Chute", lob: "Lançar", through: "Enfiada" },
+    btnDefend: { pass: "Trocar", shoot: "Desarme", lob: "Carrinho", through: "Pressão" },
+    btnSetPiece: (type, direct) => (type === "penalty" ? { pass: "-", shoot: "Chute", lob: "-", through: "-" } : { pass: type === "throwin" ? "Cobrar" : "Curto", shoot: direct ? "Chute" : "-", lob: type === "corner" ? "Cruzar" : type === "throwin" ? "Longo" : "Lançar", through: "-" }),
+    sprint: "Correr",
+    setPieceHint: (type, direct) =>
+      ({
+        corner: "Escanteio: mire com o direcional, segure Lançar e solte para cruzar. Passe cobra curto.",
+        freekick: direct ? "Falta perto do gol: mire, segure Chute e solte. Passe cobra curto, Lançar cruza." : "Falta: mire e toque Passe para jogar curto ou segure Lançar para uma bola longa.",
+        penalty: "Pênalti: mire no gol, segure Chute e solte.",
+        throwin: "Lateral: mire com o direcional e toque Passe. Lançar cobra longo.",
+        goalkick: "Tiro de meta: mire e toque Passe para sair curto ou segure Lançar para bola longa.",
+        kickoff: "Saída de bola: toque Passe para começar.",
+      })[type] + " Depois de 5 segundos a cobrança sai sozinha.",
+    keysHint: "Teclas: J passe · K chute · L lançar · I enfiada · Shift correr",
+    faceLabels: ["RIT", "FIN", "PAS", "DRI", "DEF", "FÍS"],
+    gkLabels: ["ELA", "MAN", "CHU", "REF", "VEL", "POS"],
+    posLabel: (pos) => (PT_POS as Record<string, string>)[pos] ?? pos,
+    footLabel: (foot) => (foot === "L" ? "Pé esquerdo" : "Pé direito"),
+    skillMoves: "Dribles",
+    weakFoot: "Perna ruim",
+    playStyles: "Estilos de jogo",
+    yourFive: "Seu quinteto",
+    teamOvr: "Geral do time",
+    cardNote: "Notas no estilo FC feitas por fãs, com base na temporada 2026 e em cartas antigas do EA SPORTS FC. Não são dados oficiais da EA.",
+    halfTimeShort: "INT",
+    controls: "Teclado: WASD ou as setas movem, Shift corre. J ou Z passa (troca de jogador na defesa), K, X ou Espaço chuta (desarma), L ou C lança e cruza (carrinho), I ou V dá a enfiada (manda um companheiro pressionar). Segure Chute ou Lançar para mais força. P ou Esc pausa. Controle: A passe, B chute, X lançar, Y enfiada, RT correr. No celular e no tablet: o direcional à esquerda e os quatro botões à direita.",
     credits:
-      "Jogadores e uniformes do elenco 2026 do Seoul E-Land FC e da coleção New Balance Gradient of Motion. Personagens dos jogadores desenhados com Kling AI a partir das fotos oficiais do clube em 2026. Os mascotes pertencem a Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008 e cidade de Gimhae, Gimpo FC e cidade de Gimpo, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings e Yongin FC, e são usados com permissão. Música 서울의 노래 (versão 2024) usada com permissão do Seoul E-Land FC. Jogo de fã, não é um produto oficial do clube.",
+      "Jogadores e uniformes do elenco 2026 do Seoul E-Land FC e da coleção New Balance Gradient of Motion. Personagens dos jogadores desenhados com Kling AI a partir das fotos oficiais do clube em 2026. Os mascotes pertencem a Ansan Greeners FC, Busan IPark, Cheonan City FC, Chungbuk Cheongju FC, Chungnam Asan FC, Daegu FC, Gimhae FC 2008 e cidade de Gimhae, Gimpo FC e cidade de Gimpo, Gyeongnam FC, Hwaseong FC, Jeonnam Dragons, Paju Frontier FC, Seongnam FC, Suwon FC, Suwon Samsung Bluewings e Yongin FC, e são usados com permissão. Música 서울의 노래 (versão 2024) usada com permissão do Seoul E-Land FC. As notas dos jogadores são cartas no estilo FC feitas por fãs, não dados oficiais do EA SPORTS FC. Jogo de fã, não é um produto oficial do clube.",
   },
 };

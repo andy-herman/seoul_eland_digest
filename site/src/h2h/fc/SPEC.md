@@ -125,3 +125,25 @@ export function simulateFcMatch(opts: FcMatchOptions): FcMatch // AI vs AI to fu
 ```
 The engine must be DOM-free and deterministic (use `rng()` from data.ts with `opts.seed`).
 No canvas, images or DOM: the renderer and UI are separate files owned by Copilot.
+
+## Status (2026-09-27)
+
+The engine in `sim.ts` was rewritten by Copilot after five agent rounds, keeping the contract above:
+interception-aware passing (`laneMargin` compares the ball's arrival time with every defender's),
+receivers and chasers moving to the predicted ball path, a keeper who reacts, misreads and dives with a
+limited reach, physical tackles (ball first or foul), blocks, headers only in the jump window, and
+restarts from real out-of-play. Tier differences come only from `FC_AI` and `RIVAL_OVR`.
+
+With a real user the home AI teammates play like tier 3 and the keeper like tier 4 (`HUMAN_SUPPORT`),
+so the user's own decisions decide matches. Latest headless run (200 matches per tier, bestFive(16)):
+
+| Away tier | W-D-L | Win | Loss | Goals / match |
+|---|---|---|---|---|
+| T1 | 163-22-15 | 0.82 | 0.08 | 3.5 |
+| T2 | 101-38-61 | 0.51 | 0.31 | 3.1 |
+| T3 | 66-45-89 | 0.33 | 0.45 | 3.0 |
+| T4 | 47-35-118 | 0.24 | 0.59 | 3.3 |
+
+Mirror split 0.47, pass completion 55 to 68 percent, about 2 throw-ins, 0.7 corners, 1 foul, 5 headers
+and 5 saves per match. A scripted human (FcInput only, defending goal side) wins 90, 57, 53 and 45
+percent against T1 to T4; with no input at all the user's team loses every match.

@@ -2,7 +2,8 @@
 import TranslateButton from "./TranslateButton.astro";
 import { withBase } from "../lib/paths";
 import { H2H_STRINGS } from "../h2h/i18n";
-import { OPPONENTS, OPPONENT_SLUGS, SQUAD, playerStats, type Locale } from "../h2h/data";
+import { OPPONENTS, OPPONENT_SLUGS, SQUAD, type Locale } from "../h2h/data";
+import { CARDS, bestFive, teamOvr } from "../h2h/ratings";
 
 interface Props {
   locale?: Locale;
@@ -12,6 +13,9 @@ const { locale = "en" } = Astro.props;
 const t = H2H_STRINGS[locale];
 const isPt = locale === "pt";
 const asset = (file: string) => withBase(`/play/h2h/${file}`);
+const first = SQUAD[0];
+const firstCard = CARDS[first.num];
+const firstFive = bestFive(first.num);
 const groups = [
   { id: "GK", label: "GK", positions: ["GK"] },
   { id: "DF", label: "DF", positions: ["DF"] },
@@ -39,17 +43,16 @@ const groups = [
   <section class="h2h-game" data-h2h-root data-locale={locale} data-assets={asset("")} data-play-assets={withBase("/play/")} data-music={withBase("/play/seoul-song-2024.mp3")}>
     <div class="h2h-hud" data-h2h-hud hidden>
       <span class="h2h-hud-team"><span class="h2h-hud-head" data-side="home"></span><span>SEOUL E-LAND<small data-h2h-hud-player>서울 이랜드</small></span></span>
-      <span class="h2h-clock" data-h2h-clock>1:30</span>
+      <span class="h2h-clock" data-h2h-clock>0'</span>
       <strong data-h2h-score>0 : 0</strong>
       <span class="h2h-hud-team h2h-hud-rival"><span><b data-h2h-hud-rival-name>RONNY</b><small data-h2h-hud-rival-ko>로니</small></span><span class="h2h-hud-head" data-side="rival"></span></span>
-      <span class="h2h-meter"><span data-h2h-power style="--p:0"></span></span>
-      <span class="h2h-meter h2h-meter-rival"><span data-h2h-rival-power style="--p:0"></span></span>
       <button type="button" data-h2h-mute aria-label="Sound">♪</button>
       <button type="button" data-h2h-pause>{t.pause}</button>
     </div>
 
     <div class="h2h-stage" data-h2h-stage>
       <canvas data-h2h-canvas width="1600" height="900" aria-label={t.heading}></canvas>
+      <div class="h2h-hint" data-h2h-hint hidden><p data-h2h-hint-text></p><p class="h2h-hint-keys">{t.keysHint}</p></div>
 
       <div class="h2h-screen" data-h2h-screen="loading"><p>{t.loading}</p></div>
 
@@ -57,11 +60,22 @@ const groups = [
         <h2>{t.playerSelect}</h2>
         <p>{t.playerHelp}</p>
         <div class="h2h-preview">
-          <img data-h2h-preview-img src={asset(`stickers/${SQUAD[0].num}-home.webp`)} alt="" width="220" height="330" />
-          <div>
+          <div class="fc-card" data-fc-card data-color={firstCard.color}>
+            <div class="fc-card-top"><strong data-fc-ovr>{firstCard.ovr}</strong><span data-fc-pos>{t.posLabel(firstCard.pos)}</span></div>
+            <img class="fc-card-art" data-fc-art src={asset(`stickers/${first.num}-home.webp`)} alt="" width="220" height="330" />
+            <p class="fc-card-name"><b data-fc-name>{first.ko}</b><small data-fc-sub>#{first.num} {first.en}</small></p>
+            <div class="fc-card-stats" data-fc-stats></div>
+          </div>
+          <div class="h2h-preview-info">
             <p class="h2h-selected" data-h2h-selected></p>
-            <p data-h2h-preview-line>{t.seasonLine(SQUAD[0].goals, SQUAD[0].assists, SQUAD[0].apps)}</p>
-            <div class="h2h-preview-bars" data-h2h-preview-bars></div>
+            <p data-h2h-preview-line>{t.seasonLine(first.goals, first.assists, first.apps)}</p>
+            <p class="fc-card-meta" data-fc-meta></p>
+            <p class="fc-card-styles" data-fc-styles></p>
+            <div class="fc-five">
+              <p class="fc-five-head"><span>{t.yourFive}</span><span>{t.teamOvr} <strong data-fc-team-ovr>{teamOvr(firstFive)}</strong></span></p>
+              <ol class="fc-five-list" data-fc-lineup></ol>
+            </div>
+            <p class="fc-card-note">{t.cardNote}</p>
           </div>
         </div>
         <div class="h2h-roster">
@@ -70,12 +84,12 @@ const groups = [
               <h3>{group.label}</h3>
               <div class="h2h-player-grid">
                 {SQUAD.filter((p) => group.positions.includes(p.pos)).map((p) => {
-                  const s = playerStats(p);
+                  const c = CARDS[p.num];
                   return (
-                    <button type="button" class="h2h-player-card" data-h2h-player={p.num} aria-pressed="false">
+                    <button type="button" class="h2h-player-card" data-h2h-player={p.num} data-color={c.color} aria-pressed="false">
                       <img src={asset(`thumbs/${p.num}.webp`)} alt="" width="132" height="132" loading="lazy" />
-                      <span><strong>#{p.num} {p.ko}</strong><small>{p.en} · {p.pos}</small></span>
-                      <em><i style={`--v:${s.speed}`}></i><i style={`--v:${s.jump}`}></i><i style={`--v:${s.shot}`}></i></em>
+                      <span><strong>#{p.num} {p.ko}</strong><small>{p.en}</small></span>
+                      <em><b>{c.ovr}</b>{t.posLabel(c.pos)}</em>
                     </button>
                   );
                 })}
@@ -166,7 +180,7 @@ const groups = [
         </div>
         <p class="h2h-result-line"><span class="h2h-points" data-h2h-result-points>+3 pts</span><span data-h2h-result-line></span></p>
         <div class="h2h-stat-rows">
-          {[["kicks", t.statKicks], ["headers", t.statHeaders], ["power", t.statPower], ["territory", t.statTerritory]].map(([key, label]) => (
+          {[["possession", t.statPossession], ["shots", t.statShots], ["passes", t.statPasses], ["tackles", t.statTackles], ["corners", t.statCorners]].map(([key, label]) => (
             <div class="h2h-stat-row" data-h2h-stat={key} style="--l:.5">
               <b data-h2h-stat-home>0</b><span>{label}</span><b data-h2h-stat-rival>0</b>
               <i><em></em></i>
@@ -229,14 +243,15 @@ const groups = [
     </div>
 
     <div class="h2h-touch" data-h2h-touch hidden>
-      <div>
-        <button type="button" data-h2h-btn="left">◀</button>
-        <button type="button" data-h2h-btn="right">▶</button>
+      <div class="fc-left">
+        <button type="button" class="fc-sprint" data-fc-btn="sprint"><span data-fc-label>{t.sprint}</span></button>
+        <div class="fc-stick" data-fc-stick data-active="false"><span class="fc-stick-base" data-fc-base><span class="fc-stick-knob" data-fc-knob></span></span></div>
       </div>
-      <div>
-        <button type="button" data-h2h-btn="jump" aria-label={t.jump}>↑</button>
-        <button type="button" data-h2h-btn="kick" aria-label={t.kick}>⚽</button>
-        <button type="button" data-h2h-btn="power" aria-label={t.power}>⚡</button>
+      <div class="fc-pad">
+        <button type="button" class="fc-btn fc-y" data-fc-btn="through"><b>Y</b><span data-fc-label>{t.btnAttack.through}</span></button>
+        <button type="button" class="fc-btn fc-x" data-fc-btn="lob"><b>X</b><span data-fc-label>{t.btnAttack.lob}</span></button>
+        <button type="button" class="fc-btn fc-b" data-fc-btn="shoot"><b>B</b><span data-fc-label>{t.btnAttack.shoot}</span></button>
+        <button type="button" class="fc-btn fc-a" data-fc-btn="pass"><b>A</b><span data-fc-label>{t.btnAttack.pass}</span></button>
       </div>
     </div>
   </section>
@@ -273,9 +288,6 @@ const groups = [
   .h2h-hud-head { width: 2rem; height: 2rem; border-radius: 50%; background: #1b2446 center / cover no-repeat; display: inline-block; flex: 0 0 auto; }
   .h2h-hud-team b { font-weight: 900; }
   .h2h-hud-rival .h2h-hud-head { background-color: #ffd64a; }
-  .h2h-meter { width: 88px; height: 13px; border: 2px solid #111a33; border-radius: 999px; overflow: hidden; background: #e5e7eb; }
-  .h2h-meter span { display: block; width: calc(var(--p) * 100%); height: 100%; background: linear-gradient(90deg, #1b2446, #ffd64a); }
-  .h2h-meter-rival span { background: linear-gradient(90deg, #c2410c, #fee2e2); }
   .h2h-screen { display: grid; place-items: center; overflow: visible; scroll-margin-top: 5rem; padding: clamp(.65rem, 2vw, 1.3rem); background: rgba(251,247,239,.96); color: #111827; text-align: center; border: 4px solid #111a33; border-radius: 1.4rem; box-shadow: 0 8px 0 #111a33; }
   .h2h-game[data-mode="match"] .h2h-screen,
   .h2h-game[data-mode="paused"] .h2h-screen { position: absolute; inset: 0; overflow: auto; }
@@ -290,19 +302,61 @@ const groups = [
   @container (max-height: 200px) { .h2h-pause-hint { display: none; } }
   .h2h-select, .h2h-season, .h2h-quick { align-content: start; justify-items: stretch; text-align: left; }
   .h2h-selected { font-weight: 900; }
-  .h2h-preview { display: grid; grid-template-columns: 7rem 1fr; gap: .8rem; align-items: center; border: 2px solid #111a33; border-radius: 1.2rem; background: #fff8dc; padding: .6rem; margin: .55rem 0 .8rem; }
-  .h2h-preview img { width: 7rem; height: 9rem; object-fit: contain; }
-  .h2h-preview-bars { display: grid; gap: .3rem; max-width: 18rem; }
-  .h2h-preview-bars span { display: block; height: .45rem; border-radius: 999px; background: linear-gradient(90deg, #1b2446 calc(var(--v) * 100%), #d7dce8 0); }
+  .h2h-preview { display: grid; grid-template-columns: minmax(10rem, 13rem) minmax(0, 1fr); gap: .9rem; align-items: start; border: 2px solid #111a33; border-radius: 1.2rem; background: #fff8dc; padding: .7rem; margin: .55rem 0 .8rem; }
+  .h2h-preview-info { display: grid; gap: .35rem; min-width: 0; }
+  .h2h-preview-info p { margin: 0; }
+  .fc-card { --c1: #eef1f6; --c2: #9aa4b5; --ink: #111a33; position: relative; display: grid; justify-items: center; gap: .15rem; padding: .55rem .55rem .7rem; border: 3px solid #111a33; border-radius: 1.1rem 1.1rem 1.6rem 1.6rem; background: linear-gradient(160deg, var(--c1) 0%, var(--c2) 100%); color: var(--ink); box-shadow: 0 5px 0 #111a33; overflow: hidden; }
+  .fc-card[data-color="gold"] { --c1: #fff1b8; --c2: #d4a017; }
+  .fc-card[data-color="bronze"] { --c1: #f6d2ab; --c2: #a8683a; }
+  .fc-card::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(125deg, rgba(255,255,255,.18) 0 .6rem, transparent .6rem 1.4rem); pointer-events: none; }
+  .fc-card > * { position: relative; z-index: 1; }
+  .fc-card-top { position: absolute !important; top: .45rem; left: .6rem; display: grid; justify-items: center; line-height: 1; }
+  .fc-card-top strong { font-size: 2.1rem; font-weight: 1000; letter-spacing: -.02em; }
+  .fc-card-top span { font-size: .8rem; font-weight: 1000; letter-spacing: .06em; }
+  .fc-card-art { width: 8.5rem; height: 8.8rem; object-fit: contain; margin-top: .2rem; filter: drop-shadow(0 4px 0 rgba(17,26,51,.25)); }
+  .fc-card-name { display: grid; justify-items: center; line-height: 1.1; margin: 0; text-align: center; }
+  .fc-card-name b { font-size: 1.05rem; font-weight: 1000; }
+  .fc-card-name small { font-size: .7rem; font-weight: 800; opacity: .8; }
+  .fc-card-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: .8rem; row-gap: .05rem; width: 100%; border-top: 2px solid rgba(17,26,51,.35); padding-top: .3rem; }
+  .fc-card-stats :global(div) { display: flex; align-items: baseline; gap: .35rem; justify-content: center; }
+  .fc-card-stats :global(dd) { margin: 0; font-size: 1.02rem; font-weight: 1000; font-variant-numeric: tabular-nums; min-width: 1.5rem; text-align: right; }
+  .fc-card-stats :global(dt) { font-size: .72rem; font-weight: 900; letter-spacing: .04em; opacity: .85; min-width: 2rem; }
+  .fc-card-stats :global(div[data-tier="hi"] dd) { color: #0f5132; }
+  .fc-card-stats :global(div[data-tier="lo"] dd) { color: #7f1d1d; }
+  .fc-card-meta { font-size: .78rem; font-weight: 800; color: #334155; }
+  .fc-card-styles { font-size: .76rem; font-weight: 800; color: #1b2446; }
+  .fc-card-styles[hidden] { display: none; }
+  .fc-card-note { font-size: .68rem; color: #64748b; }
+  .fc-five { border: 2px solid #111a33; border-radius: .9rem; background: #fff; padding: .4rem .5rem; }
+  .fc-five-head { display: flex; justify-content: space-between; gap: .5rem; margin: 0 0 .3rem !important; font-size: .7rem; font-weight: 900; letter-spacing: .08em; text-transform: uppercase; color: #475569; }
+  .fc-five-head strong { font-size: .95rem; color: #111a33; letter-spacing: 0; }
+  .fc-five-list { display: grid; gap: .22rem; margin: 0; padding: 0; list-style: none; }
+  .fc-five-list :global(li) { display: grid; grid-template-columns: 2.1rem minmax(0, 1fr) auto; align-items: center; gap: .4rem; border-radius: .6rem; padding: .12rem .25rem; font-size: .8rem; }
+  .fc-five-list :global(li[data-captain="true"]) { background: #fff4c4; }
+  .fc-five-list :global(li img) { width: 2.1rem; height: 2.1rem; object-fit: contain; }
+  .fc-five-list :global(li span) { display: grid; min-width: 0; line-height: 1.1; }
+  .fc-five-list :global(li span b), .fc-five-list :global(li span small) { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fc-five-list :global(li span small) { color: #64748b; font-size: .68rem; }
+  .fc-five-list :global(li em) { font-style: normal; display: inline-flex; align-items: baseline; gap: .25rem; font-size: .7rem; font-weight: 900; color: #475569; }
+  .fc-five-list :global(li em strong) { font-size: .95rem; color: #111a33; }
   .h2h-roster { display: grid; gap: .7rem; overflow: visible; padding-right: .25rem; }
   .h2h-roster h3 { margin: .25rem 0; }
   .h2h-player-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: .55rem; }
-  .h2h-player-card { display: grid; grid-template-columns: 58px 1fr; gap: .45rem; align-items: center; text-align: left; border: 2px solid #111a33; border-radius: .85rem; background: #fff; padding: .35rem; }
+  .h2h-player-card { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; gap: .45rem; align-items: center; text-align: left; border: 2px solid #111a33; border-radius: .85rem; background: #fff; padding: .35rem; }
   .h2h-player-card[aria-pressed="true"] { outline: 4px solid #ffd64a; }
   .h2h-player-card img { width: 58px; height: 58px; object-fit: contain; }
   .h2h-player-card small { display: block; color: #475569; }
-  .h2h-player-card em { grid-column: 1 / -1; display: grid; grid-template-columns: repeat(3, 1fr); gap: .2rem; }
-  .h2h-player-card i { height: .35rem; border-radius: 999px; background: linear-gradient(90deg, #1b2446 calc(var(--v) * 100%), #d7dce8 0); }
+  .h2h-player-card span { min-width: 0; }
+  .h2h-player-card strong, .h2h-player-card small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .h2h-player-card em { font-style: normal; display: grid; justify-items: center; line-height: 1; min-width: 2.4rem; padding: .25rem .3rem; border: 2px solid #111a33; border-radius: .6rem; background: linear-gradient(160deg, #eef1f6, #9aa4b5); font-size: .64rem; font-weight: 900; }
+  .h2h-player-card[data-color="gold"] em { background: linear-gradient(160deg, #fff1b8, #d4a017); }
+  .h2h-player-card[data-color="bronze"] em { background: linear-gradient(160deg, #f6d2ab, #a8683a); }
+  .h2h-player-card em b { font-size: 1.05rem; font-weight: 1000; }
+  .h2h-hint { position: absolute; left: 50%; bottom: .55rem; transform: translateX(-50%); z-index: 4; width: min(92%, 40rem); margin: 0; padding: .35rem .8rem; border: 2px solid rgba(255,255,255,.75); border-radius: .9rem; background: rgba(17,26,51,.82); color: #fff; font-size: .8rem; font-weight: 800; text-align: center; pointer-events: none; }
+  .h2h-hint[hidden] { display: none; }
+  .h2h-hint p { margin: 0; }
+  .h2h-hint-keys { margin-top: .15rem !important; font-size: .7rem; color: #ffd64a; }
+  .h2h-game[data-mode="paused"] .h2h-hint { display: none; }
   .h2h-actions { display: flex; gap: .55rem; flex-wrap: wrap; justify-content: center; margin-top: .7rem; padding: .4rem 0; }
   .h2h-season-top { display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; align-items: center; }
   .h2h-season-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(14rem, .8fr); gap: .75rem; align-items: start; }
@@ -372,8 +426,10 @@ const groups = [
   .h2h-result[data-outcome="draw"] .h2h-points { background: #e2e8f0; }
   .h2h-result[data-outcome="loss"] .h2h-points { background: #94a3b8; }
   .h2h-stat-rows { display: grid; gap: .3rem; width: min(100%, 30rem); margin-top: .35rem !important; }
-  .h2h-stat-row { display: grid; grid-template-columns: 2.4rem 1fr 2.4rem; align-items: center; row-gap: .15rem; font-size: .8rem; }
-  .h2h-stat-row b { font-size: 1rem; font-weight: 1000; font-variant-numeric: tabular-nums; }
+  .h2h-stat-row { display: grid; grid-template-columns: 4.4rem 1fr 4.4rem; align-items: center; row-gap: .15rem; font-size: .8rem; }
+  .h2h-stat-row b { font-size: 1rem; font-weight: 1000; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .h2h-stat-row b:first-child { text-align: left; }
+  .h2h-stat-row b:nth-child(3) { text-align: right; }
   .h2h-stat-row span { color: #cbd5e1; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .68rem; }
   .h2h-stat-row i { grid-column: 1 / -1; height: .42rem; border-radius: 999px; background: var(--rival, #0a8f5b); overflow: hidden; border: 1px solid rgba(255, 255, 255, .35); }
   .h2h-stat-row em { display: block; height: 100%; width: calc(var(--l) * 100%); background: linear-gradient(90deg, #ffd64a, #f5b700); transition: width .8s .4s ease-out; }
@@ -458,9 +514,24 @@ const groups = [
     .h2h-confetti { display: none; }
     .h2h-stat-row em { transition: none; }
   }
-  .h2h-touch { display: grid; grid-template-columns: 1fr 1.45fr; gap: .45rem; }
-  .h2h-touch > div { display: flex; gap: .35rem; justify-content: space-between; min-width: 0; }
-  .h2h-touch button { min-width: 0; width: 100%; min-height: 64px; touch-action: none; background: #111a33; color: #fff; font-size: 1.35rem; padding: .25rem; }
+  .h2h-touch { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: end; gap: .6rem; padding: .2rem .3rem .35rem; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; touch-action: none; }
+  .h2h-touch[hidden] { display: none; }
+  .fc-left { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr); gap: .35rem; height: 100%; min-height: 150px; }
+  .fc-sprint { justify-self: start; min-width: 5.2rem; min-height: 40px; border: 2px solid #111a33 !important; border-radius: 999px !important; background: #1b2446 !important; color: #fff; font-size: .78rem !important; font-weight: 1000; letter-spacing: .06em; text-transform: uppercase; box-shadow: 0 3px 0 #0a1024 !important; touch-action: none; }
+  .fc-stick { position: relative; min-height: 118px; border-radius: 1.2rem; background: radial-gradient(circle at 50% 55%, rgba(255,255,255,.1), transparent 70%); touch-action: none; }
+  .fc-stick-base { position: absolute; left: 50%; top: 55%; width: 112px; height: 112px; margin: -56px 0 0 -56px; border-radius: 50%; border: 3px solid rgba(255,255,255,.55); background: rgba(17,26,51,.45); pointer-events: none; }
+  .fc-stick-knob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; border: 3px solid #111a33; background: #ffd64a; box-shadow: 0 3px 0 #111a33; transition: transform .05s linear; }
+  .fc-stick[data-active="true"] .fc-stick-base { border-color: #ffd64a; }
+  .fc-pad { display: grid; grid-template-columns: repeat(3, 58px); grid-template-rows: repeat(3, 50px); grid-template-areas: ". y ." "x . b" ". a ."; gap: 2px 6px; }
+  .fc-btn { position: relative; display: grid; place-items: center; align-content: center; width: 64px; height: 64px; margin: -7px -3px; padding: 0 !important; border-radius: 50% !important; border: 3px solid #111a33 !important; color: #fff; box-shadow: 0 4px 0 #0a1024 !important; touch-action: none; line-height: 1; }
+  .fc-btn b { font-size: 1.15rem; font-weight: 1000; }
+  .fc-btn span { font-size: .56rem; font-weight: 900; letter-spacing: .02em; text-transform: uppercase; max-width: 58px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .fc-btn[data-down="true"], .fc-sprint[data-down="true"] { transform: translateY(3px); box-shadow: 0 1px 0 #0a1024 !important; filter: brightness(1.15); }
+  .fc-btn[data-off="true"] { opacity: .42; }
+  .fc-a { grid-area: a; background: #16a34a !important; }
+  .fc-b { grid-area: b; background: #dc2626 !important; }
+  .fc-x { grid-area: x; background: #2563eb !important; }
+  .fc-y { grid-area: y; background: #f59e0b !important; color: #111a33 !important; }
   .h2h-how { margin-top: .8rem; border: 2px solid #111a33; border-radius: 1rem; background: #fbf7ef; color: #111827; padding: .8rem 1rem; }
   @media (hover: hover) and (pointer: fine) {
     .h2h-touch { display: none !important; }
@@ -471,16 +542,16 @@ const groups = [
     .h2h-season-grid { grid-template-columns: 1fr; }
     .h2h-screen { min-height: auto; padding: .75rem; }
     .h2h-player-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .45rem; }
-    .h2h-player-card { grid-template-columns: 44px 1fr; border-radius: 1rem; padding: .3rem; font-size: .82rem; }
-    .h2h-player-card img { width: 44px; height: 44px; }
+    .h2h-player-card { grid-template-columns: 40px minmax(0, 1fr) auto; border-radius: 1rem; padding: .3rem; font-size: .8rem; gap: .35rem; }
+    .h2h-player-card em { min-width: 2.1rem; padding: .2rem; }
+    .h2h-preview { grid-template-columns: minmax(0, 1fr); justify-items: stretch; }
+    .fc-card { width: min(100%, 15rem); justify-self: center; }
+    .h2h-player-card img { width: 40px; height: 40px; }
     .h2h-hud { height: 44px; gap: .2rem; overflow: hidden; justify-content: space-between; }
     .h2h-hud-team { padding: .12rem .25rem; max-width: 6.4rem; border-width: 1px; gap: .2rem; }
     .h2h-hud-team > span:not(.h2h-hud-head) { display: none; }
     .h2h-hud-head { width: 2rem; height: 2rem; }
     .h2h-clock, .h2h-hud strong { padding: .2rem .42rem; font-size: .9rem; border-width: 1px; }
-    .h2h-meter { position: absolute; width: 58px; height: 6px; top: 38px; border-width: 1px; }
-    .h2h-meter { left: 3rem; }
-    .h2h-meter-rival { right: 3rem; left: auto; }
     .h2h-hud button { width: 34px; height: 34px; padding: 0; font-size: .95rem; }
     .h2h-hud [data-h2h-pause] { font-size: 0; }
     .h2h-hud [data-h2h-pause]::before { content: "Ⅱ"; font-size: .9rem; }
@@ -489,16 +560,34 @@ const groups = [
     .h2h-end-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .h2h-fixtures { max-height: none; }
   }
-  @media (orientation: landscape) and (max-height: 520px) {
-    .h2h-page { gap: .25rem; }
-    .h2h-game[data-mode="match"], .h2h-game[data-mode="paused"] { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100dvh; z-index: 60; background: #07112d; padding: .25rem max(.25rem, env(safe-area-inset-right)) .25rem max(.25rem, env(safe-area-inset-left)); gap: .25rem; grid-template-rows: 44px minmax(0, 1fr); }
-    .h2h-game[data-mode="match"] .h2h-stage, .h2h-game[data-mode="paused"] .h2h-stage { height: auto; min-height: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .h2h-touch { position: fixed; left: max(.5rem, env(safe-area-inset-left)); right: max(.5rem, env(safe-area-inset-right)); bottom: .45rem; z-index: 20; display: flex; justify-content: space-between; align-items: flex-end; pointer-events: none; }
-    .h2h-touch > div { justify-content: flex-start; gap: .4rem; pointer-events: none; }
-    .h2h-touch > div:last-child { display: grid; grid-template-columns: repeat(2, 60px); grid-template-areas: ". power" "jump kick"; }
-    .h2h-touch [data-h2h-btn="jump"] { grid-area: jump; }
-    .h2h-touch [data-h2h-btn="kick"] { grid-area: kick; }
-    .h2h-touch [data-h2h-btn="power"] { grid-area: power; }
-    .h2h-touch button { opacity: .78; pointer-events: auto; width: 60px; min-height: 56px; font-size: 1.2rem; }
+  @media (pointer: coarse) {
+    .h2h-game[data-mode="match"], .h2h-game[data-mode="paused"] { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100dvh; z-index: 60; margin: 0; background: #07112d; display: grid; grid-template-rows: 44px minmax(0, 1fr) auto; gap: .3rem; padding: max(.3rem, env(safe-area-inset-top)) max(.3rem, env(safe-area-inset-right)) max(.3rem, env(safe-area-inset-bottom)) max(.3rem, env(safe-area-inset-left)); }
+    .h2h-game[data-mode="match"] .h2h-stage, .h2h-game[data-mode="paused"] .h2h-stage { min-height: 0; height: 100%; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .h2h-hint { font-size: .72rem; bottom: .35rem; }
+    .h2h-hint-keys { display: none; }
+  }
+  @media (pointer: coarse) and (orientation: portrait) {
+    .h2h-vs { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto minmax(0, 1fr) auto auto; row-gap: 1.2cqh; padding: 4cqh 6cqw 3cqh; }
+    .h2h-vs::before { clip-path: polygon(0 0, 100% 0, 100% 40%, 0 56%); }
+    .h2h-vs-side { height: auto; gap: .6cqh; }
+    .h2h-vs-left img { height: 24cqh; }
+    .h2h-vs-ring { height: 19cqh; margin: .6cqh 0; }
+    .h2h-vs-mark { font-size: 11cqh; justify-self: center; }
+    .h2h-vs-side strong { font-size: max(.95rem, 3.3cqh); }
+    .h2h-vs-side small { font-size: max(.72rem, 2cqh); }
+    .h2h-vs-club { font-size: max(.62rem, 1.8cqh); padding: .4cqh 1.6cqh; }
+    .h2h-vs-meta { font-size: max(.68rem, 2cqh); padding: .6cqh 2cqh; }
+    .h2h-vs-skip { font-size: max(.62rem, 1.5cqh); }
+  }
+  @media (pointer: coarse) and (orientation: landscape) {
+    .h2h-game[data-mode="match"], .h2h-game[data-mode="paused"] { grid-template-rows: 40px minmax(0, 1fr); }
+    .h2h-touch { position: fixed; left: max(.4rem, env(safe-area-inset-left)); right: max(.4rem, env(safe-area-inset-right)); bottom: max(.3rem, env(safe-area-inset-bottom)); z-index: 20; padding: 0; pointer-events: none; }
+    .fc-left { width: min(34vw, 15rem); min-height: 0; height: min(44vh, 11rem); pointer-events: none; }
+    .fc-stick, .fc-sprint, .fc-pad { pointer-events: auto; }
+    .fc-stick { min-height: 0; }
+    .fc-stick-base { opacity: .8; }
+    .fc-pad { opacity: .88; grid-template-columns: repeat(3, 52px); grid-template-rows: repeat(3, 44px); }
+    .fc-btn { width: 56px; height: 56px; }
+    .h2h-hint { bottom: auto; top: .4rem; }
   }
 </style>

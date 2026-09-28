@@ -243,7 +243,7 @@ export function teamOvr(players: SquadPlayer[]): number {
 }
 
 // Rival mascot squads: OVR by AI tier (1 easiest).
-export const RIVAL_OVR: Record<1 | 2 | 3 | 4, number> = { 1: 61, 2: 64, 3: 67, 4: 71 };
+export const RIVAL_OVR: Record<1 | 2 | 3 | 4, number> = { 1: 61, 2: 63, 3: 65, 4: 67 };
 
 // The rival five (engine index 0..4, numbers 1, 4, 6, 8, 9) as cards on the same scale as the home
 // cards: same position profiles, no personal traits, the rival OVR plus a small role offset.

@@ -1,286 +1,295 @@
-import { performance } from "node:perf_hooks";
-import { AI_TIER, OPPONENT_SLUGS, type SquadPlayer } from "../data";
+// Headless balance and robustness suite for the FC match engine. Every number comes from real play.
+// Run: cd site && npx esbuild src/h2h/fc/headless.ts --bundle --platform=node --format=esm --outfile=/tmp/fc-headless.mjs && node /tmp/fc-headless.mjs
 import { bestFive } from "../ratings";
-import { FcMatch, blankFcInput } from "./sim";
-import { FC_STEP, GOLDEN_GOAL_SECONDS, MATCH_SECONDS, PITCH_L, PITCH_W, type FcInput, type FcMatchOptions, type RestartType, type Side } from "./types";
+import { FcMatch, blankFcInput, simulateFcMatch } from "./sim";
+import { MATCH_SECONDS, PITCH_L, PITCH_W, type FcInput, type FcMatchOptions, type RestartType } from "./types";
 
-const home = bestFive(16);
-const AI_MATCHES = 150;
-const HUMAN_MATCHES = 40;
-const TEST_SECONDS = 100;
-const started = performance.now();
+type Tier = 1 | 2 | 3 | 4;
+const HOME = bestFive(16);
+const base = (seed: number, tier: Tier, extra: Partial<FcMatchOptions> = {}): FcMatchOptions => ({ home: HOME, captain: 16, opponent: "suwon-fc", kit: "home", mode: "ai", seed, tier, ...extra });
 
-type TierKey = "1" | "2" | "3" | "4";
-interface Totals {
-  matches: number;
-  wins: number;
-  draws: number;
-  losses: number;
-  gf: number;
+interface Agg {
+  n: number;
+  w: number;
+  d: number;
+  l: number;
+  gh: number;
   ga: number;
-  passes: { home: number; away: number };
-  passesDone: { home: number; away: number };
-  shots: { home: number; away: number };
-  onTarget: { home: number; away: number };
-  fouls: { home: number; away: number };
-  saves: { home: number; away: number };
+  shots: [number, number];
+  onTarget: [number, number];
+  passes: [number, number];
+  done: [number, number];
+  tackles: number;
+  fouls: number;
+  saves: number;
   headers: number;
   restarts: Record<RestartType, number>;
 }
 
-class ScriptedBot {
-  private last = blankFcInput();
-  private passCooldown = 0;
-  private shootHeld = 0;
-  private lobHeld = 0;
-  constructor(private readonly leaveSomeRestarts: boolean) {}
-  input(m: FcMatch): FcInput {
-    const out = blankFcInput();
-    this.passCooldown = Math.max(0, this.passCooldown - FC_STEP);
-    const sp = m.state.setPiece;
-    if (sp?.side === "home") {
-      if (this.leaveSomeRestarts && sp.waitT < 5.1) return this.finish(out);
-      out.mx = 0.7;
-      out.mz = sp.type === "corner" ? (sp.spotZ < PITCH_W / 2 ? 0.6 : -0.6) : 0;
-      if (sp.direct && sp.waitT > 0.25) out.shoot = sp.waitT < 0.55;
-      else if (sp.type === "corner") out.lob = sp.waitT < 0.55;
-      else out.pass = sp.waitT > 0.2 && sp.waitT < 0.35;
-      return this.finish(out);
-    }
-    const controlled = m.state.players[m.state.controlled];
-    const ball = m.state.ball;
-    const owner = ball.owner;
-    if (owner?.side === "home" && owner.index === controlled.index) {
-      const goalDist = PITCH_L - controlled.x;
-      out.sprint = true;
-      if (goalDist < 20 && Math.abs(controlled.z - PITCH_W / 2) < 12) {
-        this.shootHeld += FC_STEP;
-        out.shoot = this.shootHeld < 0.45;
-        out.mz = controlled.z < PITCH_W / 2 ? 0.25 : -0.25;
-      } else if (this.passCooldown <= 0) {
-        out.pass = !this.last.pass;
-        this.passCooldown = 1.6;
-        this.shootHeld = 0;
-      } else {
-        out.mx = 1;
-        out.mz = (PITCH_W / 2 - controlled.z) / 18;
-        this.shootHeld = 0;
-      }
-    } else if (owner?.side === "away") {
-      const carrier = m.state.players[5 + owner.index];
-      const dx = carrier.x - controlled.x;
-      const dz = carrier.z - controlled.z;
-      const d = Math.hypot(dx, dz) || 1;
-      out.mx = dx / d;
-      out.mz = dz / d;
-      out.sprint = true;
-      if (d > 5 && !this.last.pass) out.pass = true;
-      if (d < 1.8 && !this.last.shoot) out.shoot = true;
-      if (d < 2.8 && d > 1.6 && !this.last.lob) out.lob = true;
-      this.shootHeld = 0;
-    } else {
-      const dx = ball.x - controlled.x;
-      const dz = ball.z - controlled.z;
-      const d = Math.hypot(dx, dz) || 1;
-      out.mx = dx / d;
-      out.mz = dz / d;
-      out.sprint = true;
-      this.shootHeld = 0;
-    }
-    return this.finish(out);
-  }
-  private finish(next: FcInput): FcInput {
-    this.last = { ...next };
-    return next;
-  }
+function agg(): Agg {
+  return { n: 0, w: 0, d: 0, l: 0, gh: 0, ga: 0, shots: [0, 0], onTarget: [0, 0], passes: [0, 0], done: [0, 0], tackles: 0, fouls: 0, saves: 0, headers: 0, restarts: { kickoff: 0, throwin: 0, corner: 0, goalkick: 0, freekick: 0, penalty: 0 } };
 }
 
+const violations: string[] = [];
 
-const allRestarts = blankRestartCounts();
-let allSaves = 0;
-let allHeaders = 0;
-const equal = blankTotals();
-for (let i = 0; i < AI_MATCHES; i++) {
-  const m = runAi({ opponent: OPPONENT_SLUGS[i % OPPONENT_SLUGS.length], tier: 2, homeAiTier: 2, mirror: true, seed: 10000 + i * 97 }, `mirror-${i}`);
-  addMatch(equal, m);
-}
-const equalSplit = equal.gf / Math.max(1, equal.gf + equal.ga);
-const equalGpm = (equal.gf + equal.ga) / equal.matches;
-if (equalSplit < 0.38 || equalSplit > 0.62) throw new Error(`equal-AI split ${equalSplit.toFixed(3)} outside 0.38..0.62`);
-if (equalGpm < 2 || equalGpm > 10) throw new Error(`equal-AI GPM ${equalGpm.toFixed(2)} outside 2..8`);
-
-const tiers: Record<TierKey, Totals> = { "1": blankTotals(), "2": blankTotals(), "3": blankTotals(), "4": blankTotals() };
-for (const tier of [1, 2, 3, 4] as const) {
-  const opponents = OPPONENT_SLUGS.filter((o) => AI_TIER[o] === tier);
-  for (let i = 0; i < AI_MATCHES; i++) {
-    const opponent = opponents[i % opponents.length] ?? OPPONENT_SLUGS[0];
-    const m = runAi({ opponent, tier, homeAiTier: 2, seed: 50000 + tier * 100000 + i * 131 }, `tier-${tier}-${i}`);
-    addMatch(tiers[String(tier) as TierKey], m);
-  }
+function check(m: FcMatch, label: string): void {
+  const s = m.state;
+  const d = m.debug;
+  if (s.phase !== "ended") violations.push(`${label}: did not end`);
+  if (s.elapsed > (m.opts.seconds ?? MATCH_SECONDS) + 61) violations.push(`${label}: ran long ${s.elapsed.toFixed(1)}`);
+  if (d.maxStuckT > 6) violations.push(`${label}: ball stuck ${d.maxStuckT.toFixed(1)} s`);
+  if (d.maxRestartWait > 7) violations.push(`${label}: restart waited ${d.maxRestartWait.toFixed(1)} s`);
+  if (s.stats.home.possession + s.stats.away.possession > s.elapsed + 0.05) violations.push(`${label}: possession exceeds play time`);
 }
 
-const rows = Object.fromEntries(Object.entries(tiers).map(([k, v]) => [k, summarize(v)])) as Record<TierKey, ReturnType<typeof summarize>>;
-for (const tier of ["1", "2", "3", "4"] as const) {
-  const row = rows[tier];
-  if (row.goalsPerMatch < 2 || row.goalsPerMatch > 10) throw new Error(`tier ${tier} GPM out of range: ${row.goalsPerMatch}`);
-  if (row.passes.home < 8 || row.passes.away < 8) throw new Error(`tier ${tier} passes too low: ${JSON.stringify(row.passes)}`);
-  if (row.shots.home < 1.4 || row.shots.away < 1.4) throw new Error(`tier ${tier} shots too low: ${JSON.stringify(row.shots)}`);
-}
-if (!(rows["1"].ppm > rows["2"].ppm)) throw new Error(`top tiers not ordered: ${rows["1"].ppm}, ${rows["2"].ppm}`);
-if (rows["1"].winPct < 0.55) throw new Error(`T1 home win too low: ${rows["1"].winPct}`);
-if (rows["4"].lossPct < 0.25) throw new Error(`T4 home loss too low: ${rows["4"].lossPct}`);
-const human: Record<TierKey, Totals> = { "1": blankTotals(), "2": blankTotals(), "3": blankTotals(), "4": blankTotals() };
-for (const tier of [1, 2, 3, 4] as const) {
-  const opponents = OPPONENT_SLUGS.filter((o) => AI_TIER[o] === tier);
-  for (let i = 0; i < HUMAN_MATCHES; i++) {
-    const opponent = opponents[i % opponents.length] ?? OPPONENT_SLUGS[0];
-    const m = runHuman({ opponent, tier, seed: 90000 + tier * 10000 + i * 173 }, `human-${tier}-${i}`, i % 4 === 0);
-    addMatch(human[String(tier) as TierKey], m);
-  }
-}
-for (const [tier, total] of Object.entries(human)) {
-  const row = summarize(total);
-  if (row.passes.home < 4 || row.shots.home < 1 || total.gf <= 0) throw new Error(`scripted human tier ${tier} did not attack enough: ${JSON.stringify(row)}`);
-  if (total.fouls.home + total.fouls.away <= 0 && total.restarts.freekick <= 0) throw new Error(`scripted human tier ${tier} produced no tackles/fouls/free kicks`);
-}
-
-const noInput = blankTotals();
-const t1Opponents = OPPONENT_SLUGS.filter((o) => AI_TIER[o] === 1);
-for (let i = 0; i < 20; i++) {
-  const opponent = t1Opponents[i % t1Opponents.length] ?? OPPONENT_SLUGS[0];
-  const m = new FcMatch({ home, captain: home[4].num, opponent, kit: "home", mode: "league", seed: 700000 + i * 193, tier: 1, seconds: TEST_SECONDS });
-  const blank = blankFcInput();
-  const played = run(m, `no-input-${i}`, () => blank);
-  addMatch(noInput, played);
-}
-const noInputRow = summarize(noInput);
-if (noInput.losses < 10 || ((noInput.wins * 3 + noInput.draws) / noInput.matches) > 0.8) throw new Error(`no-input home did not lose clearly: ${JSON.stringify(noInputRow)}`);
-
-for (const [k, v] of Object.entries(allRestarts)) if (v <= 0) throw new Error(`restart never occurred: ${k}`);
-if (allSaves <= 0) throw new Error("saves never occurred");
-if (allHeaders <= 0) throw new Error("headers never occurred");
-
-const detA = runAi({ opponent: "busan-ipark", tier: 4, homeAiTier: 2, seed: 424242 }, "det-a");
-const detB = runAi({ opponent: "busan-ipark", tier: 4, homeAiTier: 2, seed: 424242 }, "det-b");
-const detAData = JSON.stringify({ score: detA.state.score, stats: detA.state.stats, restarts: detA.debug.restartCounts, headers: detA.debug.headers });
-const detBData = JSON.stringify({ score: detB.state.score, stats: detB.state.stats, restarts: detB.debug.restartCounts, headers: detB.debug.headers });
-if (detAData !== detBData) throw new Error("determinism failed");
-
-const summary = {
-  aiMatches: AI_MATCHES * 5,
-  scriptedHumanMatches: HUMAN_MATCHES * 4,
-  equalAi: { matches: equal.matches, homeGoalSplit: round(equalSplit), goalsPerMatch: round(equalGpm), wdl: wdl(equal) },
-  tiers: rows,
-  scriptedHuman: Object.fromEntries(Object.entries(human).map(([k, v]) => [k, summarize(v)])),
-  noInput: noInputRow,
-  restartCounts: allRestarts,
-  saves: allSaves,
-  headers: allHeaders,
-  runtimeSeconds: round((performance.now() - started) / 1000),
-};
-console.log(JSON.stringify(summary, null, 2));
-
-function runAi(partial: Pick<FcMatchOptions, "opponent" | "seed" | "tier" | "homeAiTier" | "mirror">, label: string): FcMatch {
-  const m = new FcMatch({ home, captain: home[4].num, kit: "home", mode: "ai", seconds: TEST_SECONDS, ...partial });
-  return run(m, label, () => blankFcInput());
+function add(a: Agg, m: FcMatch): void {
+  const s = m.state;
+  a.n++;
+  a.gh += s.score.home;
+  a.ga += s.score.away;
+  if (s.score.home > s.score.away) a.w++;
+  else if (s.score.home === s.score.away) a.d++;
+  else a.l++;
+  const h = s.stats.home;
+  const w = s.stats.away;
+  a.shots[0] += h.shots;
+  a.shots[1] += w.shots;
+  a.onTarget[0] += h.onTarget;
+  a.onTarget[1] += w.onTarget;
+  a.passes[0] += h.passes;
+  a.passes[1] += w.passes;
+  a.done[0] += h.passesDone;
+  a.done[1] += w.passesDone;
+  a.tackles += h.tackles + w.tackles;
+  a.fouls += h.fouls + w.fouls;
+  a.saves += h.saves + w.saves;
+  a.headers += m.debug.headers;
+  for (const k of Object.keys(a.restarts) as RestartType[]) a.restarts[k] += m.debug.restartCounts[k];
 }
 
-function runHuman(partial: Pick<FcMatchOptions, "opponent" | "seed" | "tier">, label: string, leaveSomeRestarts: boolean): FcMatch {
-  const m = new FcMatch({ home, captain: home[4].num, kit: "home", mode: "league", seconds: TEST_SECONDS, ...partial });
-  const bot = new ScriptedBot(leaveSomeRestarts);
-  return run(m, label, () => bot.input(m));
-}
+const r2 = (v: number) => Math.round(v * 100) / 100;
 
-function run(m: FcMatch, label: string, inputFor: () => FcInput): FcMatch {
-  const maxSteps = Math.ceil(((m.opts.seconds ?? MATCH_SECONDS) + GOLDEN_GOAL_SECONDS + 120) / FC_STEP);
-  let quietT = 0;
-  let maxRestart = 0;
-  for (let i = 0; i < maxSteps && m.state.phase !== "ended"; i++) {
-    m.step(inputFor());
-    assertFinite(m, label);
-    if (m.state.phase === "play") {
-      if (m.state.ball.owner === null && m.state.ball.h < 0.05 && Math.hypot(m.state.ball.vx, m.state.ball.vz) < 0.08) quietT += FC_STEP;
-      else quietT = 0;
-      if (quietT > 6 && !label.startsWith("no-input")) throw new Error(`${label}: ball stuck > 6s`);
-      if (m.state.ball.x < -3.001 || m.state.ball.x > PITCH_L + 3.001 || m.state.ball.z < -3.001 || m.state.ball.z > PITCH_W + 3.001) throw new Error(`${label}: ball escaped during play`);
-      for (const p of m.state.players) if (p.x < -3.001 || p.x > PITCH_L + 3.001 || p.z < -3.001 || p.z > PITCH_W + 3.001) throw new Error(`${label}: player escaped`);
-    }
-    if (m.state.phase === "restart") {
-      maxRestart = Math.max(maxRestart, m.state.setPiece?.waitT ?? 0);
-      if ((m.state.setPiece?.waitT ?? 0) > 7.02) throw new Error(`${label}: restart did not resolve within 7s`);
-    }
-  }
-  if (m.state.phase !== "ended") throw new Error(`${label}: did not end`);
-  if (m.state.elapsed > (m.opts.seconds ?? MATCH_SECONDS) + GOLDEN_GOAL_SECONDS + 0.1) throw new Error(`${label}: match overran`);
-  const poss = m.state.stats.home.possession + m.state.stats.away.possession;
-  if (poss > m.state.elapsed + 0.15) throw new Error(`${label}: possession exceeds elapsed`);
-  void maxRestart;
-  return m;
-}
-
-function addMatch(t: Totals, m: FcMatch): void {
-  t.matches++;
-  t.gf += m.state.score.home;
-  t.ga += m.state.score.away;
-  if (m.state.score.home > m.state.score.away) t.wins++;
-  else if (m.state.score.home < m.state.score.away) t.losses++;
-  else t.draws++;
-  for (const side of ["home", "away"] as const) {
-    t.passes[side] += m.state.stats[side].passes;
-    t.passesDone[side] += m.state.stats[side].passesDone;
-    t.shots[side] += m.state.stats[side].shots;
-    t.onTarget[side] += m.state.stats[side].onTarget;
-    t.fouls[side] += m.state.stats[side].fouls;
-    t.saves[side] += m.state.stats[side].saves;
-    allSaves += m.state.stats[side].saves;
-  }
-  t.headers += m.debug.headers;
-  allHeaders += m.debug.headers;
-  for (const k of Object.keys(t.restarts) as RestartType[]) {
-    t.restarts[k] += m.debug.restartCounts[k];
-    allRestarts[k] += m.debug.restartCounts[k];
-  }
-}
-
-function summarize(t: Totals) {
+function summary(a: Agg) {
+  const n = Math.max(1, a.n);
   return {
-    wdl: wdl(t),
-    winPct: round(t.wins / t.matches),
-    lossPct: round(t.losses / t.matches),
-    ppm: round((t.wins * 3 + t.draws) / t.matches),
-    goalsPerMatch: round((t.gf + t.ga) / t.matches),
-    passes: { home: round(t.passes.home / t.matches), away: round(t.passes.away / t.matches) },
-    completionPct: { home: pct(t.passesDone.home, t.passes.home), away: pct(t.passesDone.away, t.passes.away) },
-    shots: { home: round(t.shots.home / t.matches), away: round(t.shots.away / t.matches) },
-    onTarget: { home: round(t.onTarget.home / t.matches), away: round(t.onTarget.away / t.matches) },
-    fouls: { home: round(t.fouls.home / t.matches), away: round(t.fouls.away / t.matches) },
-    restarts: Object.fromEntries(Object.entries(t.restarts).map(([k, v]) => [k, round(v / t.matches)])),
-    saves: round((t.saves.home + t.saves.away) / t.matches),
-    headers: round(t.headers / t.matches),
+    wdl: `${a.w}-${a.d}-${a.l}`,
+    win: r2(a.w / n),
+    loss: r2(a.l / n),
+    ppm: r2((a.w * 3 + a.d) / n),
+    gpm: r2((a.gh + a.ga) / n),
+    shots: [r2(a.shots[0] / n), r2(a.shots[1] / n)],
+    onTarget: [r2(a.onTarget[0] / n), r2(a.onTarget[1] / n)],
+    passes: [r2(a.passes[0] / n), r2(a.passes[1] / n)],
+    completion: [r2(a.done[0] / Math.max(1, a.passes[0])), r2(a.done[1] / Math.max(1, a.passes[1]))],
+    tackles: r2(a.tackles / n),
+    fouls: r2(a.fouls / n),
+    saves: r2(a.saves / n),
+    savePct: r2(a.saves / Math.max(1, a.onTarget[0] + a.onTarget[1])),
+    headers: r2(a.headers / n),
+    perMatch: Object.fromEntries(Object.entries(a.restarts).map(([k, v]) => [k, r2(v / n)])),
   };
 }
 
-function blankTotals(): Totals {
-  return { matches: 0, wins: 0, draws: 0, losses: 0, gf: 0, ga: 0, passes: { home: 0, away: 0 }, passesDone: { home: 0, away: 0 }, shots: { home: 0, away: 0 }, onTarget: { home: 0, away: 0 }, fouls: { home: 0, away: 0 }, saves: { home: 0, away: 0 }, headers: 0, restarts: blankRestartCounts() };
+function ensure(cond: boolean, msg: string): void {
+  if (!cond) violations.push(msg);
 }
 
-function blankRestartCounts(): Record<RestartType, number> {
-  return { kickoff: 0, throwin: 0, corner: 0, goalkick: 0, freekick: 0, penalty: 0 };
+// A simple human stand-in that only uses FcInput: runs at the ball, dribbles at goal, passes on a timer,
+// shoots inside ~20 m with a held charge, tackles and switches when defending, takes most set pieces.
+function makeBot(seed: number) {
+  let t = 0;
+  let hold: "shoot" | "lob" | null = null;
+  let holdT = 0;
+  let passCd = 0.8;
+  let tapped = "";
+  let restartSeen = 0;
+  let skipRestart = false;
+  return (m: FcMatch): FcInput => {
+    const s = m.state;
+    const inp = blankFcInput();
+    t += 1 / 60;
+    passCd -= 1 / 60;
+    const me = s.players[s.controlled];
+    const b = s.ball;
+    const sp = s.setPiece;
+    const tap = (k: "pass" | "shoot" | "lob" | "through") => {
+      const key = `${k}-${Math.floor(t * 4)}`;
+      if (tapped !== key) {
+        tapped = key;
+        inp[k] = true;
+      }
+    };
+    if (hold) {
+      holdT -= 1 / 60;
+      if (holdT > 0) {
+        inp[hold] = true;
+        return inp;
+      }
+      hold = null;
+      return inp;
+    }
+    if (s.phase === "restart" && sp?.side === "home") {
+      if (sp.waitT < 0.05) {
+        restartSeen++;
+        skipRestart = (restartSeen + seed) % 4 === 0;
+      }
+      if (skipRestart || sp.waitT < 0.6) return inp;
+      if (sp.type === "penalty" || (sp.type === "freekick" && sp.direct && (restartSeen + seed) % 2 === 0)) {
+        inp.mz = seed % 2 ? 0.8 : -0.8;
+        hold = "shoot";
+        holdT = 0.5;
+      } else if (sp.type === "corner") {
+        hold = "lob";
+        holdT = 0.45;
+      } else inp.pass = true;
+      return inp;
+    }
+    if (s.phase !== "play") return inp;
+    const mine = b.owner?.side === "home" && b.owner.index === s.controlled;
+    if (mine) {
+      const dx = PITCH_L - me.x;
+      inp.mx = 1;
+      inp.mz = me.z < PITCH_W / 2 - 3 ? 0.5 : me.z > PITCH_W / 2 + 3 ? -0.5 : 0;
+      inp.sprint = dx > 25;
+      if (dx < 20 && Math.abs(me.z - PITCH_W / 2) < 12) {
+        hold = "shoot";
+        holdT = 0.3 + ((seed + Math.floor(t)) % 4) * 0.1;
+        inp.mz = seed % 2 ? 0.6 : -0.6;
+        inp.shoot = true;
+      } else if (passCd <= 0) {
+        passCd = 1.1 + ((seed + Math.floor(t * 3)) % 5) * 0.2;
+        if ((seed + Math.floor(t)) % 5 === 0) tap("through");
+        else tap("pass");
+      }
+      return inp;
+    }
+    // defend goal side: aim for a point between the ball and our goal, then tackle when in front
+    const gs = b.owner?.side === "away" ? Math.min(1.4, Math.hypot(b.x, b.z - PITCH_W / 2) * 0.1) : 0;
+    const tgx = b.x - (b.x / Math.max(1, Math.hypot(b.x, b.z - PITCH_W / 2))) * gs;
+    const tgz = b.z - ((b.z - PITCH_W / 2) / Math.max(1, Math.hypot(b.x, b.z - PITCH_W / 2))) * gs;
+    const n = Math.hypot(tgx - me.x, tgz - me.z) || 1;
+    inp.mx = (tgx - me.x) / n;
+    inp.mz = (tgz - me.z) / n;
+    inp.sprint = n > 3;
+    const toBall = Math.hypot(b.x - me.x, b.z - me.z);
+    if (b.owner?.side === "away") {
+      const inFront = me.x < b.x + 0.3;
+      if (toBall < 1.25 && inFront) tap((seed + Math.floor(t * 2)) % 9 === 0 ? "lob" : "shoot");
+      else if (toBall > 9 && (Math.floor(t * 2) + seed) % 3 === 0) tap("pass");
+    }
+    return inp;
+  };
 }
 
-function assertFinite(m: FcMatch, label: string): void {
-  for (const v of [m.state.ball.x, m.state.ball.z, m.state.ball.h, m.state.ball.vx, m.state.ball.vz, m.state.ball.vh]) if (!Number.isFinite(v)) throw new Error(`${label}: non-finite ball`);
-  for (const p of m.state.players) for (const v of [p.x, p.z, p.vx, p.vz, p.fx, p.fz]) if (!Number.isFinite(v)) throw new Error(`${label}: non-finite player`);
+function runHuman(seed: number, tier: Tier, input: "bot" | "none"): FcMatch {
+  const m = new FcMatch({ ...base(seed, tier), mode: "quick" });
+  const bot = makeBot(seed);
+  const limit = Math.ceil((MATCH_SECONDS + 61 + 40) * 60);
+  for (let i = 0; i < limit && m.state.phase !== "ended"; i++) {
+    m.step(input === "bot" ? bot(m) : blankFcInput());
+    const s = m.state;
+    for (const p of s.players) {
+      if (!Number.isFinite(p.x) || !Number.isFinite(p.z)) violations.push(`seed ${seed}: NaN player`);
+      if (p.x < -3 || p.x > PITCH_L + 3 || p.z < -3 || p.z > PITCH_W + 3) violations.push(`seed ${seed}: player out of bounds`);
+    }
+    const b = s.ball;
+    if (!Number.isFinite(b.x) || !Number.isFinite(b.z) || !Number.isFinite(b.h)) violations.push(`seed ${seed}: NaN ball`);
+    if (s.phase === "play" && (b.x < -3 || b.x > PITCH_L + 3 || b.z < -3 || b.z > PITCH_W + 3)) violations.push(`seed ${seed}: ball out of bounds in play`);
+    if (violations.length > 20) break;
+  }
+  if (m.state.phase !== "ended") m.endNow();
+  return m;
 }
 
-function pct(done: number, attempts: number): number {
-  return attempts > 0 ? round(done / attempts) : 0;
-}
+const t0 = Date.now();
+const report: Record<string, unknown> = {};
 
-function wdl(t: Totals): string {
-  return `${t.wins}-${t.draws}-${t.losses}`;
+// 1. Mirror: identical ratings and AI on both sides, so any split is structural bias.
+const mirror = agg();
+for (let i = 0; i < 160; i++) {
+  const m = simulateFcMatch(base(500 + i, 2, { homeAiTier: 2, mirror: true }));
+  check(m, `mirror ${i}`);
+  add(mirror, m);
 }
+const split = mirror.gh / Math.max(1, mirror.gh + mirror.ga);
+report.mirror = { ...summary(mirror), homeGoalSplit: r2(split) };
+ensure(split >= 0.45 && split <= 0.55, `mirror split ${split.toFixed(3)} outside 0.45..0.55`);
 
-function round(v: number): number {
-  return Number(v.toFixed(3));
+// 2. A casual user (home AI tier 2 with the real squad) against every rival tier.
+const bands: Record<Tier, { win: [number, number]; loss: [number, number] }> = {
+  1: { win: [0.7, 0.9], loss: [0, 0.15] },
+  2: { win: [0.45, 0.65], loss: [0.15, 0.35] },
+  3: { win: [0.28, 0.45], loss: [0.35, 0.55] },
+  4: { win: [0.12, 0.28], loss: [0.5, 0.72] },
+};
+const tiers: Record<string, ReturnType<typeof summary>> = {};
+const all = agg();
+let lastPpm = Infinity;
+for (const tier of [1, 2, 3, 4] as Tier[]) {
+  const a = agg();
+  for (let i = 0; i < 200; i++) {
+    const m = simulateFcMatch(base(10000 + tier * 1000 + i, tier, { homeAiTier: 2 }));
+    check(m, `T${tier} ${i}`);
+    add(a, m);
+    add(all, m);
+  }
+  const sum = summary(a);
+  tiers[`T${tier}`] = sum;
+  const bnd = bands[tier];
+  ensure(sum.win >= bnd.win[0] && sum.win <= bnd.win[1], `T${tier} win ${sum.win} outside ${bnd.win}`);
+  ensure(sum.loss >= bnd.loss[0] && sum.loss <= bnd.loss[1], `T${tier} loss ${sum.loss} outside ${bnd.loss}`);
+  ensure(sum.gpm >= 2 && sum.gpm <= 7, `T${tier} goals per match ${sum.gpm} outside 2..7`);
+  ensure(sum.ppm < lastPpm, `T${tier} PPM ${sum.ppm} not below the previous tier`);
+  ensure(sum.passes[0] >= 12 && sum.passes[1] >= 12, `T${tier} too few passes ${sum.passes}`);
+  ensure(sum.shots[0] >= 3 && sum.shots[1] >= 3, `T${tier} too few shots ${sum.shots}`);
+  lastPpm = sum.ppm;
+}
+report.tiers = tiers;
+report.aiSample = summary(all);
+
+// 3. Scripted human through FcInput only, 40 matches against each tier.
+const human: Record<string, ReturnType<typeof summary>> = {};
+const humanAll = agg();
+for (const tier of [1, 2, 3, 4] as Tier[]) {
+  const a = agg();
+  for (let i = 0; i < 40; i++) {
+    const m = runHuman(20000 + tier * 100 + i, tier, "bot");
+    check(m, `human T${tier} ${i}`);
+    add(a, m);
+    add(humanAll, m);
+  }
+  human[`T${tier}`] = summary(a);
+}
+report.scriptedHuman = human;
+const hs = summary(humanAll);
+ensure(hs.passes[0] >= 8, `scripted human passes ${hs.passes[0]} per match`);
+ensure(hs.shots[0] >= 2, `scripted human shots ${hs.shots[0]} per match`);
+ensure(humanAll.gh > 0, "scripted human never scored");
+ensure(humanAll.tackles > 0, "no tackles in scripted human play");
+for (const k of ["kickoff", "throwin", "corner", "goalkick", "freekick", "penalty"] as RestartType[]) {
+  ensure(all.restarts[k] + humanAll.restarts[k] > 0, `restart type ${k} never happened`);
+}
+ensure(all.saves + humanAll.saves > 0, "no saves");
+ensure(all.headers + humanAll.headers > 0, "no headers");
+
+// 4. No input at all: the user's team must clearly lose, so the input matters.
+const none = agg();
+for (let i = 0; i < 20; i++) {
+  const m = runHuman(30000 + i, 1, "none");
+  add(none, m);
+}
+report.noInput = summary(none);
+ensure(none.w === 0 && none.gh / none.n <= 0.3 && none.l > none.w, `no-input side should never win and barely score (${summary(none).wdl}, ${none.gh} goals)`);
+
+// 5. Determinism.
+const a1 = simulateFcMatch(base(424242, 3, { homeAiTier: 2 }));
+const a2 = simulateFcMatch(base(424242, 3, { homeAiTier: 2 }));
+ensure(JSON.stringify(a1.state.score) === JSON.stringify(a2.state.score) && JSON.stringify(a1.state.stats) === JSON.stringify(a2.state.stats), "same seed gave different results");
+
+report.violations = violations.slice(0, 30);
+report.runtimeSeconds = r2((Date.now() - t0) / 1000);
+console.log(JSON.stringify(report, null, 1));
+if (violations.length) {
+  console.error(`FAILED: ${violations.length} violation(s)`);
+  process.exit(1);
 }
