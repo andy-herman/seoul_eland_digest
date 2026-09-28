@@ -17,9 +17,9 @@ export interface AiTier {
 }
 
 export const AI_TIERS: Record<Difficulty, AiTier> = {
-  rookie: { speed: 0.87, corner: 0.9, noise: 1.5, drift: 0.45, items: 0.45, rbAhead: 0.12, rbBehind: 0.03, mistake: 2.2 },
-  l1: { speed: 0.94, corner: 0.97, noise: 0.9, drift: 0.72, items: 0.75, rbAhead: 0.07, rbBehind: 0.05, mistake: 1.1 },
-  pro: { speed: 0.985, corner: 1.02, noise: 0.45, drift: 0.95, items: 1, rbAhead: 0.035, rbBehind: 0.075, mistake: 0.4 },
+  rookie: { speed: 0.89, corner: 0.92, noise: 1.5, drift: 0.45, items: 0.45, rbAhead: 0.12, rbBehind: 0.03, mistake: 2.2 },
+  l1: { speed: 0.965, corner: 0.99, noise: 0.9, drift: 0.72, items: 0.75, rbAhead: 0.06, rbBehind: 0.06, mistake: 1.1 },
+  pro: { speed: 1.005, corner: 1.03, noise: 0.45, drift: 0.95, items: 1, rbAhead: 0.03, rbBehind: 0.08, mistake: 0.4 },
 };
 
 const clamp = (v: number, a: number, b: number) => Math.max(a, Math.min(b, v));

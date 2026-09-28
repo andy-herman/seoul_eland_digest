@@ -269,6 +269,15 @@ export function groundY(tr: Track, i: number, along: number): number {
   return s.y + (tr.samples[j].y - s.y) * t;
 }
 
+// Road gradient (dy per metre along the track) under a point, interpolated between the centred sample
+// slopes so it changes smoothly: the joints between 1 m samples must not read as crests.
+export function slopeAt(tr: Track, i: number, along: number): number {
+  const s = tr.samples[i];
+  const j = along >= 0 ? wrap(i + 1, tr.n) : wrap(i - 1, tr.n);
+  const t = Math.min(1, Math.abs(along) / tr.ds);
+  return s.slope + (tr.samples[j].slope - s.slope) * t;
+}
+
 // World point at sample i shifted laterally by lat (+ right).
 export function pointAt(tr: Track, i: number, lat: number): { x: number; z: number; y: number } {
   const s = tr.samples[wrap(i, tr.n)];

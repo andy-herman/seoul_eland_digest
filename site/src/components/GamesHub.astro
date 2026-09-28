@@ -14,7 +14,7 @@ const copy = isPortuguese
   ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
-      intro: "Quatro jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
+      intro: "Cinco jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha é o 서울의 노래 (versão 2024) do clube.",
       newBadge: "Novo",
       play: "Jogar",
       credit:
@@ -23,7 +23,7 @@ const copy = isPortuguese
   : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
-      intro: "Four games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      intro: "Five games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
       newBadge: "New",
       play: "Play",
       credit:
@@ -31,6 +31,17 @@ const copy = isPortuguese
     };
 
 const games = [
+  {
+    href: `${prefix}/play/mascot-kart`,
+    isNew: true,
+    title: "Mascot Kart",
+    desc: isPortuguese
+      ? "Uma corrida de kart no estilo KartRider. Faça drift, use turbos e jogue balões d'água com o Leoul ou o Lenyang contra os outros 16 mascotes da K League 2, em duas copas e oito pistas de Mokdong a Busan."
+      : "A KartRider-style kart race. Drift, boost and throw water balloons as Leoul or Lenyang against the 16 other K League 2 mascots, across two cups and eight tracks from Mokdong to Busan.",
+    tags: isPortuguese ? ["Corrida de kart", "8 pistas", "2 copas"] : ["Kart racing", "8 tracks", "2 cups"],
+    art: [{ src: withBase("/play/kart/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
+    accent: "kart",
+  },
   {
     href: `${prefix}/play/head-to-head`,
     isNew: true,
@@ -193,6 +204,10 @@ const games = [
 
   .games-card-balloon .games-art {
     background: #5aa33e;
+  }
+
+  .games-card-kart .games-art {
+    background: #9ed6ff;
   }
 
   .games-card-h2h .games-art {

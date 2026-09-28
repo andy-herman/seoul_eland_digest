@@ -51,6 +51,7 @@ export const PHYS = {
   wallBounce: 0.28,
   kartBounce: 0.5,
   airTurn: 0.3,
+  launchMax: 7, // m/s of upward speed kept off a jump lip, so flights stay short enough to steer
   wallGaugeLoss: 0.2, // share of the gauge lost on a hard wall hit while drifting
   retireAfter: 20, // seconds after the leader finishes before the rest retire (KartRider: 10)
 } as const;

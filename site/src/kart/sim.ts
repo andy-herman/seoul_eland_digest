@@ -3,7 +3,7 @@
 // instant boost on a clean drift exit or a throttle re-tap, slipstream draft, start boost at GO,
 // boost pads, jumps off crests, walls and bumps. Item mode swaps the gauge for item boxes.
 import { AI_TIERS, Brain } from "./ai";
-import { angleDiff, buildTrack, frame, gridSlot, groundY, headingAt, nearestLocal, pointAt, wrap, type Track } from "./track";
+import { angleDiff, buildTrack, frame, gridSlot, groundY, headingAt, nearestLocal, pointAt, slopeAt, wrap, type Track } from "./track";
 import {
   GRAVITY,
   ITEM_KINDS,
@@ -460,15 +460,19 @@ export class Race {
     k.lat = f.lat;
     k.offroad = Math.abs(f.lat) > s.hw + 0.9;
     const gy = groundY(tr, k.si, f.along);
+    // vertical speed of the road surface under the kart as it moves along the track
+    const s2 = tr.samples[k.si];
+    const gvy = slopeAt(tr, k.si, f.along) * (k.vx * s2.tx + k.vz * s2.tz);
     if (k.grounded) {
-      const vy = (gy - k.y) / dt;
-      if (vy < k.vy - GRAVITY * dt * 1.35 && Math.abs(k.speed) > 8) {
+      // leave the road only where it falls away faster than gravity pulls: a crest or a jump lip
+      if (gvy < k.vy - GRAVITY * dt * 1.35 && Math.abs(k.speed) > 8) {
         k.grounded = false;
         k.airT = 0;
+        k.vy = Math.min(k.vy, PHYS.launchMax);
         k.vy -= GRAVITY * dt;
         k.y += k.vy * dt;
       } else {
-        k.vy = vy;
+        k.vy = gvy;
         k.y = gy;
       }
     } else {
@@ -476,9 +480,10 @@ export class Race {
       k.vy -= GRAVITY * dt;
       k.y += k.vy * dt;
       if (k.y <= gy) {
-        const power = -k.vy;
+        const power = Math.max(0, gvy - k.vy);
         k.y = gy;
-        k.vy = 0;
+        // land moving with the slope; a vertical speed of 0 on a descent would relaunch the kart next step
+        k.vy = gvy;
         k.grounded = true;
         if (k.airT > 0.25) this.emit({ type: "land", kart: k.index, power });
       }

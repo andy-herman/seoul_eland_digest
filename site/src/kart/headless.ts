@@ -137,7 +137,9 @@ function play(opts: RaceOptions, input: ((r: Race) => Inputs) | undefined, t: Ta
         t.bestLaps.push(Math.min(...k.lapTimes));
       } else t.dnf++;
     }
-    if (!k.human && !Number.isFinite(k.finishTime) && !opts.racers.some((r) => r.human)) violations.push(`${label}: AI ${k.id} did not finish (dist ${k.dist.toFixed(0)} of ${(race.laps * L).toFixed(0)})`);
+    // an AI may retire a few seconds short after a run of item hits (KartRider's retire countdown);
+    // one more than a fifth of a lap short when the countdown ends was stuck or lost
+    if (!k.human && !Number.isFinite(k.finishTime) && !opts.racers.some((r) => r.human) && k.dist < (race.laps - 0.2) * L) violations.push(`${label}: AI ${k.id} did not finish (dist ${k.dist.toFixed(0)} of ${(race.laps * L).toFixed(0)})`);
   }
   return race;
 }
