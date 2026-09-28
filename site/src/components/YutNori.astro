@@ -364,7 +364,7 @@ const mascots = withBase("/play/h2h/mascot-heads/");
       min-height: 0;
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: minmax(0, 1fr) auto auto auto;
+      grid-template-rows: auto auto auto minmax(0, 1fr);
       grid-template-areas: "board" "comment" "side" "teams";
       gap: .35rem;
       overflow: hidden;
