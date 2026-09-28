@@ -83,7 +83,7 @@ export const PAWS: PawClue[] = [
     chapterTitle: "Matchday",
     targetPath: "/guides/mokdong-stadium-matchday-guide/",
     targetPathPt: undefined,
-    selector: "main h2:nth-of-type(2), main h2",
+    selector: "main h2",
     riddle: {
       en: "A station wears the stadium's name like a collar. Find the guide where Line 5 leads a cat ten minutes to Leoul Park.",
       pt: "Uma estação usa o nome do estádio como coleira. Ache o guia em que a Linha 5 leva a gata em dez minutos ao Leoul Park.",
@@ -103,13 +103,13 @@ export const PAWS: PawClue[] = [
     targetPathPt: "/pt/play/",
     selector: "main h1, main h2",
     riddle: {
-      en: "Leoul and I found six phone-friendly toy boxes, plus the club song. Where do mascots go to play?",
-      pt: "Leoul e eu achamos seis brinquedos para celular, mais a música do clube. Onde os mascotes vão brincar?",
+      en: "Leoul and I found a whole shelf of phone-friendly toy boxes, and the club song was playing. Where do mascots go to play?",
+      pt: "Leoul e eu achamos uma prateleira inteira de brinquedos para celular, com a música do clube tocando. Onde os mascotes vão brincar?",
     },
     hint: { en: "Games page", pt: "Página de jogos" },
     source: {
       file: "site/src/components/GamesHub.astro",
-      snippet: "Six games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
+      snippet: "They all work on your phone, and the soundtrack is the club's own 서울의 노래 (2024 ver).",
     },
   },
   {
@@ -119,7 +119,7 @@ export const PAWS: PawClue[] = [
     chapterTitle: "Matchday",
     targetPath: "/korean-cup/what-is-the-korean-cup/",
     targetPathPt: "/pt/korean-cup/what-is-the-korean-cup/",
-    selector: "main h2:nth-of-type(4), main h2",
+    selector: "main h2",
     riddle: {
       en: "The cup door opened in Round 2 on July 15 for K League 2. Which explainer has the bracket string I pawed at?",
       pt: "A porta da Copa abriu na segunda rodada, em 15 de julho, para a K League 2. Qual explicador tem o fio da chave que eu puxei?",
@@ -281,7 +281,7 @@ export const PAWS: PawClue[] = [
     chapterTitle: "Deep Digest",
     targetPath: "/guides/mokdong-stadium-matchday-guide/",
     targetPathPt: undefined,
-    selector: "main h2:nth-of-type(1), main h2",
+    selector: "main h2",
     riddle: {
       en: "Even FC Seoul borrowed this ground for Asia when their pitch froze. Which guide has that chilly footnote?",
       pt: "Até o FC Seoul pegou este estádio emprestado para a Ásia quando seu gramado congelou. Qual guia tem essa nota gelada?",
@@ -299,7 +299,7 @@ export const PAWS: PawClue[] = [
     chapterTitle: "Deep Digest",
     targetPath: "/korean-cup/what-is-the-korean-cup/",
     targetPathPt: "/pt/korean-cup/what-is-the-korean-cup/",
-    selector: "main h2:nth-of-type(8), main h2",
+    selector: "main h2",
     riddle: {
       en: "My cup dream went out 4-2 after extra time, level at 2-2 through ninety. Which bracket tale tells the sad meow?",
       pt: "Meu sonho de copa caiu por 4 a 2 na prorrogação, depois de 2 a 2 nos 90. Qual história da chave conta o miado triste?",
@@ -335,7 +335,7 @@ export const PAWS: PawClue[] = [
     chapterTitle: "Deep Digest",
     targetPath: "/guides/mokdong-stadium-matchday-guide/",
     targetPathPt: undefined,
-    selector: "main h2:nth-of-type(5), main h2",
+    selector: "main h2",
     riddle: {
       en: "Nine thousand five hundred twenty-seven roared against Suwon in 2024. Which matchday guide keeps that crowd purr?",
       pt: "Nove mil quinhentos e vinte e sete rugiram contra Suwon em 2024. Qual guia de jogo guarda esse ronronar?",

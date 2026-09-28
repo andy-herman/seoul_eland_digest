@@ -9,6 +9,7 @@ export const PAW_STRINGS = {
     intro:
       "Lenyang wandered through the Digest and left 21 tiny paw prints behind. Solve the clues, visit the pages, and collect every print to earn a Detective Lenyang certificate.",
     howTitle: "How it works",
+    chapterLabel: "Chapter",
     steps: [
       "Read a clue and browse the Digest for the page it describes.",
       "Tap the paw print when you find it. Progress stays only on this device.",
@@ -49,6 +50,7 @@ export const PAW_STRINGS = {
     intro:
       "A Lenyang passeou pelo Digest e deixou 21 patinhas pelo caminho. Resolva as pistas, visite as páginas e colete todas para ganhar um certificado de Detetive Lenyang.",
     howTitle: "Como funciona",
+    chapterLabel: "Capítulo",
     steps: [
       "Leia uma pista e navegue pelo Digest até a página certa.",
       "Toque na patinha quando encontrar. O progresso fica só neste aparelho.",

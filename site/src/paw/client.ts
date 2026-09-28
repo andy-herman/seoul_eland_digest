@@ -4,8 +4,8 @@ import { stripBase, withBase } from "../lib/paths";
 const KEY = "paw-hunt-v1";
 type Locale = "en" | "pt";
 const CLIENT_STRINGS = {
-  en: { ariaPaw: "Collect Lenyang paw print", found: (c: number, t: number) => `Paw ${c} of ${t} found!`, start: "You found one of Lenyang's paw prints! There are 21 hidden on the Digest. Start the hunt", startLink: "Start the hunt", hunt: "Hunt page" },
-  pt: { ariaPaw: "Coletar patinha da Lenyang", found: (c: number, t: number) => `Patinha ${c} de ${t} encontrada!`, start: "Você encontrou uma das patinhas da Lenyang! Há 21 escondidas no Digest. Comece a caça", startLink: "Começar a caça", hunt: "Página da caça" },
+  en: { ariaPaw: "Collect Lenyang paw print", found: (c: number, t: number) => `Paw ${c} of ${t} found!`, start: "You found one of Lenyang's paw prints! There are 21 hidden on the Digest.", startLink: "Start the hunt", hunt: "Hunt page" },
+  pt: { ariaPaw: "Coletar patinha da Lenyang", found: (c: number, t: number) => `Patinha ${c} de ${t} encontrada!`, start: "Você encontrou uma das patinhas da Lenyang! Há 21 escondidas no Digest.", startLink: "Começar a caça", hunt: "Página da caça" },
 } as const;
 
 type Store = { started?: boolean; found: string[] };
@@ -48,10 +48,23 @@ function icon(done: boolean) {
   return `<svg viewBox="0 0 64 64" aria-hidden="true"><ellipse cx="22" cy="28" rx="8" ry="11"/><ellipse cx="42" cy="28" rx="8" ry="11"/><ellipse cx="17" cy="15" rx="7" ry="9"/><ellipse cx="32" cy="12" rx="7" ry="9"/><ellipse cx="47" cy="15" rx="7" ry="9"/><path d="M19 43c0-9 7-15 13-15s13 6 13 15c0 7-7 10-13 10s-13-3-13-10Z"/>${done ? `<path class="paw-check" d="M22 38l7 7 14-18"/>` : ""}</svg>`;
 }
 
+// Beside the sentence the riddle is about when the page has it, otherwise on the first heading that
+// does not already carry a paw, so two paws never sit on top of each other.
+function findAnchor(paw: SitePaw, locale: Locale): HTMLElement | null {
+  const phrase = locale === "pt" ? paw.tp : paw.t;
+  if (phrase) {
+    for (const el of document.querySelectorAll<HTMLElement>("main p, main li, main td, main blockquote")) {
+      if (el.textContent?.includes(phrase)) return el;
+    }
+  }
+  const all = [...document.querySelectorAll<HTMLElement>(paw.s)];
+  return all.find((el) => !el.querySelector(".paw-print-button")) ?? all[0] ?? document.querySelector<HTMLElement>("main h1, main h2, main article");
+}
+
 function mountOne(paw: SitePaw, locale: Locale, found: Set<string>) {
   if (!chapterUnlocked(paw.c, found)) return;
 
-  const anchor = document.querySelector<HTMLElement>(paw.s) || document.querySelector<HTMLElement>("main h1, main h2, main article");
+  const anchor = findAnchor(paw, locale);
   if (!anchor || anchor.querySelector(`.paw-print-button[data-paw-id="${paw.id}"]`)) return;
 
   anchor.classList.add("paw-anchor-host");
