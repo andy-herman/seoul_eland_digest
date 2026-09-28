@@ -1,0 +1,189 @@
+---
+import TranslateButton from "./TranslateButton.astro";
+import { withBase } from "../lib/paths";
+import { PALETTE, TIFO_STRINGS, type Locale } from "../tifo/data";
+
+interface Props { locale?: Locale }
+const { locale = "en" } = Astro.props;
+const t = TIFO_STRINGS[locale];
+const isPt = locale === "pt";
+---
+
+<div class="tf-page">
+  <header class="supporter-panel rounded-[1.25rem] sm:rounded-[2rem]">
+    <div class="relative flex flex-wrap items-end justify-between gap-x-6 gap-y-3 p-4 sm:p-7">
+      <div>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h1 class="mt-2 max-w-3xl text-[1.75rem] font-black uppercase leading-none tracking-tight sm:text-4xl">{t.heading} <span class="tf-ko">{t.ko}</span></h1>
+        <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{t.intro}</p>
+      </div>
+      {isPt ? <TranslateButton href="/play/tifo-master" code="EN" label={t.translateLabel} ariaLabel={t.translateAria} /> : <TranslateButton href="/pt/play/tifo-master" code="PT" label={t.translateLabel} ariaLabel={t.translateAria} />}
+    </div>
+  </header>
+
+  <section class="tf-game" data-tifo-root data-mode="menu" data-locale={locale} data-assets={withBase("/play/tifo/")} data-song={withBase("/play/seoul-song-2024.mp3")}>
+    <div class="tf-screen tf-menu" data-tifo-screen="menu">
+      <div class="tf-poster">
+        <img src={withBase("/play/leoul-wave.webp")} alt="" width="350" height="480" />
+        <div class="tf-poster-stand" aria-hidden="true">{PALETTE.map((p, i) => <i style={`--c:${p.hex};--i:${i}`}></i>)}</div>
+        <img src={withBase("/play/lenyang-jump.webp")} alt="" width="350" height="480" />
+        <h2>{t.heading}<span>{t.ko}</span></h2>
+      </div>
+      <div class="tf-mode-buttons">
+        <button type="button" class="tf-primary" data-menu-mode="designer">{t.designer}</button>
+        <button type="button" data-menu-mode="check">{t.check}</button>
+        <button type="button" data-menu-mode="gallery">{t.gallery}</button>
+      </div>
+    </div>
+
+    <div class="tf-screen tf-designer" data-tifo-screen="designer" hidden>
+      <div class="tf-topbar">
+        <button type="button" data-back-menu>← {t.menu}</button>
+        <input data-title aria-label="Title" />
+        <button type="button" data-mute>🔊</button>
+      </div>
+      <div class="tf-editor">
+        <canvas data-tifo-grid aria-label={t.designer}></canvas>
+        <aside class="tf-panel">
+          <div class="tf-toolrow">
+            <button type="button" data-tool="brush">B {t.brush}</button>
+            <button type="button" data-tool="fill">F {t.fill}</button>
+            <button type="button" data-tool="line">L {t.line}</button>
+            <button type="button" data-tool="rect">R {t.rect}</button>
+            <button type="button" data-tool="text">T {t.text}</button>
+            <button type="button" data-tool="dropper">I {t.dropper}</button>
+          </div>
+          <div class="tf-controls">
+            <label>Size <input data-brush type="range" min="1" max="3" value="1" /></label>
+            <button type="button" data-mirror>{t.mirror}</button>
+            <button type="button" data-rect-fill>Filled</button>
+            <button type="button" data-dither>{t.dither}</button>
+            <label class="tf-file">{t.import}<input data-import type="file" accept="image/*" /></label>
+          </div>
+          <div class="tf-frames">
+            <button type="button" data-frame-step="-1">←</button>
+            <b data-tifo-frame-label>1 / 1</b>
+            <button type="button" data-frame-step="1">→</button>
+            <button type="button" data-add-frame>{t.addFrame}</button>
+            <button type="button" data-dup-frame>{t.dupFrame}</button>
+            <button type="button" data-del-frame>{t.delFrame}</button>
+          </div>
+          <label class="tf-wave">{t.wave}<select data-wave><option value="left">Left to right</option><option value="center">Centre out</option><option value="bottom">Bottom up</option></select> <small data-tifo-wave-label></small></label>
+          <div class="tf-actions">
+            <button type="button" data-undo>{t.undo}</button>
+            <button type="button" data-redo>{t.redo}</button>
+            <button type="button" data-clear>{t.clear}</button>
+          </div>
+          <div class="tf-actions">
+            <button type="button" class="tf-primary" data-show>{t.show}</button>
+            <button type="button" data-share>{t.share}</button>
+            <button type="button" data-save>{t.save}</button>
+          </div>
+          <p class="tf-msg"><span data-share-msg></span> <span data-save-msg></span></p>
+        </aside>
+      </div>
+      <div class="tf-mobilebar">
+        <div data-palette-row></div>
+      </div>
+      <section class="tf-saves" data-saves></section>
+    </div>
+
+    <div class="tf-screen tf-gallery" data-tifo-screen="gallery" hidden>
+      <div class="tf-topbar"><button type="button" data-back-menu>← {t.menu}</button><h2>{t.gallery}</h2></div>
+      <div class="tf-gridcards" data-gallery></div>
+    </div>
+
+    <div class="tf-screen tf-check" data-tifo-screen="check" hidden>
+      <div class="tf-topbar"><button type="button" data-back-menu>← {t.menu}</button><h2>{t.check}</h2></div>
+      <p>{t.history}</p>
+      <div class="tf-levels" data-levels></div>
+    </div>
+
+    <div class="tf-screen tf-show" data-tifo-screen="show" hidden>
+      <canvas data-tifo-show-canvas></canvas>
+      <div class="tf-count" data-count></div>
+      <div class="tf-showbar">
+        <button type="button" data-close-show>{t.edit}</button>
+        <button type="button" data-download>{t.download}</button>
+        <button type="button" data-menu>{t.make}</button>
+      </div>
+    </div>
+
+    <div class="tf-screen tf-show tf-check3d" data-tifo-screen="check3d" hidden>
+      <canvas data-tifo-show-canvas></canvas>
+      <div class="tf-ref"><canvas data-tifo-ref></canvas><p data-check-hud></p><b data-check-result></b></div>
+      <div class="tf-showbar"><button type="button" data-check-back>← {t.check}</button></div>
+    </div>
+  </section>
+
+  <section class="tf-info">
+    <div><h2>{t.howTitle}</h2><ul>{t.how.map((x) => <li>{x}</li>)}</ul></div>
+    <p>{t.history}</p>
+    <p class="tf-credits">{t.credits}</p>
+  </section>
+</div>
+
+<script>
+  import { mountTifoMaster } from "../tifo/main";
+  for (const root of document.querySelectorAll("[data-tifo-root]")) mountTifoMaster(root as HTMLElement);
+</script>
+
+<style is:global>
+  .tf-lock-scroll { overflow: hidden !important; height: 100dvh !important; max-height: 100dvh !important; }
+  .tf-page { display: grid; gap: 1rem; }
+  .tf-ko { display: inline-block; color: #ffc23a; font-size: .58em; letter-spacing: 0; vertical-align: middle; }
+  .tf-game { --ink: #071228; --navy: #1b2446; --gold: #ffc23a; color: #fff; }
+  .tf-game button, .tf-game input, .tf-game select { font: inherit; }
+  .tf-screen { border: 4px solid var(--ink); border-radius: 1.25rem; background: linear-gradient(160deg, #0d1832, #14244a); box-shadow: 0 8px 0 var(--ink); padding: 1rem; }
+  .tf-screen[hidden] { display: none; }
+  .tf-primary, .tf-mode-buttons button, .tf-actions button, .tf-toolrow button, .tf-controls button, .tf-frames button, .tf-topbar button, .tf-showbar button, .tf-level, .tf-mini button, .tf-save { min-height: 44px; border: 3px solid var(--ink); border-radius: 999px; background: #fff; color: #11182d; font-weight: 900; padding: .55rem .9rem; box-shadow: 0 3px 0 var(--ink); cursor: pointer; }
+  .tf-primary { background: var(--gold) !important; }
+  .tf-game button[data-on="true"] { outline: 3px solid #58c6ff; background: #e7f7ff; }
+  .tf-poster { position: relative; display: grid; grid-template-columns: 1fr 1.4fr 1fr; align-items: end; min-height: 18rem; overflow: hidden; border: 3px solid var(--ink); border-radius: 1rem; background: radial-gradient(circle at 50% 0, #385191, #08122a 72%); }
+  .tf-poster img { width: min(28vw, 220px); max-height: 17rem; object-fit: contain; filter: drop-shadow(0 8px 0 rgba(0,0,0,.35)); }
+  .tf-poster img:last-of-type { justify-self: end; }
+  .tf-poster h2 { position: absolute; left: 1rem; bottom: 1rem; max-width: min(34rem, 62%); margin: 0; font-size: clamp(2rem, 7vw, 5rem); line-height: .92; font-weight: 1000; text-transform: uppercase; text-shadow: 0 4px 0 #000; }
+  .tf-poster h2 span { display: block; margin-top: .4rem; font-size: .34em; line-height: 1.1; color: var(--gold); letter-spacing: 0; }
+  .tf-poster-stand { align-self: center; display: grid; grid-template-columns: repeat(16, 1fr); gap: 2px; transform: perspective(480px) rotateX(18deg); }
+  .tf-poster-stand i { height: .8rem; background: var(--c); box-shadow: 0 0 10px color-mix(in srgb, var(--c), transparent 60%); }
+  .tf-mode-buttons, .tf-actions, .tf-toolrow, .tf-controls, .tf-frames, .tf-showbar, .tf-topbar { display: flex; flex-wrap: wrap; gap: .55rem; align-items: center; }
+  .tf-mode-buttons { justify-content: center; margin-top: 1rem; }
+  .tf-editor { display: grid; grid-template-columns: minmax(0, 1fr) 21rem; gap: 1rem; align-items: start; }
+  .tf-editor canvas, .tf-show canvas[data-tifo-show-canvas] { width: 100%; display: block; touch-action: none; border: 3px solid var(--ink); border-radius: .9rem; background: #071228; }
+  .tf-panel { display: grid; gap: .8rem; }
+  .tf-topbar input { flex: 1; min-width: 12rem; border: 3px solid var(--ink); border-radius: 999px; padding: .55rem .9rem; color: #10182f; font-weight: 900; }
+  .tf-controls label, .tf-wave, .tf-file { color: #dce7ff; font-weight: 800; }
+  .tf-file input { display: none; }
+  .tf-mobilebar { position: sticky; bottom: max(.4rem, env(safe-area-inset-bottom)); z-index: 4; margin-top: .6rem; }
+  .tf-mobilebar > div { display: flex; gap: .4rem; justify-content: center; padding: .45rem; border-radius: 999px; background: rgba(7,18,40,.86); backdrop-filter: blur(8px); }
+  .tf-mobilebar button { width: 44px; height: 44px; border: 3px solid #071228; border-radius: 50%; box-shadow: 0 2px 0 #071228; }
+  .tf-gridcards, .tf-saves { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: .8rem; margin-top: 1rem; }
+  .tf-mini, .tf-save { display: grid; gap: .5rem; border-radius: 1rem; background: #fff; color: #10182f; padding: .7rem; text-align: left; }
+  .tf-mini img, .tf-save img { width: 100%; border-radius: .6rem; background: #071228; }
+  .tf-levels { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: .65rem; }
+  .tf-level:disabled { opacity: .45; }
+  .tf-show { position: relative; min-height: 72vh; padding: 0; overflow: hidden; background: #071228; }
+  .tf-show canvas[data-tifo-show-canvas] { height: 72vh; border: 0; border-radius: .8rem; }
+  .tf-count { position: absolute; top: max(.7rem, env(safe-area-inset-top)); left: 50%; transform: translateX(-50%); min-width: 5.5rem; display: grid; place-items: center; pointer-events: none; border: 2px solid rgba(255, 194, 58, .55); border-radius: 999px; background: rgba(7, 18, 40, .72); padding: .25rem .9rem; font-size: clamp(1.15rem, 3.6vw, 2.1rem); line-height: 1; font-weight: 1000; color: var(--gold); text-shadow: 0 2px 0 #000; }
+  .tf-showbar { position: absolute; left: 1rem; right: 1rem; bottom: max(1rem, env(safe-area-inset-bottom)); justify-content: center; }
+  .tf-ref { position: absolute; left: 50%; top: max(.6rem, env(safe-area-inset-top)); transform: translateX(-50%); display: flex; align-items: center; gap: .7rem; max-width: calc(100% - 1.2rem); padding: .45rem .6rem; border: 3px solid var(--ink); border-radius: .9rem; background: rgba(255,255,255,.94); color: #10182f; font-weight: 900; pointer-events: none; }
+  .tf-ref canvas { display: block; flex: none; height: min(5.5rem, 16vh); width: auto; aspect-ratio: 12 / 5; border: 0; border-radius: .35rem; }
+  .tf-ref p, .tf-ref b { margin: 0; font-size: .85rem; line-height: 1.25; }
+  .tf-ref > p { max-width: 14rem; }
+  @media (max-width: 480px) { .tf-ref { flex-direction: column; align-items: stretch; gap: .35rem; } .tf-ref canvas { height: auto; width: min(15rem, 70vw); } }
+  .tf-info { display: grid; gap: 1rem; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); color: var(--color-text); }
+  .tf-credits { grid-column: 1 / -1; font-size: .9rem; opacity: .82; }
+  @media (pointer: coarse) {
+    .tf-game[data-mode="show"] .tf-show, .tf-game[data-mode="check3d"] .tf-check3d { position: fixed; inset: 0; z-index: 80; min-height: 100dvh; border-radius: 0; border: 0; box-shadow: none; }
+    .tf-game[data-mode="show"] .tf-show canvas[data-tifo-show-canvas], .tf-game[data-mode="check3d"] .tf-check3d canvas[data-tifo-show-canvas] { height: 100dvh; border-radius: 0; }
+  }
+  @media (max-width: 760px) {
+    .tf-screen { padding: .7rem; border-radius: 1rem; }
+    .tf-editor { grid-template-columns: 1fr; }
+    .tf-toolrow, .tf-controls, .tf-actions, .tf-frames { overflow-x: auto; flex-wrap: nowrap; padding-bottom: .15rem; }
+    .tf-panel { order: 2; }
+    .tf-info { grid-template-columns: 1fr; }
+    .tf-poster { min-height: 15rem; grid-template-columns: .7fr 1.2fr .7fr; }
+    .tf-poster h2 { max-width: 74%; font-size: clamp(1.7rem, 12vw, 3.4rem); }
+  }
+</style>

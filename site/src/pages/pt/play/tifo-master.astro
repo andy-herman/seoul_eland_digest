@@ -1,0 +1,11 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TifoMaster from "../../../components/TifoMaster.astro";
+import { TIFO_STRINGS } from "../../../tifo/data";
+
+const t = TIFO_STRINGS.pt;
+---
+
+<BaseLayout title={t.pageTitle} description={t.pageDescription} ogImage="/play/tifo/og-tifo-pt.jpg" lang="pt">
+  <TifoMaster locale="pt" />
+</BaseLayout>
