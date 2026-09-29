@@ -3,7 +3,7 @@ import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import PawPrints from "../components/PawPrints.astro";
-import { withBase } from "../lib/paths";
+import { withBase, stripBase } from "../lib/paths";
 
 interface Props {
   title: string;
@@ -20,7 +20,12 @@ interface Props {
 const { title, description, lang = "en", ogType = "website", publishedDate, ogImage = "/assets/og-card.png" } = Astro.props;
 const locale = lang === "pt" ? "pt" : "en";
 const siteName = "Seoul E-Land Digest";
-const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+// Mirror builds (GitHub Pages) set CANONICAL_SITE so search engines credit the
+// main domain instead of the mirror.
+const canonicalSite = process.env.CANONICAL_SITE?.trim();
+const canonicalUrl = canonicalSite
+  ? new URL(stripBase(Astro.url.pathname), canonicalSite).href
+  : new URL(Astro.url.pathname, Astro.site).href;
 const ogImageUrl = new URL(withBase(ogImage), Astro.site).href;
 const jsonLd =
   ogType === "article"

@@ -39,6 +39,7 @@ jobs:
         env:
           SITE_URL: ${{ vars.SITE_URL || format('https://{0}.github.io', github.repository_owner) }}
           SITE_BASE: ${{ vars.SITE_BASE || format('/{0}', github.event.repository.name) }}
+          CANONICAL_SITE: ${{ vars.CANONICAL_SITE || 'https://seoulelanddigest.com' }}
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

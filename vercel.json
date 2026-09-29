@@ -5,25 +5,25 @@
   "framework": null,
   "redirects": [
     {
-      "source": "/:path*",
+      "source": "/:path(.*)",
       "has": [
         {
           "type": "host",
           "value": "www.seoulelanddigest.com"
         }
       ],
-      "destination": "https://seoulelanddigest.com/:path*",
+      "destination": "https://seoulelanddigest.com/:path",
       "permanent": true
     },
     {
-      "source": "/:path*",
+      "source": "/:path(.*)",
       "has": [
         {
           "type": "host",
           "value": "seoulelanddigest.vercel.app"
         }
       ],
-      "destination": "https://seoulelanddigest.com/:path*",
+      "destination": "https://seoulelanddigest.com/:path",
       "permanent": true
     }
   ]

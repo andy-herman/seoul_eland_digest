@@ -1,6 +1,6 @@
 param(
     [string]$ProjectDir = "C:\Andy Herman\Coding Projects (Local)\seoul_eland_digest",
-    [string]$SiteUrl = "https://seoul-eland-digest.vercel.app",
+    [string]$SiteUrl = "https://seoulelanddigest.com",
     [string]$Remote = "origin",
     [string]$Branch = "main",
     [switch]$DirectVercelDeploy
