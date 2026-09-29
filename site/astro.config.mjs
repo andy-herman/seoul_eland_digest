@@ -6,7 +6,7 @@ import { visit } from "unist-util-visit";
 
 // The production domain is the default so canonical URLs, OG tags, the sitemap
 // and the RSS feed come out right on Vercel builds, where SITE_URL is not set.
-const site = process.env.SITE_URL ?? "https://seoulelanddigest.vercel.app";
+const site = process.env.SITE_URL ?? "https://seoulelanddigest.com";
 const base = process.env.SITE_BASE?.trim() || "/";
 const linkBase = base === "/" ? "" : base.replace(/\/$/, "");
 

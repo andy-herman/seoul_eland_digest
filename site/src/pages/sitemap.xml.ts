@@ -55,7 +55,7 @@ const STATIC_PATHS = [
 ];
 
 export async function GET(context: APIContext) {
-  const site = (context.site ?? new URL("https://seoulelanddigest.vercel.app")).href.replace(/\/$/, "");
+  const site = (context.site ?? new URL("https://seoulelanddigest.com")).href.replace(/\/$/, "");
 
   const paths: string[] = [...STATIC_PATHS];
 

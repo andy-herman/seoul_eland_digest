@@ -2,5 +2,29 @@
   "installCommand": "cd site && npm ci",
   "buildCommand": "cd site && npm run build",
   "outputDirectory": "site/dist",
-  "framework": null
+  "framework": null,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.seoulelanddigest.com"
+        }
+      ],
+      "destination": "https://seoulelanddigest.com/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "seoulelanddigest.vercel.app"
+        }
+      ],
+      "destination": "https://seoulelanddigest.com/:path*",
+      "permanent": true
+    }
+  ]
 }

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://seoulelanddigest.vercel.app/sitemap.xml
+Sitemap: https://seoulelanddigest.com/sitemap.xml
