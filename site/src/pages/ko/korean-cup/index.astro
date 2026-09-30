@@ -1,5 +1,71 @@
 ---
-import { safeGetCollection } from "../../../lib/safeContent"; import BaseLayout from "../../../layouts/BaseLayout.astro"; import TranslateButton from "../../../components/TranslateButton.astro"; import { withBase } from "../../../lib/paths";
-const articles=(await safeGetCollection("koreanCupKo")).sort((a,b)=>a.data.order-b.data.order || (b.data.date?.getTime()??0)-(a.data.date?.getTime()??0));
+import { safeGetCollection } from "../../../lib/safeContent";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TranslateButton from "../../../components/TranslateButton.astro";
+import { withBase } from "../../../lib/paths";
+
+const articles = (await safeGetCollection("koreanCupKo")).sort(
+  (a, b) => (a.data.order ?? 0) - (b.data.order ?? 0),
+);
+
+const tagKo = (tag: string) =>
+  ({
+    "explainer": "해설",
+    "draw": "대진",
+    "seoul-e-land": "서울 이랜드",
+    "cup": "컵대회",
+  })[tag] ?? tag.replace(/-/g, " ");
 ---
-<BaseLayout title="서울 이랜드 코리아컵" description="코리아컵 대진표와 서울 이랜드의 컵 여정을 정리한 한국어 허브입니다." lang="ko"><section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]"><div class="relative p-5 sm:p-8 lg:p-10"><p class="eyebrow">Hana Bank Korea Cup</p><h1 class="mt-3 text-[2.35rem] font-black leading-none tracking-tight sm:text-6xl">코리아컵</h1><p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color:var(--color-link);">대진표, 대회 방식, 서울 이랜드의 컵 여정을 한국어로 정리합니다.</p><div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7"><TranslateButton href="/korean-cup" code="EN" label="영어" /><TranslateButton href="/pt/korean-cup" code="PT" label="포르투갈어" /></div></div></section><section class="grid gap-4">{articles.map((article)=><a href={withBase(`/ko/korean-cup/${article.id.replace(/\.md$/,"")}`)} class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6" style="background:color-mix(in srgb,white 6%,transparent);border-color:color-mix(in srgb,var(--color-gold) 16%,var(--color-rule));"><span class="metadata-chip">코리아컵</span><h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">{article.data.title}</h2>{article.data.description && <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color:var(--color-link);">{article.data.description}</p>}<p class="mt-4 text-sm font-black" style="color:var(--color-gold-light);">읽기 →</p></a>)}</section>{articles.length===0 && <p class="rounded-2xl border p-6 font-black" style="border-color:var(--color-rule);">아직 한국어 코리아컵 글이 없습니다.</p>}</BaseLayout>
+
+<BaseLayout
+  title="서울 이랜드와 코리아컵"
+  description="코리아컵이 무엇인지, 2026년 대진이 어떻게 이어지는지, 서울 이랜드가 어디서 합류하는지 정리했습니다."
+  lang="ko"
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        코리아컵
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        K리그2 팀이 강호들과 같은 무대에서 만날 수 있는 컵대회입니다. 코리아컵의 구조, 2026년 대진, 서울 이랜드의 토너먼트 경로를 정리합니다.
+      </p>
+      <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+        글 {articles.length}편
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/korean-cup" code="EN" label="영어" ariaLabel="코리아컵 영어판 보기" />
+        <TranslateButton href="/pt/korean-cup" code="PT" label="포르투갈어" ariaLabel="코리아컵 포르투갈어판 보기" />
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="코리아컵 글" class="grid gap-4">
+    {articles.map((article, index) => (
+      <a
+        href={withBase(`/ko/korean-cup/${article.id.replace(/\.md$/, "")}`)}
+        class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6"
+        style="background: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));"
+      >
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="metadata-chip">{index + 1}편</span>
+          {article.data.tags?.filter((tag: string) => tag !== "korean-cup").slice(0, 2).map((tag: string) => (
+            <span class="metadata-chip">{tagKo(tag)}</span>
+          ))}
+        </div>
+        <h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">
+          {article.data.title}
+        </h2>
+        {article.data.description && (
+          <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">
+            {article.data.description}
+          </p>
+        )}
+        <p class="mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          글 읽기 →
+        </p>
+      </a>
+    ))}
+  </section>
+</BaseLayout>

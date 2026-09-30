@@ -5,12 +5,18 @@ import TranslateButton from "../../components/TranslateButton.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import { byeRounds, fixtures, scheduleSections, season, sourceUrl, team, type MatchFixture } from "../../data/matches";
 import { getTeamInitials, getTeamLogo } from "../../lib/teamLogos";
+import { koTeam, stadiumKo } from "../../lib/teamNamesKo";
 import { withBase } from "../../lib/paths";
 import { getPreMatchPreviewForRound } from "../../lib/prematchPreviews";
-import { koTeam, stadiumKo } from "../../lib/teamNamesKo";
 
 const digests = await safeGetCollection("digestsKo");
-const reportByRound = new Map(digests.map((digest) => [digest.data.round, `/ko/rounds/${digest.id.replace(/\.md$/, "")}`]));
+const reportByRound = new Map(
+  digests.map((digest) => [
+    digest.data.round,
+    `/ko/rounds/${digest.id.replace(/\.md$/, "")}`,
+  ]),
+);
+
 const schedule = [...fixtures].sort((a, b) => a.round - b.round);
 const playedMatches = schedule.filter((match) => match.result !== "TBD");
 const upcomingMatches = schedule.filter((match) => match.result === "TBD");
@@ -19,27 +25,267 @@ const nextMatchPreview = nextMatch ? getPreMatchPreviewForRound(nextMatch.round,
 const wins = playedMatches.filter((match) => match.result.startsWith("W")).length;
 const draws = playedMatches.filter((match) => match.result.startsWith("D")).length;
 const losses = playedMatches.filter((match) => match.result.startsWith("L")).length;
-const publishedSections = scheduleSections.map((section) => ({ ...section, matches: schedule.filter((match) => match.round >= section.rounds[0] && match.round <= section.rounds[1]) }));
-const dateFormatter = new Intl.DateTimeFormat("ko-KR", { weekday: "short", month: "long", day: "numeric", year: "numeric", timeZone: "UTC" });
-const formatDate = (date: string) => dateFormatter.format(new Date(`${date}T00:00:00Z`));
-const formatKickoff = (time: string) => (time === "TBD" || time === "00:00" ? "시간 미정" : `${time} KST`);
-const venueLabel = (venue: MatchFixture["venue"]) => (venue === "home" ? "홈" : venue === "away" ? "원정" : "중립");
-const getSectionByeRounds = (rounds: readonly [number, number]) => byeRounds.filter((round) => round >= rounds[0] && round <= rounds[1]);
-const sectionLabel = (label: string) => label === "Round robin 1" ? "첫 번째 라운드 로빈" : label === "Round robin 2" ? "두 번째 라운드 로빈" : label;
-function getMatchTeams(match: MatchFixture) {
-  const seoul = { name: team, display: koTeam(team, "short"), score: match.venue === "away" ? match.awayScore : match.homeScore };
-  const opponent = { name: match.opponent, display: koTeam(match.opponent, "short"), score: match.venue === "away" ? match.homeScore : match.awayScore };
-  return match.venue === "away" ? { home: opponent, away: seoul } : { home: seoul, away: opponent };
+const publishedSections = scheduleSections.map((section) => ({
+  ...section,
+  matches: schedule.filter(
+    (match) => match.round >= section.rounds[0] && match.round <= section.rounds[1],
+  ),
+}));
+
+const dateFormatter = new Intl.DateTimeFormat("ko-KR", {
+  weekday: "short",
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+function formatDate(date: string) {
+  return dateFormatter.format(new Date(`${date}T00:00:00Z`));
 }
-const getScore = (score?: number) => typeof score === "number" ? String(score) : "-";
+
+function formatKickoff(time: string) {
+  return time === "TBD" || time === "00:00" ? "시간 미정" : `${time} KST`;
+}
+
+function venueLabel(venue: MatchFixture["venue"]) {
+  return venue === "home" ? "홈" : venue === "away" ? "원정" : "중립";
+}
+
+function getSectionByeRounds(rounds: readonly [number, number]) {
+  return byeRounds.filter((round) => round >= rounds[0] && round <= rounds[1]);
+}
+
+function sectionLabel(label: string) {
+  return label === "Round robin 1" ? "1차 라운드 로빈" : label === "Round robin 2" ? "2차 라운드 로빈" : label;
+}
+
+function getMatchTeams(match: MatchFixture) {
+  const seoul = {
+    name: team,
+    score: match.venue === "away" ? match.awayScore : match.homeScore,
+  };
+  const opponent = {
+    name: match.opponent,
+    score: match.venue === "away" ? match.homeScore : match.awayScore,
+  };
+
+  return match.venue === "away"
+    ? { home: opponent, away: seoul }
+    : { home: seoul, away: opponent };
+}
+
+function getLogo(teamName: string) {
+  return getTeamLogo(teamName);
+}
+
+function getScore(score?: number) {
+  return typeof score === "number" ? String(score) : "-";
+}
 ---
-<BaseLayout title="서울 이랜드 일정·결과" description="서울 이랜드 FC의 2026시즌 일정, 결과, 킥오프 시간, 경기 리뷰 링크입니다." lang="ko">
-  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]"><div class="relative grid gap-6 p-5 sm:gap-8 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-10">
-    <div><p class="eyebrow">서울 이랜드 FC</p><h1 class="mt-3 text-[2.35rem] font-black leading-none tracking-tight sm:text-6xl">일정·결과</h1><p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">리그 일정, 결과, 킥오프 시간, 한국어 프리뷰와 리뷰를 한곳에 모았습니다.</p><p class="hero-meta-line mt-4 text-sm font-black" style="color: var(--color-gold-light);">{season}시즌 · 리그 {schedule.length}경기 · {wins}승 {draws}무 {losses}패</p><div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7"><TranslateButton href="/matches" code="EN" label="영어" /><TranslateButton href="/pt/matches" code="PT" label="포르투갈어" /></div></div>
-    <aside class="rounded-[1.25rem] border p-5" style="background: color-mix(in srgb, white 8%, transparent); border-color: color-mix(in srgb, var(--color-gold) 26%, var(--color-rule));"><p class="eyebrow">다음 경기</p>{nextMatch ? <><p class="mt-3 text-sm font-black" style="color: var(--color-muted);">{nextMatch.round}라운드 · {formatDate(nextMatch.date)} · {venueLabel(nextMatch.venue)}</p>{nextMatchPreview ? <a href={withBase(`/ko/previews/${nextMatchPreview.slug}`)} class="mt-5 block rounded-2xl border p-4 no-underline" style="background: color-mix(in srgb, var(--color-gold) 14%, transparent); border-color: color-mix(in srgb, var(--color-gold) 34%, var(--color-rule));"><p class="text-xs font-black" style="color: var(--color-gold-light);">경기 프리뷰</p><h2 class="mt-2 text-lg font-black leading-tight">{nextMatchPreview.title}</h2><p class="mt-2 text-sm font-bold leading-6" style="color: var(--color-link);">상대 분석, 최근 흐름, 전술 키, 모델 전망.</p><p class="mt-3 text-sm font-black" style="color: var(--color-gold-light);">프리뷰 보기 →</p></a> : <p class="mt-3 text-lg font-black">프리뷰 준비 중</p>}</> : <p class="mt-3 text-lg font-black">예정된 경기가 없습니다.</p>}</aside>
-  </div></section>
-  <section aria-labelledby="full-schedule"><div class="mb-5 flex flex-wrap items-end justify-between gap-3"><div><p class="eyebrow">캘린더</p><h2 id="full-schedule" class="mt-2 text-3xl font-black tracking-tight">공식 일정</h2></div><p class="text-sm font-bold" style="color: var(--color-muted);">{playedMatches.length}경기 완료 · {upcomingMatches.length}경기 예정</p></div>
-    <p class="mb-6 max-w-3xl rounded-2xl border px-4 py-3 text-sm font-bold leading-6" style="background: color-mix(in srgb, white 5%, transparent); border-color: color-mix(in srgb, var(--color-gold) 14%, var(--color-rule)); color: var(--color-link);">K League 공식 일정을 기준으로 정리했습니다. <a href={sourceUrl} class="font-black underline underline-offset-2" style="color: var(--color-gold-light);" target="_blank" rel="noopener noreferrer">K League 일정 보기</a>.</p>
-    <div class="grid gap-8">{publishedSections.map((section) => <section id={`ko-${section.id}`} class="scroll-mt-24 sm:scroll-mt-28" aria-labelledby={`ko-${section.id}-heading`}><div class="mb-4 flex flex-wrap items-end justify-between gap-3"><div><p class="eyebrow">{sectionLabel(section.label)}</p><h3 id={`ko-${section.id}-heading`} class="mt-2 text-2xl font-black tracking-tight">{section.rounds[0]}-{section.rounds[1]}라운드</h3></div><p class="text-sm font-bold" style="color: var(--color-muted);">{section.matches.length}경기{getSectionByeRounds(section.rounds).length > 0 && ` · 휴식 R${getSectionByeRounds(section.rounds).join(", R")}`}</p></div><ol class="grid gap-3">{section.matches.map((match) => { const teams = getMatchTeams(match); const homeLogo = getTeamLogo(teams.home.name); const awayLogo = getTeamLogo(teams.away.name); const reportHref = reportByRound.get(match.round); const isUpcoming = match.result === "TBD"; return <li class="overflow-hidden rounded-2xl border" style={`background: ${isUpcoming ? "color-mix(in srgb, var(--color-blue) 18%, var(--color-surface))" : "color-mix(in srgb, white 6%, transparent)"}; border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));`}><div class="grid gap-4 p-4 sm:grid-cols-[8.5rem_minmax(0,1fr)_auto] sm:items-center"><div><p class="text-xs font-black" style="color: var(--color-gold-light);">{match.round}라운드</p><p class="mt-1 text-sm font-bold leading-5" style="color: var(--color-link);">{formatDate(match.date)} · {formatKickoff(match.time)}</p><p class="mt-1 hidden text-xs font-bold leading-5 min-[380px]:block" style="color: var(--color-muted);">{stadiumKo(match.stadium)}</p><span class="metadata-chip mt-3">{venueLabel(match.venue)}</span></div><div class="grid gap-2">{[teams.home, teams.away].map((t) => { const logo = t === teams.home ? homeLogo : awayLogo; return <div class="grid grid-cols-[minmax(0,1fr)_2.25rem] items-center gap-3"><div class="flex min-w-0 items-center gap-3">{logo ? <img src={logo} alt={`${t.display} 엠블럼`} class="h-10 w-10 shrink-0 rounded-xl bg-white object-contain p-1.5" loading="lazy" /> : <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-xs font-black" style="color: var(--color-navy);">{getTeamInitials(t.name)}</span>}<p class="min-w-0 truncate text-sm font-black">{t.display}</p></div><p class="text-right text-xl font-black tabular-nums">{getScore(t.score)}</p></div>; })}</div><div class="flex flex-wrap items-center gap-3 sm:flex-col sm:items-end">{isUpcoming ? <span class="inline-flex rounded-full border px-3 py-1.5 text-sm font-black" style="border-color: color-mix(in srgb, var(--color-gold) 34%, var(--color-rule)); color: var(--color-gold-light);">예정</span> : <ResultBadge result={match.result} size="sm" locale="ko" />}{reportHref ? <a href={withBase(reportHref)} class="text-sm font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">리뷰 보기</a> : <span class="text-sm font-bold" style="color: var(--color-muted);">한국어 준비 중</span>}</div></div></li>; })}</ol></section>)}</div>
+
+<BaseLayout
+  title="서울 이랜드 일정·결과"
+  description="서울 이랜드의 일정, 결과, 다음 경기, 한국어 프리뷰를 한곳에 모았습니다."
+  lang="ko"
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative grid gap-6 p-5 sm:gap-8 sm:p-8 lg:grid-cols-[1.1fr_0.9fr] lg:p-10">
+      <div>
+        <p class="eyebrow">Seoul E-Land FC</p>
+        <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+          일정·결과
+        </h1>
+        <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          서울 이랜드의 결과, 다음 경기, 킥오프 시간, 프리뷰를 한 페이지에서 확인합니다.
+        </p>
+        <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          {season}시즌 · 리그 {schedule.length}경기 · {wins}승 {draws}무 {losses}패
+        </p>
+        <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+          <TranslateButton href="/matches" code="EN" label="영어" ariaLabel="일정·결과 영어판 보기" />
+          <TranslateButton href="/pt/matches" code="PT" label="포르투갈어" ariaLabel="일정·결과 포르투갈어판 보기" />
+        </div>
+      </div>
+
+      <aside class="rounded-[1.25rem] border p-5" style="background: color-mix(in srgb, white 8%, transparent); border-color: color-mix(in srgb, var(--color-gold) 26%, var(--color-rule));">
+        <p class="eyebrow">다음 경기</p>
+        {nextMatch ? (
+          <>
+            <p class="mt-3 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+              라운드 {nextMatch.round} · {formatDate(nextMatch.date)} · {venueLabel(nextMatch.venue)}
+            </p>
+            <div class="mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
+              {(() => {
+                const teams = getMatchTeams(nextMatch);
+                const homeLogo = getLogo(teams.home.name);
+                const awayLogo = getLogo(teams.away.name);
+                return (
+                  <>
+                    <div class="min-w-0 text-center">
+                      {homeLogo ? (
+                        <img src={homeLogo} alt={`${koTeam(teams.home.name)} 엠블럼`} class="mx-auto h-14 w-14 rounded-xl bg-white object-contain p-2" loading="lazy" />
+                      ) : (
+                        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-white text-sm font-black" style="color: var(--color-navy);">
+                          {getTeamInitials(teams.home.name)}
+                        </span>
+                      )}
+                      <p class="mt-2 text-sm font-black leading-tight">{koTeam(teams.home.name)}</p>
+                    </div>
+                    <span class="text-xs font-black uppercase tracking-[0.18em]" style="color: var(--color-gold-light);">대</span>
+                    <div class="min-w-0 text-center">
+                      {awayLogo ? (
+                        <img src={awayLogo} alt={`${koTeam(teams.away.name)} 엠블럼`} class="mx-auto h-14 w-14 rounded-xl bg-white object-contain p-2" loading="lazy" />
+                      ) : (
+                        <span class="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-white text-sm font-black" style="color: var(--color-navy);">
+                          {getTeamInitials(teams.away.name)}
+                        </span>
+                      )}
+                      <p class="mt-2 text-sm font-black leading-tight">{koTeam(teams.away.name)}</p>
+                    </div>
+                  </>
+                );
+              })()}
+            </div>
+            {nextMatchPreview && (
+              <a
+                href={withBase(`/ko/previews/${nextMatchPreview.slug}`)}
+                class="mt-5 block rounded-2xl border p-4 no-underline transition hover:-translate-y-0.5"
+                style="background: color-mix(in srgb, var(--color-gold) 14%, transparent); border-color: color-mix(in srgb, var(--color-gold) 34%, var(--color-rule));"
+              >
+                <p class="text-xs font-black uppercase tracking-[0.16em]" style="color: var(--color-gold-light);">
+                  경기 프리뷰
+                </p>
+                <h2 class="mt-2 text-lg font-black leading-tight">{nextMatchPreview.title}</h2>
+                <p class="mt-2 text-sm font-bold leading-6" style="color: var(--color-link);">
+                  상대 분석, 최근 맞대결, 전술 키, 모델 전망.
+                </p>
+                <p class="mt-3 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+                  전체 프리뷰 읽기 →
+                </p>
+              </a>
+            )}
+          </>
+        ) : (
+          <p class="mt-3 text-lg font-black">예정된 경기가 없습니다.</p>
+        )}
+      </aside>
+    </div>
+  </section>
+
+  <section aria-labelledby="full-schedule">
+    <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <p class="eyebrow">일정</p>
+        <h2 id="full-schedule" class="mt-2 text-3xl font-black tracking-tight">공식 일정</h2>
+      </div>
+      <p class="text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+        소화 {playedMatches.length}경기 · 예정 {upcomingMatches.length}경기
+      </p>
+    </div>
+
+    <p class="mb-6 max-w-3xl rounded-2xl border px-4 py-3 text-sm font-bold leading-6" style="background: color-mix(in srgb, white 5%, transparent); border-color: color-mix(in srgb, var(--color-gold) 14%, var(--color-rule)); color: var(--color-link);">
+      <span class="sm:hidden">32경기 · 홈앤드어웨이 · 17R/30R 휴식.</span>
+      <span class="hidden sm:inline">K리그가 발표한 공식 일정을 기준으로 정리했습니다. 17개 팀 체제라 서울 이랜드는 1~34라운드 사이 32경기를 치르고 17라운드와 30라운드에 쉽니다.</span>
+      <a href={sourceUrl} class="font-black underline underline-offset-2" style="color: var(--color-gold-light);" target="_blank" rel="noopener noreferrer">K리그 일정 보기</a>.
+    </p>
+
+    <div class="grid gap-8">
+      {publishedSections.map((section) => (
+        <section id={`ko-${section.id}`} class="scroll-mt-24 sm:scroll-mt-28" aria-labelledby={`ko-${section.id}-heading`}>
+          <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p class="eyebrow">{sectionLabel(section.label)}</p>
+              <h3 id={`ko-${section.id}-heading`} class="mt-2 text-2xl font-black tracking-tight">
+                {section.rounds[0]}~{section.rounds[1]}라운드
+              </h3>
+            </div>
+            <p class="text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+              {section.matches.length}경기
+              {getSectionByeRounds(section.rounds).length > 0 && ` · 휴식 R${getSectionByeRounds(section.rounds).join(", R")}`}
+            </p>
+          </div>
+
+          <ol class="grid gap-3">
+            {section.matches.map((match) => {
+              const teams = getMatchTeams(match);
+              const homeLogo = getLogo(teams.home.name);
+              const awayLogo = getLogo(teams.away.name);
+              const reportHref = reportByRound.get(match.round);
+              const isUpcoming = match.result === "TBD";
+
+              return (
+                <li
+                  class="overflow-hidden rounded-2xl border"
+                  style={`background: ${isUpcoming ? "color-mix(in srgb, var(--color-blue) 18%, var(--color-surface))" : "color-mix(in srgb, white 6%, transparent)"}; border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));`}
+                >
+                  <div class="grid gap-4 p-4 sm:grid-cols-[8.5rem_minmax(0,1fr)_auto] sm:items-center">
+                    <div>
+                      <p class="text-xs font-black uppercase tracking-[0.16em]" style="color: var(--color-gold-light);">
+                        라운드 {match.round}
+                      </p>
+                      <p class="mt-1 text-sm font-bold leading-5" style="color: var(--color-link);">
+                        {formatDate(match.date)} · {formatKickoff(match.time)}
+                      </p>
+                      <p class="mt-1 hidden text-xs font-bold leading-5 min-[380px]:block" style="color: var(--color-muted);">{stadiumKo(match.stadium)}</p>
+                      <span class="metadata-chip mt-3">{venueLabel(match.venue)}</span>
+                    </div>
+
+                    <div class="grid gap-2">
+                      <div class="grid grid-cols-[minmax(0,1fr)_2.25rem] items-center gap-3">
+                        <div class="flex min-w-0 items-center gap-3">
+                          {homeLogo ? (
+                            <img src={homeLogo} alt={`${koTeam(teams.home.name)} 엠블럼`} class="h-10 w-10 shrink-0 rounded-xl bg-white object-contain p-1.5" loading="lazy" />
+                          ) : (
+                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-xs font-black" style="color: var(--color-navy);">
+                              {getTeamInitials(teams.home.name)}
+                            </span>
+                          )}
+                          <p class="min-w-0 truncate text-sm font-black">{koTeam(teams.home.name)}</p>
+                        </div>
+                        <p class="text-right text-xl font-black tabular-nums">{getScore(teams.home.score)}</p>
+                      </div>
+
+                      <div class="grid grid-cols-[minmax(0,1fr)_2.25rem] items-center gap-3">
+                        <div class="flex min-w-0 items-center gap-3">
+                          {awayLogo ? (
+                            <img src={awayLogo} alt={`${koTeam(teams.away.name)} 엠블럼`} class="h-10 w-10 shrink-0 rounded-xl bg-white object-contain p-1.5" loading="lazy" />
+                          ) : (
+                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-xs font-black" style="color: var(--color-navy);">
+                              {getTeamInitials(teams.away.name)}
+                            </span>
+                          )}
+                          <p class="min-w-0 truncate text-sm font-black">{koTeam(teams.away.name)}</p>
+                        </div>
+                        <p class="text-right text-xl font-black tabular-nums">{getScore(teams.away.score)}</p>
+                      </div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center gap-3 sm:flex-col sm:items-end">
+                      {isUpcoming ? (
+                        <span class="inline-flex rounded-full border px-3 py-1.5 text-sm font-black uppercase tracking-[0.12em]" style="border-color: color-mix(in srgb, var(--color-gold) 34%, var(--color-rule)); color: var(--color-gold-light);">
+                          다음
+                        </span>
+                      ) : (
+                        <ResultBadge result={match.result} size="sm" locale="ko" />
+                      )}
+                      {reportHref ? (
+                        <a href={withBase(reportHref)} class="text-sm font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">
+                          리뷰 보기
+                        </a>
+                      ) : (
+                        <span class="text-sm font-bold" style="color: var(--color-muted);">
+                          준비 중
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      ))}
+    </div>
   </section>
 </BaseLayout>

@@ -168,6 +168,10 @@ const KOREAN_PLAYER_NAME_ALIASES: Record<string, string> = {
   "Byeon Gyeong-jun": "변경준",
   "Yun Seok-ju": "윤석주",
   "Yoon Seok-ju": "윤석주",
+  "Jo Jun-hyun": "조준현",
+  "Cho Jun-hyun": "조준현",
+  "Lee Ju-hyuk": "이주혁",
+  "Lee Ju-hyeok": "이주혁",
 };
 
 export function koreanPlayerName(englishName: string) {

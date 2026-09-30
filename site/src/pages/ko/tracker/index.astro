@@ -2,9 +2,58 @@
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import TranslateButton from "../../../components/TranslateButton.astro";
 import SeasonTracker from "../../../components/SeasonTracker.astro";
+import { withBase } from "../../../lib/paths";
 ---
-<BaseLayout title="승격 레이스 트래커" description="서울 이랜드의 후반기 예측과 실제 결과를 비교하고 K리그2 승격 경쟁을 추적합니다." lang="ko">
-  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]"><div class="relative p-5 sm:p-8 lg:p-10"><p class="eyebrow">서울 이랜드 FC</p><h1 class="mt-3 text-[2.35rem] font-black leading-none tracking-tight sm:text-6xl">승격 레이스</h1><p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">후반기 전체를 미리 예측한 기록을 실제 결과와 비교하고, 남은 K리그2 승격 경쟁을 업데이트합니다.</p><div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7"><TranslateButton href="/tracker" code="EN" label="영어" /><TranslateButton href="/pt/tracker" code="PT" label="포르투갈어" /></div></div></section>
-  <article class="editorial-shell preview-article mx-auto"><SeasonTracker locale="ko"><div slot="method" class="tracker-method"><p><strong>예측</strong>은 7월 12일에 공개한 후반기 라운드별 전망입니다. 결과가 나온 뒤에도 바꾸지 않습니다.</p><p><strong>전망</strong>은 현재 승점과 남은 일정을 바탕으로 다시 계산하는 모델입니다. 매 라운드 업데이트되며, 공개 예측과 달라도 그대로 보여줍니다.</p><p>서울 이랜드 결과는 사이트의 일정 데이터에서 직접 읽어옵니다. 경쟁팀 기록은 라운드마다 확인해 반영합니다.</p></div></SeasonTracker></article>
+
+<BaseLayout
+  title="시즌 승격 레이스"
+  description="공개한 2라운드 로빈 예측과 실제 결과를 라운드별로 비교하고, K리그2 승격 경쟁을 끝까지 전망합니다."
+  lang="ko"
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        승격 레이스
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        2라운드 로빈 전체를 미리 예측했습니다. 이 페이지는 그 예측의 성적표이자, 라운드마다 업데이트되는 승격 경쟁 전망판입니다.
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/tracker" code="EN" label="영어" ariaLabel="승격 레이스 영어판 보기" />
+        <TranslateButton href="/pt/tracker" code="PT" label="포르투갈어" ariaLabel="승격 레이스 포르투갈어판 보기" />
+      </div>
+    </div>
+  </section>
+
+  <article class="editorial-shell preview-article mx-auto">
+    <SeasonTracker locale="ko">
+      <div slot="method" class="tracker-method">
+        <p>
+          이 페이지에는 의도적으로 분리해 둔 두 가지 숫자가 있습니다.
+        </p>
+        <p>
+          <strong>공개 예측</strong>은 7월 12일, 해당 경기들이 시작되기 전에
+          <a href={withBase("/ko/articles/2026-second-round-robin-playoff-run-in-preview")}>2라운드 로빈 프리뷰</a>에 실은 라운드별 예상입니다. 당시 예측은 9승 4무 3패, 승점 31점이었고, 당시 서울의 승점 29점과 합쳐 최종 60점을 전망했습니다. 이 예측은 고정되어 있습니다. 적중률과 점선은 이 고정 예측을 평가하며, 결과가 빗나가도 조용히 수정하지 않습니다.
+        </p>
+        <p>
+          <strong>모델 전망</strong>은 예측이라기보다 현재 전력을 수치화한 계산입니다. 각 구단은 현재까지의 경기당 승점과 같은 기본 점수를 갖고, 홈팀은 이 리그의 홈 이점에 가까운 경기당 0.35점 보너스를 받습니다. 두 점수의 차이를 승·무·패 확률로 바꾸고, 차이가 커질수록 무승부 비중을 줄인 뒤 각 경기의 기대 승점을 계산합니다. 남은 모든 경기에 이를 적용하면 최종 승점 전망이 나옵니다. 현재 흐름으로 매주 다시 계산하므로 시즌이 진행될수록 고정 예측과 달라질 수 있고, 바로 그 차이를 보려고 만든 도구입니다.
+        </p>
+        <p>
+          서울 이랜드 결과는 사이트의 다른 영역과 같은 일정 파일에서 직접 읽습니다. 따라서 트래커와 경기 리뷰가 어긋나지 않습니다. 경쟁팀 전적은 매 라운드 수동으로 업데이트합니다.
+        </p>
+      </div>
+    </SeasonTracker>
+  </article>
 </BaseLayout>
-<style is:global>.tracker-method p{margin:0 0 .85rem;font-size:.92rem;line-height:1.65;color:var(--color-editorial-muted)}.tracker-method strong{color:var(--color-navy)}.tracker-method a{color:var(--color-blue);font-weight:650}</style>
+
+<style is:global>
+  .tracker-method p {
+    margin: 0 0 0.85rem;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: var(--color-editorial-muted);
+  }
+  .tracker-method strong { color: var(--color-navy); }
+  .tracker-method a { color: var(--color-blue); font-weight: 650; }
+</style>

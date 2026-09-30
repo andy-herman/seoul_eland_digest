@@ -1,4 +1,33 @@
 ---
-import BaseLayout from "../../../layouts/BaseLayout.astro"; import TranslateButton from "../../../components/TranslateButton.astro"; import SeasonReviewHub from "../../../components/SeasonReviewHub.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import SeasonReviewHub from "../../../components/SeasonReviewHub.astro";
+import TranslateButton from "../../../components/TranslateButton.astro";
+import { withBase } from "../../../lib/paths";
 ---
-<BaseLayout title="서울 이랜드 시즌 결산" description="서울 이랜드 2026시즌 선수단과 감독 평가를 모은 한국어 허브입니다." lang="ko"><section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]"><div class="relative p-5 sm:p-8 lg:p-10"><p class="eyebrow">시즌 결산</p><h1 class="mt-3 text-[2.35rem] font-black leading-none tracking-tight sm:text-6xl">선수단 평가</h1><p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color:var(--color-link);">번역된 시즌 결산 글이 올라오면 이곳에 모입니다.</p><div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7"><TranslateButton href="/articles/season-review" code="EN" label="영어" /><TranslateButton href="/pt/articles/season-review" code="PT" label="포르투갈어" /></div></div></section><SeasonReviewHub lang="ko" /></BaseLayout>
+
+<BaseLayout
+  lang="ko"
+  title="2026 시즌 결산: 선수단 전체"
+  description="2026시즌 리그 10경기 이상 출전한 서울 이랜드 선수 전원의 카드, 공식 기록, 평점, 종합 평가를 모았습니다."
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">시즌 결산 · 2026</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">평점으로 보는 선수단</h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        리그 10경기 이상 출전한 선수들을 한 명씩 평가했습니다. 각 카드는 구단 공식 기록과 평점을 담고 있습니다. 카드를 누르면 잘한 점, 반복된 문제, 막판 레이스에서의 의미를 볼 수 있습니다.
+      </p>
+      <div class="mt-5 flex flex-wrap items-center gap-2">
+        <span class="metadata-chip">27라운드까지의 평가</span>
+        <TranslateButton href="/articles/season-review" code="EN" label="영어" ariaLabel="영어판 보기" />
+        <TranslateButton href="/pt/articles/season-review" code="PT" label="포르투갈어" ariaLabel="포르투갈어판 보기" />
+      </div>
+    </div>
+  </section>
+
+  <SeasonReviewHub lang="ko" />
+
+  <nav class="mx-auto mt-4 max-w-5xl border-t pt-6" style="border-color: var(--color-rule);">
+    <a href={withBase("/ko/articles")} class="text-sm font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">← 전체 글</a>
+  </nav>
+</BaseLayout>

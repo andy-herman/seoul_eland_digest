@@ -1,6 +1,75 @@
 ---
-import { safeGetCollection } from "../../../lib/safeContent"; import BaseLayout from "../../../layouts/BaseLayout.astro"; import TranslateButton from "../../../components/TranslateButton.astro"; import { withBase } from "../../../lib/paths"; import { partKo, seriesKo } from "../../../lib/i18n";
-const articles=(await safeGetCollection("articlesKo")).sort((a,b)=>b.data.date.getTime()-a.data.date.getTime() || a.data.order-b.data.order);
-const dateFmt=new Intl.DateTimeFormat("ko-KR",{year:"numeric",month:"long",day:"numeric",timeZone:"UTC"});
+import { safeGetCollection } from "../../../lib/safeContent";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TranslateButton from "../../../components/TranslateButton.astro";
+import { withBase } from "../../../lib/paths";
+import { partKo, seriesKo } from "../../../lib/i18n";
+
+const articles = (await safeGetCollection("articlesKo")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime() || b.data.order - a.data.order,
+);
+
+const dateFormatter = new Intl.DateTimeFormat("ko-KR", {
+  day: "numeric",
+  month: "short",
+  year: "numeric",
+  timeZone: "UTC",
+});
 ---
-<BaseLayout title="서울 이랜드 기획·칼럼" description="서울 이랜드 FC를 다루는 한국어 기획 기사와 칼럼입니다." lang="ko"><section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]"><div class="relative p-5 sm:p-8 lg:p-10"><p class="eyebrow">기획·칼럼</p><h1 class="mt-3 text-[2.35rem] font-black leading-none tracking-tight sm:text-6xl">긴 글 모음</h1><p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color:var(--color-link);">승격 경쟁, 선수단, 구단의 흐름을 깊게 읽는 한국어 글입니다.</p><p class="hero-meta-line mt-4 text-sm font-black" style="color:var(--color-gold-light);">{articles.length}편</p><div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7"><TranslateButton href="/articles" code="EN" label="영어" /><TranslateButton href="/pt/articles" code="PT" label="포르투갈어" /></div></div></section><section class="grid gap-4">{articles.map((article)=><a href={withBase(`/ko/articles/${article.id.replace(/\.md$/,"")}`)} class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6" style="background:color-mix(in srgb,white 6%,transparent);border-color:color-mix(in srgb,var(--color-gold) 16%,var(--color-rule));"><div class="flex flex-wrap items-center gap-2"><span class="metadata-chip">{seriesKo(article.data.series)}</span>{article.data.part && <span class="metadata-chip">{partKo(article.data.part)}</span>}<span class="metadata-chip">{dateFmt.format(article.data.date)}</span></div><h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">{article.data.title}</h2><p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color:var(--color-link);">{article.data.description}</p><p class="mt-4 text-sm font-black" style="color:var(--color-gold-light);">읽기 →</p></a>)}</section>{articles.length===0 && <p class="rounded-2xl border p-6 font-black" style="border-color:var(--color-rule);">아직 한국어 기획·칼럼이 없습니다.</p>}</BaseLayout>
+
+<BaseLayout
+  title="서울 이랜드 기획·칼럼"
+  description="서울 이랜드의 선수별 시즌 결산, 승격 레이스 분석, 장문 기획을 모았습니다."
+  lang="ko"
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        기획·칼럼
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        서울 이랜드를 길게 읽는 공간입니다. 선수별 2026시즌 결산, 승격 경쟁을 짚는 K1 추격 편지, 더 넓게 풀어야 할 이야기를 모았습니다.
+      </p>
+      <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+        글 {articles.length}편
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/articles" code="EN" label="영어" ariaLabel="기획·칼럼 영어판 보기" />
+        <TranslateButton href="/pt/articles" code="PT" label="포르투갈어" ariaLabel="기획·칼럼 포르투갈어판 보기" />
+      </div>
+    </div>
+  </section>
+
+  <a href={withBase("/ko/articles/season-review")} class="group mb-6 block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6" style="background: linear-gradient(135deg, var(--color-navy) 0%, var(--color-blue) 100%); border-color: color-mix(in srgb, var(--color-gold) 40%, var(--color-rule));">
+    <p class="eyebrow">시즌 결산 · 2026</p>
+    <h2 class="mt-2 text-2xl font-black uppercase tracking-tight sm:text-3xl">평점으로 보는 선수단</h2>
+    <p class="mt-2 max-w-2xl text-sm leading-6" style="color: var(--color-link);">리그 10경기 이상 출전 선수를 한 페이지에 모았습니다. 사진, 등번호, 공식 시즌 기록, 결산 평점을 함께 봅니다.</p>
+    <span class="mt-3 inline-block text-xs font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">모든 카드 보기 →</span>
+  </a>
+
+  <section aria-label="기획·칼럼" class="grid gap-4">
+    {articles.map((article) => (
+      <a
+        href={withBase(`/ko/articles/${article.id.replace(/\.md$/, "")}`)}
+        class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6"
+        style="background: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));"
+      >
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="metadata-chip">{seriesKo(article.data.series)}</span>
+          {article.data.part && <span class="metadata-chip">{partKo(article.data.part)}</span>}
+          <span class="metadata-chip">{dateFormatter.format(article.data.date)}</span>
+        </div>
+        <h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">
+          {article.data.title}
+        </h2>
+        <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">
+          {article.data.description}
+        </p>
+        <p class="mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          읽기 →
+        </p>
+      </a>
+    ))}
+  </section>
+</BaseLayout>

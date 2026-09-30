@@ -8,35 +8,65 @@ import TranslateButton from "../../components/TranslateButton.astro";
 import { getDigestDeck } from "../../lib/digestDeck";
 
 const digests = await safeGetCollection("digestsKo");
-digests.sort((a, b) => b.data.season - a.data.season || b.data.round - a.data.round);
-const seasons = [...new Set(digests.map((d) => d.data.season))].sort((a, b) => b - a);
+digests.sort(
+  (a, b) =>
+    b.data.season - a.data.season || b.data.round - a.data.round,
+);
+
+const seasons = [...new Set(digests.map((d) => d.data.season))].sort(
+  (a, b) => b - a,
+);
 const latestDigest = digests[0];
 const currentSeason = seasons[0];
-const currentSeasonDigests = currentSeason ? digests.filter((d) => d.data.season === currentSeason) : [];
+const currentSeasonDigests = currentSeason
+  ? digests.filter((d) => d.data.season === currentSeason)
+  : [];
 const wins = currentSeasonDigests.filter((d) => d.data.result.trim().startsWith("W")).length;
 const draws = currentSeasonDigests.filter((d) => d.data.result.trim().startsWith("D")).length;
 const losses = currentSeasonDigests.filter((d) => d.data.result.trim().startsWith("L")).length;
 const latestHref = latestDigest ? `/ko/rounds/${latestDigest.id.replace(/\.md$/, "")}` : "#";
-const heroStatsLabel = currentSeason ? `${currentSeason}시즌 · 리뷰 ${digests.length}편 · ${wins}승 ${draws}무 ${losses}패` : `리뷰 ${digests.length}편`;
+const heroStatsLabel = currentSeason
+  ? `${currentSeason}시즌 · 리뷰 ${digests.length}편 · ${wins}승 ${draws}무 ${losses}패`
+  : `리뷰 ${digests.length}편`;
 const deckFallback = "경기 리뷰, 선수 이야기, 승격 레이스의 흐름을 팬의 시선으로 정리합니다.";
 ---
 
-<BaseLayout title="Seoul E-Land Digest 한국어" description="서울 이랜드 FC를 다루는 팬 제작 독립 매체, Seoul E-Land Digest 한국어판입니다." lang="ko">
+<BaseLayout
+  title="서울 이랜드 다이제스트"
+  description="서울 이랜드 FC를 따라가는 한국어 팬 매체입니다."
+  lang="ko"
+>
   <section class="supporter-panel home-hero mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
     <div class="relative grid min-w-0 gap-6 p-5 sm:gap-8 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:p-10">
       <div class="flex min-w-0 flex-col justify-center">
         <p class="eyebrow">팬이 만드는 독립 매체</p>
-        <h1 class="mt-3 max-w-3xl text-[2.08rem] font-black leading-[1.05] tracking-tight min-[380px]:text-[2.45rem] sm:text-6xl lg:text-7xl">Seoul E-Land Digest</h1>
+        <h1 class="mt-3 max-w-3xl text-[2.08rem] font-black uppercase leading-[0.95] tracking-tight min-[380px]:text-[2.45rem] sm:text-6xl lg:text-7xl">
+          Seoul E-Land Digest
+        </h1>
         <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
-          서울 이랜드 FC를 따라가는 독립 서포터 매체입니다. 경기 리뷰, 전술 포인트, 선수단 이야기, 승격 레이스를 한국어로 차분히 정리합니다.
+          서울 이랜드 팬을 위한 한국어 매치 리포트입니다. 라운드 리뷰, 전술 포인트, 선수 맥락, 승격 경쟁의 흐름을 한눈에 전합니다.
         </p>
-        <p class="hero-meta-line mt-4 text-sm font-black" style="color: var(--color-gold-light);">{heroStatsLabel}</p>
+        <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          {heroStatsLabel}
+        </p>
         <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
           <TranslateButton href="/" code="EN" label="영어" ariaLabel="영어판 보기" />
           <TranslateButton href="/pt/" code="PT" label="포르투갈어" ariaLabel="포르투갈어판 보기" />
         </div>
       </div>
-      {latestDigest && <LatestMatchCard href={latestHref} round={latestDigest.data.round} date={latestDigest.data.date} opponent={latestDigest.data.opponent} venue={latestDigest.data.venue} result={latestDigest.data.result} deck={getDigestDeck(latestDigest.body, deckFallback)} locale="ko" />}
+
+      {latestDigest && (
+        <LatestMatchCard
+          href={latestHref}
+          round={latestDigest.data.round}
+          date={latestDigest.data.date}
+          opponent={latestDigest.data.opponent}
+          venue={latestDigest.data.venue}
+          result={latestDigest.data.result}
+          deck={getDigestDeck(latestDigest.body, deckFallback)}
+          locale="ko"
+        />
+      )}
     </div>
   </section>
 
@@ -47,11 +77,26 @@ const deckFallback = "경기 리뷰, 선수 이야기, 승격 레이스의 흐�
     return (
       <section class="mb-12" aria-labelledby={`ko-season-${season}`}>
         <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
-          <div><p class="eyebrow">라운드 리뷰</p><h2 id={`ko-season-${season}`} class="mt-2 text-3xl font-black tracking-tight">{season}시즌</h2></div>
-          <p class="text-sm font-bold" style="color: var(--color-muted);">경기 리뷰 {seasonDigests.length}편</p>
+          <div>
+            <p class="eyebrow">라운드 리뷰 아카이브</p>
+            <h2 id={`ko-season-${season}`} class="mt-2 text-3xl font-black tracking-tight">{season}시즌</h2>
+          </div>
+          <p class="text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
+            경기 리뷰 {seasonDigests.length}편
+          </p>
         </div>
         <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {seasonDigests.map((d) => <DigestCard href={`/ko/rounds/${d.id.replace(/\.md$/, "")}`} round={d.data.round} date={d.data.date} opponent={d.data.opponent} venue={d.data.venue} result={d.data.result} locale="ko" />)}
+          {seasonDigests.map((d) => (
+            <DigestCard
+              href={`/ko/rounds/${d.id.replace(/\.md$/, "")}`}
+              round={d.data.round}
+              date={d.data.date}
+              opponent={d.data.opponent}
+              venue={d.data.venue}
+              result={d.data.result}
+              locale="ko"
+            />
+          ))}
         </div>
       </section>
     );
@@ -60,7 +105,9 @@ const deckFallback = "경기 리뷰, 선수 이야기, 승격 레이스의 흐�
   {digests.length === 0 && (
     <div class="rounded-2xl border p-6" style="background-color: color-mix(in srgb, white 8%, transparent); border-color: var(--color-rule);">
       <p class="font-black">아직 한국어 라운드 리뷰가 없습니다.</p>
-      <p class="mt-2 text-sm" style="color: var(--color-muted);">번역이 올라오면 이곳에 표시됩니다.</p>
+      <p class="mt-2 text-sm" style="color: var(--color-muted);">
+        다음 경기 후 다시 확인해 주세요.
+      </p>
     </div>
   )}
 </BaseLayout>

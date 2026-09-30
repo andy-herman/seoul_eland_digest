@@ -1,5 +1,74 @@
 ---
-import { safeGetCollection } from "../../../lib/safeContent"; import BaseLayout from "../../../layouts/BaseLayout.astro"; import TranslateButton from "../../../components/TranslateButton.astro"; import { withBase } from "../../../lib/paths";
-const guides = (await safeGetCollection("guidesKo")).sort((a,b)=>a.data.order-b.data.order || b.data.date.getTime()-a.data.date.getTime());
+import { safeGetCollection } from "../../../lib/safeContent";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import TranslateButton from "../../../components/TranslateButton.astro";
+import { withBase } from "../../../lib/paths";
+
+const guides = (await safeGetCollection("guidesKo")).sort(
+  (a, b) => a.data.order - b.data.order || b.data.date.getTime() - a.data.date.getTime(),
+);
+
+const dateFormatter = new Intl.DateTimeFormat("ko-KR", {
+  month: "long",
+  year: "numeric",
+  timeZone: "UTC",
+});
+
+const categoryKo = (category: string) =>
+  ({
+    "The Club": "구단",
+    Watching: "시청",
+    Matchday: "경기일",
+    "The League": "리그",
+    Players: "선수",
+  })[category] ?? category;
 ---
-<BaseLayout title="서울 이랜드 가이드" description="구단, 경기장, 중계, K리그2 승격 구조를 설명하는 한국어 가이드입니다." lang="ko"><section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]"><div class="relative p-5 sm:p-8 lg:p-10"><p class="eyebrow">처음이신가요?</p><h1 class="mt-3 text-[2.35rem] font-black leading-none tracking-tight sm:text-6xl">가이드</h1><p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">서울 이랜드 FC, 목동, K리그2, 해외 중계 정보를 한눈에 보는 입문 가이드입니다.</p><div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7"><TranslateButton href="/guides" code="EN" label="영어" /><TranslateButton href="/pt/guides" code="PT" label="포르투갈어" /></div></div></section><section class="grid gap-4">{guides.map((guide)=><a href={withBase(`/ko/guides/${guide.id.replace(/\.md$/,"")}`)} class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6" style="background: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));"><span class="metadata-chip">{guide.data.category}</span><h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">{guide.data.title}</h2><p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">{guide.data.description}</p><p class="mt-4 text-sm font-black" style="color: var(--color-gold-light);">가이드 보기 →</p></a>)}</section>{guides.length===0 && <p class="rounded-2xl border p-6 font-black" style="border-color: var(--color-rule);">아직 한국어 가이드가 없습니다.</p>}</BaseLayout>
+
+<BaseLayout
+  title="서울 이랜드 가이드"
+  description="서울 이랜드 팬을 위한 상시 가이드입니다. 구단 소개, 해외 시청, 목동 경기일, 승격 제도를 정리합니다."
+  lang="ko"
+>
+  <section class="supporter-panel mb-8 rounded-[1.5rem] sm:mb-10 sm:rounded-[2rem]">
+    <div class="relative p-5 sm:p-8 lg:p-10">
+      <p class="eyebrow">Seoul E-Land FC</p>
+      <h1 class="mt-3 text-[2.35rem] font-black uppercase leading-none tracking-tight sm:text-6xl">
+        가이드
+      </h1>
+      <p class="mt-4 max-w-2xl text-[0.95rem] leading-6 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+        서울 이랜드나 한국 축구가 처음이라면 여기서 시작하세요. 구단 소개, 해외 시청 방법, 목동 경기일, 승격 경쟁 방식을 차례로 정리했습니다.
+      </p>
+      <p class="hero-meta-line mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+        가이드 {guides.length}편
+      </p>
+      <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
+        <TranslateButton href="/guides" code="EN" label="영어" ariaLabel="가이드 영어판 보기" />
+        <TranslateButton href="/pt/guides" code="PT" label="포르투갈어" ariaLabel="가이드 포르투갈어판 보기" />
+      </div>
+    </div>
+  </section>
+
+  <section aria-label="가이드" class="grid gap-4">
+    {guides.map((guide) => (
+      <a
+        href={withBase(`/ko/guides/${guide.id.replace(/\.md$/, "")}`)}
+        class="group block rounded-2xl border p-5 no-underline transition duration-200 hover:-translate-y-0.5 sm:p-6"
+        style="background: color-mix(in srgb, white 6%, transparent); border-color: color-mix(in srgb, var(--color-gold) 16%, var(--color-rule));"
+      >
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="metadata-chip">{categoryKo(guide.data.category)}</span>
+          <span class="metadata-chip">업데이트 {dateFormatter.format(guide.data.date)}</span>
+        </div>
+        <h2 class="mt-3 text-2xl font-black leading-tight tracking-tight transition-colors group-hover:text-white sm:text-3xl">
+          {guide.data.title}
+        </h2>
+        <p class="mt-2 max-w-3xl text-sm font-bold leading-6" style="color: var(--color-link);">
+          {guide.data.description}
+        </p>
+        <p class="mt-4 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-gold-light);">
+          가이드 읽기 →
+        </p>
+      </a>
+    ))}
+  </section>
+</BaseLayout>

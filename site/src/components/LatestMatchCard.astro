@@ -92,7 +92,7 @@ const labels = isKorean
       <span class="latest-team-logo flex h-12 w-12 items-center justify-center rounded-2xl bg-white p-2 min-[380px]:h-14 min-[380px]:w-14 sm:h-16 sm:w-16">
         <img src={withBase("/assets/crest.png")} alt={labels.homeAlt} class="h-full w-full object-contain" loading="lazy" />
       </span>
-      <span class="latest-team-name text-xs font-black" style="color: var(--color-link);">Seoul E-Land</span>
+      <span class="latest-team-name text-xs font-black" style="color: var(--color-link);">{isKorean ? "서울 이랜드" : "Seoul E-Land"}</span>
     </div>
     <div>
       <p class="latest-score text-3xl font-black tabular-nums leading-none min-[380px]:text-[2.15rem] sm:text-4xl" style="color: var(--color-ink);">{score}</p>
@@ -113,7 +113,7 @@ const labels = isKorean
   <div class="latest-mobile-summary mt-4 sm:hidden">
     <div class="latest-mobile-team">
       <img src={withBase("/assets/crest.png")} alt={labels.homeAlt} class="latest-mobile-logo" loading="lazy" />
-      <span>Seoul E-Land</span>
+      <span>{isKorean ? "서울 이랜드" : "Seoul E-Land"}</span>
     </div>
     <p class="latest-mobile-score">{score}</p>
     <div class="latest-mobile-team latest-mobile-team-right">

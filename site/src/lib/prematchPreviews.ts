@@ -228,9 +228,22 @@ function parsePredictedLineup(data: Record<string, string>, locale: PreviewLocal
 
   if (cleanPlayers.length === 0) return undefined;
 
+  const label =
+    locale === "ko"
+      ? data.predicted_lineup_label && !/^Predicted Seoul XI$/i.test(data.predicted_lineup_label)
+        ? data.predicted_lineup_label
+        : "서울 이랜드 예상 XI"
+      : data.predicted_lineup_label || "Predicted Seoul XI";
+  const statusLabel =
+    locale === "ko"
+      ? data.predicted_lineup_status && !/^Predicted$/i.test(data.predicted_lineup_status)
+        ? data.predicted_lineup_status
+        : "예상"
+      : data.predicted_lineup_status || "Predicted";
+
   return {
-    label: data.predicted_lineup_label || "Predicted Seoul XI",
-    statusLabel: data.predicted_lineup_status || "Predicted",
+    label,
+    statusLabel,
     teamName: data.predicted_lineup_team || (locale === "ko" ? "서울 이랜드" : "Seoul E-Land"),
     formation: data.predicted_formation || "Predicted shape",
     note: data.predicted_lineup_note,
@@ -251,13 +264,14 @@ export function getPreMatchPreviews(locale: PreviewLocale = "en"): PreMatchPrevi
       const cleanBody = cleanPreviewBody(body);
       const slug = slugify(fileName);
       const title = firstHeading(cleanBody, fileName);
+      const localizedTitle = locale === "ko" ? title.replace(/\s+vs\s+/gi, " 대 ") : title;
       const forecast = parseForecast(data, locale);
       const predictedLineup = parsePredictedLineup(data, locale);
       return {
         slug,
         fileName,
         locale,
-        title,
+        title: localizedTitle,
         description: descriptionFromBody(cleanBody),
         body: cleanBody,
         data,

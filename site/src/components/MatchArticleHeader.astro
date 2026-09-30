@@ -163,6 +163,9 @@ const labels = isKorean
       </p>
       <div class="mt-5 flex flex-wrap items-center gap-3">
         <TranslateButton href={labels.toggleHref} code={labels.toggleCode} label={labels.toggleLabel} ariaLabel={labels.toggleAria} />
+        {isKorean && (
+          <TranslateButton href={`/pt/rounds/${slug}`} code="PT" label="포르투갈어" ariaLabel="포르투갈어로 보기" />
+        )}
         <p class="hidden text-sm font-semibold sm:block" style="color: var(--color-muted);">
           {labels.toggleHelp}
         </p>

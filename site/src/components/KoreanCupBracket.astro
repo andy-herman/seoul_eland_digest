@@ -1,5 +1,6 @@
 ---
 import { withBase } from "../lib/paths";
+import { koTeam } from "../lib/teamNamesKo";
 
 interface Props {
   locale?: "en" | "pt" | "ko";
@@ -138,6 +139,10 @@ const t = isKo
 function tierLabel(tier: Tier) {
   return tier;
 }
+
+function clubName(club: Club) {
+  return isKo ? koTeam(club.name) : club.name;
+}
 ---
 
 <section class="kc-bracket not-prose" aria-label={t.caption}>
@@ -155,14 +160,15 @@ function tierLabel(tier: Tier) {
           {highlight && <span class="kc-our">{t.our}</span>}
           {[home, away].map((club) => {
             const src = crest(club);
+            const name = clubName(club);
             return (
               <div class={`kc-team${club.seoul ? " kc-team-seoul" : ""}`}>
                 {src ? (
-                  <img class="kc-logo" src={src} alt={`${club.name} crest`} loading="lazy" width="28" height="28" />
+                  <img class="kc-logo" src={src} alt={`${name} crest`} loading="lazy" width="28" height="28" />
                 ) : (
                   <span class="kc-logo kc-initials" aria-hidden="true">{initials(club.name)}</span>
                 )}
-                <span class="kc-name">{club.name}</span>
+                <span class="kc-name">{name}</span>
                 <span class="kc-tier">{tierLabel(club.tier)}</span>
               </div>
             );
@@ -179,8 +185,8 @@ function tierLabel(tier: Tier) {
   <ul class="kc-crest-row">
     {r3Entrants.map((club) => (
       <li class="kc-crest-chip">
-        <img class="kc-logo" src={crest(club)} alt={`${club.name} crest`} loading="lazy" width="24" height="24" />
-        <span>{club.name}</span>
+        <img class="kc-logo" src={crest(club)} alt={`${clubName(club)} crest`} loading="lazy" width="24" height="24" />
+        <span>{clubName(club)}</span>
       </li>
     ))}
   </ul>
@@ -193,8 +199,8 @@ function tierLabel(tier: Tier) {
   <ul class="kc-crest-row">
     {giants.map((club) => (
       <li class="kc-crest-chip kc-crest-giant">
-        <img class="kc-logo" src={crest(club)} alt={`${club.name} crest`} loading="lazy" width="24" height="24" />
-        <span>{club.name}</span>
+        <img class="kc-logo" src={crest(club)} alt={`${clubName(club)} crest`} loading="lazy" width="24" height="24" />
+        <span>{clubName(club)}</span>
       </li>
     ))}
   </ul>
