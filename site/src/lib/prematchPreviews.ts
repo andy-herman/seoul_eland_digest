@@ -1,8 +1,10 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { withBase } from "./paths";
+import { koreanPlayerName } from "./playerLocalisation";
+import { koTeam } from "./teamNamesKo";
 
-type PreviewLocale = "en" | "pt";
+type PreviewLocale = "en" | "pt" | "ko";
 
 export interface PreMatchPreview {
   slug: string;
@@ -46,10 +48,34 @@ export interface PredictedLineup {
 
 const DEFAULT_PREVIEW_DIR = path.resolve(process.cwd(), "src", "content", "prematch-previews");
 const DEFAULT_PREVIEW_PT_DIR = path.resolve(process.cwd(), "src", "content", "prematch-previews-pt");
+const DEFAULT_PREVIEW_KO_DIR = path.resolve(process.cwd(), "src", "content", "prematch-previews-ko");
+const DEFAULT_DIGEST_KO_DIR = path.resolve(process.cwd(), "src", "content", "digests-ko");
+const PLAYER_ALIASES = new Map([
+  ["carius", "alan-carius"],
+  ["geraldes", "francisco-geraldes"],
+  ["gabriel", "gabriel-santos"],
+  ["yun-seok-ju", "yoon-seok-ju"],
+]);
+const PLAYER_SLUGS = new Set([
+  "ahn-joo-wan", "bae-jin-woo", "bae-seo-jun", "baek-ji-woong", "byeon-gyeong-jun", "alan-carius", "carius",
+  "cho-jun-hyun", "choi-rang", "eom-ye-hun", "euller", "gabriel", "gabriel-santos", "geraldes", "hwang-jae-yun",
+  "francisco-geraldes", "kang-hyeon-je", "kang-min-jae", "kang-young-seok", "kim-hyun", "kim-hyun-woo",
+  "kim-joo-hwan", "kim-oh-kyu", "kim-tae-san", "kim-woo-bin", "lee-ju-hyeok", "min-sung-jun", "oh-in-pyo",
+  "osmar", "park-chang-hwan", "park-jae-hwan", "park-jae-yong", "park-jin-young", "park-sun-woo", "seo-jin-seok",
+  "son-hyuk-chan", "yang-seung-min", "yoon-seok-ju", "yun-seok-ju",
+]);
+const PLACE_SLUGS = new Set(["mokdong-stadium"]);
+const TEAM_SLUGS = new Set([
+  "ansan-greeners", "busan-ipark", "cheonan", "chungnam-asan", "daegu", "gimpo-citizen", "gyeongnam",
+  "hwaseong-fc", "k-league-2-2026", "paju-frontier", "suwon-bluewings", "suwon-fc", "yongin", "yongin-fc",
+]);
 
 function previewDir(locale: PreviewLocale = "en") {
   if (locale === "pt") {
     return String(import.meta.env.PREMATCH_PREVIEW_PT_DIR || process.env.PREMATCH_PREVIEW_PT_DIR || DEFAULT_PREVIEW_PT_DIR);
+  }
+  if (locale === "ko") {
+    return String(import.meta.env.PREMATCH_PREVIEW_KO_DIR || process.env.PREMATCH_PREVIEW_KO_DIR || DEFAULT_PREVIEW_KO_DIR);
   }
   return String(import.meta.env.PREMATCH_PREVIEW_DIR || process.env.PREMATCH_PREVIEW_DIR || DEFAULT_PREVIEW_DIR);
 }
@@ -60,6 +86,26 @@ function slugify(value: string) {
     .replace(/[^A-Za-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
     .toLowerCase();
+}
+
+function markdownFileExists(dir: string, fileName: string) {
+  return existsSync(path.join(dir, fileName.replace(/\.md$/i, "") + ".md"));
+}
+
+function resolveKoreanWikiHref(name: string) {
+  const clean = name.replace(/\.md$/i, "");
+  const slug = slugify(clean);
+  if (/^2026-r\d+-seoul-e-land-digest$/.test(slug)) {
+    const id = clean.replace(/ /g, "-").toLowerCase();
+    return markdownFileExists(DEFAULT_DIGEST_KO_DIR, clean) ? `/ko/rounds/${id}` : `/rounds/${id}`;
+  }
+  if (getPreMatchPreviews("ko").some((preview) => preview.slug === slug)) return `/ko/previews/${slug}`;
+  if (getPreMatchPreviews("en").some((preview) => preview.slug === slug)) return `/previews/${slug}`;
+  if (PLAYER_ALIASES.has(slug)) return `/ko/players/${PLAYER_ALIASES.get(slug)}`;
+  if (PLAYER_SLUGS.has(slug)) return `/ko/players/${slug}`;
+  if (PLACE_SLUGS.has(slug)) return `/places/${slug}`;
+  if (TEAM_SLUGS.has(slug)) return `/teams/${slug === "yongin-fc" ? "yongin" : slug}`;
+  return undefined;
 }
 
 function parseFrontmatter(markdown: string) {
@@ -134,7 +180,7 @@ function normalizedPercent(value: unknown) {
   return Math.max(0, Math.min(100, percent));
 }
 
-function parseForecast(data: Record<string, string>): ForecastRead | undefined {
+function parseForecast(data: Record<string, string>, locale: PreviewLocale): ForecastRead | undefined {
   const probabilities = parseJsonField<Record<string, unknown>>(data, "forecast_probabilities");
   if (!probabilities) return undefined;
 
@@ -152,7 +198,7 @@ function parseForecast(data: Record<string, string>): ForecastRead | undefined {
     },
     {
       key: "opponent" as const,
-      label: labels.opponent_win || `${data.opponent || "Opponent"} win`,
+      label: labels.opponent_win || (locale === "ko" ? `${koTeam(data.opponent || "상대", "short")} 승` : `${data.opponent || "Opponent"} win`),
       value: normalizedPercent(probabilities.opponent_win),
     },
   ].filter((option): option is ForecastProbability => typeof option.value === "number");
@@ -166,7 +212,7 @@ function parseForecast(data: Record<string, string>): ForecastRead | undefined {
   };
 }
 
-function parsePredictedLineup(data: Record<string, string>): PredictedLineup | undefined {
+function parsePredictedLineup(data: Record<string, string>, locale: PreviewLocale): PredictedLineup | undefined {
   const players = parseJsonField<PredictedLineupPlayer[]>(data, "predicted_lineup");
   if (!Array.isArray(players) || players.length === 0) return undefined;
 
@@ -185,7 +231,7 @@ function parsePredictedLineup(data: Record<string, string>): PredictedLineup | u
   return {
     label: data.predicted_lineup_label || "Predicted Seoul XI",
     statusLabel: data.predicted_lineup_status || "Predicted",
-    teamName: data.predicted_lineup_team || "Seoul E-Land",
+    teamName: data.predicted_lineup_team || (locale === "ko" ? "서울 이랜드" : "Seoul E-Land"),
     formation: data.predicted_formation || "Predicted shape",
     note: data.predicted_lineup_note,
     players: cleanPlayers,
@@ -205,8 +251,8 @@ export function getPreMatchPreviews(locale: PreviewLocale = "en"): PreMatchPrevi
       const cleanBody = cleanPreviewBody(body);
       const slug = slugify(fileName);
       const title = firstHeading(cleanBody, fileName);
-      const forecast = parseForecast(data);
-      const predictedLineup = parsePredictedLineup(data);
+      const forecast = parseForecast(data, locale);
+      const predictedLineup = parsePredictedLineup(data, locale);
       return {
         slug,
         fileName,
@@ -262,9 +308,10 @@ const GLANCE_HEADINGS = new Set([
   "panorama",
   "visão geral",
   "visao geral",
+  "한눈에 보기",
 ]);
 
-function inlineMarkdown(value: string) {
+function inlineMarkdown(value: string, locale: PreviewLocale = "en") {
   let html = escapeHtml(value);
   html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
   html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
@@ -281,8 +328,19 @@ function inlineMarkdown(value: string) {
     /\[([^\]]+)\]\((\/[A-Za-z0-9\-._~/]*)\)/g,
     (_match, text: string, href: string) => `<a href="${escapeHtml(withBase(href))}">${text}</a>`,
   );
-  html = html.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, "<span>$2</span>");
-  html = html.replace(/\[\[([^\]]+)\]\]/g, "<span>$1</span>");
+  if (locale === "ko") {
+    html = html.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, (_match, target: string, label: string) => {
+      const href = resolveKoreanWikiHref(target);
+      return href ? `<a href="${escapeHtml(withBase(href))}">${label}</a>` : `<span>${label}</span>`;
+    });
+    html = html.replace(/\[\[([^\]]+)\]\]/g, (_match, target: string) => {
+      const href = resolveKoreanWikiHref(target);
+      return href ? `<a href="${escapeHtml(withBase(href))}">${target}</a>` : `<span>${target}</span>`;
+    });
+  } else {
+    html = html.replace(/\[\[([^\]|]+)\|([^\]]+)\]\]/g, "<span>$2</span>");
+    html = html.replace(/\[\[([^\]]+)\]\]/g, "<span>$1</span>");
+  }
   return html;
 }
 
@@ -312,9 +370,9 @@ function renderForecastBar(forecast: ForecastRead, locale: PreviewLocale = "en")
     )
     .join("");
 
-  const ariaLabel = locale === "pt" ? "Probabilidades da previsão" : "Forecast probabilities";
-  const defaultHeading = locale === "pt" ? "Leitura do modelo" : "Forecast read";
-  const defaultSubheading = locale === "pt" ? "Probabilidades de vitória/empate" : "Win/draw probabilities";
+  const ariaLabel = locale === "ko" ? "예측 확률" : locale === "pt" ? "Probabilidades da previsão" : "Forecast probabilities";
+  const defaultHeading = locale === "ko" ? "모델 전망" : locale === "pt" ? "Leitura do modelo" : "Forecast read";
+  const defaultSubheading = locale === "ko" ? "승·무 확률" : locale === "pt" ? "Probabilidades de vitória/empate" : "Win/draw probabilities";
 
   return `<section class="preview-forecast-card" aria-label="${ariaLabel}">
     <div class="preview-forecast-heading">
@@ -329,7 +387,14 @@ function renderForecastBar(forecast: ForecastRead, locale: PreviewLocale = "en")
 
 function renderLineupPitch(lineup: PredictedLineup, locale: PreviewLocale = "en") {
   const labels =
-    locale === "pt"
+    locale === "ko"
+      ? {
+          attack: "공격 라인",
+          midfield: "미드필드",
+          defense: "수비 라인",
+          goalkeeper: "골키퍼",
+        }
+      : locale === "pt"
       ? {
           attack: "Linha de frente",
           midfield: "Meio-campo",
@@ -348,7 +413,8 @@ function renderLineupPitch(lineup: PredictedLineup, locale: PreviewLocale = "en"
     { id: "defense", label: labels.defense },
     { id: "goalkeeper", label: labels.goalkeeper },
   ] as const;
-  const aria = lineup.players.map((player) => `${player.role} ${player.name}`).join(", ");
+  const displayName = (name: string) => (locale === "ko" ? koreanPlayerName(name) : name);
+  const aria = lineup.players.map((player) => `${player.role} ${displayName(player.name)}`).join(", ");
   const playerRows = rows
     .map((row) => {
       const players = lineup.players.filter((player) => player.line === row.id);
@@ -359,7 +425,7 @@ function renderLineupPitch(lineup: PredictedLineup, locale: PreviewLocale = "en"
             (player) => `<div class="preview-player-marker">
               <span class="preview-player-role">${escapeHtml(player.role)}</span>
               <span class="preview-player-dot" aria-hidden="true"></span>
-              <span class="preview-player-name">${escapeHtml(player.name)}</span>
+              <span class="preview-player-name">${escapeHtml(displayName(player.name))}</span>
             </div>`,
           )
           .join("")}
@@ -393,14 +459,14 @@ function renderLineupPitch(lineup: PredictedLineup, locale: PreviewLocale = "en"
   </section>`;
 }
 
-function renderTable(lines: string[], options?: { hideForecastRead?: boolean }) {
+function renderTable(lines: string[], options?: { hideForecastRead?: boolean; locale?: PreviewLocale }) {
   const rows = lines
     .filter((line) => !/^\|\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(line))
     .map((line) =>
       line
         .replace(/^\||\|$/g, "")
         .split("|")
-        .map((cell) => inlineMarkdown(cell.trim())),
+        .map((cell) => inlineMarkdown(cell.trim(), options?.locale)),
     );
 
   if (rows.length === 0) return "";
@@ -441,7 +507,7 @@ export function renderPreviewMarkdown(
       }
       const normalizedHeading = currentHeading.toLowerCase();
       const isAtAGlance = GLANCE_HEADINGS.has(normalizedHeading);
-      html.push(renderTable(tableLines, { hideForecastRead: isAtAGlance && Boolean(preview?.forecast) }));
+      html.push(renderTable(tableLines, { hideForecastRead: isAtAGlance && Boolean(preview?.forecast), locale: preview?.locale }));
       if (isAtAGlance && !renderedGlanceVisuals) {
         if (preview?.forecast) {
           html.push(renderForecastBar(preview.forecast, preview.locale));
@@ -455,16 +521,16 @@ export function renderPreviewMarkdown(
     }
 
     if (line.startsWith("### ")) {
-      html.push(`<h3>${inlineMarkdown(line.slice(4))}</h3>`);
+      html.push(`<h3>${inlineMarkdown(line.slice(4), preview?.locale)}</h3>`);
       continue;
     }
     if (line.startsWith("## ")) {
       currentHeading = line.slice(3).trim();
-      html.push(`<h2>${inlineMarkdown(currentHeading)}</h2>`);
+      html.push(`<h2>${inlineMarkdown(currentHeading, preview?.locale)}</h2>`);
       continue;
     }
     if (line.startsWith("> ")) {
-      html.push(`<blockquote>${inlineMarkdown(line.slice(2))}</blockquote>`);
+      html.push(`<blockquote>${inlineMarkdown(line.slice(2), preview?.locale)}</blockquote>`);
       continue;
     }
 
@@ -474,7 +540,7 @@ export function renderPreviewMarkdown(
         i += 1;
         items.push(lines[i].trim().slice(2));
       }
-      html.push(`<ul>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}</ul>`);
+      html.push(`<ul>${items.map((item) => `<li>${inlineMarkdown(item, preview?.locale)}</li>`).join("")}</ul>`);
       continue;
     }
 
@@ -484,11 +550,11 @@ export function renderPreviewMarkdown(
         i += 1;
         items.push(lines[i].trim().replace(/^\d+\.\s+/, ""));
       }
-      html.push(`<ol>${items.map((item) => `<li>${inlineMarkdown(item)}</li>`).join("")}</ol>`);
+      html.push(`<ol>${items.map((item) => `<li>${inlineMarkdown(item, preview?.locale)}</li>`).join("")}</ol>`);
       continue;
     }
 
-    html.push(`<p>${inlineMarkdown(line)}</p>`);
+    html.push(`<p>${inlineMarkdown(line, preview?.locale)}</p>`);
   }
 
   return html.join("\n");

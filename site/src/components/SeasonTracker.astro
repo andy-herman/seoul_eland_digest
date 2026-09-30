@@ -12,12 +12,14 @@ import {
   type Outcome,
 } from "../data/seasonTracker";
 import { CLUB_RECORDS, RIVAL_FIXTURES, STANDINGS_AS_OF } from "../data/seasonRivals";
+import { koTeam } from "../lib/teamNamesKo";
 
 interface Props {
-  locale?: "en" | "pt";
+  locale?: "en" | "pt" | "ko";
 }
 const { locale = "en" } = Astro.props;
 const isPt = locale === "pt";
+const isKo = locale === "ko";
 
 const rounds = buildTrackedRounds();
 const played = rounds.filter((r) => r.actual);
@@ -48,6 +50,7 @@ const revisedStartIndex = rounds.findIndex((r) => r.round === REVISED_BASELINE.r
 const hasRivals = CLUB_RECORDS.length > 0 && RIVAL_FIXTURES.length > 0;
 const projections = hasRivals ? projectSeason(CLUB_RECORDS, RIVAL_FIXTURES) : [];
 const seoulProjection = projections.find((p) => p.slug === "seoul-e-land");
+const standingsAsOf = isKo ? STANDINGS_AS_OF.replace(/^Round\s+(\d+)/, "$1라운드") : STANDINGS_AS_OF;
 
 // Points-per-game the model currently implies for Seoul's remaining games.
 const modelPpg =
@@ -58,7 +61,7 @@ const modelPpg =
 // Rival projections excluding Seoul, for the client-side position calculation.
 const rivalsForClient = projections
   .filter((p) => p.slug !== "seoul-e-land")
-  .map((p) => ({ name: p.name, projected: Number(p.projectedFinal.toFixed(2)) }));
+  .map((p) => ({ name: isKo ? koTeam(p.name, "short") : p.name, projected: Number(p.projectedFinal.toFixed(2)) }));
 
 // ---- chart geometry (static, computed at build time) ----
 const chartW = 720;
@@ -104,7 +107,57 @@ const revisedPath =
 const yTicks: number[] = [];
 for (let v = yMin; v <= yMax; v += 5) yTicks.push(v);
 
-const t = isPt
+const t = isKo
+  ? {
+      eyebrow: "라이브 도구",
+      title: "시즌 트래커",
+      intro: "7월 12일에 공개한 후반기 라운드별 예측과 9월 7일에 공개한 수정 예측을 실제 결과와 비교하고, 남은 시즌의 승격 레이스를 계산합니다. 공개 뒤에는 조용히 고치지 않습니다.",
+      cardPredicted: "공개 예측",
+      cardPredictedSub: "7월 12일 예상 최종 승점",
+      cardNow: "현재 승점",
+      cardNowSub: "이 시점 예측 대비",
+      cardAccuracy: "예측 적중률",
+      cardAccuracySub: "정확히 맞힌 결과",
+      cardProjection: "모델 전망",
+      cardProjectionSub: "오늘 기준 예상 최종 승점",
+      chartTitle: "예측과 실제",
+      chartNote: "두 선은 프리뷰 작성 당시 서울 이랜드의 29점에서 출발합니다. 실선은 실제 결과입니다.",
+      legendPredicted: "예측(7월 12일)",
+      legendActual: "실제",
+      legendRevised: "수정(9월 7일)",
+      cardRevised: "수정 예측",
+      cardRevisedSub: "9월 7일 시뮬레이션 기반 4승 3무 1패",
+      revisedAccuracy: "수정 예측 적중",
+      tableTitle: "라운드별 기록",
+      thRound: "R",
+      thMatch: "경기",
+      thPredicted: "7월 예측",
+      thRevised: "9월 수정",
+      thActual: "실제",
+      thCall: "판정",
+      thRunning: "누적",
+      pending: "예정",
+      hit: "적중",
+      miss: "실패",
+      whatIfTitle: "가정 계산",
+      whatIfIntro: "서울 이랜드의 최종 승점을 정하면 남은 경기에서 필요한 흐름과 예상 순위를 보여줍니다.",
+      whatIfTotal: "최종 승점",
+      whatIfPpg: "남은 경기 평균 승점",
+      whatIfPosition: "예상 순위",
+      whatIfNeededFrom: "승점",
+      whatIfRemaining: "남은 경기",
+      raceTitle: "5위권 경쟁",
+      raceIntro: "승격 경쟁 팀들의 남은 일정을 경기별로 계산한 모델 전망입니다.",
+      thClub: "구단",
+      thPlayed: "경기",
+      thPoints: "승점",
+      thRemaining: "잔여",
+      thProjected: "전망",
+      methodTitle: "계산 방식",
+      soon: "경쟁팀 데이터가 확인되는 대로 반영합니다.",
+      asOf: "표 기준",
+    }
+  : isPt
   ? {
       eyebrow: "Ferramenta ao vivo",
       title: "Rastreador da Temporada",
@@ -213,10 +266,12 @@ const t = isPt
     };
 
 function outcomeLabel(o: Outcome) {
+  if (isKo) return o === "W" ? "승" : o === "D" ? "무" : "패";
   if (isPt) return o === "W" ? "V" : o === "D" ? "E" : "D";
   return o;
 }
 function ordinal(n: number) {
+  if (isKo) return `${n}위`;
   if (isPt) return `${n}º`;
   const s = ["th", "st", "nd", "rd"];
   const v = n % 100;
@@ -320,7 +375,7 @@ function ordinal(n: number) {
           <tr class={r.actual ? "" : "st-row-pending"}>
             <td class="st-num">{r.round}</td>
             <td>
-              <span class="st-venue">{r.venue === "home" ? "H" : "A"}</span> {r.opponent}
+              <span class="st-venue">{r.venue === "home" ? "H" : "A"}</span> {isKo ? koTeam(r.opponent, "short") : r.opponent}
             </td>
             <td><span class={`st-pill st-pill-${r.predicted}`}>{outcomeLabel(r.predicted)}</span></td>
             <td>
@@ -366,7 +421,7 @@ function ordinal(n: number) {
 
   <h3 class="st-h3">{t.whatIfTitle}</h3>
   <div class="st-whatif" data-points-now={pointsNow} data-remaining={remainingCount}
-       data-rivals={JSON.stringify(rivalsForClient)} data-ordinal-style={isPt ? "pt" : "en"}>
+       data-rivals={JSON.stringify(rivalsForClient)} data-ordinal-style={isKo ? "ko" : isPt ? "pt" : "en"}>
     <p class="st-note">{t.whatIfIntro}</p>
     <div class="st-slider-row">
       <label for="st-total">{t.whatIfTotal}</label>
@@ -411,7 +466,7 @@ function ordinal(n: number) {
             {projections.map((p, i) => (
               <tr class={p.slug === "seoul-e-land" ? "st-row-seoul" : ""}>
                 <td class="st-num">{i + 1}</td>
-                <td>{p.name}</td>
+                <td>{isKo ? koTeam(p.name, "short") : p.name}</td>
                 <td class="st-num">{p.played}</td>
                 <td class="st-num">{p.points}</td>
                 <td class="st-num">{p.remaining}</td>
@@ -421,7 +476,7 @@ function ordinal(n: number) {
           </tbody>
         </table>
       </div>
-      <p class="st-note">{t.asOf} {STANDINGS_AS_OF}.</p>
+      <p class="st-note">{t.asOf} {standingsAsOf}.</p>
     </>
   ) : (
     <p class="st-note">{t.soon}</p>
@@ -443,6 +498,7 @@ function ordinal(n: number) {
     const pointsNow = Number(root.dataset.pointsNow ?? 0);
     const remaining = Number(root.dataset.remaining ?? 0);
     const isPt = root.dataset.ordinalStyle === "pt";
+    const isKo = root.dataset.ordinalStyle === "ko";
     let rivals: { name: string; projected: number }[] = [];
     try {
       rivals = JSON.parse(root.dataset.rivals || "[]");
@@ -451,6 +507,7 @@ function ordinal(n: number) {
     }
 
     const ordinal = (n: number) => {
+      if (isKo) return `${n}위`;
       if (isPt) return `${n}º`;
       const s = ["th", "st", "nd", "rd"];
       const v = n % 100;

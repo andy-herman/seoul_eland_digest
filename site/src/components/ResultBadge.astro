@@ -2,11 +2,12 @@
 interface Props {
   result: string; // e.g. "W 2-1", "D 0-0", "L 1-3"
   size?: "sm" | "md";
-  locale?: "en" | "pt";
+  locale?: "en" | "pt" | "ko";
 }
 
 const { result, size = "md", locale = "en" } = Astro.props;
 const isPortuguese = locale === "pt";
+const isKorean = locale === "ko";
 const letter = result.trim().charAt(0).toUpperCase();
 const score = result.trim().slice(1).trim();
 
@@ -19,7 +20,15 @@ const colorVar =
         ? "var(--color-result-loss)"
         : "var(--color-muted)";
 
-const displayLetter = isPortuguese
+const displayLetter = isKorean
+  ? letter === "W"
+    ? "승"
+    : letter === "D"
+      ? "무"
+      : letter === "L"
+        ? "패"
+        : letter
+  : isPortuguese
   ? letter === "W"
     ? "V"
     : letter === "D"
@@ -28,7 +37,15 @@ const displayLetter = isPortuguese
         ? "D"
         : letter
   : letter;
-const label = isPortuguese
+const label = isKorean
+  ? letter === "W"
+    ? "승리"
+    : letter === "D"
+      ? "무승부"
+      : letter === "L"
+        ? "패배"
+        : "결과"
+  : isPortuguese
   ? letter === "W"
     ? "Vitória"
     : letter === "D"

@@ -18,26 +18,34 @@ const SITE_BASE = join(__dirname, "..", "src", "content");
 const SRC = {
   digests: join(VAULT_BASE, "Digests"),
   digestsPt: join(VAULT_BASE, "Digests-PT"),
+  digestsKo: join(VAULT_BASE, "Digests-KO"),
   players: join(VAULT_BASE, "Players"),
   prematchPreviews: join(VAULT_BASE, "Scouting Report", "K League 2 2026", "Pre-Match Previews"),
   prematchPreviewsPt: join(VAULT_BASE, "Scouting Report", "K League 2 2026", "Pre-Match Previews-PT"),
+  prematchPreviewsKo: join(VAULT_BASE, "Scouting Report", "K League 2 2026", "Pre-Match Previews-KO"),
   guides: join(VAULT_BASE, "Guides"),
   guidesPt: join(VAULT_BASE, "Guides-PT"),
+  guidesKo: join(VAULT_BASE, "Guides-KO"),
   articles: join(VAULT_BASE, "Articles"),
   articlesPt: join(VAULT_BASE, "Articles-PT"),
+  articlesKo: join(VAULT_BASE, "Articles-KO"),
 };
 
 const DEST = {
   digests: join(SITE_BASE, "digests"),
   digestsPt: join(SITE_BASE, "digests-pt"),
+  digestsKo: join(SITE_BASE, "digests-ko"),
   players: join(SITE_BASE, "players"),
   places: join(SITE_BASE, "places"),
   prematchPreviews: join(SITE_BASE, "prematch-previews"),
   prematchPreviewsPt: join(SITE_BASE, "prematch-previews-pt"),
+  prematchPreviewsKo: join(SITE_BASE, "prematch-previews-ko"),
   guides: join(SITE_BASE, "guides"),
   guidesPt: join(SITE_BASE, "guides-pt"),
+  guidesKo: join(SITE_BASE, "guides-ko"),
   articles: join(SITE_BASE, "articles"),
   articlesPt: join(SITE_BASE, "articles-pt"),
+  articlesKo: join(SITE_BASE, "articles-ko"),
 };
 
 function polishFanFacingCopy(content) {
@@ -100,6 +108,33 @@ async function copyTree(srcDir, destDir, predicate, transform) {
   return count;
 }
 
+async function mergeTree(srcDir, destDir, predicate, transform) {
+  if (!existsSync(srcDir)) {
+    console.warn(`[sync] missing source: ${srcDir} — skipping`);
+    await mkdir(destDir, { recursive: true });
+    return 0;
+  }
+  await mkdir(destDir, { recursive: true });
+  const entries = await readdir(srcDir);
+  let count = 0;
+  for (const entry of entries) {
+    const srcPath = join(srcDir, entry);
+    const s = await stat(srcPath);
+    if (!s.isFile()) continue;
+    if (!entry.endsWith(".md")) continue;
+    if (predicate && !predicate(entry)) continue;
+    const destPath = join(destDir, entry);
+    if (transform) {
+      const content = await readFile(srcPath, "utf8");
+      await writeFile(destPath, transform(content), "utf8");
+    } else {
+      await copyFile(srcPath, destPath);
+    }
+    count += 1;
+  }
+  return count;
+}
+
 async function main() {
   console.log("[sync] vault →", VAULT_BASE);
 
@@ -113,6 +148,14 @@ async function main() {
     scrubDigestForSite,
   );
   console.log(`[sync] copied ${digestPtCount} Portuguese digest(s)`);
+
+  const digestKoCount = await mergeTree(
+    SRC.digestsKo,
+    DEST.digestsKo,
+    (name) => /^\d{4}-R\d+_Seoul_E-Land_Digest\.md$/i.test(name),
+    scrubDigestForSite,
+  );
+  console.log(`[sync] merged ${digestKoCount} Korean digest(s)`);
 
   // Place names: file name ends with a venue noun. Don't match the Korean
   // surname "Park" — players named "Park Chang-hwan" must stay players.
@@ -133,17 +176,26 @@ async function main() {
   const previewPtCount = await copyTree(SRC.prematchPreviewsPt, DEST.prematchPreviewsPt, undefined, scrubPreviewForSite);
   console.log(`[sync] copied ${previewPtCount} Portuguese pre-match preview(s)`);
 
+  const previewKoCount = await mergeTree(SRC.prematchPreviewsKo, DEST.prematchPreviewsKo, undefined, scrubPreviewForSite);
+  console.log(`[sync] merged ${previewKoCount} Korean pre-match preview(s)`);
+
   const guideCount = await copyTree(SRC.guides, DEST.guides, undefined, polishFanFacingCopy);
   console.log(`[sync] copied ${guideCount} guide(s)`);
 
   const guidePtCount = await copyTree(SRC.guidesPt, DEST.guidesPt, undefined, polishFanFacingCopy);
   console.log(`[sync] copied ${guidePtCount} Portuguese guide(s)`);
 
+  const guideKoCount = await mergeTree(SRC.guidesKo, DEST.guidesKo, undefined, polishFanFacingCopy);
+  console.log(`[sync] merged ${guideKoCount} Korean guide(s)`);
+
   const articleCount = await copyTree(SRC.articles, DEST.articles, undefined, polishFanFacingCopy);
   console.log(`[sync] copied ${articleCount} article(s)`);
 
   const articlePtCount = await copyTree(SRC.articlesPt, DEST.articlesPt, undefined, polishFanFacingCopy);
   console.log(`[sync] copied ${articlePtCount} Portuguese article(s)`);
+
+  const articleKoCount = await mergeTree(SRC.articlesKo, DEST.articlesKo, undefined, polishFanFacingCopy);
+  console.log(`[sync] merged ${articleKoCount} Korean article(s)`);
 
   // Always seed empty content folders so Astro doesn't error if vault is empty.
   for (const dir of Object.values(DEST)) {

@@ -2,20 +2,29 @@
 import { withBase } from "../lib/paths";
 
 interface Props {
-  locale?: "en" | "pt";
+  locale?: "en" | "pt" | "ko";
 }
 
 const { locale = "en" } = Astro.props;
 const isPortuguese = locale === "pt";
-const copy = isPortuguese
+const isKorean = locale === "ko";
+const copy = isKorean
   ? {
+      href: "/ko/play",
+      eyebrow: "게임 · 영어판 먼저 공개",
+      title: "레울·레냥과 함께하는 미니게임",
+      desc: "11개 게임의 한국어 허브입니다. 게임 본편 한국어판도 이어서 준비합니다.",
+      cta: "게임 보기",
+    }
+  : isPortuguese
+    ? {
       href: "/pt/play",
       eyebrow: "Novo · Jogos dos mascotes",
       title: "Jogue com o Leoul e o Lenyang",
       desc: "Cobre pênaltis na Festa dos Pênaltis e drible os mascotes dos outros 16 clubes da K League 2 na Corrida do Drible.",
       cta: "Jogar",
     }
-  : {
+    : {
       href: "/play",
       eyebrow: "New · Mascot games",
       title: "Play with Leoul & Lenyang",

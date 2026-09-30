@@ -3,6 +3,8 @@ import ResultBadge from "./ResultBadge.astro";
 import TranslateButton from "./TranslateButton.astro";
 import { getTeamInitials, getTeamLogo } from "../lib/teamLogos";
 import { withBase } from "../lib/paths";
+import { dateLocale, type Locale } from "../lib/i18n";
+import { koTeam } from "../lib/teamNamesKo";
 
 interface Props {
   slug: string;
@@ -12,17 +14,19 @@ interface Props {
   opponent: string;
   venue: "home" | "away" | "neutral";
   result: string;
-  locale?: "en" | "pt";
+  locale?: Locale;
 }
 
 const { slug, season, round, date, opponent, venue, result, locale = "en" } = Astro.props;
 const isPortuguese = locale === "pt";
+const isKorean = locale === "ko";
 const opponentLogo = getTeamLogo(opponent);
 const opponentInitials = getTeamInitials(opponent);
+const displayOpponent = isKorean ? koTeam(opponent, "short") : opponent;
 const resultLetter = result.trim().charAt(0).toUpperCase();
 const scorePart = result.trim().slice(1).trim();
 const [elandScore = "—", opponentScore = "—"] = scorePart.split("-").map((part) => part.trim());
-const shortDateLabel = date.toLocaleDateString(isPortuguese ? "pt-BR" : "en-US", {
+const shortDateLabel = date.toLocaleDateString(dateLocale[locale], {
   weekday: "short",
   month: "short",
   day: "numeric",
@@ -30,8 +34,27 @@ const shortDateLabel = date.toLocaleDateString(isPortuguese ? "pt-BR" : "en-US",
   timeZone: "UTC",
 });
 
-const labels = isPortuguese
+const labels = isKorean
   ? {
+      season: "시즌",
+      round: "라운드",
+      venue: venue === "home" ? "홈" : venue === "away" ? "원정" : "중립",
+      resultText: resultLetter === "W" ? "승리" : resultLetter === "D" ? "무승부" : resultLetter === "L" ? "패배" : "경기 종료",
+      matchup: venue === "away" ? `${displayOpponent} 원정` : venue === "home" ? `${displayOpponent}전` : `${displayOpponent} 중립 경기`,
+      eyebrow: "경기 리뷰",
+      deck: "전술 포인트, 선수 이야기, 승격 레이스 흐름을 팬의 시선으로 정리한 리뷰.",
+      toggleHref: `/rounds/${slug}`,
+      toggleCode: "EN",
+      toggleLabel: "영어",
+      toggleAria: "영어로 보기",
+      toggleHelp: "이 리뷰를 영어로 읽기.",
+      crestAlt: "서울 이랜드 FC 엠블럼",
+      opponentAlt: `${displayOpponent} 엠블럼`,
+      fullTime: "경기 종료",
+      homeName: "서울 이랜드 FC",
+    }
+  : isPortuguese
+    ? {
       season: "Temporada",
       round: "Rodada",
       venue: venue === "home" ? "Casa" : venue === "away" ? "Fora" : "Neutro",
@@ -46,6 +69,8 @@ const labels = isPortuguese
       toggleHelp: "Ler este relato em inglês.",
       crestAlt: "Escudo do Seoul E-Land FC",
       opponentAlt: `Logo do ${opponent}`,
+      fullTime: "Fim de jogo",
+      homeName: "Seoul E-Land FC",
     }
   : {
       season: "Season",
@@ -62,6 +87,8 @@ const labels = isPortuguese
       toggleHelp: "Read this match report in Portuguese.",
       crestAlt: "Seoul E-Land FC crest",
       opponentAlt: `${opponent} logo`,
+      fullTime: "Full time",
+      homeName: "Seoul E-Land FC",
     };
 ---
 
@@ -79,7 +106,7 @@ const labels = isPortuguese
     <div class="match-mobile-summary mt-4 sm:hidden">
       <div class="match-mobile-team">
         <img src={withBase("/assets/crest.png")} alt={labels.crestAlt} class="match-mobile-logo" />
-        <span>Seoul E-Land</span>
+        <span>{labels.homeName}</span>
       </div>
       <div class="match-mobile-center">
         <ResultBadge result={result} size="sm" locale={locale} />
@@ -92,14 +119,14 @@ const labels = isPortuguese
         ) : (
           <span class="match-mobile-logo match-mobile-initials">{opponentInitials}</span>
         )}
-        <span>{opponent}</span>
+        <span>{displayOpponent}</span>
       </div>
     </div>
 
     <div class="scoreboard-grid mt-6 hidden min-w-0 sm:mt-8 sm:grid">
       <div class="scoreboard-team scoreboard-home min-w-0 rounded-2xl border p-3 text-center sm:rounded-3xl sm:p-5" style="background-color: color-mix(in srgb, white 6%, transparent); border-color: var(--color-rule);">
         <img src={withBase("/assets/crest.png")} alt={labels.crestAlt} class="scoreboard-team-logo mx-auto h-14 w-14 object-contain min-[380px]:h-16 min-[380px]:w-16 sm:h-20 sm:w-20" />
-        <p class="scoreboard-team-name mt-2 text-[0.68rem] font-black uppercase tracking-[0.08em] min-[380px]:text-xs sm:mt-3 sm:text-sm sm:tracking-[0.14em]" style="color: var(--color-link);">Seoul E-Land FC</p>
+        <p class="scoreboard-team-name mt-2 text-[0.68rem] font-black uppercase tracking-[0.08em] min-[380px]:text-xs sm:mt-3 sm:text-sm sm:tracking-[0.14em]" style="color: var(--color-link);">{labels.homeName}</p>
       </div>
 
       <div class="scoreboard-center text-center">
@@ -110,7 +137,7 @@ const labels = isPortuguese
           <span class="text-4xl leading-none min-[380px]:text-5xl sm:text-7xl" style="color: var(--color-ink);">{opponentScore}</span>
         </div>
         <p class="mt-2 text-[0.64rem] font-black uppercase tracking-[0.12em] min-[380px]:text-xs min-[380px]:tracking-[0.18em] sm:mt-3" style="color: var(--color-gold-light);">
-          {labels.resultText} · {isPortuguese ? "Fim de jogo" : "Full time"}
+          {labels.resultText} · {labels.fullTime}
         </p>
       </div>
 
@@ -122,7 +149,7 @@ const labels = isPortuguese
             <span class="text-xl font-black" style="color: var(--color-navy);">{opponentInitials}</span>
           )}
         </span>
-        <p class="scoreboard-team-name mt-2 text-[0.68rem] font-black uppercase tracking-[0.08em] min-[380px]:text-xs sm:mt-3 sm:text-sm sm:tracking-[0.14em]" style="color: var(--color-link);">{opponent}</p>
+        <p class="scoreboard-team-name mt-2 text-[0.68rem] font-black uppercase tracking-[0.08em] min-[380px]:text-xs sm:mt-3 sm:text-sm sm:tracking-[0.14em]" style="color: var(--color-link);">{displayOpponent}</p>
       </div>
     </div>
 

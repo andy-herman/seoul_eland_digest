@@ -1,23 +1,27 @@
 ---
 import { withBase } from "../lib/paths";
+import type { Locale } from "../lib/i18n";
 
 interface Props {
-  locale?: "en" | "pt";
+  locale?: Locale;
 }
 
 const { locale = "en" } = Astro.props;
 const isPortuguese = locale === "pt";
+const isKorean = locale === "ko";
 const year = new Date().getFullYear();
 ---
 
 <footer class="mt-16 border-t" style="border-color: color-mix(in srgb, var(--color-gold) 22%, var(--color-rule)); color: var(--color-muted);">
   <div class="mx-auto grid max-w-6xl gap-6 px-5 py-9 text-sm sm:grid-cols-[1fr_auto] sm:px-6">
     <div class="flex items-start gap-4">
-      <img src={withBase("/assets/crest.png")} alt={isPortuguese ? "Escudo do Seoul E-Land FC" : "Seoul E-Land FC crest"} class="h-12 w-12 object-contain" loading="lazy" />
+      <img src={withBase("/assets/crest.png")} alt={isKorean ? "서울 이랜드 FC 엠블럼" : isPortuguese ? "Escudo do Seoul E-Land FC" : "Seoul E-Land FC crest"} class="h-12 w-12 object-contain" loading="lazy" />
       <div>
         <p class="font-black uppercase tracking-[0.18em]" style="color: var(--color-ink);">Seoul E-Land Digest</p>
         <p class="mt-2 max-w-xl leading-relaxed">
-          {isPortuguese
+          {isKorean
+            ? "서울 이랜드 FC를 경기마다 따라가는 팬이 만드는 독립 매체입니다."
+            : isPortuguese
             ? "Cobertura independente em português para torcedores que acompanham o Seoul E-Land FC, partida a partida."
             : "Independent English-language notes for supporters following Seoul E-Land FC, match by match."}
         </p>
@@ -25,11 +29,11 @@ const year = new Date().getFullYear();
     </div>
     <div class="flex flex-col gap-2 sm:items-end">
       <div class="flex flex-wrap items-center gap-x-4 gap-y-1 sm:justify-end">
-        <a href={withBase("/support")} class="inline-flex min-h-11 items-center font-black no-underline transition-colors hover:text-white sm:min-h-0" style="color: var(--color-gold-light);">{isPortuguese ? "Apoie" : "Support me"}</a>
-        <a href={withBase("/about")} class="inline-flex min-h-11 items-center font-black no-underline transition-colors hover:text-white sm:min-h-0" style="color: var(--color-gold-light);">{isPortuguese ? "Sobre" : "About"}</a>
+        <a href={withBase("/support")} class="inline-flex min-h-11 items-center font-black no-underline transition-colors hover:text-white sm:min-h-0" style="color: var(--color-gold-light);">{isKorean ? "후원" : isPortuguese ? "Apoie" : "Support me"}</a>
+        <a href={withBase("/about")} class="inline-flex min-h-11 items-center font-black no-underline transition-colors hover:text-white sm:min-h-0" style="color: var(--color-gold-light);">{isKorean ? "소개" : isPortuguese ? "Sobre" : "About"}</a>
       </div>
       <span>© {year} Seoul E-Land Digest</span>
-      <span>{isPortuguese ? "Feito para torcedores dos Leopards." : "Made for fans of the Leopards."}</span>
+      <span>{isKorean ? "레오파드 팬을 위해 만들었습니다." : isPortuguese ? "Feito para torcedores dos Leopards." : "Made for fans of the Leopards."}</span>
     </div>
   </div>
 </footer>

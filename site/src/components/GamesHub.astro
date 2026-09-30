@@ -3,15 +3,28 @@ import TranslateButton from "./TranslateButton.astro";
 import { withBase } from "../lib/paths";
 
 interface Props {
-  locale?: "en" | "pt";
+  locale?: "en" | "pt" | "ko";
 }
 
 const { locale = "en" } = Astro.props;
 const isPortuguese = locale === "pt";
-const prefix = isPortuguese ? "/pt" : "";
+const isKorean = locale === "ko";
+const prefix = isKorean ? "" : isPortuguese ? "/pt" : "";
+const KOREAN_GAME_PAGES = new Set<string>();
 
-const copy = isPortuguese
+const copy = isKorean
   ? {
+      eyebrow: "마스코트 게임",
+      heading: "레울·레냥과 함께하는 미니게임",
+      intro: "서울 이랜드의 마스코트와 선수들이 등장하는 11개의 미니게임입니다. 지금은 게임 본편이 영어로 열리고, 한국어판은 준비 중입니다.",
+      englishBadge: "영어",
+      newBadge: "신규",
+      play: "게임 열기",
+      credit:
+        "레울, 레냥, 서울의 노래(2024 ver), 사랑하는 나의 서울 이랜드(2022 ver)는 서울 이랜드 FC의 자산입니다. 다른 K리그2 마스코트는 각 구단의 자산이며, 허가를 받아 사용했습니다.",
+    }
+  : isPortuguese
+    ? {
       eyebrow: "Jogos dos mascotes",
       heading: "Jogue com o Leoul e o Lenyang",
       intro: "Onze jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha são as músicas do próprio clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022).",
@@ -20,7 +33,7 @@ const copy = isPortuguese
       credit:
         "Leoul, Lenyang e as músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão.",
     }
-  : {
+    : {
       eyebrow: "Mascot games",
       heading: "Play with Leoul & Lenyang",
       intro: "Eleven games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver).",
@@ -30,114 +43,186 @@ const copy = isPortuguese
         "Leoul, Lenyang and the songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver) belong to Seoul E-Land FC. The other K League 2 mascots belong to their clubs. All are used with permission.",
     };
 
+const koCopy: Record<string, { title: string; desc: string; tags: string[] }> = {
+  "tifo-master": {
+    title: "Tifo Master",
+    desc: "목동 북측 스탠드의 카드섹션을 직접 설계하고, 관중석이 하나의 물결처럼 들어 올리는 장면을 확인하는 게임.",
+    tags: ["카드섹션", "3D 응원석", "12개 과제"],
+  },
+  "yut-nori": {
+    title: "Yut Nori FC",
+    desc: "전통 윷놀이를 축구장 위로 옮긴 보드게임. 네 말을 몰고 윷판을 돌아 골문 코너를 통과하면 득점.",
+    tags: ["보드게임", "윷놀이", "2인 플레이"],
+  },
+  "clap-for-seoul": {
+    title: "Clap for Seoul",
+    desc: "마이크가 컨트롤러가 됩니다. 박수와 함성으로 서울 이랜드 응원가의 박자를 맞추는 응원석 리듬 게임.",
+    tags: ["마이크", "리듬", "응원 모드"],
+  },
+  "take-five": {
+    title: "Take Five",
+    desc: "패스, 침투, 마무리를 차례로 녹화해 혼자서 한 골을 완성하는 1인 풋살 퍼즐.",
+    tags: ["퍼즐", "12개 스테이지", "실제 경기"],
+  },
+  "paw-hunt": {
+    title: "레냥의 발자국 찾기",
+    desc: "사이트 곳곳에 숨어 있는 레냥의 발자국 21개를 찾는 보물찾기. 힌트를 풀고 인증서를 받아보세요.",
+    tags: ["보물찾기", "21개 힌트", "3장 구성"],
+  },
+  "seoul-song": {
+    title: "Seoul Song Rhythm",
+    desc: "서울의 노래와 사랑하는 나의 서울 이랜드에 맞춰 레울·레냥과 북을 치는 리듬 게임.",
+    tags: ["리듬", "응원가 2곡", "3단계"],
+  },
+  "mascot-kart": {
+    title: "Mascot Kart",
+    desc: "레울 또는 레냥으로 드리프트와 부스터를 쓰며 K리그2 마스코트들과 달리는 카트 레이싱.",
+    tags: ["카트", "8개 트랙", "2개 컵"],
+  },
+  "head-to-head": {
+    title: "Head-to-Head League",
+    desc: "2026 서울 이랜드 선수단으로 5대5 팀을 꾸려 K리그2 마스코트 팀과 16경기 시즌을 치르는 축구 게임.",
+    tags: ["5대5 축구", "35장 선수 카드", "리그"],
+  },
+  "balloon-battle": {
+    title: "Balloon Battle",
+    desc: "물풍선으로 K리그2 마스코트를 가두고 터뜨리는 아케이드 어드벤처.",
+    tags: ["어드벤처", "18개 스테이지", "보스 6명"],
+  },
+  "dribble-dash": {
+    title: "Dribble Dash",
+    desc: "공을 몰고 달리며 태클과 점프를 피하는 러너 게임. 마스코트 앨범을 채워보세요.",
+    tags: ["러너", "18장 카드"],
+  },
+  "penalty-party": {
+    title: "Penalty Party",
+    desc: "레울로 페널티킥을 차거나 레냥으로 골문을 지키며 마스코트 카드를 모으는 게임.",
+    tags: ["페널티킥", "12장 카드"],
+  },
+};
+
+function gameHref(slug: string) {
+  return isKorean && !KOREAN_GAME_PAGES.has(slug) ? `/play/${slug}` : `${prefix}/play/${slug}`;
+}
+
 const games = [
   {
-    href: `${prefix}/play/tifo-master`,
+    slug: "tifo-master",
+    href: gameHref("tifo-master"),
     isNew: true,
-    title: "Tifo Master",
-    desc: isPortuguese
+    title: isKorean ? koCopy["tifo-master"].title : "Tifo Master",
+    desc: isKorean ? koCopy["tifo-master"].desc : isPortuguese
       ? "Monte um mosaico de cartões para a arquibancada norte de Mokdong, cartão por cartão, e veja a torcida levantar tudo numa onda enquanto o Leoul conta 하나, 둘, 셋. Depois, na Conferência, ache os torcedores com o cartão errado antes do apito."
       : "Design a card stunt for the Mokdong north stand, one card per fan, and watch the whole end raise it in a wave as Leoul counts 하나, 둘, 셋. Then play Card Check and find the fans holding the wrong card before kick-off.",
-    tags: isPortuguese ? ["Criação", "Mosaico 3D", "12 desafios"] : ["Create", "3D card stunt", "12 puzzles"],
+    tags: isKorean ? koCopy["tifo-master"].tags : isPortuguese ? ["Criação", "Mosaico 3D", "12 desafios"] : ["Create", "3D card stunt", "12 puzzles"],
     art: [{ src: withBase("/play/tifo/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
     accent: "tifo",
   },
   {
-    href: `${prefix}/play/yut-nori`,
+    slug: "yut-nori",
+    href: gameHref("yut-nori"),
     isNew: true,
-    title: "Yut Nori FC",
-    desc: isPortuguese
+    title: isKorean ? koCopy["yut-nori"].title : "Yut Nori FC",
+    desc: isKorean ? koCopy["yut-nori"].desc : isPortuguese
       ? "O jogo de tabuleiro tradicional da Coreia num campo de futebol. Jogue os bastões de 윷 no tapete, leve quatro peças do Seoul E-Land pelo 윷판, junte companheiros, dê carrinhos nos mascotes rivais e marque cruzando o canto do gol. Contra o computador ou com um amigo no mesmo aparelho."
       : "Korea's traditional board game on a football pitch. Throw the 윷 sticks on the mat, race four Seoul E-Land pieces around the 윷판, stack teammates, tackle the rival mascots and score by crossing the goal corner. Against the computer or pass and play with a friend.",
-    tags: isPortuguese ? ["Tabuleiro", "Tradição coreana", "2 jogadores"] : ["Board game", "Korean tradition", "2 players"],
+    tags: isKorean ? koCopy["yut-nori"].tags : isPortuguese ? ["Tabuleiro", "Tradição coreana", "2 jogadores"] : ["Board game", "Korean tradition", "2 players"],
     art: [{ src: withBase("/play/yut/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
     accent: "yut",
   },
   {
-    href: `${prefix}/play/clap-for-seoul`,
+    slug: "clap-for-seoul",
+    href: gameHref("clap-for-seoul"),
     isNew: true,
-    title: "Clap for Seoul",
-    desc: isPortuguese
+    title: isKorean ? koCopy["clap-for-seoul"].title : "Clap for Seoul",
+    desc: isKorean ? koCopy["clap-for-seoul"].desc : isPortuguese
       ? "O microfone é o controle. O Leoul puxa os gritos da arquibancada: bata 짝짝 짝짝짝 e grite 서울! no ritmo da música do clube, e cada grito certo empurra o time para o gol. Melhor com uma sala cheia de torcedores. Também dá para jogar tocando na tela."
       : "The microphone is the controller. Leoul leads the chants from the supporters' end: clap 짝짝 짝짝짝 and shout 서울! on the beat of the club song, and every chant you land pushes the team toward goal. Best with a room full of fans. Tap mode works too.",
-    tags: isPortuguese ? ["Microfone", "Ritmo", "Para torcidas"] : ["Microphone", "Rhythm", "Watch parties"],
+    tags: isKorean ? koCopy["clap-for-seoul"].tags : isPortuguese ? ["Microfone", "Ritmo", "Para torcidas"] : ["Microphone", "Rhythm", "Watch parties"],
     art: [{ src: withBase("/play/clap/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
     accent: "clap",
   },
   {
-    href: `${prefix}/play/take-five`,
+    slug: "take-five",
+    href: gameHref("take-five"),
     isNew: true,
-    title: "Take Five",
-    desc: isPortuguese
+    title: isKorean ? koCopy["take-five"].title : "Take Five",
+    desc: isKorean ? koCopy["take-five"].desc : isPortuguese
       ? "Um jogo de futebol de um jogador só. Grave o passe, depois a corrida para recebê-lo, depois a finalização: cada tomada volta como eco e o gol inteiro sai de você. 12 fases e todos os jogos de 2026 para reescrever contra os mascotes rivais."
       : "A one-player five-a-side. Record the pass, then the run to meet it, then the finish: every take plays back as an echo, so the whole goal is yours. 12 levels plus every 2026 match to rewrite against the rival mascots.",
-    tags: isPortuguese ? ["Quebra-cabeça", "12 fases", "26 jogos reais"] : ["Puzzle", "12 levels", "26 real matches"],
+    tags: isKorean ? koCopy["take-five"].tags : isPortuguese ? ["Quebra-cabeça", "12 fases", "26 jogos reais"] : ["Puzzle", "12 levels", "26 real matches"],
     art: [{ src: withBase("/play/take5/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
     accent: "take5",
   },
   {
-    href: `${prefix}/play/paw-hunt`,
+    slug: "paw-hunt",
+    href: gameHref("paw-hunt"),
     isNew: true,
-    title: isPortuguese ? "A Caça às Patinhas da Lenyang" : "Lenyang's Paw Hunt",
-    desc: isPortuguese
+    title: isKorean ? koCopy["paw-hunt"].title : isPortuguese ? "A Caça às Patinhas da Lenyang" : "Lenyang's Paw Hunt",
+    desc: isKorean ? koCopy["paw-hunt"].desc : isPortuguese
       ? "Uma caça ao tesouro pelo site inteiro. A Lenyang deixou 21 patinhas escondidas no Digest: resolva as charadas, ache as páginas, toque nas patinhas e ganhe o certificado de Detetive Lenyang."
       : "A treasure hunt across the whole site. Lenyang left 21 paw prints hidden around the Digest: solve the riddles, find the pages, tap the paws and earn a Detective Lenyang certificate.",
-    tags: isPortuguese ? ["Caça ao tesouro", "21 charadas", "3 capítulos"] : ["Treasure hunt", "21 riddles", "3 chapters"],
+    tags: isKorean ? koCopy["paw-hunt"].tags : isPortuguese ? ["Caça ao tesouro", "21 charadas", "3 capítulos"] : ["Treasure hunt", "21 riddles", "3 chapters"],
     art: [{ src: withBase("/play/paw/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
     accent: "paw",
   },
   {
-    href: `${prefix}/play/seoul-song`,
+    slug: "seoul-song",
+    href: gameHref("seoul-song"),
     isNew: false,
-    title: "Seoul Song Rhythm",
-    desc: isPortuguese
+    title: isKorean ? koCopy["seoul-song"].title : "Seoul Song Rhythm",
+    desc: isKorean ? koCopy["seoul-song"].desc : isPortuguese
       ? "Um jogo de ritmo com duas músicas do clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022). Toque tambor com o Leoul, o Lenyang e a torcida de Mokdong: acerte as notas, segure as longas e leve a arquibancada à febre, no Fácil, Normal ou Difícil."
       : "A rhythm game to two club songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver). Drum along with Leoul, Lenyang and the Mokdong supporters' end: hit the notes, hold the long ones and send the stand into fever, on Easy, Normal or Hard.",
-    tags: isPortuguese ? ["Ritmo", "2 músicas", "3 níveis"] : ["Rhythm", "2 songs", "3 levels"],
+    tags: isKorean ? koCopy["seoul-song"].tags : isPortuguese ? ["Ritmo", "2 músicas", "3 níveis"] : ["Rhythm", "2 songs", "3 levels"],
     art: [{ src: withBase("/play/rhythm/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
     accent: "rhythm",
   },
   {
-    href: `${prefix}/play/mascot-kart`,
+    slug: "mascot-kart",
+    href: gameHref("mascot-kart"),
     isNew: false,
-    title: "Mascot Kart",
-    desc: isPortuguese
+    title: isKorean ? koCopy["mascot-kart"].title : "Mascot Kart",
+    desc: isKorean ? koCopy["mascot-kart"].desc : isPortuguese
       ? "Uma corrida de kart no estilo KartRider. Faça drift, use turbos e jogue balões d'água com o Leoul ou o Lenyang contra os outros 16 mascotes da K League 2, em duas copas e oito pistas de Mokdong a Busan."
       : "A KartRider-style kart race. Drift, boost and throw water balloons as Leoul or Lenyang against the 16 other K League 2 mascots, across two cups and eight tracks from Mokdong to Busan.",
-    tags: isPortuguese ? ["Corrida de kart", "8 pistas", "2 copas"] : ["Kart racing", "8 tracks", "2 cups"],
+    tags: isKorean ? koCopy["mascot-kart"].tags : isPortuguese ? ["Corrida de kart", "8 pistas", "2 copas"] : ["Kart racing", "8 tracks", "2 cups"],
     art: [{ src: withBase("/play/kart/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
     accent: "kart",
   },
   {
-    href: `${prefix}/play/head-to-head`,
+    slug: "head-to-head",
+    href: gameHref("head-to-head"),
     isNew: false,
-    title: isPortuguese ? "Liga Cabeça a Cabeça" : "Head-to-Head League",
-    desc: isPortuguese
+    title: isKorean ? koCopy["head-to-head"].title : isPortuguese ? "Liga Cabeça a Cabeça" : "Head-to-Head League",
+    desc: isKorean ? koCopy["head-to-head"].desc : isPortuguese
       ? "Comande um time de cinco com o elenco real do Seoul E-Land 2026 contra os mascotes rivais. Passe, cruze, chute e cobre escanteios numa temporada de 16 jogos com tabela ao vivo."
       : "Lead a five-a-side team of the real 2026 Seoul E-Land squad against the rival mascots. Pass, cross, shoot and take corners through a 16-match season with a live league table.",
-    tags: isPortuguese ? ["Futebol de cinco", "35 cartas", "Liga"] : ["Five-a-side", "35 player cards", "League"],
+    tags: isKorean ? koCopy["head-to-head"].tags : isPortuguese ? ["Futebol de cinco", "35 cartas", "Liga"] : ["Five-a-side", "35 player cards", "League"],
     art: [{ src: withBase("/play/h2h/stickers/16-home.webp"), cls: "games-art-h2h", w: 440, h: 660 }],
     accent: "h2h",
   },
   {
-    href: `${prefix}/play/balloon-battle`,
+    slug: "balloon-battle",
+    href: gameHref("balloon-battle"),
     isNew: false,
-    title: isPortuguese ? "A Batalha de Balões" : "Balloon Battle",
-    desc: isPortuguese
+    title: isKorean ? koCopy["balloon-battle"].title : isPortuguese ? "A Batalha de Balões" : "Balloon Battle",
+    desc: isKorean ? koCopy["balloon-battle"].desc : isPortuguese
       ? "Uma aventura de balões d'água no estilo de Crazy Arcade. Prenda os mascotes da K League 2 em bolhas, estoure todos e derrote seis chefes gigantes em seis mundos."
       : "A water-balloon adventure in the style of Crazy Arcade. Trap the K League 2 mascots in bubbles, pop them, and beat six giant bosses across six worlds.",
-    tags: isPortuguese ? ["Aventura", "18 fases", "6 chefes"] : ["Adventure", "18 stages", "6 bosses"],
+    tags: isKorean ? koCopy["balloon-battle"].tags : isPortuguese ? ["Aventura", "18 fases", "6 chefes"] : ["Adventure", "18 stages", "6 bosses"],
     art: [{ src: withBase("/play/balloon/card.webp"), cls: "games-art-cover", w: 780, h: 344 }],
     accent: "balloon",
   },
   {
-    href: `${prefix}/play/dribble-dash`,
+    slug: "dribble-dash",
+    href: gameHref("dribble-dash"),
     isNew: false,
-    title: isPortuguese ? "A Corrida do Drible" : "Dribble Dash",
-    desc: isPortuguese
+    title: isKorean ? koCopy["dribble-dash"].title : isPortuguese ? "A Corrida do Drible" : "Dribble Dash",
+    desc: isKorean ? koCopy["dribble-dash"].desc : isPortuguese
       ? "Uma corrida sem fim com a bola no pé. Pule os carrinhos e deslize por baixo dos voadores dos mascotes dos outros 16 clubes da K League 2, e complete o álbum."
       : "An endless run with the ball at your feet. Jump the slide tackles and duck the flying leaps of all 16 other K League 2 mascots, and fill your album.",
-    tags: isPortuguese ? ["Corrida", "18 cartas"] : ["Runner", "18 cards"],
+    tags: isKorean ? koCopy["dribble-dash"].tags : isPortuguese ? ["Corrida", "18 cartas"] : ["Runner", "18 cards"],
     art: [
       { src: withBase("/play/dash/leoul-run1.webp"), cls: "games-art-hero", w: 189, h: 259 },
       { src: withBase("/play/dash/daegu-fc-leap.webp"), cls: "games-art-rival games-art-rival-a", w: 200, h: 166 },
@@ -146,13 +231,14 @@ const games = [
     accent: "dash",
   },
   {
-    href: `${prefix}/play/penalty-party`,
+    slug: "penalty-party",
+    href: gameHref("penalty-party"),
     isNew: false,
-    title: isPortuguese ? "A Festa dos Pênaltis" : "Penalty Party",
-    desc: isPortuguese
+    title: isKorean ? koCopy["penalty-party"].title : isPortuguese ? "A Festa dos Pênaltis" : "Penalty Party",
+    desc: isKorean ? koCopy["penalty-party"].desc : isPortuguese
       ? "Cobre pênaltis com o Leoul ou vá para o gol com o Lenyang, e colecione as 12 cartas dos mascotes."
       : "Take penalties as Leoul or go in goal as Lenyang, and collect all 12 mascot cards.",
-    tags: isPortuguese ? ["Pênaltis", "12 cartas"] : ["Penalties", "12 cards"],
+    tags: isKorean ? koCopy["penalty-party"].tags : isPortuguese ? ["Pênaltis", "12 cartas"] : ["Penalties", "12 cards"],
     art: [
       { src: withBase("/play/leoul-kick.webp"), cls: "games-art-hero", w: 397, h: 625 },
       { src: withBase("/play/lenyang-hug.webp"), cls: "games-art-rival games-art-rival-a", w: 373, h: 432 },
@@ -170,10 +256,18 @@ const games = [
         <h1 class="mt-2 max-w-3xl text-[1.55rem] font-black uppercase leading-[1.02] tracking-tight sm:text-4xl">{copy.heading}</h1>
         <p class="mt-2 max-w-3xl text-sm leading-6 sm:text-base" style="color: var(--color-link);">{copy.intro}</p>
       </div>
-      {isPortuguese ? (
+      {isKorean ? (
+        <div class="flex flex-wrap gap-2">
+          <TranslateButton href="/play" code="EN" label="영어" ariaLabel="영어 게임 허브 보기" />
+          <TranslateButton href="/pt/play" code="PT" label="포르투갈어" ariaLabel="포르투갈어 게임 허브 보기" />
+        </div>
+      ) : isPortuguese ? (
         <TranslateButton href="/play" code="EN" label="Inglês" ariaLabel="Ver os jogos em inglês" />
       ) : (
-        <TranslateButton href="/pt/play" code="PT" label="Português" ariaLabel="See the games in Portuguese" />
+        <div class="flex flex-wrap gap-2">
+          <TranslateButton href="/pt/play" code="PT" label="Português" ariaLabel="See the games in Portuguese" />
+          <TranslateButton href="/ko/play" code="KO" label="한국어" ariaLabel="See the games in Korean" />
+        </div>
       )}
     </div>
   </header>
@@ -190,6 +284,7 @@ const games = [
           <span class="games-body">
             <span class="games-tags">
               {game.isNew && <span class="games-new">{copy.newBadge}</span>}
+              {isKorean && !KOREAN_GAME_PAGES.has(game.slug) && <span class="games-new">{copy.englishBadge}</span>}
               {game.tags.map((tag) => <span class="games-tag">{tag}</span>)}
             </span>
             <span class="games-title">{game.title}</span>

@@ -5,16 +5,31 @@
 import { getCollection } from "astro:content";
 import { getOfficialRosterWithPhotos } from "../lib/officialRoster";
 import { withBase } from "../lib/paths";
+import { safeGetCollection } from "../lib/safeContent";
+import { partKo } from "../lib/i18n";
 
 interface Props {
-  lang?: "en" | "pt";
+  lang?: "en" | "pt" | "ko";
 }
 
 const { lang = "en" } = Astro.props;
 const pt = lang === "pt";
-const base = pt ? "/pt/articles" : "/articles";
+const ko = lang === "ko";
+const base = ko ? "/ko/articles" : pt ? "/pt/articles" : "/articles";
 
-const t = pt
+const t = ko
+  ? {
+      groups: { GK: "골키퍼", DF: "수비수", MF: "미드필더", FW: "공격수", ST: "감독" },
+      apps: "경기",
+      goals: "골",
+      assists: "도움",
+      minutes: "분",
+      read: "평가 읽기",
+      grade: "평점",
+      players: "명",
+      average: "평점 분포",
+    }
+  : pt
   ? {
       groups: { GK: "Goleiro", DF: "Defensores", MF: "Meio-campistas", FW: "Atacantes", ST: "Comissão técnica" },
       apps: "Jogos",
@@ -39,11 +54,15 @@ const t = pt
     };
 
 const [articles, roster] = await Promise.all([
-  getCollection(pt ? "articlesPt" : "articles"),
+  ko ? safeGetCollection("articlesKo") : getCollection(pt ? "articlesPt" : "articles"),
   getOfficialRosterWithPhotos(),
 ]);
 
-const GRADE_RE = pt ? /\*\*Nota até aqui:\s*([A-D])(?:\s+(mais|menos))?\.?\*\*/ : /\*\*Grade so far:\s*([A-D])(?:\s+(plus|minus))?\.?\*\*/;
+const GRADE_RE = ko
+  ? /\*\*평점(?:은|):\s*([A-D])(?:\s+(플러스|마이너스))?\.?\*\*/
+  : pt
+    ? /\*\*Nota até aqui:\s*([A-D])(?:\s+(mais|menos))?\.?\*\*/
+    : /\*\*Grade so far:\s*([A-D])(?:\s+(plus|minus))?\.?\*\*/;
 
 function groupOf(position: string): keyof typeof t.groups {
   if (/goal/i.test(position)) return "GK";
@@ -58,7 +77,7 @@ const reviews = articles
     const player = roster.find((p) => p.slug === a.data.player);
     const m = a.body?.match(GRADE_RE);
     const mod = m?.[2];
-    const grade = m ? `${m[1]}${mod === "plus" || mod === "mais" ? "+" : mod === "minus" || mod === "menos" ? "-" : ""}` : undefined;
+    const grade = m ? `${m[1]}${mod === "plus" || mod === "mais" || mod === "플러스" ? "+" : mod === "minus" || mod === "menos" || mod === "마이너스" ? "-" : ""}` : undefined;
     const name = a.data.title.replace(/^[^:]*:\s*/, "").split(/,\s*/)[0];
     const subtitle = a.data.title.replace(/^[^:]*:\s*/, "").split(/,\s*/).slice(1).join(", ");
     const sub = subtitle ? subtitle.charAt(0).toUpperCase() + subtitle.slice(1) : "";
@@ -76,7 +95,8 @@ const groups = (Object.keys(t.groups) as (keyof typeof t.groups)[])
   .filter((g) => g.items.length > 0);
 
 const PT_POS: Record<string, string> = { Goalkeeper: "Goleiro", Defender: "Defensor", Midfielder: "Meio-campista", Forward: "Atacante", Attacker: "Atacante" };
-const posLabel = (pos: string) => (pt ? PT_POS[pos] ?? pos : pos);
+const KO_POS: Record<string, string> = { Goalkeeper: "골키퍼", Defender: "수비수", Midfielder: "미드필더", Forward: "공격수", Attacker: "공격수" };
+const posLabel = (pos: string) => (ko ? KO_POS[pos] ?? pos : pt ? PT_POS[pos] ?? pos : pos);
 
 const gradeOrder = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D"];
 const spread = gradeOrder
@@ -109,7 +129,7 @@ const gradeStyle = (letter?: string) =>
           const s = p?.stats ?? {};
           const photo = p?.photoUrl ?? withBase("/assets/crest.png");
           const number = p?.backNumber ?? "";
-          const role = p ? posLabel(p.englishPosition) : pt ? "Treinador" : "Manager";
+          const role = p ? posLabel(p.englishPosition) : ko ? "감독" : pt ? "Treinador" : "Manager";
           return (
             <a
               href={withBase(`${base}/${r.slug}`)}
@@ -133,13 +153,13 @@ const gradeStyle = (letter?: string) =>
                   </div>
                 )}
                 {r.entry.data.part && (
-                  <span class="metadata-chip absolute bottom-3 left-3" style="background: var(--color-navy-deep); color: #fff;">{r.entry.data.part}</span>
+                  <span class="metadata-chip absolute bottom-3 left-3" style="background: var(--color-navy-deep); color: #fff;">{ko ? partKo(r.entry.data.part) : r.entry.data.part}</span>
                 )}
               </div>
               <div class="flex flex-1 flex-col p-5">
-                <h3 class="text-xl font-black tracking-tight">{p?.englishName ?? r.name}</h3>
+                <h3 class="text-xl font-black tracking-tight">{ko && p ? p.korName : p?.englishName ?? r.name}</h3>
                 <p class="mt-0.5 text-sm" style="color: var(--color-muted);">
-                  {p ? `${p.korName} · #${p.backNumber} · ${role}` : role}
+                  {p ? (ko ? `${p.englishName} · #${p.backNumber} · ${role}` : `${p.korName} · #${p.backNumber} · ${role}`) : role}
                 </p>
                 {r.subtitle && (
                   <p class="mt-3 text-sm font-semibold leading-6" style="color: var(--color-link);">{r.subtitle}</p>

@@ -18,7 +18,7 @@ const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http
   <text x="430" y="375" font-family="Arial Black, Arial, sans-serif" font-size="86" font-weight="900" fill="#d4a872" letter-spacing="10">DIGEST</text>
   <text x="434" y="448" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#c9d4ff" letter-spacing="1">Match reports, previews and guides</text>
   <text x="434" y="492" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#c9d4ff" letter-spacing="1">from the 2026 K League 2 promotion race</text>
-  <text x="434" y="560" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#B38259" letter-spacing="4">SUPPORTER PUBLICATION · EN / PT</text>
+  <text x="434" y="560" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#B38259" letter-spacing="4">SUPPORTER PUBLICATION · EN / PT / KO</text>
 </svg>`;
 
 const crest = await sharp("public/assets/crest.png")

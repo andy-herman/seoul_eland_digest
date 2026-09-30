@@ -22,6 +22,11 @@ const digestsPt = defineCollection({
   schema: digestSchema,
 });
 
+const digestsKo = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/digests-ko" }),
+  schema: digestSchema,
+});
+
 const players = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/players" }),
   schema: z
@@ -62,6 +67,11 @@ const koreanCupPt = defineCollection({
   schema: koreanCupSchema,
 });
 
+const koreanCupKo = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/korean-cup-ko" }),
+  schema: koreanCupSchema,
+});
+
 const guideSchema = z.object({
   title: z.string(),
   description: z.string(),
@@ -78,6 +88,11 @@ const guides = defineCollection({
 
 const guidesPt = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/guides-pt" }),
+  schema: guideSchema,
+});
+
+const guidesKo = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/guides-ko" }),
   schema: guideSchema,
 });
 
@@ -105,4 +120,24 @@ const articlesPt = defineCollection({
   schema: articleSchema,
 });
 
-export const collections = { digests, digestsPt, players, places, koreanCup, koreanCupPt, guides, guidesPt, articles, articlesPt };
+const articlesKo = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/articles-ko" }),
+  schema: articleSchema,
+});
+
+export const collections = {
+  digests,
+  digestsPt,
+  digestsKo,
+  players,
+  places,
+  koreanCup,
+  koreanCupPt,
+  koreanCupKo,
+  guides,
+  guidesPt,
+  guidesKo,
+  articles,
+  articlesPt,
+  articlesKo,
+};

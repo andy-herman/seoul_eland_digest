@@ -124,3 +124,52 @@ export function getPortuguesePosition(position: string | null) {
 
   return PORTUGUESE_POSITIONS[position] ?? position;
 }
+
+const KOREAN_POSITIONS: Record<string, string> = {
+  GK: "골키퍼",
+  DF: "수비수",
+  MF: "미드필더",
+  FW: "공격수",
+  AM: "공격수",
+  OT: "코칭스태프",
+};
+
+export function getKoreanNationality(nationality: string | null) {
+  return nationality || "-";
+}
+
+export function getKoreanPosition(position: string | null) {
+  if (!position) {
+    return "선수";
+  }
+
+  return KOREAN_POSITIONS[position] ?? position;
+}
+
+const KOREAN_PLAYER_NAMES_BY_ENGLISH = Object.fromEntries(
+  Object.entries(ENGLISH_PLAYER_NAMES).map(([ko, en]) => [en, ko]),
+) as Record<string, string>;
+
+const KOREAN_PLAYER_NAME_ALIASES: Record<string, string> = {
+  "Alan Carius": "까리우스",
+  "Alan Cariús": "까리우스",
+  Carius: "까리우스",
+  Euller: "에울레르",
+  Osmar: "오스마르",
+  Gabriel: "가브리엘",
+  "Gabriel Santos": "가브리엘",
+  Caio: "카이오",
+  "Caio Marcelo": "카이오",
+  "Francisco Geraldes": "제랄데스",
+  Geraldes: "제랄데스",
+  "John Iredale": "아이데일",
+  Iredale: "아이데일",
+  "Byun Kyung-jun": "변경준",
+  "Byeon Gyeong-jun": "변경준",
+  "Yun Seok-ju": "윤석주",
+  "Yoon Seok-ju": "윤석주",
+};
+
+export function koreanPlayerName(englishName: string) {
+  return KOREAN_PLAYER_NAME_ALIASES[englishName] ?? KOREAN_PLAYER_NAMES_BY_ENGLISH[englishName] ?? englishName;
+}

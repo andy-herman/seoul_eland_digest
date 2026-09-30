@@ -50,6 +50,15 @@ html {
   text-rendering: optimizeLegibility;
 }
 
+:lang(ko) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+:lang(ko) :where(.eyebrow, .metadata-chip, .hero-meta-line, .nav-menu-button, .nav-panel-kicker, .nav-trigger-label, .text-xs, .uppercase, [class*="tracking-"]) {
+  letter-spacing: normal;
+}
+
 html,
 body {
   overflow-x: clip;

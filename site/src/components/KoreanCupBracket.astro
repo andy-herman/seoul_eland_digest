@@ -2,10 +2,11 @@
 import { withBase } from "../lib/paths";
 
 interface Props {
-  locale?: "en" | "pt";
+  locale?: "en" | "pt" | "ko";
 }
 const { locale = "en" } = Astro.props;
 const isPt = locale === "pt";
+const isKo = locale === "ko";
 
 type Tier = "K1" | "K2" | "K3" | "K4";
 interface Club {
@@ -77,8 +78,27 @@ const giants: Club[] = [
   { name: "Gangwon FC", tier: "K1", kcode: "K21" },
 ];
 
-const t = isPt
+const t = isKo
   ? {
+      r2: "2라운드 전체 대진",
+      r2date: "2026년 7월 15일 · 32팀, 16경기",
+      our: "서울 이랜드 2-4 연장 패",
+      r3: "3라운드, K리그1 합류",
+      r3date: "2026년 7월 29일 · K리그1 8팀 합류",
+      r3note: "7월 29일 진행. 부산 아이파크는 구덕에서 FC 서울을 2-0으로 꺾고 16강에 올랐습니다. 서울 이랜드는 이미 2라운드에서 K3 울산시민축구단에 패해 탈락했습니다.",
+      r16: "16강, 강호 합류",
+      r16date: "2026년 8월 19일 · AFC 챔피언스리그 엘리트 시드 4팀 합류",
+      qf: "8강",
+      qfdate: "2027년 5월 19일 · 공개 재추첨",
+      sf: "준결승",
+      sfdate: "2027년 5월 26일",
+      fn: "결승",
+      fndate: "2027년 6월 5일 · 단판",
+      reward: "우승팀은 AFC 챔피언스리그 Two 출전권을 얻습니다",
+      caption: "2026-27 하나은행 코리아컵 대진표입니다.",
+    }
+  : isPt
+    ? {
       r2: "2ª Fase, o chaveamento completo",
       r2date: "15 jul 2026 · 32 times, 16 confrontos",
       our: "Seoul eliminado, 2-4 pror.",

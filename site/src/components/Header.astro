@@ -5,15 +5,20 @@ import { fixtures, season } from "../data/matches";
 import { getPreMatchPreviewForRound } from "../lib/prematchPreviews";
 import { getTeamLogo } from "../lib/teamLogos";
 import { stripBase, withBase } from "../lib/paths";
+import { asLocale, dateLocale, localePrefix, partKo, type Locale } from "../lib/i18n";
+import { koTeam } from "../lib/teamNamesKo";
+import { safeGetCollection } from "../lib/safeContent";
 
 interface Props {
-  locale?: "en" | "pt";
+  locale?: Locale;
 }
 
 const { locale = "en" } = Astro.props;
-const isPortuguese = locale === "pt";
+const lang = asLocale(locale);
+const isPortuguese = lang === "pt";
+const isKorean = lang === "ko";
 const pathname = stripBase(Astro.url.pathname);
-const prefix = isPortuguese ? "/pt" : "";
+const prefix = localePrefix[lang];
 
 type NavLink = { href: string; label: string; description: string };
 type NavSection = { id: "matches" | "season"; label: string; dek: string; links: NavLink[] };
@@ -22,8 +27,32 @@ type NavSection = { id: "matches" | "season"; label: string; dek: string; links:
 // Matches holds everything tied to a fixture (before it, after it, the
 // schedule, the cup). Season holds the long view (the race, the grades,
 // features, and the evergreen guides for newcomers).
-const sections: NavSection[] = isPortuguese
-  ? [
+const sectionsByLocale: Record<Locale, NavSection[]> = {
+  ko: [
+    {
+      id: "matches",
+      label: "경기",
+      dek: "서울 이랜드의 모든 경기, 킥오프 전과 후.",
+      links: [
+        { href: "/ko/", label: "라운드 리뷰", description: "리그 경기마다 올리는 리뷰" },
+        { href: "/ko/previews", label: "프리뷰", description: "상대 분석, 예상 선발, 스코어 예측" },
+        { href: "/ko/matches", label: "일정·결과", description: "경기 일정, 결과, 킥오프 시간" },
+        { href: "/ko/korean-cup", label: "코리아컵", description: "대진표와 서울 이랜드의 여정" },
+      ],
+    },
+    {
+      id: "season",
+      label: "시즌",
+      dek: "승격 레이스, 선수단 평가, 긴 글.",
+      links: [
+        { href: "/ko/tracker", label: "승격 레이스", description: "순위 경쟁과 우리 예측" },
+        { href: "/ko/articles/season-review", label: "시즌 결산", description: "선수·감독 평가" },
+        { href: "/ko/articles", label: "기획·칼럼", description: "긴 호흡의 읽을거리" },
+        { href: "/ko/guides", label: "가이드", description: "구단·경기장·중계 안내" },
+      ],
+    },
+  ],
+  pt: [
       {
         id: "matches",
         label: "Partidas",
@@ -46,8 +75,8 @@ const sections: NavSection[] = isPortuguese
           { href: "/pt/guides", label: "Guias", description: "Chegou agora? Comece por aqui" },
         ],
       },
-    ]
-  : [
+    ],
+  en: [
       {
         id: "matches",
         label: "Matches",
@@ -70,18 +99,44 @@ const sections: NavSection[] = isPortuguese
           { href: "/guides", label: "Guides", description: "New here? Club, stadium, how to watch" },
         ],
       },
-    ];
+    ],
+};
 
-const squad: NavLink = isPortuguese
-  ? { href: "/pt/players", label: "Elenco", description: "Perfis, números e fotos dos jogadores" }
-  : { href: "/players", label: "Squad", description: "Player profiles, shirt numbers and photos" };
+const sections = sectionsByLocale[lang];
 
-const play: NavLink = isPortuguese
-  ? { href: "/pt/play", label: "Jogos", description: "Jogos com os mascotes Leoul e Lenyang" }
-  : { href: "/play", label: "Play", description: "Mascot games with Leoul and Lenyang" };
+const squad: NavLink =
+  lang === "ko"
+    ? { href: "/ko/players", label: "선수단", description: "선수 프로필, 등번호, 사진" }
+    : isPortuguese
+      ? { href: "/pt/players", label: "Elenco", description: "Perfis, números e fotos dos jogadores" }
+      : { href: "/players", label: "Squad", description: "Player profiles, shirt numbers and photos" };
 
-const t = isPortuguese
-  ? {
+const play: NavLink =
+  lang === "ko"
+    ? { href: "/ko/play", label: "게임", description: "레울·레냥과 함께하는 미니게임" }
+    : isPortuguese
+      ? { href: "/pt/play", label: "Jogos", description: "Jogos com os mascotes Leoul e Lenyang" }
+      : { href: "/play", label: "Play", description: "Mascot games with Leoul and Lenyang" };
+
+const tByLocale = {
+  ko: {
+      navLabel: "주요 메뉴",
+      menu: "메뉴",
+      latest: "최근 결과",
+      next: "다음 경기",
+      round: "라운드",
+      venue: { home: "홈", away: "원정", neutral: "중립" },
+      digestCta: "리뷰",
+      previewCta: "프리뷰",
+      scheduleCta: "일정",
+      kickoffTbd: "시간 미정",
+      hubEyebrow: "시즌 결산",
+      hubTitle: "선수단 평가",
+      hubMeta: (count: number) => `${count}편, 리그 10경기 이상 출전 선수 대상`,
+      hubCta: "평점",
+      latestPart: "최신",
+    },
+  pt: {
       navLabel: "Navegação principal",
       menu: "Menu",
       latest: "Último resultado",
@@ -97,8 +152,8 @@ const t = isPortuguese
       hubMeta: (count: number) => `${count} partes, todos os jogadores com 10+ jogos na liga`,
       hubCta: "Notas",
       latestPart: "Mais recente",
-    }
-  : {
+    },
+  en: {
       navLabel: "Main",
       menu: "Menu",
       latest: "Latest result",
@@ -114,11 +169,13 @@ const t = isPortuguese
       hubMeta: (count: number) => `${count} parts, every player with 10+ league apps`,
       hubCta: "Grades",
       latestPart: "Latest",
-    };
+    },
+} satisfies Record<Locale, any>;
+const t = tByLocale[lang];
 
 function isActive(href: string) {
   // The hub lives under /articles, so the Articles tab must not light up for it.
-  if (href === "/articles" || href === "/pt/articles") {
+  if (href === "/articles" || href === "/pt/articles" || href === "/ko/articles") {
     return pathname.startsWith(href) && !pathname.startsWith(`${href}/season-review`);
   }
   if (href === "/") {
@@ -126,6 +183,9 @@ function isActive(href: string) {
   }
   if (href === "/pt/") {
     return pathname === "/pt/" || pathname.startsWith("/pt/rounds");
+  }
+  if (href === "/ko/") {
+    return pathname === "/ko/" || pathname.startsWith("/ko/rounds");
   }
   return pathname.startsWith(href);
 }
@@ -138,21 +198,22 @@ const lastResult = schedule.filter((match) => match.result !== "TBD").at(-1);
 const nextMatch = schedule.find((match) => match.result === "TBD");
 
 const [digests, articles] = await Promise.all([
-  getCollection(isPortuguese ? "digestsPt" : "digests"),
-  getCollection(isPortuguese ? "articlesPt" : "articles"),
+  lang === "ko" ? safeGetCollection("digestsKo") : getCollection(isPortuguese ? "digestsPt" : "digests"),
+  lang === "ko" ? safeGetCollection("articlesKo") : getCollection(isPortuguese ? "articlesPt" : "articles"),
 ]);
 const lastDigest = lastResult
   ? digests.find((digest) => digest.data.season === season && digest.data.round === lastResult.round)
   : undefined;
-const nextPreview = nextMatch ? getPreMatchPreviewForRound(nextMatch.round, locale) : undefined;
+const nextPreview = nextMatch ? getPreMatchPreviewForRound(nextMatch.round, lang) : undefined;
 
-const dateFormatter = new Intl.DateTimeFormat(isPortuguese ? "pt-BR" : "en-US", {
+const dateFormatter = new Intl.DateTimeFormat(dateLocale[lang], {
   month: "short",
   day: "numeric",
   timeZone: "UTC",
 });
 const formatDate = (date: string) => dateFormatter.format(new Date(`${date}T00:00:00Z`));
 const formatKickoff = (time: string) => (time === "TBD" || time === "00:00" ? t.kickoffTbd : `${time} KST`);
+const displayTeam = (name: string) => (isKorean ? koTeam(name, "short") : name);
 
 type FeatureRow = {
   key: string;
@@ -176,7 +237,7 @@ if (lastResult) {
     eyebrow: t.latest,
     cta: lastDigest ? t.digestCta : t.scheduleCta,
     href: lastDigest ? `${prefix}/rounds/${lastDigest.id.replace(/\.md$/, "")}` : `${prefix}/matches`,
-    opponent: lastResult.opponent,
+    opponent: displayTeam(lastResult.opponent),
     logo: getTeamLogo(lastResult.opponent),
     meta: `${t.round} ${lastResult.round} · ${t.venue[lastResult.venue]} · ${formatDate(lastResult.date)}`,
     result: lastResult.result,
@@ -188,7 +249,7 @@ if (nextMatch) {
     eyebrow: t.next,
     cta: nextPreview ? t.previewCta : t.scheduleCta,
     href: nextPreview ? `${prefix}/previews/${nextPreview.slug}` : `${prefix}/matches`,
-    opponent: nextMatch.opponent,
+    opponent: displayTeam(nextMatch.opponent),
     logo: getTeamLogo(nextMatch.opponent),
     meta: `${t.round} ${nextMatch.round} · ${t.venue[nextMatch.venue]}`,
     chipDate: formatDate(nextMatch.date),
@@ -213,7 +274,7 @@ const seasonRows: FeatureRow[] = [
 if (latestReview) {
   seasonRows.push({
     key: "latest-review",
-    eyebrow: `${t.latestPart} · ${latestReview.data.part ?? ""}`,
+    eyebrow: `${t.latestPart} · ${lang === "ko" ? partKo(latestReview.data.part) : latestReview.data.part ?? ""}`,
     href: `${prefix}/articles/${latestReview.id.replace(/\.md$/, "")}`,
     // "Season Review, Part 23: Kim Do-gyun, the Manager..." reads as the subject alone.
     headline: latestReview.data.title.split(": ").slice(1).join(": ") || latestReview.data.title,
@@ -239,7 +300,7 @@ const featureRows = { matches: matchRows, season: seasonRows };
       <span class="hidden lg:block leading-tight">
         <span class="block text-sm font-black uppercase tracking-[0.18em]" style="color: var(--color-ink);">Digest</span>
         <span class="block text-[0.68rem] font-bold uppercase tracking-[0.2em]" style="color: var(--color-gold-light);">
-          {isPortuguese ? "Publicação de torcida" : "Supporter publication"}
+          {lang === "ko" ? "팬이 만드는 독립 매체" : isPortuguese ? "Publicação de torcida" : "Supporter publication"}
         </span>
       </span>
     </a>

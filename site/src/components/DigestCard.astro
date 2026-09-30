@@ -2,6 +2,8 @@
 import ResultBadge from "./ResultBadge.astro";
 import { getTeamInitials, getTeamLogo } from "../lib/teamLogos";
 import { withBase } from "../lib/paths";
+import { dateLocale, type Locale } from "../lib/i18n";
+import { koTeam } from "../lib/teamNamesKo";
 
 interface Props {
   href: string;
@@ -11,14 +13,16 @@ interface Props {
   venue: "home" | "away" | "neutral";
   result: string;
   description?: string;
-  locale?: "en" | "pt";
+  locale?: Locale;
 }
 
 const { href, round, date, opponent, venue, result, description, locale = "en" } = Astro.props;
 const isPortuguese = locale === "pt";
+const isKorean = locale === "ko";
 const opponentLogo = getTeamLogo(opponent);
 const opponentInitials = getTeamInitials(opponent);
-const dateStr = date.toLocaleDateString(isPortuguese ? "pt-BR" : "en-US", {
+const displayOpponent = isKorean ? koTeam(opponent, "short") : opponent;
+const dateStr = date.toLocaleDateString(dateLocale[locale], {
   year: "numeric",
   month: "short",
   day: "numeric",
@@ -26,7 +30,15 @@ const dateStr = date.toLocaleDateString(isPortuguese ? "pt-BR" : "en-US", {
 });
 const resultLetter = result.trim().charAt(0).toUpperCase();
 const score = result.trim().slice(1).trim();
-const outcomeLabel = isPortuguese
+const outcomeLabel = isKorean
+  ? resultLetter === "W"
+    ? "승리"
+    : resultLetter === "D"
+      ? "무승부"
+      : resultLetter === "L"
+        ? "패배"
+        : "결과"
+  : isPortuguese
   ? resultLetter === "W"
     ? "Vitória"
     : resultLetter === "D"
@@ -41,7 +53,13 @@ const outcomeLabel = isPortuguese
       : resultLetter === "L"
         ? "Seoul loss"
         : "Result";
-const venuePrefix = isPortuguese
+const venuePrefix = isKorean
+  ? venue === "away"
+    ? "원정"
+    : venue === "home"
+      ? "홈"
+      : "중립"
+  : isPortuguese
   ? venue === "away"
     ? "fora contra"
     : venue === "home"
@@ -52,7 +70,13 @@ const venuePrefix = isPortuguese
     : venue === "away"
       ? "at"
       : "v";
-const venueLabel = isPortuguese
+const venueLabel = isKorean
+  ? venue === "home"
+    ? "홈"
+    : venue === "away"
+      ? "원정"
+      : "중립"
+  : isPortuguese
   ? venue === "home"
     ? "Casa"
     : venue === "away"
@@ -63,10 +87,10 @@ const venueLabel = isPortuguese
     : venue === "away"
       ? "Away"
       : "Neutral";
-const roundLabel = isPortuguese ? "Rodada" : "Round";
-const reportLabel = isPortuguese ? "Relato da partida" : "Full-time report";
-const scoreLabel = isPortuguese ? "Placar do Seoul E-Land" : "Seoul E-Land score";
-const readLabel = isPortuguese ? "Ler" : "Read";
+const roundLabel = isKorean ? "라운드" : isPortuguese ? "Rodada" : "Round";
+const reportLabel = isKorean ? "경기 리뷰" : isPortuguese ? "Relato da partida" : "Full-time report";
+const scoreLabel = isKorean ? "서울 이랜드 스코어" : isPortuguese ? "Placar do Seoul E-Land" : "Seoul E-Land score";
+const readLabel = isKorean ? "더 보기" : isPortuguese ? "Ler" : "Read";
 ---
 
 <a
@@ -87,14 +111,14 @@ const readLabel = isPortuguese ? "Ler" : "Read";
   <div class="digest-card-match mt-5 flex items-center gap-4">
     <span class="digest-card-logo flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border bg-white p-2 shadow-inner" style="border-color: color-mix(in srgb, var(--color-gold) 26%, transparent);">
       {opponentLogo ? (
-        <img src={opponentLogo} alt={`${opponent} logo`} class="h-full w-full object-contain" loading="lazy" />
+        <img src={opponentLogo} alt={isKorean ? `${displayOpponent} 엠블럼` : `${opponent} logo`} class="h-full w-full object-contain" loading="lazy" />
       ) : (
         <span class="text-sm font-black" style="color: var(--color-navy);">{opponentInitials}</span>
       )}
     </span>
     <div class="min-w-0">
       <h3 class="text-xl font-black leading-tight tracking-tight" style="color: var(--color-ink);">
-        <span class="uppercase" style="color: var(--color-gold-light);">{venuePrefix}</span> {opponent}
+        <span class="uppercase" style="color: var(--color-gold-light);">{venuePrefix}</span> {displayOpponent}
       </h3>
       <p class="mt-1 text-sm leading-relaxed" style="color: var(--color-muted);">
         {outcomeLabel} · {reportLabel}

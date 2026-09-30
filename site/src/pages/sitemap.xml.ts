@@ -1,6 +1,7 @@
 import type { APIContext } from "astro";
 import { getCollection } from "astro:content";
 import { getPreMatchPreviews } from "../lib/prematchPreviews";
+import { safeGetCollection } from "../lib/safeContent";
 
 // Hand-rolled sitemap (no @astrojs/sitemap; see rss.xml.ts for why). Covers
 // every content-driven route plus the section pages. Player pages are omitted
@@ -52,6 +53,16 @@ const STATIC_PATHS = [
   "/pt/play/clap-for-seoul",
   "/pt/play/yut-nori",
   "/pt/play/tifo-master",
+  "/ko/",
+  "/ko/matches",
+  "/ko/previews",
+  "/ko/tracker",
+  "/ko/korean-cup",
+  "/ko/guides",
+  "/ko/articles",
+  "/ko/articles/season-review",
+  "/ko/players",
+  "/ko/play",
 ];
 
 export async function GET(context: APIContext) {
@@ -67,12 +78,19 @@ export async function GET(context: APIContext) {
   for (const digest of digestsPt) {
     paths.push(`/pt/rounds/${digest.id.replace(/\.md$/, "")}`);
   }
+  const digestsKo = await safeGetCollection("digestsKo");
+  for (const digest of digestsKo) {
+    paths.push(`/ko/rounds/${digest.id.replace(/\.md$/, "")}`);
+  }
 
   for (const preview of getPreMatchPreviews("en")) {
     paths.push(`/previews/${preview.slug}`);
   }
   for (const preview of getPreMatchPreviews("pt")) {
     paths.push(`/pt/previews/${preview.slug}`);
+  }
+  for (const preview of getPreMatchPreviews("ko")) {
+    paths.push(`/ko/previews/${preview.slug}`);
   }
 
   const guides = await getCollection("guides");
@@ -83,6 +101,10 @@ export async function GET(context: APIContext) {
   for (const guide of guidesPt) {
     paths.push(`/pt/guides/${guide.id.replace(/\.md$/, "")}`);
   }
+  const guidesKo = await safeGetCollection("guidesKo");
+  for (const guide of guidesKo) {
+    paths.push(`/ko/guides/${guide.id.replace(/\.md$/, "")}`);
+  }
   const articles = await getCollection("articles");
   for (const article of articles) {
     paths.push(`/articles/${article.id.replace(/\.md$/, "")}`);
@@ -90,6 +112,23 @@ export async function GET(context: APIContext) {
   const articlesPt = await getCollection("articlesPt");
   for (const article of articlesPt) {
     paths.push(`/pt/articles/${article.id.replace(/\.md$/, "")}`);
+  }
+  const articlesKo = await safeGetCollection("articlesKo");
+  for (const article of articlesKo) {
+    paths.push(`/ko/articles/${article.id.replace(/\.md$/, "")}`);
+  }
+
+  const koreanCup = await getCollection("koreanCup");
+  for (const article of koreanCup) {
+    paths.push(`/korean-cup/${article.id.replace(/\.md$/, "")}`);
+  }
+  const koreanCupPt = await getCollection("koreanCupPt");
+  for (const article of koreanCupPt) {
+    paths.push(`/pt/korean-cup/${article.id.replace(/\.md$/, "")}`);
+  }
+  const koreanCupKo = await safeGetCollection("koreanCupKo");
+  for (const article of koreanCupKo) {
+    paths.push(`/ko/korean-cup/${article.id.replace(/\.md$/, "")}`);
   }
 
   const places = await getCollection("places");

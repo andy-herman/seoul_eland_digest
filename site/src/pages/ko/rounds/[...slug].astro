@@ -1,0 +1,14 @@
+---
+import { render } from "astro:content";
+import { safeGetCollection } from "../../../lib/safeContent";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import MatchArticleHeader from "../../../components/MatchArticleHeader.astro";
+import { withBase } from "../../../lib/paths";
+import { koTeam } from "../../../lib/teamNamesKo";
+export async function getStaticPaths() { const digests = await safeGetCollection("digestsKo"); return digests.map((entry) => ({ params: { slug: entry.id.replace(/\.md$/, "") }, props: { entry } })); }
+const { entry } = Astro.props; const { Content } = await render(entry); const slug = entry.id.replace(/\.md$/, ""); const dateStr = entry.data.date.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric", timeZone: "UTC" });
+---
+<BaseLayout title={`${entry.data.round}라운드 — ${koTeam(entry.data.opponent, "short")}`} description={`서울 이랜드 FC ${entry.data.result} ${koTeam(entry.data.opponent, "short")}, ${dateStr}.`} lang="ko" ogType="article" publishedDate={entry.data.date.toISOString()}>
+  <article class="mx-auto max-w-5xl"><MatchArticleHeader slug={slug} season={entry.data.season} round={entry.data.round} date={entry.data.date} opponent={entry.data.opponent} venue={entry.data.venue} result={entry.data.result} locale="ko" /><div class="editorial-shell mx-auto"><div class="prose-eland digest-body mx-auto"><Content /></div></div></article>
+  <nav class="mx-auto mt-10 max-w-5xl border-t pt-6" style="border-color: var(--color-rule);"><a href={withBase("/ko/")} class="text-sm font-black no-underline transition-colors hover:text-white" style="color: var(--color-gold-light);">← 모든 라운드 리뷰</a></nav>
+</BaseLayout>
