@@ -3,6 +3,7 @@ import BaseLayout from "../../../layouts/BaseLayout.astro";
 import TranslateButton from "../../../components/TranslateButton.astro";
 import { withBase } from "../../../lib/paths";
 import { koTeam } from "../../../lib/teamNamesKo";
+import { formatDate } from "../../../lib/i18n";
 import {
   getPreMatchPreviews,
   renderPreviewMarkdown,
@@ -55,7 +56,7 @@ const isSeason = preview.data.kind === "season";
         ) : (
           <>
             <span class="metadata-chip" style="background: #fff; color: var(--color-navy);">상대: {preview.data.opponent ? koTeam(preview.data.opponent) : "미정"}</span>
-            <span class="metadata-chip" style="background: #fff; color: var(--color-navy);">{preview.data.date || "날짜 미정"}</span>
+            <span class="metadata-chip" style="background: #fff; color: var(--color-navy);">{preview.data.date ? formatDate(preview.data.date, "ko", { weekday: "short" }) : "날짜 미정"}</span>
           </>
         )}
         {hasEnglish && (

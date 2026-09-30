@@ -5,6 +5,7 @@ import DigestCard from "../../components/DigestCard.astro";
 import LatestMatchCard from "../../components/LatestMatchCard.astro";
 import PlayTeaser from "../../components/PlayTeaser.astro";
 import TranslateButton from "../../components/TranslateButton.astro";
+import KoreanButton from "../../components/KoreanButton.astro";
 import { getDigestDeck } from "../../lib/digestDeck";
 
 const digests = await getCollection("digestsPt");
@@ -51,6 +52,7 @@ const deckFallback = "Relatos de jogo, notas dos jogadores e uma leitura direta 
         </p>
         <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
           <TranslateButton href="/" code="EN" label="Inglês" ariaLabel="Ler o arquivo em inglês" />
+          <KoreanButton />
         </div>
       </div>
 

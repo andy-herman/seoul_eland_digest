@@ -272,7 +272,7 @@ const num = (value: number | undefined) => (value == null ? "-" : value.toLocale
             <ul>
               {mentions.map((mention) => (
                 <li>
-                  <a href={mention.href}>라운드 {mention.round}</a> - {mention.date}
+                  <a href={mention.href}>{mention.round}라운드</a> - {mention.date}
                 </li>
               ))}
             </ul>

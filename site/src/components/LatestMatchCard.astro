@@ -81,7 +81,7 @@ const labels = isKorean
     <div class="min-w-0">
       <p class="eyebrow">{labels.eyebrow}</p>
       <p class="latest-match-meta mt-1 text-sm font-bold uppercase tracking-[0.14em]" style="color: var(--color-muted);">
-        {labels.round} {round} · {dateLabel}
+        {isKorean ? `${round}라운드` : `${labels.round} ${round}`} · {dateLabel}
       </p>
     </div>
     <ResultBadge result={result} size="sm" locale={locale} />

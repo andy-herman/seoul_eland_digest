@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TranslateButton from "../../components/TranslateButton.astro";
+import KoreanButton from "../../components/KoreanButton.astro";
 import SeasonTracker from "../../components/SeasonTracker.astro";
 import { withBase } from "../../lib/paths";
 ---
@@ -20,6 +21,7 @@ import { withBase } from "../../lib/paths";
       </p>
       <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
         <TranslateButton href="/pt/tracker" code="PT" label="Português" ariaLabel="Ver o rastreador em português" />
+        <KoreanButton />
       </div>
     </div>
   </section>

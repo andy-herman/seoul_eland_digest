@@ -1,6 +1,7 @@
 ---
 import ResultBadge from "./ResultBadge.astro";
 import TranslateButton from "./TranslateButton.astro";
+import KoreanButton from "./KoreanButton.astro";
 import { getTeamInitials, getTeamLogo } from "../lib/teamLogos";
 import { withBase } from "../lib/paths";
 import { dateLocale, type Locale } from "../lib/i18n";
@@ -95,7 +96,7 @@ const labels = isKorean
 <header class="supporter-panel not-prose mb-3 rounded-[1.5rem] sm:mb-4 sm:rounded-[2rem]">
   <div class="relative min-w-0 p-5 sm:p-8 lg:p-10">
     <div class="article-meta-stack">
-      <p class="article-meta-primary">K League 2 · {labels.season} {season} · {labels.round} {round}</p>
+      <p class="article-meta-primary">{isKorean ? `K리그2 · ${season}시즌 · ${round}라운드` : `K League 2 · ${labels.season} ${season} · ${labels.round} ${round}`}</p>
       <p class="article-meta-secondary">
         <span>{labels.venue}</span>
         <span aria-hidden="true">·</span>
@@ -156,7 +157,7 @@ const labels = isKorean
     <div class="mt-6 min-w-0 max-w-3xl sm:mt-8">
       <p class="eyebrow">{labels.eyebrow}</p>
       <h1 class="mt-3 text-[1.85rem] font-black tracking-tight min-[380px]:text-[2.05rem] sm:text-5xl">
-        {labels.round} {round}: {labels.matchup}
+        {isKorean ? `${round}라운드` : `${labels.round} ${round}`}: {labels.matchup}
       </h1>
       <p class="mt-4 hidden text-base leading-7 sm:block sm:text-lg sm:leading-8" style="color: var(--color-link);">
         {labels.deck}
@@ -166,6 +167,7 @@ const labels = isKorean
         {isKorean && (
           <TranslateButton href={`/pt/rounds/${slug}`} code="PT" label="포르투갈어" ariaLabel="포르투갈어로 보기" />
         )}
+        {!isKorean && <KoreanButton />}
         <p class="hidden text-sm font-semibold sm:block" style="color: var(--color-muted);">
           {labels.toggleHelp}
         </p>
@@ -177,11 +179,11 @@ const labels = isKorean
 <div
   class="match-sticky-strip not-prose sticky top-14 z-30 mb-6 rounded-2xl border px-4 py-2.5 backdrop-blur sm:top-[4.75rem] sm:mb-8 sm:px-6 sm:py-3"
   style="background-color: color-mix(in srgb, var(--color-navy-deep) 92%, transparent); border-color: color-mix(in srgb, var(--color-gold) 24%, var(--color-rule));"
-  aria-label={`${labels.round} ${round}, ${labels.matchup}, ${labels.resultText} ${elandScore}-${opponentScore}`}
+  aria-label={`${isKorean ? `${round}라운드` : `${labels.round} ${round}`}, ${labels.matchup}, ${labels.resultText} ${elandScore}-${opponentScore}`}
 >
   <div class="flex min-w-0 items-center gap-3">
     <span class="shrink-0 text-xs font-black uppercase tracking-[0.16em]" style="color: var(--color-gold-light);">
-      {labels.round} {round}
+      {isKorean ? `${round}라운드` : `${labels.round} ${round}`}
     </span>
     <ResultBadge result={result} size="sm" locale={locale} />
     <span class="min-w-0 flex-1 truncate text-sm font-black" style="color: var(--color-ink);">

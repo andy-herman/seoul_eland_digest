@@ -1,0 +1,16 @@
+---
+// "KO 한국어" button for English and Portuguese pages. Renders only when the
+// Korean edition has the same page (see lib/localizedRoutes.ts).
+import TranslateButton from "./TranslateButton.astro";
+import { localizedHref } from "../lib/localizedRoutes";
+import { stripBase } from "../lib/paths";
+
+interface Props {
+  ariaLabel?: string;
+}
+
+const { ariaLabel = "한국어판 보기" } = Astro.props;
+const href = await localizedHref(stripBase(Astro.url.pathname), "ko");
+---
+
+{href && <TranslateButton href={href} code="KO" label="한국어" ariaLabel={ariaLabel} hreflang="ko" />}

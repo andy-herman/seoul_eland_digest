@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TranslateButton from "../../components/TranslateButton.astro";
+import KoreanButton from "../../components/KoreanButton.astro";
 import { withBase } from "../../lib/paths";
 
 const articles = (await getCollection("koreanCup")).sort(
@@ -27,6 +28,7 @@ const articles = (await getCollection("koreanCup")).sort(
       </p>
       <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
         <TranslateButton href="/pt/korean-cup" code="PT" label="Português" ariaLabel="Ler a seção da Copa da Coreia em português" />
+        <KoreanButton />
       </div>
     </div>
   </section>

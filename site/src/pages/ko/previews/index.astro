@@ -85,7 +85,7 @@ function venueLabel(round: number) {
               </>
             ) : (
               <>
-                <span class="metadata-chip">라운드 {preview.data.round || "TBD"}</span>
+                <span class="metadata-chip">{preview.data.round ? `${preview.data.round}라운드` : "라운드 미정"}</span>
                 {preview.data.opponent && <span class="metadata-chip">{koTeam(preview.data.opponent)}</span>}
                 {venue && <span class="metadata-chip">{venue}</span>}
                 <span class="metadata-chip">{formatDate(preview.data.date)}</span>

@@ -7,6 +7,8 @@ import { withBase, stripBase } from "../lib/paths";
 import { asLocale, htmlLang, ogLocale, type AlternateLink, type Locale } from "../lib/i18n";
 import { safeGetCollection } from "../lib/safeContent";
 import { getPreMatchPreviews } from "../lib/prematchPreviews";
+import { SITE_VERIFICATION } from "../lib/siteVerification";
+import { alternatesFor } from "../lib/localizedRoutes";
 
 interface Props {
   title: string;
@@ -31,14 +33,8 @@ const canonicalUrl = canonicalSite
   ? new URL(stripBase(Astro.url.pathname), canonicalSite).href
   : new URL(Astro.url.pathname, Astro.site).href;
 const ogImageUrl = new URL(withBase(ogImage), Astro.site).href;
-const languageAlternates =
-  alternates ??
-  ([
-    { lang: "en", href: stripBase(Astro.url.pathname).replace(/^\/(pt|ko)(?=\/|$)/, "") || "/" },
-    { lang: "pt", href: stripBase(Astro.url.pathname).replace(/^\/(pt|ko)(?=\/|$)/, "/pt") || "/pt/" },
-    { lang: "ko", href: stripBase(Astro.url.pathname).replace(/^\/(pt|ko)(?=\/|$)/, "/ko") || "/ko/" },
-    { lang: "x-default", href: stripBase(Astro.url.pathname).replace(/^\/(pt|ko)(?=\/|$)/, "") || "/" },
-  ] satisfies AlternateLink[]);
+// hreflang: only languages that really have this page (see lib/localizedRoutes.ts).
+const languageAlternates = alternates ?? (await alternatesFor(stripBase(Astro.url.pathname)));
 const alternateHrefLang: Record<Locale | "x-default", string> = { en: "en", pt: "pt-BR", ko: "ko", "x-default": "x-default" };
 const koRounds =
   locale === "ko"
@@ -68,6 +64,9 @@ const jsonLd =
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {SITE_VERIFICATION.naver && <meta name="naver-site-verification" content={SITE_VERIFICATION.naver} />}
+    {SITE_VERIFICATION.bing && <meta name="msvalidate.01" content={SITE_VERIFICATION.bing} />}
+    {SITE_VERIFICATION.google && <meta name="google-site-verification" content={SITE_VERIFICATION.google} />}
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <link rel="canonical" href={canonicalUrl} />
@@ -75,7 +74,7 @@ const jsonLd =
       <link
         rel="alternate"
         hreflang={alternateHrefLang[alternate.lang]}
-        href={new URL(withBase(alternate.href), Astro.site).href}
+        href={canonicalSite ? new URL(alternate.href, canonicalSite).href : new URL(withBase(alternate.href), Astro.site).href}
       />
     ))}
     <link rel="icon" type="image/png" href={withBase("/assets/crest.png")} />
@@ -91,9 +90,9 @@ const jsonLd =
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:locale" content={ogLocale[locale]} />
-    {(["en", "pt", "ko"] as Locale[]).filter((item) => item !== locale).map((item) => (
-      <meta property="og:locale:alternate" content={ogLocale[item]} />
-    ))}
+    {languageAlternates
+      .filter((item): item is AlternateLink & { lang: Locale } => item.lang !== "x-default" && item.lang !== locale)
+      .map((item) => <meta property="og:locale:alternate" content={ogLocale[item.lang]} />)}
     {ogType === "article" && publishedDate && <meta property="article:published_time" content={publishedDate} />}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />

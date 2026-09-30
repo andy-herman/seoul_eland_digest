@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import TranslateButton from "../../../components/TranslateButton.astro";
+import KoreanButton from "../../../components/KoreanButton.astro";
 import { getOfficialRosterWithPhotos, type OfficialPlayerWithPhoto } from "../../../lib/officialRoster";
 import { getPortugueseNationality, getPortuguesePosition } from "../../../lib/playerLocalisation";
 import { withBase } from "../../../lib/paths";
@@ -148,8 +149,9 @@ const num = (value: number | undefined) => (value == null ? "-" : value.toLocale
               <dd class="mt-2 text-xl font-black">{birthday ?? "-"}</dd>
             </div>
           </dl>
-          <div class="mt-6">
+          <div class="mt-6 flex flex-wrap items-center gap-2">
             <TranslateButton href={`/players/${player.slug}`} code="EN" label="English" ariaLabel={`View ${player.englishName}'s profile in English`} />
+            <KoreanButton />
           </div>
         </div>
       </div>

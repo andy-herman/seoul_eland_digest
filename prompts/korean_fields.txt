@@ -1,0 +1,6 @@
+Localize these frontmatter fields of a Seoul E-Land Digest article into Korean, following the house style. Rules: title = a compressed Korean headline (no final period); description = one or two natural Korean sentences in 해라체; forecast_labels = the same JSON object with Korean values ("서울 이랜드 승", "무승부", "<상대> 승"); predicted_lineup_label = "서울 이랜드 예상 선발"; predicted_lineup_team = "서울 이랜드"; notes in natural Korean. Keep JSON objects valid. Reply with one JSON object that has the same keys; values must be the complete field values (strings keep their surrounding quotes only if the input had them).
+
+{style}
+
+FIELDS
+{fields_json}

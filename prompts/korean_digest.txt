@@ -1,0 +1,31 @@
+Rewrite the English Seoul E-Land round review below into Korean for the site's Korean edition.
+
+{style}
+
+FIXED HEADINGS FOR ROUND REVIEWS
+- H1 "Round N Digest: Seoul E-Land FC vs X" -> "N라운드 리뷰: 서울 이랜드 FC vs X" (X in its full Korean name)
+- The Round in One Paragraph -> 한 문단 요약
+- Match Report -> 경기 리뷰
+- Player Performances -> 선수 평가
+- Fan Reaction -> 팬 반응
+- News and Transfers -> 선수단 소식
+- Tactical and Strategic Watch -> 전술 포인트
+- Standings Snapshot -> 순위표
+- Looking Ahead -> 다음 경기
+- My Honest Read -> 총평
+- Standings table header -> 순위 | 팀 | 경기 | 승 | 무 | 패 | 득점 | 실점 | 승점 (short club names in the rows; keep every number)
+- Player lines: "**[[Park Jae-yong]] (박재용):**" -> "**[[Park Jae-yong|박재용]]:**"; "**Euller (에울레르):**" -> "**에울레르:**"; "**Han Tae-hee (한태희, Daegu):**" -> "**한태희 (대구):**"
+
+GLOSSARY (JSON, English -> official Korean)
+{glossary}
+
+KOREAN SOURCE QUOTES (original Korean wording from this round's Korean press; use verbatim when a quote in the English paraphrases one of these)
+{korean_quotes}
+
+OUTPUT
+Only the Korean markdown body (no frontmatter, no preface, no notes).
+
+ENGLISH ARTICLE BODY
+---
+{article_body}
+---

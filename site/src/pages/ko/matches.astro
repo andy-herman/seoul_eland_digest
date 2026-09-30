@@ -113,7 +113,7 @@ function getScore(score?: number) {
         {nextMatch ? (
           <>
             <p class="mt-3 text-sm font-black uppercase tracking-[0.14em]" style="color: var(--color-muted);">
-              라운드 {nextMatch.round} · {formatDate(nextMatch.date)} · {venueLabel(nextMatch.venue)}
+              {nextMatch.round}라운드 · {formatDate(nextMatch.date)} · {venueLabel(nextMatch.venue)}
             </p>
             <div class="mt-5 grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3">
               {(() => {
@@ -222,7 +222,7 @@ function getScore(score?: number) {
                   <div class="grid gap-4 p-4 sm:grid-cols-[8.5rem_minmax(0,1fr)_auto] sm:items-center">
                     <div>
                       <p class="text-xs font-black uppercase tracking-[0.16em]" style="color: var(--color-gold-light);">
-                        라운드 {match.round}
+                        {match.round}라운드
                       </p>
                       <p class="mt-1 text-sm font-bold leading-5" style="color: var(--color-link);">
                         {formatDate(match.date)} · {formatKickoff(match.time)}

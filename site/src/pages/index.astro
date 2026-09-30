@@ -5,6 +5,7 @@ import DigestCard from "../components/DigestCard.astro";
 import LatestMatchCard from "../components/LatestMatchCard.astro";
 import PlayTeaser from "../components/PlayTeaser.astro";
 import TranslateButton from "../components/TranslateButton.astro";
+import KoreanButton from "../components/KoreanButton.astro";
 import { getDigestDeck } from "../lib/digestDeck";
 import { withBase } from "../lib/paths";
 
@@ -51,6 +52,7 @@ const deckFallback = "Match report, player notes, and a plain-spoken read on wha
         </p>
         <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
           <TranslateButton href="/pt/" code="PT" label="Português" ariaLabel="Read the Portuguese archive" />
+          <KoreanButton />
           <a
             href={withBase("/support")}
             class="support-link text-sm font-black no-underline transition-colors hover:text-white"

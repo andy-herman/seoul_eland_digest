@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TranslateButton from "../../components/TranslateButton.astro";
+import KoreanButton from "../../components/KoreanButton.astro";
 import { withBase } from "../../lib/paths";
 
 export async function getStaticPaths() {
@@ -52,6 +53,7 @@ const dateStr = entry.data.date.toLocaleDateString("en-US", {
             ariaLabel="Ler este guia em português"
           />
         )}
+        <KoreanButton />
       </div>
     </header>
 

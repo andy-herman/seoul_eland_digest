@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import SeasonReviewHub from "../../components/SeasonReviewHub.astro";
 import TranslateButton from "../../components/TranslateButton.astro";
+import KoreanButton from "../../components/KoreanButton.astro";
 import { withBase } from "../../lib/paths";
 ---
 
@@ -19,6 +20,7 @@ import { withBase } from "../../lib/paths";
       <div class="mt-5 flex flex-wrap items-center gap-2">
         <span class="metadata-chip">Grades through Round 27</span>
         <TranslateButton href="/pt/articles/season-review" code="PT" label="Português" ariaLabel="Ver esta página em português" />
+        <KoreanButton />
       </div>
     </div>
   </section>

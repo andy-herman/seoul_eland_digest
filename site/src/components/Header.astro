@@ -239,7 +239,7 @@ if (lastResult) {
     href: lastDigest ? `${prefix}/rounds/${lastDigest.id.replace(/\.md$/, "")}` : `${prefix}/matches`,
     opponent: displayTeam(lastResult.opponent),
     logo: getTeamLogo(lastResult.opponent),
-    meta: `${t.round} ${lastResult.round} · ${t.venue[lastResult.venue]} · ${formatDate(lastResult.date)}`,
+    meta: `${lang === "ko" ? `${lastResult.round}라운드` : `${t.round} ${lastResult.round}`} · ${t.venue[lastResult.venue]} · ${formatDate(lastResult.date)}`,
     result: lastResult.result,
   });
 }
@@ -251,7 +251,7 @@ if (nextMatch) {
     href: nextPreview ? `${prefix}/previews/${nextPreview.slug}` : `${prefix}/matches`,
     opponent: displayTeam(nextMatch.opponent),
     logo: getTeamLogo(nextMatch.opponent),
-    meta: `${t.round} ${nextMatch.round} · ${t.venue[nextMatch.venue]}`,
+    meta: `${lang === "ko" ? `${nextMatch.round}라운드` : `${t.round} ${nextMatch.round}`} · ${t.venue[nextMatch.venue]}`,
     chipDate: formatDate(nextMatch.date),
     chipTime: formatKickoff(nextMatch.time),
   });

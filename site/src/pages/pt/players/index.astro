@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import TranslateButton from "../../../components/TranslateButton.astro";
+import KoreanButton from "../../../components/KoreanButton.astro";
 import { getOfficialRosterWithPhotos } from "../../../lib/officialRoster";
 import { getPortugueseNationality, getPortuguesePosition } from "../../../lib/playerLocalisation";
 import { withBase } from "../../../lib/paths";
@@ -22,6 +23,7 @@ const rosterWithPhotos = await getOfficialRosterWithPhotos();
       </p>
       <div class="mt-5">
         <TranslateButton href="/players" code="EN" label="English" ariaLabel="View the squad in English" />
+        <KoreanButton />
       </div>
     </div>
   </header>

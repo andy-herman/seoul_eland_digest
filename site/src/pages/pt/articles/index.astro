@@ -2,6 +2,7 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import TranslateButton from "../../../components/TranslateButton.astro";
+import KoreanButton from "../../../components/KoreanButton.astro";
 import { withBase } from "../../../lib/paths";
 
 const articles = (await getCollection("articlesPt")).sort(
@@ -35,6 +36,7 @@ const dateFormatter = new Intl.DateTimeFormat("pt-BR", {
       </p>
       <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
         <TranslateButton href="/articles" code="EN" label="English" ariaLabel="Read the articles in English" />
+        <KoreanButton />
       </div>
     </div>
   </section>

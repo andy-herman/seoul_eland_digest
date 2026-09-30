@@ -2,6 +2,7 @@
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import TranslateButton from "../../components/TranslateButton.astro";
+import KoreanButton from "../../components/KoreanButton.astro";
 import PlayerCard from "../../components/PlayerCard.astro";
 import { withBase } from "../../lib/paths";
 import { getOfficialRosterWithPhotos } from "../../lib/officialRoster";
@@ -71,6 +72,7 @@ const dateStr = entry.data.date.toLocaleDateString("en-US", {
             ariaLabel="Ler este artigo em português"
           />
         )}
+        <KoreanButton />
       </div>
     </header>
 

@@ -262,11 +262,14 @@ const games = [
           <TranslateButton href="/pt/play" code="PT" label="포르투갈어" ariaLabel="포르투갈어 게임 허브 보기" />
         </div>
       ) : isPortuguese ? (
-        <TranslateButton href="/play" code="EN" label="Inglês" ariaLabel="Ver os jogos em inglês" />
+        <div class="flex flex-wrap gap-2">
+          <TranslateButton href="/play" code="EN" label="Inglês" ariaLabel="Ver os jogos em inglês" />
+          <TranslateButton href="/ko/play" code="KO" label="한국어" ariaLabel="한국어 게임 허브 보기" hreflang="ko" />
+        </div>
       ) : (
         <div class="flex flex-wrap gap-2">
           <TranslateButton href="/pt/play" code="PT" label="Português" ariaLabel="See the games in Portuguese" />
-          <TranslateButton href="/ko/play" code="KO" label="한국어" ariaLabel="See the games in Korean" />
+          <TranslateButton href="/ko/play" code="KO" label="한국어" ariaLabel="한국어 게임 허브 보기" hreflang="ko" />
         </div>
       )}
     </div>

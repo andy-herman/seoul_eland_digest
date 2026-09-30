@@ -6,13 +6,17 @@ interface Props {
   code: string;
   label: string;
   ariaLabel?: string;
+  /** Language of the target page, e.g. "ko"; sets hreflang and lang on the link. */
+  hreflang?: string;
 }
 
-const { href, code, label, ariaLabel = `Read in ${label}` } = Astro.props;
+const { href, code, label, ariaLabel = `Read in ${label}`, hreflang } = Astro.props;
 ---
 
 <a
   href={withBase(href)}
+  hreflang={hreflang}
+  lang={hreflang}
   class="translate-button inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-black no-underline transition-colors hover:bg-white"
   style="border-color: color-mix(in srgb, var(--color-gold) 42%, var(--color-rule)); color: var(--color-gold-light);"
   aria-label={ariaLabel}

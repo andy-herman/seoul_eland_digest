@@ -100,7 +100,7 @@ const readLabel = isKorean ? "더 보기" : isPortuguese ? "Ler" : "Read";
 >
   <div class="flex items-start justify-between gap-3">
     <div>
-      <p class="eyebrow">{roundLabel} {round}</p>
+      <p class="eyebrow">{isKorean ? `${round}${roundLabel}` : `${roundLabel} ${round}`}</p>
       <p class="mt-1 text-xs font-bold uppercase tracking-[0.16em]" style="color: var(--color-muted);">
         <time datetime={date.toISOString()}>{dateStr}</time> · {venueLabel}
       </p>

@@ -4,6 +4,7 @@ import { safeGetCollection } from "../../../lib/safeContent";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import MatchArticleHeader from "../../../components/MatchArticleHeader.astro";
 import { withBase } from "../../../lib/paths";
+import { koDigestMeta } from "../../../lib/koDigestMeta";
 
 export async function getStaticPaths() {
   const digests = await safeGetCollection("digestsKo");
@@ -17,17 +18,12 @@ const { entry } = Astro.props;
 const { Content } = await render(entry);
 const slug = entry.id.replace(/\.md$/, "");
 
-const dateStr = entry.data.date.toLocaleDateString("ko-KR", {
-  year: "numeric",
-  month: "long",
-  day: "numeric",
-  timeZone: "UTC",
-});
+const { title: pageTitle, description: pageDescription } = koDigestMeta(entry);
 ---
 
 <BaseLayout
-  title={`라운드 ${entry.data.round} — ${entry.data.opponent}`}
-  description={`Seoul E-Land FC ${entry.data.result} ${entry.data.opponent}, ${dateStr}.`}
+  title={pageTitle}
+  description={pageDescription}
   lang="ko"
   ogType="article"
   publishedDate={entry.data.date.toISOString()}

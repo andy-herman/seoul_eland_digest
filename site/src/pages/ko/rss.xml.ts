@@ -1,14 +1,14 @@
 import type { APIContext } from "astro";
 import { safeGetCollection } from "../../lib/safeContent";
 import { getPreMatchPreviews } from "../../lib/prematchPreviews";
-import { koTeam } from "../../lib/teamNamesKo";
+import { koDigestMeta } from "../../lib/koDigestMeta";
 
 type FeedItem = { title: string; link: string; pubDate: Date; description: string; category: string };
 function escapeXml(value: string) { return value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&apos;"); }
 export async function GET(context: APIContext) {
   const site = (context.site ?? new URL("https://seoulelanddigest.com")).href.replace(/\/$/, "");
   const digests = await safeGetCollection("digestsKo");
-  const digestItems: FeedItem[] = digests.map((digest) => { const slug = digest.id.replace(/\.md$/, ""); return { title: `${digest.data.round}라운드 리뷰: 서울 이랜드 ${digest.data.result} ${koTeam(digest.data.opponent,"short")}`, link: `${site}/ko/rounds/${slug}`, pubDate: digest.data.date, description: `서울 이랜드 FC ${digest.data.result} ${koTeam(digest.data.opponent,"short")} 경기 리뷰.`, category: "match-report" }; });
+  const digestItems: FeedItem[] = digests.map((digest) => { const slug = digest.id.replace(/\.md$/, ""); const meta = koDigestMeta(digest); return { title: meta.feedTitle, link: `${site}/ko/rounds/${slug}`, pubDate: digest.data.date, description: meta.description, category: "match-report" }; });
   const previewItems: FeedItem[] = getPreMatchPreviews("ko").filter((preview)=>preview.data.date).map((preview)=>({ title: preview.title, link: `${site}/ko/previews/${preview.slug}`, pubDate: new Date(`${preview.data.date}T00:00:00Z`), description: preview.description, category: "preview" })).filter((item)=>!Number.isNaN(item.pubDate.getTime()));
   const guides = await safeGetCollection("guidesKo");
   const guideItems: FeedItem[] = guides.map((guide)=>({ title: guide.data.title, link: `${site}/ko/guides/${guide.id.replace(/\.md$/,"")}`, pubDate: guide.data.date, description: guide.data.description, category: "guide" }));

@@ -52,16 +52,15 @@ const DEFAULT_PREVIEW_KO_DIR = path.resolve(process.cwd(), "src", "content", "pr
 const DEFAULT_DIGEST_KO_DIR = path.resolve(process.cwd(), "src", "content", "digests-ko");
 const PLAYER_ALIASES = new Map([
   ["carius", "alan-carius"],
-  ["geraldes", "francisco-geraldes"],
   ["gabriel", "gabriel-santos"],
   ["yun-seok-ju", "yoon-seok-ju"],
 ]);
 const PLAYER_SLUGS = new Set([
   "ahn-joo-wan", "bae-jin-woo", "bae-seo-jun", "baek-ji-woong", "byeon-gyeong-jun", "alan-carius", "carius",
-  "cho-jun-hyun", "choi-rang", "eom-ye-hun", "euller", "gabriel", "gabriel-santos", "geraldes", "hwang-jae-yun",
-  "francisco-geraldes", "kang-hyeon-je", "kang-min-jae", "kang-young-seok", "kim-hyun", "kim-hyun-woo",
+  "cho-jun-hyun", "choi-rang", "eom-ye-hun", "euller", "gabriel", "gabriel-santos", "hwang-jae-yun",
+  "kang-hyeon-je", "kang-min-jae", "kang-young-seok", "kim-hyun", "kim-hyun-woo",
   "kim-joo-hwan", "kim-oh-kyu", "kim-tae-san", "kim-woo-bin", "lee-ju-hyeok", "min-sung-jun", "oh-in-pyo",
-  "osmar", "park-chang-hwan", "park-jae-hwan", "park-jae-yong", "park-jin-young", "park-sun-woo", "seo-jin-seok",
+  "osmar", "park-chang-hwan", "park-jae-hwan", "park-jae-yong", "park-sun-woo", "seo-jin-seok",
   "son-hyuk-chan", "yang-seung-min", "yoon-seok-ju", "yun-seok-ju",
 ]);
 const PLACE_SLUGS = new Set(["mokdong-stadium"]);
@@ -140,7 +139,7 @@ function cleanPreviewBody(body: string) {
     .join("\n");
 }
 
-function descriptionFromBody(body: string) {
+function descriptionFromBody(body: string, locale: PreviewLocale = "en") {
   const paragraph = body
     .replace(/^# .+$/m, "")
     .split(/\r?\n/)
@@ -155,6 +154,13 @@ function descriptionFromBody(body: string) {
     .replace(/\*\*|\*|`/g, "")
     .replace(/\s+/g, " ")
     .trim();
+  if (locale === "ko") {
+    if (!plain) return "경기 전 상대 분석과 예상 선발, 관전 포인트.";
+    if (plain.length <= 180) return plain;
+    // Korean decks end on a whole sentence instead of stopping mid-word.
+    const end = plain.lastIndexOf("다.", 178);
+    return end > 40 ? plain.slice(0, end + 2) : `${plain.slice(0, 179)}…`;
+  }
   return plain?.slice(0, 180) || "Pre-match notes, matchup keys, and what to watch before kickoff.";
 }
 
@@ -272,7 +278,7 @@ export function getPreMatchPreviews(locale: PreviewLocale = "en"): PreMatchPrevi
         fileName,
         locale,
         title: localizedTitle,
-        description: descriptionFromBody(cleanBody),
+        description: descriptionFromBody(cleanBody, locale),
         body: cleanBody,
         data,
         forecast,

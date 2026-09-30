@@ -50,6 +50,10 @@ if %ERRORLEVEL% NEQ 0 (
     exit /b %ERRORLEVEL%
 )
 
+echo [%date% %time%] Creating Korean companion digest and preview...
+python scripts\translate_digest_ko.py
+if %ERRORLEVEL% NEQ 0 echo WARNING: Korean translation did not pass its checks, the English and Portuguese editions still publish. See output above.
+
 echo [%date% %time%] Deduplicating player notes...
 python scripts\dedupe_player_notes.py
 

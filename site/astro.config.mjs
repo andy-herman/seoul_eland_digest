@@ -15,6 +15,8 @@ const linkBase = base === "/" ? "" : base.replace(/\/$/, "");
 // without a page becomes a link to a 404; anything omitted renders as plain
 // text, which is why the manager (Kim Do-gyun) is deliberately absent. Add him
 // back the day a staff page exists.
+// Players who left mid-season (Francisco Geraldes, Park Jin-young) drop off the
+// official roster, so they have no page and are left out here too.
 const playerSlugs = new Set([
   "ahn-joo-wan",
   "bae-jin-woo",
@@ -29,9 +31,7 @@ const playerSlugs = new Set([
   "euller",
   "gabriel",
   "gabriel-santos",
-  "geraldes",
   "hwang-jae-yun",
-  "francisco-geraldes",
   "kang-hyeon-je",
   "kang-min-jae",
   "kang-young-seok",
@@ -48,7 +48,6 @@ const playerSlugs = new Set([
   "park-chang-hwan",
   "park-jae-hwan",
   "park-jae-yong",
-  "park-jin-young",
   "park-sun-woo",
   "seo-jin-seok",
   "son-hyuk-chan",
@@ -81,7 +80,6 @@ const teamSlugs = new Set([
 // Short forms that appear in the vault prose but are not the page slug.
 const playerAliases = new Map([
   ["carius", "alan-carius"],
-  ["geraldes", "francisco-geraldes"],
   ["gabriel", "gabriel-santos"],
   ["yun-seok-ju", "yoon-seok-ju"],
 ]);
@@ -145,6 +143,42 @@ function remarkUnresolvedWikiLinksAsText() {
   };
 }
 
+// Korean content links to the Korean edition wherever it has the page, so the
+// HTML that crawlers read already points at /ko/ (players always; rounds and
+// previews once their Korean version exists).
+function readKoreanSlugs(dir) {
+  try {
+    return new Set(
+      readdirSync(new URL(`./src/content/${dir}`, import.meta.url))
+        .filter((f) => f.endsWith(".md"))
+        .map((f) => (dir === "digests-ko" ? f.replace(/\.md$/i, "").replace(/ /g, "-").toLowerCase() : slugify(f))),
+    );
+  } catch {
+    return new Set();
+  }
+}
+
+function rehypeKoreanEditionLinks() {
+  const koRounds = readKoreanSlugs("digests-ko");
+  const koPreviews = readKoreanSlugs("prematch-previews-ko");
+  return (tree, file) => {
+    const source = String(file.path ?? file.history?.[0] ?? "");
+    if (!/[\\/]content[\\/][^\\/]+-ko[\\/]/.test(source)) return;
+    visit(tree, "element", (node) => {
+      if (node.tagName !== "a" || typeof node.properties?.href !== "string") return;
+      const href = node.properties.href;
+      if (!href.startsWith(`${linkBase}/`)) return;
+      const path = href.slice(linkBase.length);
+      const match = path.match(/^\/(players|rounds|previews)\/([^/?#]+)\/?([?#].*)?$/);
+      if (!match) return;
+      const [, section, slug, rest = ""] = match;
+      const hasKorean =
+        section === "players" || (section === "rounds" ? koRounds.has(slug) : koPreviews.has(slug));
+      if (hasKorean) node.properties.href = `${linkBase}/ko/${section}/${slug}${rest}`;
+    });
+  };
+}
+
 export default defineConfig({
   site,
   base,
@@ -163,5 +197,6 @@ export default defineConfig({
       ],
       remarkUnresolvedWikiLinksAsText,
     ],
+    rehypePlugins: [rehypeKoreanEditionLinks],
   },
 });

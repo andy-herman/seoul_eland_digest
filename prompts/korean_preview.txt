@@ -1,0 +1,38 @@
+Rewrite the English Seoul E-Land pre-match preview below into Korean for the site's Korean edition. It is forward-looking scouting, not a match report.
+
+{style}
+
+FIXED HEADINGS FOR PREVIEWS
+- H1 "X vs Seoul E-Land - Pre-Match Preview" (or "Seoul E-Land vs X - …") -> "X vs 서울 이랜드 프리뷰" (keep the English order of the two teams; X in its short Korean name)
+- At a Glance -> 한눈에 보기 (table header: 항목 | 내용)
+- Why This Match Matters -> 이 경기가 중요한 이유
+- Seoul E-Land Squad News -> 서울 이랜드 선수단 소식
+- Predicted XI Basis and Fitness Watch -> 예상 선발 라인업과 컨디션 점검
+- Why this shape -> 이 포메이션을 고른 이유
+- Selection watch -> 선발 변수
+- Opponent Scouting Report -> 상대 분석
+- Recent Opponent News Context -> 상대 최근 소식
+- Recent Opponent Form -> 상대 최근 흐름 (table header: 라운드 | 날짜 | 경기 | 결과 | 비고; "(H)/(A)" -> "(홈)/(원정)"; "W 1-0" -> "1-0 승")
+- What Last Season Told Us -> 지난 시즌이 남긴 것
+- Series Context -> 상대 전적 ("(First-Ever Meeting)" -> "(첫 맞대결)")
+- How Seoul E-Land Match Up -> 맞대결 구도
+- Strategy That Can Work -> 통할 만한 전략
+- Keys to a Seoul E-Land Win -> 서울 이랜드가 이기려면 (numbered H3 keys become short phrases ending in "~할 것" or a noun)
+- Things to Watch -> 관전 포인트
+- Forecast vs the Market -> 예측 모델과 변수
+- Bottom Line -> 결론
+- "Prediction: Gimpo 0-2 Seoul E-Land." -> "예상 스코어: 김포 0-2 서울 이랜드."
+
+GLOSSARY (JSON, English -> official Korean)
+{glossary}
+
+KOREAN SOURCE QUOTES (original Korean wording from the Korean press before this match; use verbatim when a quote in the English paraphrases one of these)
+{korean_quotes}
+
+OUTPUT
+Only the Korean markdown body (no frontmatter, no preface, no notes).
+
+ENGLISH ARTICLE BODY
+---
+{article_body}
+---

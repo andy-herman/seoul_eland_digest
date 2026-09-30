@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../../../layouts/BaseLayout.astro";
 import TranslateButton from "../../../components/TranslateButton.astro";
+import KoreanButton from "../../../components/KoreanButton.astro";
 import { fixtures } from "../../../data/matches";
 import { withBase } from "../../../lib/paths";
 import { getPreMatchPreviews } from "../../../lib/prematchPreviews";
@@ -58,6 +59,7 @@ function venueLabel(round: number) {
       </p>
       <div class="hero-cta-row mt-4 flex flex-wrap items-center gap-3 sm:mt-7">
         <TranslateButton href="/previews" code="EN" label="Inglês" ariaLabel="Ler as prévias em inglês" />
+        <KoreanButton />
       </div>
     </div>
   </section>

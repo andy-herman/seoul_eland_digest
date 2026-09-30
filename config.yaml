@@ -34,6 +34,11 @@ models:
   portuguese_digest:
     max_tokens: 8000
 
+  # Korean edition (scripts/translate_digest_ko.py): transcreate, then a desk-edit pass.
+  # Hangul text needs more tokens than Portuguese for the same article.
+  korean_digest:
+    max_tokens: 12000
+
 # Logging
 logging:
   level: "INFO"
