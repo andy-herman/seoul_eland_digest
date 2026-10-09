@@ -121,7 +121,27 @@
   "Jeong Seung-bae": "정승배",
   "Park Cheol-woo": "박철우",
   "Dejan": "데얀",
-  "Golden Crew": "골든크루"
+  "Golden Crew": "골든크루",
+  "Choi Pil-su": "최필수",
+  "Hong Wook-hyun": "홍욱현",
+  "Gwak Seong-uk": "곽성욱",
+  "Park Jae-hyeon": "박재현",
+  "Beka Mikeltadze": "베카",
+  "Beka": "베카",
+  "Lee Seung-jae": "이승재",
+  "Woo Je-uk": "우제욱",
+  "Park Yo-han": "박요한",
+  "Ruben Macedo": "후벵 마세도",
+  "Rúben Macedo": "후벵 마세도",
+  "Maissa Fall": "마이사 폴",
+  "Bruno Costa": "브루노 코스타",
+  "Miguel Baggio": "미겔 바지오",
+  "Lee Yu-chan": "이유찬",
+  "Cha Jun-young": "차준영",
+  "Seong Ho-young": "성호영",
+  "Lee Kang-uk": "이강욱",
+  "Lee Dae-gwang": "이대광",
+  "Leul Cup": "레울컵"
  },
  "wrong_forms": {
   "서울이랜드": "서울 이랜드",
@@ -253,7 +273,26 @@
   "Choi Myeong-seong": "최명성",
   "Son Hyun-jun": "손현준",
   "Jeong Seung-bae": "정승배",
-  "Park Cheol-woo": "박철우"
+  "Park Cheol-woo": "박철우",
+  "Choi Pil-su": "최필수",
+  "Hong Wook-hyun": "홍욱현",
+  "Gwak Seong-uk": "곽성욱",
+  "Park Jae-hyeon": "박재현",
+  "Beka Mikeltadze": "베카",
+  "Beka": "베카",
+  "Lee Seung-jae": "이승재",
+  "Woo Je-uk": "우제욱",
+  "Park Yo-han": "박요한",
+  "Ruben Macedo": "후벵 마세도",
+  "Rúben Macedo": "후벵 마세도",
+  "Maissa Fall": "마이사 폴",
+  "Bruno Costa": "브루노 코스타",
+  "Miguel Baggio": "미겔 바지오",
+  "Lee Yu-chan": "이유찬",
+  "Cha Jun-young": "차준영",
+  "Seong Ho-young": "성호영",
+  "Lee Kang-uk": "이강욱",
+  "Lee Dae-gwang": "이대광"
  },
  "clubs_short": {
   "Seoul E-Land FC": "서울 이랜드 FC",
@@ -334,6 +373,7 @@
   "K League 1": "K리그1",
   "Korean Cup": "코리아컵",
   "promotion playoff": "승강 플레이오프",
-  "K League 2 playoff": "K리그2 플레이오프"
+  "K League 2 playoff": "K리그2 플레이오프",
+  "Leul Cup": "레울컵"
  }
 }

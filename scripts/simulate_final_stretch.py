@@ -133,10 +133,8 @@ FIXTURES = [
 # ---------------------------------------------------------------------------
 ADJUSTMENTS: dict[tuple, dict] = {
     # ---- Seoul E-Land fixtures ----
-    (29, "seoul-e-land", "gimhae"): {
-        "away_att": 0.95,
-        "why": "Woo Je-uk (3 goals in 3 after signing) injured since R22; Gimhae safe from relegation "
-               "with nothing to play for by mid-October."},
+    # (29, "seoul-e-land", "gimhae"): no adjustment. The earlier away_att 0.95 assumed Woo Je-uk was
+    # injured; he returned in R26 and played the full R27, so the season and form rates stand alone.
     (31, "yongin", "seoul-e-land"): {
         "home_att": 0.96, "home_def": 1.04,
         "why": "GK Hwang Sung-min hurt Sep 5, severity unreported; Yongin likely mid-table with only an "
