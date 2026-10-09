@@ -106,7 +106,22 @@
   "Gimpo Solteo Football Field": "김포솔터축구장",
   "Big Bird": "빅버드",
   "Changwon Football Center": "창원축구센터",
-  "Yongin Mireu Stadium": "용인미르스타디움"
+  "Yongin Mireu Stadium": "용인미르스타디움",
+  "Kim Tae-han": "김태한",
+  "Lee Hak-min": "이학민",
+  "Kim Do-hyeok": "김도혁",
+  "Im Chang-seok": "임창석",
+  "Kim Jun-seo": "김준서",
+  "Kim Min-sik": "김민식",
+  "Kim Sung-jun": "김성준",
+  "Luan": "루안",
+  "Chapman": "채프먼",
+  "Choi Myeong-seong": "최명성",
+  "Son Hyun-jun": "손현준",
+  "Jeong Seung-bae": "정승배",
+  "Park Cheol-woo": "박철우",
+  "Dejan": "데얀",
+  "Golden Crew": "골든크루"
  },
  "wrong_forms": {
   "서울이랜드": "서울 이랜드",
@@ -225,7 +240,20 @@
   "Gu Bon-cheol": "구본철",
   "Gerard Nus": "제라드 누스 (파주 감독)",
   "Tim Hartzell": "하츠젤 (안산, 등록명)",
-  "Stanislav Iljutcenko": "일류첸코 (수원 삼성)"
+  "Stanislav Iljutcenko": "일류첸코 (수원 삼성)",
+  "Kim Tae-han": "김태한",
+  "Lee Hak-min": "이학민",
+  "Kim Do-hyeok": "김도혁",
+  "Im Chang-seok": "임창석",
+  "Kim Jun-seo": "김준서",
+  "Kim Min-sik": "김민식",
+  "Kim Sung-jun": "김성준",
+  "Luan": "루안",
+  "Chapman": "채프먼",
+  "Choi Myeong-seong": "최명성",
+  "Son Hyun-jun": "손현준",
+  "Jeong Seung-bae": "정승배",
+  "Park Cheol-woo": "박철우"
  },
  "clubs_short": {
   "Seoul E-Land FC": "서울 이랜드 FC",
@@ -298,7 +326,8 @@
   "Lenyang": "레냥"
  },
  "supporters": {
-  "Guncheong": "군청"
+  "Guncheong": "군청",
+  "Golden Crew": "골든크루"
  },
  "competitions": {
   "K League 2": "K리그2",

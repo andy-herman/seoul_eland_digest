@@ -45,22 +45,23 @@ AWAY_GOALS = 1.21
 RHO = -0.10                 # Dixon-Coles low-score correlation
 
 # ---------------------------------------------------------------------------
-# Table after Round 27 (en/ko wikipedia, 2026-09-20). slug: (P, W, D, L, GF, GA)
+# Table after Friday's Round 28 matches (kleague.com teamRank, 2026-10-09).
+# slug: (P, W, D, L, GF, GA)
 # ---------------------------------------------------------------------------
 TABLE = {
     "suwon-samsung": (25, 16, 5, 4, 39, 20),
-    "seoul-e-land": (26, 14, 6, 6, 45, 30),
-    "suwon-fc": (25, 13, 9, 3, 50, 29),
+    "seoul-e-land": (27, 15, 6, 6, 46, 30),
+    "suwon-fc": (26, 14, 9, 3, 51, 29),
     "daegu": (26, 13, 7, 6, 48, 35),
-    "hwaseong": (26, 12, 8, 6, 41, 27),
+    "hwaseong": (27, 12, 8, 7, 41, 28),
     "busan-ipark": (26, 12, 5, 9, 41, 34),
     "chungnam-asan": (25, 9, 7, 9, 34, 31),
-    "gimpo": (25, 8, 11, 6, 31, 30),
+    "gimpo": (26, 8, 11, 7, 31, 31),
     "gyeongnam": (25, 8, 10, 7, 31, 30),
-    "seongnam": (25, 7, 10, 8, 28, 30),
+    "seongnam": (26, 7, 10, 9, 29, 33),
     "yongin": (25, 5, 12, 8, 31, 35),
     "paju": (25, 8, 5, 12, 24, 28),
-    "cheongju": (26, 5, 14, 7, 31, 41),
+    "cheongju": (27, 6, 14, 7, 34, 42),
     "cheonan": (26, 4, 11, 11, 30, 37),
     "ansan": (26, 6, 4, 16, 27, 49),
     "jeonnam": (25, 4, 9, 12, 28, 43),
@@ -84,18 +85,18 @@ RANKED = CONTENDERS + CHASERS
 # Filled from the final-stretch research dossiers. Defaults to season rate.
 # ---------------------------------------------------------------------------
 LAST5 = {
-    # slug: (GF5, GA5)  last five league matches through Round 26 (2026-09-13)
-    "seoul-e-land": (9, 5),     # 1-1 Paju, 1-1 Seongnam, 2-0 Cheongju, 0-1 Suwon Samsung, 2-1 Daegu
+    # slug: (GF5, GA5)  last five league matches (Seoul, Suwon FC, Hwaseong, Gimpo through R28)
+    "seoul-e-land": (6, 3),     # 1-1 Seongnam, 2-0 Cheongju, 0-1 Suwon Samsung, 2-1 Daegu, 1-0 at Gimpo
     "suwon-samsung": (10, 3),   # 2-2 Suwon FC, 1-0 Cheonan, 4-1 Gimpo, 2-0 Asan, 1-0 at Seoul
     "daegu": (7, 4),            # 1-1 Busan, 2-1 Ansan, 0-0 Paju, 3-1 Yongin, 1-2 at Seoul
-    "suwon-fc": (9, 3),         # 2-0 Gimhae, 2-1 Busan, 1-1 Yongin, 1-1 Cheonan, 3-0 at Jeonnam
-    "hwaseong": (7, 5),         # 0-1 Jeonnam, 2-1 Cheongju, 1-1 Cheonan, 2-0 Ansan, 2-2 Seongnam
+    "suwon-fc": (8, 3),         # 2-1 Busan, 1-1 Yongin, 1-1 Cheonan, 3-0 at Jeonnam, 1-0 Hwaseong
+    "hwaseong": (7, 5),         # 2-1 Cheongju, 1-1 Cheonan, 2-0 Ansan, 2-2 Seongnam, 0-1 at Suwon FC
     "busan-ipark": (4, 4),      # 1-1 Daegu, 1-2 Suwon FC, 0-1 Ansan, 2-0 Gimhae, 0-1 at Gimpo
     "gimhae": (2, 8),           # 0-2 Busan, 0-2 Paju
     "yongin": (5, 6),           # 1-3 Daegu then 0-0 Gyeongnam
     "gyeongnam": (4, 2),        # 1-0 Seongnam, 0-0 Yongin; five unbeaten
     "jeonnam": (6, 7),          # 2-2 Gimpo then 0-3 Suwon FC
-    "gimpo": (6, 6),            # 1-1, 1-4, 1-2, 2-2, 1-0 Busan
+    "gimpo": (5, 9),            # 1-4, 1-2, 2-2, 1-0 Busan, 0-1 Seoul
     "chungnam-asan": (6, 5),    # 3-1 Cheonan
 }
 
@@ -104,7 +105,7 @@ LAST5 = {
 # ---------------------------------------------------------------------------
 FIXTURES = [
     
-    (28, "suwon-fc", "hwaseong"), (28, "gimpo", "seoul-e-land"), (28, "suwon-samsung", "ansan"),
+    (28, "suwon-samsung", "ansan"),
     (28, "paju", "busan-ipark"),
     (29, "suwon-samsung", "hwaseong"), (29, "seoul-e-land", "gimhae"), (29, "busan-ipark", "jeonnam"),
     (29, "seongnam", "suwon-fc"), (29, "daegu", "cheongju"),
@@ -132,10 +133,6 @@ FIXTURES = [
 # ---------------------------------------------------------------------------
 ADJUSTMENTS: dict[tuple, dict] = {
     # ---- Seoul E-Land fixtures ----
-    (28, "gimpo", "seoul-e-land"): {
-        "home_att": 0.92, "home_def": 1.04,
-        "why": "Gimpo have two home wins in ten (1-0 Busan on Sep 19 the second); Seoul unbeaten in the last "
-               "four meetings with a Gimpo red card in each of the last two; Park Chang-hwan back from his ban."},
     (29, "seoul-e-land", "gimhae"): {
         "away_att": 0.95,
         "why": "Woo Je-uk (3 goals in 3 after signing) injured since R22; Gimhae safe from relegation "
@@ -157,8 +154,6 @@ ADJUSTMENTS: dict[tuple, dict] = {
         "why": "Gyeongnam take 20 of 30 points at Changwon (4W 1D 1L last six at home) but should be safe "
                "and out of the race; Seoul unbeaten in five meetings, Gyeongnam 2 goals in those five."},
     # ---- rival fixtures ----
-    (28, "suwon-fc", "hwaseong"): {"home_def": 0.94, "home_att": 0.94,
-                                   "why": "Suwon FC home defense (9 conceded in 10); Frizzo doubtful on the one-month timeline."},
     (30, "suwon-fc", "chungnam-asan"): {"home_def": 0.94, "away_att": 0.90,
                                         "why": "Suwon FC home defense; Asan away attack (0.91 per game)."},
     (31, "suwon-fc", "ansan"): {"home_def": 0.94, "why": "Suwon FC home defense."},

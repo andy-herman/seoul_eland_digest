@@ -194,7 +194,9 @@ fixtures:
     date: 2026-10-09
     venue: away
     opponent: "Gimpo Citizen"
-    result: "TBD"
+    home_score: 0
+    away_score: 1
+    result: "W 1-0"
   - round: 29
     date: 2026-10-18
     venue: home
