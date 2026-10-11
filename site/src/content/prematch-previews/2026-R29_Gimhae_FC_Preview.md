@@ -8,9 +8,9 @@ round: "29"
 date: "2026-10-18"
 opponent: "Gimhae FC"
 venue_for_seoul: "home"
-forecast_probabilities: {"seoul_eland_win":0.81,"draw":0.15,"opponent_win":0.04}
+forecast_probabilities: {"seoul_eland_win":0.82,"draw":0.14,"opponent_win":0.04}
 forecast_labels: {"seoul_eland_win":"Seoul win","draw":"Draw","opponent_win":"Gimhae win"}
-forecast_note: "Monte Carlo read on the table after Friday's Round 28 matches: season and last-five attack and defense rates for both sides and home advantage, with no fixture-specific adjustment. Rounded to whole percentages."
+forecast_note: "Monte Carlo read on the complete Round 28 table: season and last-five attack and defense rates for both sides and home advantage, with no fixture-specific adjustment. Rounded to whole percentages."
 predicted_lineup_label: "Predicted Seoul XI"
 predicted_lineup_team: "Seoul E-Land"
 predicted_formation: "4-3-3"
@@ -28,16 +28,16 @@ tags: [seoul-eland, pre-match-preview, scouting]
 | Fixture | Round 29, Sunday 2026-10-18, 14:00, Mokdong Stadium |
 | Venue for Seoul | Home |
 | Seoul table context | 3rd, 27 played, 51 points, 15-6-6, 46-30 (+16) |
-| Opponent table context | 17th, 25 played, 13 points, 2-7-16, 19-49 (-30), before hosting Chungnam Asan on October 10 |
+| Opponent table context | 17th, 26 played, 14 points, 2-8-16, 20-50 (-30) |
 | Prior 2026 meetings | R16 (2026-07-05): Seoul won 3-1 at Gimhae |
 | Future 2026 meetings | None; this is the return fixture |
-| Forecast read | Seoul 81%, draw 15%, Gimhae 4% |
+| Forecast read | Seoul 82%, draw 14%, Gimhae 4% |
 | Same weekend | Seongnam v Suwon FC and Daegu v Cheongju on Saturday at 14:00; Suwon Samsung v Hwaseong kicks off at the same time as Seoul |
 | Context | Seoul's last match before the Round 30 bye; Gimhae's second under caretaker Choi Myeong-seong |
 
 ## Why This Match Matters
 
-This is the most lopsided fixture left on Seoul's schedule and the one with the least room for error. Seoul are level on 51 points with Suwon FC, who sit second on goals scored (51 to 46) with a game in hand, and two points behind Suwon Samsung, who have two in hand. The model gives Seoul a 22 percent chance of finishing in the top two. A win at home to the bottom club keeps that number around 24 percent. Anything less cuts it to under 10, and with the Round 30 bye to follow, Seoul would then spend two weekends watching the clubs above them play. Kim Do-gyun said after Gimpo that Seoul are the ones chasing and that hoping for rivals to slip is not a plan. Against Gimhae, at Mokdong, the plan has to include goals as well as points: the tiebreaker is goals scored, and Seoul are five behind.
+This is the most lopsided fixture left on Seoul's schedule and the one with the least room for error. Seoul are level on 51 points with Suwon FC, who sit second on goals scored (51 to 46) with a game in hand, and five points behind Suwon Samsung, who have a game in hand. The model gives Seoul an 18 percent chance of finishing in the top two. A win at home to the bottom club keeps that number around 21 percent. Anything less cuts it to under 10, and with the Round 30 bye to follow, Seoul would then spend two weekends watching the clubs above them play. Kim Do-gyun said after Gimpo that Seoul are the ones chasing and that hoping for rivals to slip is not a plan. Against Gimhae, at Mokdong, the plan has to include goals as well as points: the tiebreaker is goals scored, and Seoul are five behind.
 
 ## Seoul E-Land Squad News
 
@@ -69,30 +69,30 @@ The 4-3-3 has been the default since July and it kept a clean sheet at Gimpo, so
 
 ## Opponent Scouting Report
 
-**Gimhae FC** are in their first professional season. The club began in 2008 as the Gimhae City works team, won the first K3 League title after the 2020 restructuring and the K3 title again in 2025 under Son Hyun-jun, and was approved for K League 2 in January, making it a 17-team division alongside the other two newcomers, Yongin and Paju. The city funds the club at roughly 6 billion won a year. It has been a brutal first season: five defeats to start, a first professional win at Jeonnam on May 23, and 2 wins, 7 draws and 16 defeats after 25 matches. The mayor said at the end of September that the worst record by a new professional club had been five wins and ten draws, and that disbanding the club was one option if results do not improve. A public hearing on the club's future was scheduled for October 10, the same afternoon as their match against Chungnam Asan.
+**Gimhae FC** are in their first professional season. The club began in 2008 as the Gimhae City works team, won the first K3 League title after the 2020 restructuring and the K3 title again in 2025 under Son Hyun-jun, and was approved for K League 2 in January, making it a 17-team division alongside the other two newcomers, Yongin and Paju. The city funds the club at roughly 6 billion won a year. It has been a brutal first season: five defeats to start, a first professional win at Jeonnam on May 23, and 2 wins, 8 draws and 16 defeats after 26 matches. The mayor said at the end of September that the worst record by a new professional club had been five wins and ten draws, and that disbanding the club was one option if results do not improve. A public hearing on the club's future was scheduled for October 10, the same afternoon as their match against Chungnam Asan.
 
-**A new caretaker, the same face.** Son Hyun-jun left by mutual agreement on October 1. Choi Myeong-seong, the senior assistant coach, is in charge for the rest of the season. It is his third spell as caretaker this year: he covered Son's sick leave in May and a touchline ban in July, and both of Gimhae's league wins came on those occasions, 1-0 at Jeonnam and 1-0 at Cheonan. He has spent more than twenty years in the National League and K3; this is his first year in professional football. His message since taking over has been about attacking, not defending: he told the club's preview that Gimhae will play with the idea of scoring two whenever they concede one, and told a local paper he would rather think about how to break opponents down than how to stop them.
+**A new caretaker, the same face.** Son Hyun-jun left by mutual agreement on October 1. Choi Myeong-seong, the senior assistant coach, is in charge for the rest of the season. It is his third spell as caretaker this year: he covered Son's sick leave in May and a touchline ban in July, and both of Gimhae's league wins came on those occasions, 1-0 at Jeonnam and 1-0 at Cheonan. He has spent more than twenty years in the National League and K3; this is his first year in professional football. His message since taking over has been about attacking, not defending: he told the club's preview that Gimhae will play with the idea of scoring two whenever they concede one, and told a local paper he would rather think about how to break opponents down than how to stop them. His first match back, at home to Chungnam Asan on October 10, ended 1-1: Gwak Seong-uk scored on 17 from Lee Kang-uk's pass, Kim Ju-seong equalized on 63, and Gimhae had 14 shots to Asan's 11.
 
 **How they line up.** The official team sheets have listed a 3-4-3 for each of the last three matches. The regular eleven since the summer is built around goalkeeper and captain Choi Pil-su, who has started 22 of 25 and concedes almost two a game; Hong Wook-hyun, a 2004-born center-back signed from Busan who has started every match since arriving and, according to the club, makes more than 50 passes a game; Gwak Seong-uk, who captained the 2025 K3 title side; and wing-back Park Jae-hyeon. Up front, Beka Mikeltadze, the Georgian striker with K League 1 experience, has three goals; Lee Seung-jae is the top scorer with four, mostly as a substitute lately; and Woo Je-uk, a former gym trainer described in Korean media as the first Korean to play in Iceland, scored three in his first three matches after joining from Hwaseong in July, missed three rounds in late August and early September, and played the full ninety against Paju in Round 27. Park Yo-han takes the set pieces. Portuguese winger Ruben Macedo, a summer signing from Gyeongnam, has mostly come off the bench. Two of the season's foreign signings, Maissa Fall and Bruno Costa, have not played since July, and Costa is no longer on the club's roster.
 
-**The pattern.** Gimhae are not a team that sits in. Over their last six matches they have averaged 52 percent of the ball and more shots than their opponents, and the club describes its build-up from the back as one of the best in the league. The problem is at both ends. They have the fewest goals in the division, 19, and have failed to score in eight matches. And they collapse late: 16 of the 49 goals they have conceded came from the 76th minute onward, seven of them in second-half stoppage time. The Round 27 defeat to Paju was the season in miniature: 68 percent possession, 17 shots to 7, 12 corners to 2, and a 2-0 defeat completed in the sixth minute of added time.
+**The pattern.** Gimhae are not a team that sits in. Over their last six matches they have averaged 52 percent of the ball and more shots than their opponents, and the club describes its build-up from the back as one of the best in the league. The problem is at both ends. They have the fewest goals in the division, 20, and have failed to score in eight matches. And they collapse late: 16 of the 50 goals they have conceded came from the 76th minute onward, seven of them in second-half stoppage time. The Round 27 defeat to Paju was the season in miniature: 68 percent possession, 17 shots to 7, 12 corners to 2, and a 2-0 defeat completed in the sixth minute of added time.
 
 **Away from home.** Their away record, 2 wins, 4 draws and 7 defeats with 10 scored and 21 conceded, is better than their home record, which still has no wins. Both of their victories this season came on the road and both were 1-0.
 
-**Availability.** No injuries were reported in Gimhae's preview of the Chungnam Asan match. Miguel Baggio and Lee Yu-chan were on four cautions going into that game, one from a ban. Center-back Cha Jun-young, a regular since July, missed the Round 27 squad without a stated reason.
+**Availability.** No injuries have been reported. Woo Je-uk and Seong Ho-young were booked against Chungnam Asan; Miguel Baggio and Lee Yu-chan, both on four cautions and one from a ban, were not. Center-back Cha Jun-young, a regular since July, missed the Round 27 squad without a stated reason.
 
 ## Recent Opponent Form
 
 | Round | Date | Fixture | Result | Notes |
 | --- | --- | --- | --- | --- |
+| 28 | Oct 10 | Gimhae v Chungnam Asan (H) | D 1-1 | Gwak Seong-uk 17'; Choi Myeong-seong's first match of this caretaker spell |
 | 27 | Sep 20 | Gimhae v Paju (H) | L 0-2 | Own goal 11', Lee Dae-gwang 90+6'; Gimhae had 68% possession and 17 shots |
 | 26 | Sep 13 | Busan v Gimhae (A) | L 0-2 | Woo Je-uk back from a three-match absence at halftime |
 | 25 | Sep 5 | Gimhae v Jeonnam (H) | D 2-2 | Lee Seung-jae 17', Miguel Baggio 27'; led 2-1 and were pegged back nine minutes later |
 | 24 | Aug 30 | Gimhae v Yongin (H) | L 0-3 | Three down by 25 minutes; Seong Ho-young sent off for a second caution on 21 |
 | 23 | Aug 22 | Suwon FC v Gimhae (A) | L 0-2 | Second goal on 88 |
-| 22 | Aug 15 | Gimhae v Gyeongnam (H) | D 1-1 | Lee Kang-uk 58' |
 
-Season: 2-7-16, 19 scored, 49 conceded. Winless in nine league matches since July 10. Three goals in the last six. Gimhae host Chungnam Asan on October 10, Choi Myeong-seong's first match of this spell.
+Season: 2-8-16, 20 scored, 50 conceded. Winless in ten league matches since July 10. Three goals in the last six.
 
 ## How Seoul E-Land Match Up
 
@@ -124,14 +124,14 @@ The last two times Seoul had to grind out a win against a side like this, the be
 
 - Suwon FC's result at Seongnam on Saturday, and Suwon Samsung against Hwaseong at the same time as Seoul kick off.
 - Whether Kim Oh-kyu is back in the squad, and who starts on the left of the attack.
-- Gimhae's Saturday result against Chungnam Asan and the outcome of the city's public hearing on the club's future, held the same day.
+- Any news from the city's public hearing on Gimhae's future, scheduled for October 10.
 - Seoul's goal count. Every goal now has a value in the tiebreak.
 - Kim Hyun's 298th K League appearance, if he plays.
 - The awards for the club's women's and children's futsal festival, the Leul Cup, which will be presented on the pitch during the match.
 
 ## Forecast vs the Market
 
-The model makes it 81 percent Seoul, 15 percent draw and 4 percent Gimhae, with 2-0 the likeliest single score and a 66 percent chance of a Seoul clean sheet. That is the strongest read Seoul have for any remaining match. We found no bookmaker market for this fixture yet. One honest note on the model: until this week it carried a small downward adjustment to Gimhae's attack on the assumption that Woo Je-uk was injured. He is not, so the adjustment is gone; it moves the numbers by less than one point. What the model cannot capture is a new caretaker's first weeks, which have produced both of Gimhae's wins this season.
+The model makes it 82 percent Seoul, 14 percent draw and 4 percent Gimhae, with 2-0 the likeliest single score and a 64 percent chance of a Seoul clean sheet. That is the strongest read Seoul have for any remaining match. We found no bookmaker market for this fixture yet. One honest note on the model: until this week it carried a small downward adjustment to Gimhae's attack on the assumption that Woo Je-uk was injured. He is not, so the adjustment is gone; it moves the numbers by less than one point. What the model cannot capture is a new caretaker's first weeks, which have produced both of Gimhae's wins this season.
 
 ## Bottom Line
 
