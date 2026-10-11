@@ -148,12 +148,12 @@ function remarkUnresolvedWikiLinksAsText() {
 // Korean content links to the Korean edition wherever it has the page, so the
 // HTML that crawlers read already points at /ko/ (players always; rounds and
 // previews once their Korean version exists).
-function readKoreanSlugs(dir) {
+function readEditionSlugs(dir) {
   try {
     return new Set(
       readdirSync(new URL(`./src/content/${dir}`, import.meta.url))
         .filter((f) => f.endsWith(".md"))
-        .map((f) => (dir === "digests-ko" ? f.replace(/\.md$/i, "").replace(/ /g, "-").toLowerCase() : slugify(f))),
+        .map((f) => (dir.startsWith("digests-") ? f.replace(/\.md$/i, "").replace(/ /g, "-").toLowerCase() : slugify(f))),
     );
   } catch {
     return new Set();
@@ -161,8 +161,8 @@ function readKoreanSlugs(dir) {
 }
 
 function rehypeKoreanEditionLinks() {
-  const koRounds = readKoreanSlugs("digests-ko");
-  const koPreviews = readKoreanSlugs("prematch-previews-ko");
+  const koRounds = readEditionSlugs("digests-ko");
+  const koPreviews = readEditionSlugs("prematch-previews-ko");
   return (tree, file) => {
     const source = String(file.path ?? file.history?.[0] ?? "");
     if (!/[\\/]content[\\/][^\\/]+-ko[\\/]/.test(source)) return;
@@ -181,18 +181,31 @@ function rehypeKoreanEditionLinks() {
   };
 }
 
-// Portuguese content (digests-pt, articles-pt, guides-pt, ...) links player
-// wikilinks to the Portuguese profiles. Every roster player has a page under
-// /pt/players, so the rewrite never points at a page that does not exist.
-function rehypePortugueseEditionLinks() {
+// Portuguese content (digests-pt, articles-pt, guides-pt, ...) links to the
+// Portuguese edition the same way: players always (every roster player has a
+// page under /pt/players), rounds and previews once their Portuguese version
+// exists, so the rewrite never points at a page that does not exist. The
+// sections are passed as an option on purpose: Astro only re-renders cached
+// content when the markdown config it can see changes, so widening or
+// narrowing this list must show up in the config, not just in the code.
+function rehypePortugueseEditionLinks({ sections = ["players"] } = {}) {
+  const ptRounds = readEditionSlugs("digests-pt");
+  const ptPreviews = readEditionSlugs("prematch-previews-pt");
   return (tree, file) => {
     const source = String(file.path ?? file.history?.[0] ?? "");
     if (!/[\\/]content[\\/][^\\/]+-pt[\\/]/.test(source)) return;
     visit(tree, "element", (node) => {
       if (node.tagName !== "a" || typeof node.properties?.href !== "string") return;
       const href = node.properties.href;
-      if (!href.startsWith(`${linkBase}/players/`)) return;
-      node.properties.href = `${linkBase}/pt${href.slice(linkBase.length)}`;
+      if (!href.startsWith(`${linkBase}/`)) return;
+      const path = href.slice(linkBase.length);
+      const match = path.match(/^\/(players|rounds|previews)\/([^/?#]+)\/?([?#].*)?$/);
+      if (!match) return;
+      const [, section, slug, rest = ""] = match;
+      if (!sections.includes(section)) return;
+      const hasPortuguese =
+        section === "players" || (section === "rounds" ? ptRounds.has(slug) : ptPreviews.has(slug));
+      if (hasPortuguese) node.properties.href = `${linkBase}/pt/${section}/${slug}${rest}`;
     });
   };
 }
@@ -215,6 +228,9 @@ export default defineConfig({
       ],
       remarkUnresolvedWikiLinksAsText,
     ],
-    rehypePlugins: [rehypeKoreanEditionLinks, rehypePortugueseEditionLinks],
+    rehypePlugins: [
+      rehypeKoreanEditionLinks,
+      [rehypePortugueseEditionLinks, { sections: ["players", "rounds", "previews"] }],
+    ],
   },
 });
