@@ -181,6 +181,22 @@ function rehypeKoreanEditionLinks() {
   };
 }
 
+// Portuguese content (digests-pt, articles-pt, guides-pt, ...) links player
+// wikilinks to the Portuguese profiles. Every roster player has a page under
+// /pt/players, so the rewrite never points at a page that does not exist.
+function rehypePortugueseEditionLinks() {
+  return (tree, file) => {
+    const source = String(file.path ?? file.history?.[0] ?? "");
+    if (!/[\\/]content[\\/][^\\/]+-pt[\\/]/.test(source)) return;
+    visit(tree, "element", (node) => {
+      if (node.tagName !== "a" || typeof node.properties?.href !== "string") return;
+      const href = node.properties.href;
+      if (!href.startsWith(`${linkBase}/players/`)) return;
+      node.properties.href = `${linkBase}/pt${href.slice(linkBase.length)}`;
+    });
+  };
+}
+
 export default defineConfig({
   site,
   base,
@@ -199,6 +215,6 @@ export default defineConfig({
       ],
       remarkUnresolvedWikiLinksAsText,
     ],
-    rehypePlugins: [rehypeKoreanEditionLinks],
+    rehypePlugins: [rehypeKoreanEditionLinks, rehypePortugueseEditionLinks],
   },
 });
