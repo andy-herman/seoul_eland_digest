@@ -148,7 +148,10 @@
   "Ryu Seung-wan": "류승완",
   "Kim Ju-seong": "김주성",
   "Han Chan-hee": "한찬희",
-  "Ha Jung-woo": "하정우"
+  "Ha Jung-woo": "하정우",
+  "Gimcheon Sangmu": "김천상무",
+  "Gwangju FC": "광주FC",
+  "Jeonju": "전주"
  },
  "wrong_forms": {
   "서울이랜드": "서울 이랜드",
@@ -339,7 +342,9 @@
   "Yongin": "용인",
   "Ulsan HD": "울산 HD",
   "Ulsan": "울산",
-  "Jeonbuk": "전북"
+  "Jeonbuk": "전북",
+  "Gimcheon Sangmu": "김천상무",
+  "Gwangju FC": "광주"
  },
  "clubs_full": {
   "Seoul E-Land FC": "서울 이랜드 FC",
@@ -358,7 +363,9 @@
   "Seongnam FC": "성남FC",
   "Suwon Samsung Bluewings": "수원 삼성 블루윙즈",
   "Suwon FC": "수원FC",
-  "Yongin FC": "용인FC"
+  "Yongin FC": "용인FC",
+  "Gimcheon Sangmu": "김천상무",
+  "Gwangju FC": "광주FC"
  },
  "places": {
   "Mokdong Stadium": "목동종합운동장",
@@ -372,7 +379,8 @@
   "Changwon Football Center": "창원축구센터",
   "Gwangyang": "광양",
   "Yongin Mireu Stadium": "용인미르스타디움",
-  "Changwon": "창원"
+  "Changwon": "창원",
+  "Jeonju": "전주"
  },
  "mascots": {
   "Leoul": "레울",
