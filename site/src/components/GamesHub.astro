@@ -20,6 +20,9 @@ const copy = isKorean
       englishBadge: "영어",
       newBadge: "신규",
       play: "게임 열기",
+      storage: "점수와 진행 상황은 이 브라우저에만 저장되며 서버로 전송되지 않습니다. 언제든",
+      storageLink: "개인정보 처리방침",
+      storageAfter: " 페이지에서 지울 수 있습니다.",
       credit:
         "레울, 레냥, 서울의 노래(2024 ver), 사랑하는 나의 서울 이랜드(2022 ver)는 서울 이랜드 FC의 자산입니다. 다른 K리그2 마스코트는 각 구단의 자산이며, 허가를 받아 사용했습니다.",
     }
@@ -30,6 +33,9 @@ const copy = isKorean
       intro: "Onze jogos com os mascotes e jogadores do Seoul E-Land. Todos funcionam no celular, e a trilha são as músicas do próprio clube, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022).",
       newBadge: "Novo",
       play: "Jogar",
+      storage: "Pontuações e progresso ficam salvos só neste navegador e nunca são enviados a um servidor. Você pode apagá-los quando quiser na",
+      storageLink: "página de privacidade",
+      storageAfter: ".",
       credit:
         "Leoul, Lenyang e as músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão.",
     }
@@ -39,6 +45,9 @@ const copy = isKorean
       intro: "Eleven games starring Seoul E-Land's mascots and players. They all work on your phone, and the soundtrack is the club's own songs, 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver).",
       newBadge: "New",
       play: "Play",
+      storage: "Scores and progress are saved only in this browser and are never sent to a server. You can clear them at any time on the",
+      storageLink: "privacy page",
+      storageAfter: ".",
       credit:
         "Leoul, Lenyang and the songs 서울의 노래 (2024 ver) and 사랑하는 나의 서울 이랜드 (2022 ver) belong to Seoul E-Land FC. The other K League 2 mascots belong to their clubs. All are used with permission.",
     };
@@ -299,6 +308,7 @@ const games = [
     ))}
   </ul>
 
+  <p class="games-credit">{copy.storage} <a href={withBase(`${isKorean ? "/ko" : isPortuguese ? "/pt" : ""}/privacy#browser-storage`)}>{copy.storageLink}</a>{copy.storageAfter}</p>
   <p class="games-credit">{copy.credit}</p>
 </div>
 

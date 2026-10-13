@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/paths";
+
+const CONTACT_EMAIL = "hello@seoulelanddigest.com";
+const UPDATED = "October 13, 2026";
+---
+
+<BaseLayout
+  title="Credits and disclaimer — Seoul E-Land Digest"
+  description="Seoul E-Land Digest is an unofficial fan site. Who owns the club names, crests, mascots, songs, photos and data used on the site, and how to ask for a change."
+>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">Policies</p>
+        <h1 class="mt-4 text-4xl font-black uppercase tracking-tight sm:text-5xl">Credits and disclaimer</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          Last updated {UPDATED}.
+        </p>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <h2 id="disclaimer">Disclaimer</h2>
+        <p>
+          Seoul E-Land Digest is an independent, unofficial fan site. It is not affiliated with, endorsed by, sponsored by or connected to Seoul E-Land FC, E-Land Group, the K League (Korea Professional Football League) or any other club. Opinions on the site are the author's own and do not represent any club or the league.
+        </p>
+
+        <h2 id="marks">Names, crests and mascots</h2>
+        <p>
+          "Seoul E-Land FC", its crest and its mascots Leoul and Lenyang are the property of Seoul E-Land FC. The names, crests and mascots of other clubs belong to those clubs, and "K League" and its marks belong to the Korea Professional Football League. They appear on this site only to identify the clubs and the competition and to report and comment on them. No endorsement is implied.
+        </p>
+        <p>
+          The Digest's leopard logo was made for this site. It is not the club's crest and is not meant to be mistaken for it.
+        </p>
+
+        <h2 id="photos">Photos and crests</h2>
+        <ul>
+          <li><strong>Player photos</strong> are © Seoul E-Land FC and are displayed from the club's official website, seoulelandfc.com.</li>
+          <li><strong>Club crests</strong> are the property of their clubs. Most are hosted on this site so pages load quickly; the Korean Cup bracket shows crests directly from the K League's website, kleague.com.</li>
+        </ul>
+
+        <h2 id="games">The games</h2>
+        <ul>
+          <li>Leoul and Lenyang, and the songs 서울의 노래 (2024 version) and 사랑하는 나의 서울 이랜드 (2022 version), belong to Seoul E-Land FC and are used with permission.</li>
+          <li>The other K League 2 mascots belong to their clubs and are used with permission.</li>
+          <li>The Mokdong stand, drums and notes in Seoul Song Rhythm were made in Blender for the game, and its note charts were built from a beat and melody analysis of each song.</li>
+        </ul>
+
+        <h2 id="data">Data and reporting</h2>
+        <ul>
+          <li>Results, standings and match statistics come from the K League's official data at kleague.com.</li>
+          <li>Squad lists, player details and club announcements come from Seoul E-Land FC's official website.</li>
+          <li>Quotes from Korean newspapers and sports sites are short extracts, credited to the outlet and linked to the original article. Those articles remain the property of their publishers.</li>
+        </ul>
+
+        <h2 id="type">Typeface</h2>
+        <p>
+          The site is set in Pretendard by Kil Hyung-jin, used under the SIL Open Font License 1.1 (<a href={withBase("/fonts/Pretendard-OFL.txt")}>licence text</a>).
+        </p>
+
+        <h2 id="requests">Corrections and rights requests</h2>
+        <p>
+          If you own something on this site and want it removed, credited differently or linked, or if a credit here is wrong, email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. See <a href={withBase("/terms#rights")}>Rights and takedown requests</a> for what to include.
+        </p>
+        <p>
+          See also: <a href={withBase("/privacy")}>Privacy</a> · <a href={withBase("/terms")}>Terms of use</a> · <a href={withBase("/about")}>About</a>
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

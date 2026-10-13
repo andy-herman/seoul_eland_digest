@@ -5,7 +5,8 @@
   font-weight: 45 920;
   font-style: normal;
   font-display: swap;
-  src: url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/packages/pretendard/dist/web/variable/woff2/PretendardVariable.woff2") format("woff2-variations");
+  /* Self-hosted (SIL Open Font License, see /fonts/Pretendard-OFL.txt) so no third-party font CDN sees readers' IP addresses. */
+  src: url("../assets/fonts/PretendardVariable.woff2") format("woff2-variations");
 }
 
 @theme {

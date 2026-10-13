@@ -1,0 +1,159 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/paths";
+import PrivacyControls from "../components/PrivacyControls.astro";
+import TranslateButton from "../components/TranslateButton.astro";
+
+const CONTACT_EMAIL = "hello@seoulelanddigest.com";
+const UPDATED = "October 13, 2026";
+---
+
+<BaseLayout
+  title="Privacy — Seoul E-Land Digest"
+  description="What Seoul E-Land Digest collects (very little), the cookieless analytics and how to turn them off, how the games store progress in your browser, and your privacy rights."
+>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">Policies</p>
+        <h1 class="mt-4 text-4xl font-black uppercase tracking-tight sm:text-5xl">Privacy</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          Last updated {UPDATED}.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <TranslateButton href="/pt/privacy" code="PT" label="Português" ariaLabel="Ler a política de privacidade em português" hreflang="pt-BR" />
+          <TranslateButton href="/ko/privacy" code="KO" label="한국어" ariaLabel="개인정보 처리방침 한국어로 보기" hreflang="ko" />
+        </div>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <h2 id="summary">The short version</h2>
+        <ul>
+          <li>There are no accounts, no comments, no forms, no ads and no tracking cookies.</li>
+          <li>The site counts visits with Vercel Web Analytics, which uses no cookies and cannot identify you. You can <a href="#analytics">turn it off</a>.</li>
+          <li>The games save scores and progress in your own browser. That data never leaves your device, and you can <a href="#browser-storage">clear it</a>.</li>
+          <li>Clap for Seoul uses your microphone only while you play, and the sound never leaves your device.</li>
+          <li>Nothing about you is sold or shared for advertising.</li>
+        </ul>
+
+        <h2 id="who">Who is responsible</h2>
+        <p>
+          Seoul E-Land Digest is run by Andy Herman in Seattle, Washington, USA, who is responsible for the personal data described here (the "controller" under the GDPR and Brazil's LGPD, and the privacy officer for the purposes of Korea's Personal Information Protection Act). For any privacy question or request, email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+        </p>
+
+        <h2 id="collected">What is collected, and why</h2>
+        <h3>When you visit any page</h3>
+        <p>
+          The site is hosted by Vercel. Like any web server, Vercel receives technical information with each request, such as your IP address, browser type and the page you asked for, so it can deliver the page and protect the site against abuse. Vercel handles this under its own <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>.
+        </p>
+
+        <h3 id="analytics">Visitor statistics</h3>
+        <p>
+          To see which pages are read, the site uses <a href="https://vercel.com/docs/analytics/privacy-policy" target="_blank" rel="noopener noreferrer">Vercel Web Analytics</a>. It records the page viewed, the referring site, your country, and your browser, operating system and device type. It sets no cookies and stores nothing on your device. To count unique visitors it uses a hash of the incoming request, which Vercel discards after 24 hours, and the reports I see are totals only. I cannot identify you from them, and they are not combined with any other data.
+        </p>
+        <p>
+          Analytics is skipped automatically if your browser sends a Global Privacy Control signal. You can also turn it off in this browser here:
+        </p>
+        <PrivacyControls kind="analytics" />
+
+        <h3 id="browser-storage">Browser storage used by the games</h3>
+        <p>
+          The games and Lenyang's Paw Hunt save your scores, unlocked cards, settings and progress in your browser's local storage, and the analytics switch above saves your choice the same way. This data stays on your device: it is never sent to the site or to anyone else. It is only used for features you choose to use, so it needs no cookie banner, and it stays until you clear it. This button deletes all of it for this site (your analytics choice is kept):
+        </p>
+        <PrivacyControls kind="clear" />
+        <p>You can also clear it at any time through your browser's settings for this site.</p>
+
+        <h3>Microphone (Clap for Seoul)</h3>
+        <p>
+          Clap for Seoul asks for permission to use your microphone so you can clap and chant along. The microphone is used only while a match is playing, the sound is analysed on your device, and nothing is recorded, stored or uploaded. You can refuse and play in tap mode instead.
+        </p>
+
+        <h3>Sharing</h3>
+        <p>
+          Some games have share buttons. They use your device's own share menu or clipboard, and nothing passes through this site.
+        </p>
+
+        <h3>If you email me</h3>
+        <p>
+          If you write to {CONTACT_EMAIL}, I receive your email address and whatever you include in the message. I use it only to reply and to keep a record of corrections and requests, and I delete it on request or once it is no longer needed.
+        </p>
+
+        <h3>If you leave a tip</h3>
+        <p>
+          Tips go through <a href="https://buymeacoffee.com/seoulelands" target="_blank" rel="noopener noreferrer">Buy Me a Coffee</a>, which processes your payment under its own <a href="https://buymeacoffee.com/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>. I never see your card details. Buy Me a Coffee shares some details with me, such as the name you give, your message and the amount, and sometimes your email address, which I use only to say thank you.
+        </p>
+
+        <h2 id="third-party">Content loaded from other sites</h2>
+        <p>
+          Player photos are shown directly from Seoul E-Land FC's website (cdn.seoulelandfc.com), and the crests in the Korean Cup bracket from the K League's website (kleague.com). When your browser loads those images, those sites receive your IP address and browser details, as they would if you visited them, and handle them under their own policies. Links to other sites, such as news articles, YouTube and Buy Me a Coffee, lead to services with their own privacy policies.
+        </p>
+
+        <h2 id="not-done">What is not done</h2>
+        <p>
+          No personal data is sold, rented or shared for advertising. There are no ads, no advertising or social-media trackers, no profiles and no cross-site tracking. The fonts are served from this site, not from a third-party font service.
+        </p>
+
+        <h2 id="legal-bases">Legal bases (EU, UK and Brazil)</h2>
+        <ul>
+          <li><strong>Hosting and security:</strong> legitimate interests in running a safe, working website.</li>
+          <li><strong>Visitor statistics:</strong> legitimate interests in understanding which pages are useful, using a cookieless, aggregated tool. You can object at any time with the switch above.</li>
+          <li><strong>Browser storage for the games:</strong> strictly necessary to provide a feature you choose to use.</li>
+          <li><strong>Emails and tips:</strong> to respond to you and handle your request.</li>
+        </ul>
+
+        <h2 id="providers">Service providers and international transfers</h2>
+        <p>
+          The site relies on Vercel Inc. (hosting and analytics, USA) and Buy Me a Coffee (tips). A mirror of the site is also served by GitHub Pages (GitHub, Inc., USA); if you visit the mirror, GitHub receives the same technical information that Vercel does. These providers may process data in the United States. Where the law requires it, they rely on recognised safeguards such as standard contractual clauses or the EU-US Data Privacy Framework.
+        </p>
+
+        <h2 id="retention">How long data is kept</h2>
+        <ul>
+          <li>Analytics: the visitor hash is discarded after 24 hours; only aggregated totals are kept.</li>
+          <li>Server logs: kept by Vercel for a short period under its own retention rules.</li>
+          <li>Emails: until your request is handled and no longer needed, or until you ask me to delete them.</li>
+          <li>Game data: in your browser until you clear it.</li>
+        </ul>
+
+        <h2 id="rights">Your rights</h2>
+        <p>
+          Depending on where you live, you may have the right to know what personal data I hold about you, to get a copy, to have it corrected or deleted, to object to or restrict its use, and to withdraw consent. Because the site has no accounts, I usually hold nothing that identifies you beyond any emails you have sent. To use any of these rights, email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. I will reply within 30 days at the latest, or sooner where local law sets a shorter deadline (for example, 10 days for access requests under Korea's Personal Information Protection Act and 15 days for full access requests under Brazil's LGPD). You also have the right to complain to your data protection authority, such as your national authority in the EU, the Information Commissioner's Office in the UK, the ANPD in Brazil or the Personal Information Protection Commission in Korea.
+        </p>
+
+        <h2 id="korea">For readers in Korea</h2>
+        <p>Under Korea's Personal Information Protection Act:</p>
+        <ul>
+          <li><strong>Items processed:</strong> technical connection data (IP address, browser and device details, pages viewed) through hosting and analytics; your email address and message if you write; supporter details shared by Buy Me a Coffee if you leave a tip.</li>
+          <li><strong>Purposes:</strong> delivering and securing the site, counting visits, replying to messages and thanking supporters.</li>
+          <li><strong>Retention:</strong> as set out above; data is destroyed without delay once its purpose is met.</li>
+          <li><strong>Provision to third parties:</strong> none.</li>
+          <li><strong>Entrusted processing:</strong> hosting and visitor statistics are entrusted to Vercel Inc. (USA); tips are processed by Buy Me a Coffee.</li>
+          <li><strong>Overseas transfer:</strong> when you visit, technical connection data is sent over the network to Vercel Inc. in the United States and processed for delivering the site and counting visits, for the periods above. Vercel's contact details are in its <a href="https://vercel.com/legal/privacy-policy" target="_blank" rel="noopener noreferrer">privacy policy</a>. You can refuse the visitor statistics with the switch above, but the transfer needed for hosting cannot be refused if you want to use the site.</li>
+          <li><strong>Automatic collection tools:</strong> no cookies are used. Browser storage is used only for the games; you can delete it with the button above or in your browser settings, and refuse analytics with the switch above.</li>
+          <li><strong>Privacy officer:</strong> Andy Herman, <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.</li>
+          <li><strong>Remedies:</strong> the Personal Information Dispute Mediation Committee (www.kopico.go.kr, 1833-6972), the KISA Privacy Center (privacy.kisa.or.kr, phone 118), the Supreme Prosecutors' Office (1301) and the Korean National Police Agency (182).</li>
+        </ul>
+
+        <h2 id="brazil">For readers in Brazil</h2>
+        <p>
+          Under the LGPD you have the rights listed in Article 18, including confirmation of processing, access, correction, deletion and information about sharing. As a small-scale processing agent, this site does not appoint a data protection officer (encarregado); under ANPD Resolution CD/ANPD No. 2/2022 it offers <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> as the channel for exercising them. You may also complain to the Autoridade Nacional de Proteção de Dados (ANPD).
+        </p>
+
+        <h2 id="children">Children</h2>
+        <p>
+          The site and the games are suitable for all ages. No personal information is collected from anyone through them, including children under 13: there are no sign-ups, and game data stays on the device. If a child has emailed me and a parent would like the message deleted, email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+        </p>
+
+        <h2 id="changes">Changes to this policy</h2>
+        <p>
+          If this policy changes, the date at the top will change too, and significant changes will be explained on this page.
+        </p>
+        <p>
+          See also: <a href={withBase("/terms")}>Terms of use</a> · <a href={withBase("/credits")}>Credits and disclaimer</a> · <a href={withBase("/about")}>About</a>
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
+

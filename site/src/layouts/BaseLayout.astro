@@ -101,7 +101,20 @@ const jsonLd =
     {description && <meta name="twitter:description" content={description} />}
     <meta name="twitter:image" content={ogImageUrl} />
     {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
-    <script defer src={withBase("/_vercel/insights/script.js")}></script>
+    {/* Cookieless Vercel Web Analytics. Skipped when the reader has turned it off on
+        the Privacy page (localStorage "sed-analytics-off") or the browser sends a
+        Global Privacy Control signal. */}
+    <script is:inline define:vars={{ analyticsSrc: withBase("/_vercel/insights/script.js") }}>
+      (function () {
+        try {
+          if (navigator.globalPrivacyControl === true || localStorage.getItem("sed-analytics-off") === "1") return;
+        } catch (e) {}
+        var s = document.createElement("script");
+        s.defer = true;
+        s.src = analyticsSrc;
+        document.head.appendChild(s);
+      })();
+    </script>
   </head>
   <body class="min-h-screen flex flex-col">
     <Header locale={locale} />

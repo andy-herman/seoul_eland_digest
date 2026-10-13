@@ -32,6 +32,12 @@ const year = new Date().getFullYear();
         <a href={withBase("/support")} class="inline-flex min-h-11 items-center font-black no-underline transition-colors hover:text-white sm:min-h-0" style="color: var(--color-gold-light);">{isKorean ? "후원" : isPortuguese ? "Apoie" : "Support me"}</a>
         <a href={withBase("/about")} class="inline-flex min-h-11 items-center font-black no-underline transition-colors hover:text-white sm:min-h-0" style="color: var(--color-gold-light);">{isKorean ? "소개" : isPortuguese ? "Sobre" : "About"}</a>
       </div>
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs sm:justify-end">
+        <a href={withBase(isKorean ? "/ko/privacy" : isPortuguese ? "/pt/privacy" : "/privacy")} class="inline-flex min-h-11 items-center no-underline transition-colors hover:text-white sm:min-h-0" style="color: var(--color-muted);">{isKorean ? "개인정보 처리방침" : isPortuguese ? "Privacidade" : "Privacy"}</a>
+        <a href={withBase("/terms")} class="inline-flex min-h-11 items-center no-underline transition-colors hover:text-white sm:min-h-0" style="color: var(--color-muted);">{isKorean ? "이용약관" : isPortuguese ? "Termos de uso" : "Terms"}</a>
+        <a href={withBase("/credits")} class="inline-flex min-h-11 items-center no-underline transition-colors hover:text-white sm:min-h-0" style="color: var(--color-muted);">{isKorean ? "출처 및 고지" : isPortuguese ? "Créditos" : "Credits"}</a>
+      </div>
+      <span>{isKorean ? "비공식 팬 사이트이며 서울 이랜드 FC 및 K리그와 관련이 없습니다." : isPortuguese ? "Site de torcedor, não oficial, sem vínculo com o Seoul E-Land FC ou a K League." : "Unofficial fan site, not affiliated with Seoul E-Land FC or the K League."}</span>
       <span>© {year} Seoul E-Land Digest</span>
       <span>{isKorean ? "레오파드 팬을 위해 만들었습니다." : isPortuguese ? "Feito para torcedores dos Leopards." : "Made for fans of the Leopards."}</span>
     </div>

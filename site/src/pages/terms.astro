@@ -1,0 +1,105 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { withBase } from "../lib/paths";
+
+const CONTACT_EMAIL = "hello@seoulelanddigest.com";
+const UPDATED = "October 13, 2026";
+const year = new Date().getFullYear();
+---
+
+<BaseLayout
+  title="Terms of use — Seoul E-Land Digest"
+  description="The terms for using Seoul E-Land Digest: sharing and quoting the content, accuracy and the promotion model, the games, tips, rights and takedown requests."
+>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">Policies</p>
+        <h1 class="mt-4 text-4xl font-black uppercase tracking-tight sm:text-5xl">Terms of use</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          Last updated {UPDATED}.
+        </p>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <p>
+          Seoul E-Land Digest (seoulelanddigest.com and its mirrors) is an independent, fan-made website run by Andy Herman. By using it you agree to these terms. They are written to be short and readable; if anything is unclear, email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+        </p>
+
+        <h2 id="unofficial">An unofficial site</h2>
+        <p>
+          The site is not affiliated with, endorsed by or connected to Seoul E-Land FC, E-Land Group or the K League. Nothing here is an official statement from any club or the league. Club names, crests, mascots and other marks belong to their owners and are used only to identify them; see <a href={withBase("/credits")}>Credits and disclaimer</a>.
+        </p>
+
+        <h2 id="content">Using the content</h2>
+        <p>
+          The original writing, translations, graphics, data visualisations and games on this site are © {year} Andy Herman (Seoul E-Land Digest), except where material belongs to someone else, as noted on the Credits page.
+        </p>
+        <ul>
+          <li>You are welcome to share links to any page and to quote short passages, as long as you credit Seoul E-Land Digest and link to the original.</li>
+          <li>Please do not republish whole articles or translations, scrape the site in bulk, or use the content commercially without written permission.</li>
+          <li>Third-party material shown on the site, such as player photos, crests and quotes from other publications, belongs to its owners and is not covered by this permission.</li>
+        </ul>
+
+        <h2 id="accuracy">Accuracy, the model and betting</h2>
+        <p>
+          The Digest is written with care and checked against named sources, but it is provided "as is". Information can be wrong, incomplete or out of date, and opinions are opinions. The projections and promotion odds on the site come from simple models; they are estimates, not predictions or guarantees.
+        </p>
+        <p>
+          <strong>Nothing on this site is betting, financial or professional advice.</strong> Please do not rely on it for betting or any other financial decision.
+        </p>
+
+        <h2 id="ai">AI-assisted content</h2>
+        <p>
+          AI tools help with research, drafting and translation. All content is reviewed and edited by a person before it is published, and the site takes responsibility for what it publishes. See <a href={withBase("/about#sources")}>Sources, AI and the model</a>.
+        </p>
+
+        <h2 id="games">The games</h2>
+        <ul>
+          <li>The games are free and for fun. There is nothing to buy, no prizes and no accounts.</li>
+          <li>Progress is stored only in your browser and can be lost if you clear your browser data or switch devices.</li>
+          <li>Games may be changed, rebalanced or removed at any time.</li>
+          <li>Clap for Seoul uses your microphone only with your permission; please play at a sensible volume and be considerate of people around you.</li>
+        </ul>
+
+        <h2 id="tips">Tips and support</h2>
+        <ul>
+          <li>Tips through Buy Me a Coffee are entirely voluntary. They are a thank-you, not a purchase: they do not buy goods, services, perks, access or influence over coverage.</li>
+          <li>Seoul E-Land Digest is not a charity, so tips are not tax-deductible.</li>
+          <li>Tips are processed by Buy Me a Coffee under its own <a href="https://buymeacoffee.com/terms" target="_blank" rel="noopener noreferrer">terms</a>. If you tip by mistake or are charged twice, email me and the payment will be refunded. Otherwise tips are not refundable, except where the law requires.</li>
+        </ul>
+
+        <h2 id="links">Links to other sites</h2>
+        <p>
+          The site links to news articles, official club and league pages, video channels and other services. They are run by others, and the Digest is not responsible for their content or their privacy practices.
+        </p>
+
+        <h2 id="rights">Rights and takedown requests</h2>
+        <p>
+          If you own material that appears on this site and believe it is used without permission, or want it credited differently, email <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> with:
+        </p>
+        <ul>
+          <li>what the material is and the page where it appears;</li>
+          <li>who you are and how you hold the rights;</li>
+          <li>what you would like done: removal, a different credit or a link.</li>
+        </ul>
+        <p>Requests are reviewed promptly, and material is removed or corrected where the request is valid.</p>
+
+        <h2 id="liability">Liability</h2>
+        <p>
+          To the extent the law allows, Seoul E-Land Digest is not liable for any loss or damage arising from your use of the site, its content or the games. Nothing in these terms limits any right you have that cannot be limited by law.
+        </p>
+
+        <h2 id="changes">Changes</h2>
+        <p>
+          These terms may be updated from time to time. The date at the top shows when they last changed.
+        </p>
+        <p>
+          See also: <a href={withBase("/privacy")}>Privacy</a> · <a href={withBase("/credits")}>Credits and disclaimer</a> · <a href={withBase("/about")}>About</a>
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
