@@ -21,12 +21,13 @@ const svg = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" xmlns="http
   <text x="434" y="560" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#B38259" letter-spacing="4">SUPPORTER PUBLICATION · EN / PT / KO</text>
 </svg>`;
 
-const crest = await sharp("public/assets/crest.png")
-  .resize({ height: 380 })
+// The Digest's own badge (leopard over the Seattle skyline), not the club crest.
+const badge = await sharp("public/assets/brand/badge-512.png")
+  .resize({ width: 384, height: 384 })
   .toBuffer();
 
 await sharp(Buffer.from(svg))
-  .composite([{ input: crest, left: 105, top: 125 }])
+  .composite([{ input: badge, left: 30, top: 118 }])
   .png()
   .toFile("public/assets/og-card.png");
 

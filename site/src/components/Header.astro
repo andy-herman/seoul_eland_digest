@@ -291,14 +291,12 @@ const featureRows = { matches: matchRows, season: seasonRows };
        column. -->
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-1.5 sm:px-6 md:gap-6 md:py-3">
     <a href={withBase("/")} class="flex items-center gap-3 no-underline" aria-label="Seoul E-Land Digest home">
-      <span class="flex h-9 w-[4.6rem] items-center justify-center rounded-xl bg-white px-1.5 shadow-lg shadow-black/20 min-[380px]:h-10 min-[380px]:w-20 min-[380px]:px-2 lg:h-11 lg:w-24 lg:px-3">
-        <img src={withBase("/assets/logo-official.svg")} alt="Seoul E-Land FC" class="h-7 w-auto min-[380px]:h-8" />
-      </span>
+      <img src={withBase("/assets/brand/badge-192.webp")} alt="" width="48" height="48" class="h-10 w-10 shrink-0 rounded-full shadow-lg shadow-black/30 min-[380px]:h-11 min-[380px]:w-11 lg:h-12 lg:w-12" />
       <!-- The wordmark used to appear at sm, the exact width where the nav also
            starts sharing the row with the logo. Those two together were the
            640px pinch. It waits for lg now, alongside the nav's own sizing. -->
       <span class="hidden lg:block leading-tight">
-        <span class="block text-sm font-black uppercase tracking-[0.18em]" style="color: var(--color-ink);">Digest</span>
+        <span class="block text-sm font-black uppercase tracking-[0.18em]" style="color: var(--color-ink);">Seoul E-Land Digest</span>
         <span class="block text-[0.68rem] font-bold uppercase tracking-[0.2em]" style="color: var(--color-gold-light);">
           {lang === "ko" ? "팬이 만드는 독립 매체" : isPortuguese ? "Publicação de torcida" : "Supporter publication"}
         </span>
