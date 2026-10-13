@@ -53,7 +53,7 @@ const jsonLd =
         inLanguage: locale === "pt" ? "pt-BR" : htmlLang[locale],
         image: [ogImageUrl],
         author: { "@type": "Organization", name: siteName },
-        publisher: { "@type": "Organization", name: siteName, logo: { "@type": "ImageObject", url: new URL(withBase("/assets/brand/badge-512.png"), Astro.site).href, width: 512, height: 512 } },
+        publisher: { "@type": "Organization", name: siteName, logo: { "@type": "ImageObject", url: new URL(withBase("/assets/brand/leopard-logo-512.png"), Astro.site).href, width: 512, height: 512 } },
         mainEntityOfPage: canonicalUrl,
       })
     : undefined;
@@ -78,9 +78,9 @@ const jsonLd =
       />
     ))}
     <link rel="icon" href={withBase("/favicon.ico")} sizes="16x16 32x32" />
-    <link rel="icon" type="image/png" sizes="32x32" href={withBase("/assets/brand/favicon-32.png")} />
-    <link rel="icon" type="image/png" sizes="192x192" href={withBase("/assets/brand/icon-192.png")} />
-    <link rel="apple-touch-icon" href={withBase("/assets/brand/apple-touch-icon.png")} />
+    <link rel="icon" type="image/png" sizes="32x32" href={withBase("/assets/brand/leopard-favicon-32.png")} />
+    <link rel="icon" type="image/png" sizes="192x192" href={withBase("/assets/brand/leopard-icon-192.png")} />
+    <link rel="apple-touch-icon" href={withBase("/assets/brand/leopard-apple-touch.png")} />
     <link rel="alternate" type="application/rss+xml" title={siteName} href={new URL(withBase(locale === "ko" ? "/ko/rss.xml" : "/rss.xml"), Astro.site).href} />
     <link rel="sitemap" href={withBase("/sitemap.xml")} />
     <meta property="og:site_name" content={siteName} />
