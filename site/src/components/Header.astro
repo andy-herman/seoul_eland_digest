@@ -292,9 +292,14 @@ const featureRows = { matches: matchRows, season: seasonRows };
   <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-1.5 sm:px-6 md:gap-6 md:py-3">
     <a href={withBase("/")} class="flex items-center gap-3 no-underline" aria-label="Seoul E-Land Digest home">
       <img src={withBase("/assets/brand/badge-192.webp")} alt="" width="48" height="48" class="h-10 w-10 shrink-0 rounded-full shadow-lg shadow-black/30 min-[380px]:h-11 min-[380px]:w-11 lg:h-12 lg:w-12" />
-      <!-- The wordmark used to appear at sm, the exact width where the nav also
-           starts sharing the row with the logo. Those two together were the
-           640px pinch. It waits for lg now, alongside the nav's own sizing. -->
+      <!-- The badge has no lettering, so a short stacked title sits beside it
+           at every width (the old club logo carried the name). The full title
+           with the tagline waits for lg, alongside the nav's own sizing; it
+           used to sit at sm, which caused the 640px pinch with the nav. -->
+      <span class="block leading-tight lg:hidden">
+        <span class="block text-[0.72rem] font-black uppercase tracking-[0.14em] min-[380px]:text-[0.8rem] md:text-sm" style="color: var(--color-ink);">Seoul E-Land</span>
+        <span class="block text-[0.72rem] font-black uppercase tracking-[0.34em] min-[380px]:text-[0.8rem] md:text-sm" style="color: var(--color-gold-light);">Digest</span>
+      </span>
       <span class="hidden lg:block leading-tight">
         <span class="block text-sm font-black uppercase tracking-[0.18em]" style="color: var(--color-ink);">Seoul E-Land Digest</span>
         <span class="block text-[0.68rem] font-bold uppercase tracking-[0.2em]" style="color: var(--color-gold-light);">
