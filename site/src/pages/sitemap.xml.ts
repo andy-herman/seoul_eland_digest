@@ -32,6 +32,8 @@ const STATIC_PATHS = [
   "/play/tifo-master",
   "/support",
   "/about",
+  "/pt/about",
+  "/ko/about",
   "/privacy",
   "/pt/privacy",
   "/ko/privacy",

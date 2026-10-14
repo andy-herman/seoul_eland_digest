@@ -1,0 +1,190 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import { withBase } from "../../lib/paths";
+import { safeGetCollection } from "../../lib/safeContent";
+import { getPreMatchPreviews } from "../../lib/prematchPreviews";
+
+const CONTACT_EMAIL = "hello@seoulelanddigest.com";
+const coffeeUrl = "https://buymeacoffee.com/seoulelands";
+
+const rounds = (await safeGetCollection("digestsKo")).length;
+const articles = (await safeGetCollection("articlesKo")).length;
+const previews = getPreMatchPreviews("ko").length;
+
+// The games open in English for now (no Korean game pages yet), so links go to /play/<slug>.
+const games = [
+  { slug: "tifo-master", title: "Tifo Master", desc: "목동 북측 스탠드의 카드섹션을 직접 설계하고 관중석이 들어 올리는 장면을 본 뒤, 잘못된 카드를 든 팬을 찾아내는 게임." },
+  { slug: "yut-nori", title: "Yut Nori FC", desc: "축구장 위에서 펼치는 윷놀이. 컴퓨터와 겨루거나 한 기기로 친구와 함께 즐길 수 있다." },
+  { slug: "clap-for-seoul", title: "Clap for Seoul", desc: "마이크가 컨트롤러다. 구단 노래 박자에 맞춰 박수 치고 응원해 팀을 골문 앞으로 밀어 준다. 탭 모드도 있다." },
+  { slug: "take-five", title: "Take Five", desc: "패스, 침투, 마무리를 하나씩 직접 녹화해 골을 완성하는 1인 5대5 축구. 12개 레벨과 이번 시즌 경기가 들어 있다." },
+  { slug: "paw-hunt", title: "레냥의 발자국 찾기", desc: "사이트 전체에서 벌이는 보물찾기. 수수께끼를 풀고 숨겨진 발자국 21개를 모두 찾으면 인증서를 받는다." },
+  { slug: "seoul-song", title: "Seoul Song Rhythm", desc: "레울, 레냥, 목동 서포터즈와 함께 구단 노래 두 곡에 맞춰 북을 치는 리듬 게임. 쉬움, 보통, 어려움 난이도가 있다." },
+  { slug: "mascot-kart", title: "Mascot Kart", desc: "다른 K리그2 마스코트들과 겨루는 카트 레이스. 2개 컵, 8개 트랙." },
+  { slug: "head-to-head", title: "Head-to-Head League", desc: "실제 2026 선수단으로 5인 팀을 이끌고 실시간 순위표와 함께 16경기 시즌을 치른다." },
+  { slug: "balloon-battle", title: "Balloon Battle", desc: "6개 월드와 6번의 보스전에서 라이벌 마스코트를 물풍선에 가두는 게임." },
+  { slug: "dribble-dash", title: "Dribble Dash", desc: "공을 몰고 끝없이 달리며 태클을 뛰어넘고 마스코트 앨범을 채우는 게임." },
+  { slug: "penalty-party", title: "Penalty Party", desc: "레울로 페널티킥을 차거나 레냥으로 골문을 지키며 마스코트 카드 12장을 모으는 게임." },
+];
+
+const sections = [
+  ["who", "만드는 사람"],
+  ["structure", "사이트 구성"],
+  ["digest", "라운드 리뷰의 구성"],
+  ["editions", "세 가지 언어판"],
+  ["games", "게임"],
+  ["sources", "출처, AI, 예측 모델"],
+  ["standards", "원칙과 정정"],
+  ["support", "후원"],
+  ["contact", "연락처"],
+];
+---
+
+<BaseLayout
+  title="소개 — 서울 이랜드 다이제스트"
+  description="서울 이랜드 다이제스트를 누가 만드는지, 사이트 구성, 라운드 리뷰와 프리뷰, 승격 레이스, 마스코트 게임이 어떻게 운영되는지, 정보의 출처와 연락 방법을 안내합니다."
+  lang="ko"
+>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">다이제스트 소개</p>
+        <h1 class="mt-4 text-4xl font-black tracking-tight sm:text-5xl">세계 곳곳의 서울 이랜드 팬을 위한 가이드</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          서울 이랜드 다이제스트는 서울 이랜드 FC를 경기마다 영어, 포르투갈어, 한국어로 따라간다. 어디에서든 레오파드를 응원하는 팬을 위한 사이트다.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <TranslateButton href="/about" code="EN" label="영어" ariaLabel="Read the About page in English" hreflang="en" />
+          <TranslateButton href="/pt/about" code="PT" label="포르투갈어" ariaLabel="Ler a página Sobre em português" hreflang="pt-BR" />
+        </div>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <p>
+          <strong>독립적인 비공식 사이트다.</strong> 서울 이랜드 다이제스트는 팬이 만든 사이트로, 서울 이랜드 FC, 이랜드그룹, 한국프로축구연맹(K리그)과 제휴하거나 승인을 받거나 관련되어 있지 않다. 구단 이름, 엠블럼, 마스코트는 각 소유자의 자산이다. 자세한 내용은 <a href={withBase("/credits")}>출처 및 고지</a>(영문)에 있다.
+        </p>
+
+        <nav aria-label="이 페이지의 목차">
+          <p><strong>목차:</strong> {sections.map(([id, label], i) => (<>{i > 0 && " · "}<a href={`#${id}`}>{label}</a></>))}</p>
+        </nav>
+
+        <h2 id="who">만드는 사람</h2>
+        <p>
+          다이제스트는 시애틀에 사는 서울 이랜드 서포터 앤디 허먼(Andy Herman)이 쓰고 운영한다. 혼자 하는 프로젝트로, 취재와 편집, 사이트와 게임의 제작과 관리를 모두 여가 시간에 직접 한다.
+        </p>
+        <p>
+          서울 이랜드 FC는 K리그2 구단으로, 서울 서남부 양천구의 목동종합운동장을 홈으로 쓴다. 한국 밖에서는 이 구단을 따라가기가 쉽지 않다. 경기 기사, 인터뷰, 구단 소식은 거의 모두 한국어로 나오고, 리그의 영어 보도는 점수 이상을 다루는 경우가 드물다. 다이제스트는 그 빈틈을 메우려고 만들었다. 시애틀에서든 상파울루에서든 서울에서든, 결과뿐 아니라 왜 그런 결과가 나왔는지, 시즌에 어떤 의미인지까지 이해할 수 있게 하는 것이 목표다.
+        </p>
+        <p>
+          사이트는 2026년 5월, 2월 개막전부터의 모든 라운드를 영어와 포르투갈어로 담아 문을 열었다. 7월에 코리아컵 페이지가, 8월에 승격 레이스 페이지가 생겼고, 9월에는 시즌 결산과 'K리그1을 향해'가 실린 기획·칼럼 섹션, 첫 마스코트 게임, 그리고 한국어판이 나왔다. 10월에는 다이제스트만의 레오파드 로고를 만들었다. 이번 시즌 한국어판에는 지금까지 라운드 리뷰 {rounds}편, 프리뷰 {previews}편, 기획·칼럼 {articles}편이 실렸다.
+        </p>
+
+        <h2 id="structure">사이트 구성</h2>
+        <p>모든 페이지 상단의 메뉴는 네 부분으로 나뉜다.</p>
+        <h3>경기</h3>
+        <ul>
+          <li><a href={withBase("/ko/")}>라운드 리뷰</a>: 리그 경기가 끝날 때마다 올리는 리뷰.</li>
+          <li><a href={withBase("/ko/previews")}>프리뷰</a>: 경기 전에 올리며, 상대 팀의 흐름, 눈여겨볼 점, 결과에 따른 순위 변화를 다룬다.</li>
+          <li><a href={withBase("/ko/matches")}>일정·결과</a>: 2026년 모든 경기의 일정과 결과를 한곳에 모았고, 각 경기의 리뷰로 바로 갈 수 있다.</li>
+          <li><a href={withBase("/ko/korean-cup")}>코리아컵</a>: 서울 이랜드의 코리아컵 경기를 다룬다.</li>
+        </ul>
+        <h3>시즌</h3>
+        <ul>
+          <li><a href={withBase("/ko/tracker")}>승격 레이스</a>: 7월에 발표한 라운드별 예측과 실제 시즌을 비교한다. 예측은 고정된 채 결과가 나올 때마다 채점되며, 승격 경쟁 전망과 '만약에' 도구도 함께 볼 수 있다.</li>
+          <li><a href={withBase("/ko/articles/season-review")}>시즌 결산</a>: 선수단 전원과 감독을 한 편씩 평가하는 시리즈.</li>
+          <li><a href={withBase("/ko/articles")}>기획·칼럼</a>: 승격 확률을 정기적으로 살피는 'K리그1을 향해', 막판 레이스와 플레이오프를 다룬 승격 레이스 시리즈 같은 기획 기사.</li>
+          <li><a href={withBase("/ko/guides")}>가이드</a>: 목동종합운동장 직관 가이드 같은 실용 정보.</li>
+        </ul>
+        <h3>선수단</h3>
+        <p>
+          <a href={withBase("/ko/players")}>선수단</a> 페이지에는 현재 1군 명단과 선수별 프로필이 있고, 많은 선수에게는 플레이 스타일을 분석한 스카우팅 노트가 붙어 있다. 등번호, 포지션, 사진은 구단 공식 웹사이트에서 가져오며, 사이트를 업데이트할 때마다 새로 반영된다.
+        </p>
+        <h3>게임</h3>
+        <p>
+          <a href={withBase("/ko/play")}>게임</a> 페이지는 마스코트 게임 모음이다. <a href="#games">아래</a>에서 소개한다.
+        </p>
+        <p>
+          기사 곳곳의 상대 팀 이름은 각 팀이 어떤 팀인지, 서울 이랜드에 왜 중요한 경기인지 설명하는 팀 페이지(영문)로 연결된다. 새 글은 RSS로도 받아볼 수 있다(<a href={withBase("/ko/rss.xml")}>한국어</a>, <a href={withBase("/rss.xml")}>영어</a>).
+        </p>
+        <p>
+          이 사이트에서 다루지 않는 것도 있다. 베팅 팁, 사실처럼 쓴 이적 루머, 실시간 스코어, 경기 전체 영상이다. 실시간 스코어와 하이라이트는 K리그 공식 사이트와 채널에서 보면 된다.
+        </p>
+
+        <h2 id="digest">라운드 리뷰의 구성</h2>
+        <p>라운드 리뷰는 어디를 보면 되는지 쉽게 알 수 있도록 매번 같은 구성으로 쓴다.</p>
+        <ul>
+          <li><strong>결과와 경기 흐름</strong>: 어떻게 이기고, 지고, 비겼는지, 그리고 경기를 가른 순간들.</li>
+          <li><strong>경기를 좌우한 선수들</strong>: 좋은 쪽으로든 나쁜 쪽으로든.</li>
+          <li><strong>숫자</strong>: 슈팅, 점유율 등 리그 공식 경기 기록.</li>
+          <li><strong>경기 후 발언</strong>: 국내 언론에 실린 감독과 선수의 말을 원문 기사 링크와 함께 전한다.</li>
+          <li><strong>총평</strong>: 결과가 실제로 무엇을 의미하는지에 대한 마지막 의견이다. 이 부분은 필자의 의견이며, 앞의 보도 내용과 분리해 둔다.</li>
+        </ul>
+
+        <h2 id="editions">세 가지 언어판</h2>
+        <p>
+          모든 글은 영어로 먼저 쓴다. <a href={withBase("/pt")}>포르투갈어판</a>은 브라질을 비롯한 포르투갈어권 팬을 위한 것이고, <a href={withBase("/ko")}>한국어판</a>은 한국의 팬과 한국어로 읽고 싶은 모든 이를 위한 것이다. 라운드 리뷰, 프리뷰, 기획·칼럼은 세 언어로 모두 나오며, 일부 페이지는 지원하는 언어가 더 적다. 각 페이지 위쪽의 언어 버튼으로 번역본이 있는 판으로 옮겨 갈 수 있다.
+        </p>
+        <p>
+          번역은 공통 용어집을 바탕으로 선수와 구단 이름을 각 언어의 표기에 맞춘다. 한국어나 포르투갈어 표현이 어색하면 <a href="#contact">알려 주길 바란다</a>. 번역 수정도 다른 정정과 똑같이 처리한다.
+        </p>
+
+        <h2 id="games">게임</h2>
+        <p>
+          게임 페이지에는 서울 이랜드의 레오파드 마스코트 레울과 레냥, 실제 2026 선수단, 그리고 다른 K리그2 구단의 마스코트가 등장하는 무료 게임 {games.length}개가 있다. 휴대폰, 태블릿, 컴퓨터의 브라우저에서 바로 실행되며, 내려받을 것도, 살 것도, 만들어야 할 계정도 없다. 지금은 게임이 영어로 열리며 한국어판은 준비 중이다. 포르투갈어판은 모두 나와 있다.
+        </p>
+        <ul>
+          {games.map((game) => (
+            <li><a href={withBase(`/play/${game.slug}`)}><strong>{game.title}</strong></a>: {game.desc}</li>
+          ))}
+        </ul>
+        <p>
+          <strong>게임 데이터.</strong> 점수, 획득한 카드, 설정, 진행 상황은 이용자 기기의 브라우저에만 저장되며 서버로 보내지 않는다. <a href={withBase("/ko/privacy#browser-storage")}>개인정보 처리방침</a> 페이지에서 언제든 지울 수 있다. Clap for Seoul은 경기가 진행되는 동안에만 마이크를 사용하며, 소리는 기기 안에서 분석되고 녹음되거나 전송되지 않는다.
+        </p>
+        <p>
+          레울, 레냥, 그리고 게임에 쓰인 구단 노래 서울의 노래(2024 ver)와 사랑하는 나의 서울 이랜드(2022 ver)는 서울 이랜드 FC의 자산이다. 다른 K리그2 마스코트는 각 구단의 자산이다. 모두 허가를 받아 사용했다.
+        </p>
+
+        <h2 id="sources">출처, AI, 예측 모델</h2>
+        <p>다이제스트는 다음 자료를 바탕으로 만든다.</p>
+        <ul>
+          <li>K리그 공식 결과, 순위, 경기 기록(kleague.com)</li>
+          <li>선수단, 선수 정보, 구단 공지를 위한 서울 이랜드 FC 공식 웹사이트</li>
+          <li>경기 중계</li>
+          <li>국내 신문과 스포츠 매체. 인용할 때마다 매체 이름을 밝히고 원문에 링크한다.</li>
+        </ul>
+        <p>
+          <strong>AI 활용.</strong> 자료 조사, 초안 작성, 포르투갈어와 한국어 번역에 AI 도구를 활용한다. 모든 글은 위의 출처와 대조해 확인하고 필자가 직접 편집한 뒤 게재하며, 검토 없이 올라가는 글은 없다. 의견은 모두 필자의 것이다.
+        </p>
+        <p>
+          <strong>예측 모델.</strong> 승격 레이스 페이지의 전망과 'K리그1을 향해'의 승격 확률은 현재 순위, 최근 흐름, 남은 일정을 바탕으로 이 사이트를 위해 만든 모델에서 나온다. 'K리그1을 향해'는 남은 시즌을 2만 번 시뮬레이션한다. 이 숫자는 일어날 수 있는 일에 대한 추정일 뿐 약속이 아니며, 베팅 조언도 아니다.
+        </p>
+        <p>
+          <strong>이미지.</strong> 선수 사진과 구단 엠블럼은 각 구단의 자산이며, <a href={withBase("/credits")}>출처 및 고지</a>(영문) 페이지에 출처를 밝혀 두었다. 다이제스트의 레오파드 로고는 이 사이트를 위해 만든 것으로, 구단 엠블럼이 아니다.
+        </p>
+
+        <h2 id="standards">원칙과 정정</h2>
+        <ul>
+          <li>사실, 인용, 통계는 출처를 밝힐 수 있어야 한다. 국내 매체의 기사는 링크를 달아 직접 확인할 수 있게 한다.</li>
+          <li>의견은 의견으로 밝히고, 총평처럼 분명히 구분된 부분에만 쓴다.</li>
+          <li>루머를 사실처럼 쓰지 않는다. 확인되지 않은 내용은 확인되지 않았다고 밝힌다.</li>
+          <li>잘못은 바로잡는다. 오류를 발견하면 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>으로 알려 주길 바란다. 글의 의미가 바뀌는 정정은 글 끝에 날짜와 함께 밝힌다.</li>
+        </ul>
+
+        <h2 id="support">후원</h2>
+        <p>
+          다이제스트에는 광고, 협찬 글, 유료 게재가 없고, 구단에서 돈을 받지도 않는다. 독자의 후원으로 운영된다. 이 사이트가 레오파드를 응원하는 데 도움이 된다면 <a href={coffeeUrl} target="_blank" rel="noopener noreferrer">커피 한 잔</a>으로 응원해 주면 고맙겠다. 후원은 자발적이며 호스팅, 도메인, 사이트 운영 도구 비용에 쓰인다. 자세한 내용은 <a href={withBase("/support")}>후원 페이지</a>(영문)에 있다. 사이트의 모든 글과 게임은 계속 무료다.
+        </p>
+
+        <h2 id="contact">연락처</h2>
+        <p>
+          정정, 제보, 번역 수정, 개인정보 문의, 저작권 및 게시 중단 요청은 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>으로 보내 주길 바란다. 모든 메일을 읽고, 며칠 안에 답하려고 한다.
+        </p>
+        <p>
+          정책: <a href={withBase("/ko/privacy")}>개인정보 처리방침</a> · <a href={withBase("/terms")}>이용약관</a>(영문) · <a href={withBase("/credits")}>출처 및 고지</a>(영문)
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

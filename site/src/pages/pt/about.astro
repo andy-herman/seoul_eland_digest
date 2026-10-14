@@ -1,0 +1,189 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import { withBase } from "../../lib/paths";
+import { safeGetCollection } from "../../lib/safeContent";
+import { getPreMatchPreviews } from "../../lib/prematchPreviews";
+
+const CONTACT_EMAIL = "hello@seoulelanddigest.com";
+const coffeeUrl = "https://buymeacoffee.com/seoulelands";
+
+const rounds = (await safeGetCollection("digestsPt")).length;
+const articles = (await safeGetCollection("articlesPt")).length;
+const previews = getPreMatchPreviews("pt").length;
+
+const games = [
+  { slug: "tifo-master", title: "Tifo Master", desc: "Monte um mosaico de cartões para a arquibancada norte de Mokdong, veja a torcida levantá-lo e depois ache quem está com o cartão errado." },
+  { slug: "yut-nori", title: "Yut Nori FC", desc: "O jogo de tabuleiro tradicional da Coreia num campo de futebol, contra o computador ou com um amigo no mesmo aparelho." },
+  { slug: "clap-for-seoul", title: "Clap for Seoul", desc: "O microfone é o controle: bata palmas e cante no ritmo da música do clube para empurrar o time ao gol. Também dá para jogar tocando na tela." },
+  { slug: "take-five", title: "Take Five", desc: "Um futebol de cinco em que você grava cada passe, corrida e finalização, em 12 fases e nos jogos desta temporada." },
+  { slug: "paw-hunt", title: "A Caça às Patinhas da Lenyang", desc: "Uma caça ao tesouro pelo site inteiro: resolva as charadas, ache as 21 patinhas escondidas e ganhe um certificado." },
+  { slug: "seoul-song", title: "Seoul Song Rhythm", desc: "Toque tambor com o Leoul, a Lenyang e a torcida de Mokdong ao som de duas músicas do clube, no Fácil, Normal ou Difícil." },
+  { slug: "mascot-kart", title: "Mascot Kart", desc: "Uma corrida de kart contra os outros mascotes da K League 2, em dois campeonatos e oito pistas." },
+  { slug: "head-to-head", title: "Liga Cabeça a Cabeça", desc: "Comande um time de cinco com o elenco real de 2026 numa temporada de 16 jogos com tabela ao vivo." },
+  { slug: "balloon-battle", title: "A Batalha de Balões", desc: "Prenda os mascotes rivais em balões de água por seis mundos e seis chefões." },
+  { slug: "dribble-dash", title: "A Corrida do Drible", desc: "Uma corrida sem fim com a bola no pé: pule os carrinhos e complete o seu álbum de mascotes." },
+  { slug: "penalty-party", title: "A Festa dos Pênaltis", desc: "Bata pênaltis como o Leoul ou vá para o gol como a Lenyang e colecione as 12 cartas de mascotes." },
+];
+
+const sections = [
+  ["who", "Quem faz o site"],
+  ["structure", "Como o site é organizado"],
+  ["digest", "O que tem em cada resumo"],
+  ["editions", "Três edições"],
+  ["games", "Os jogos"],
+  ["sources", "Fontes, IA e o modelo"],
+  ["standards", "Padrões e correções"],
+  ["support", "Apoio"],
+  ["contact", "Contato"],
+];
+---
+
+<BaseLayout
+  title="Sobre — Seoul E-Land Digest"
+  description="Quem faz o Seoul E-Land Digest, como o site é organizado, como funcionam os resumos, as prévias, o rastreador e os jogos dos mascotes, de onde vêm as informações e como entrar em contato."
+  lang="pt"
+>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">Sobre o Digest</p>
+        <h1 class="mt-4 text-4xl font-black uppercase tracking-tight sm:text-5xl">O guia do torcedor internacional do Seoul E-Land</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          O Seoul E-Land Digest acompanha o Seoul E-Land FC jogo a jogo em inglês, português e coreano, para quem torce pelos Leopards de onde estiver.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <TranslateButton href="/about" code="EN" label="Inglês" ariaLabel="Read the About page in English" hreflang="en" />
+          <TranslateButton href="/ko/about" code="KO" label="한국어" ariaLabel="소개 페이지 한국어로 보기" hreflang="ko" />
+        </div>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <p>
+          <strong>Independente e não oficial.</strong> O Seoul E-Land Digest é um site feito por torcedor. Não tem vínculo, aval ou ligação com o Seoul E-Land FC, o E-Land Group ou a K League (Korea Professional Football League). Nomes, escudos e mascotes dos clubes pertencem aos seus donos; veja <a href={withBase("/credits")}>Créditos e aviso legal</a> (em inglês).
+        </p>
+
+        <nav aria-label="Nesta página">
+          <p><strong>Nesta página:</strong> {sections.map(([id, label], i) => (<>{i > 0 && " · "}<a href={`#${id}`}>{label}</a></>))}</p>
+        </nav>
+
+        <h2 id="who">Quem faz o site</h2>
+        <p>
+          O Digest é escrito e mantido por Andy Herman, um torcedor do Seoul E-Land em Seattle. É um projeto de uma pessoa só: a apuração, a edição, o site e os jogos são feitos e mantidos por mim, no meu tempo livre.
+        </p>
+        <p>
+          O Seoul E-Land FC (서울 이랜드 FC) joga a K League 2 e manda os seus jogos no Estádio de Mokdong, em Yangcheon-gu, no sudoeste de Seul. Fora da Coreia, o clube é difícil de acompanhar: resumos, entrevistas e notícias saem quase todos em coreano, e a cobertura da liga em outros idiomas raramente vai além do placar. O Digest existe para preencher essa lacuna, para que um torcedor em Seattle, São Paulo ou Seul entenda não só o resultado, mas por que ele aconteceu e o que significa para a temporada.
+        </p>
+        <p>
+          O site entrou no ar em maio de 2026, já com todas as rodadas da temporada desde a estreia, em fevereiro, em inglês e português. A cobertura da Copa da Coreia veio em julho, e o Rastreador da temporada, em agosto. Em setembro chegaram a seção de Artigos, com a Avaliação da Temporada e a série Rumo à K1, os primeiros jogos dos mascotes e a edição em coreano; em outubro, o próprio logo de leopardo do Digest. Nesta temporada, a edição em português já publicou {rounds} resumos de rodada, {previews} prévias e {articles} artigos.
+        </p>
+
+        <h2 id="structure">Como o site é organizado</h2>
+        <p>O menu no topo de cada página tem quatro seções.</p>
+        <h3>Partidas</h3>
+        <ul>
+          <li><a href={withBase("/pt/")}>Rodadas</a>: um resumo para cada rodada da liga, publicado depois do apito final.</li>
+          <li><a href={withBase("/pt/previews")}>Prévias</a>: publicadas antes de cada jogo, com o momento do adversário, o que observar e como o resultado pode mexer na tabela.</li>
+          <li><a href={withBase("/pt/matches")}>Partidas</a>: todos os jogos e resultados de 2026 numa só lista, cada um com link para o seu resumo.</li>
+          <li><a href={withBase("/pt/korean-cup")}>Copa da Coreia</a>: os jogos do Seoul E-Land na copa nacional.</li>
+        </ul>
+        <h3>Temporada</h3>
+        <ul>
+          <li><a href={withBase("/pt/tracker")}>Rastreador</a>: a temporada comparada com as previsões rodada a rodada publicadas em julho, que ficam congeladas e recebem nota a cada resultado, ao lado de uma projeção da briga pelo acesso e de uma ferramenta de "e se?".</li>
+          <li><a href={withBase("/pt/articles/season-review")}>Avaliação da Temporada</a>: nota para cada jogador do elenco e para o técnico, um capítulo de cada vez.</li>
+          <li><a href={withBase("/pt/articles")}>Artigos</a>: reportagens e séries como Rumo à K1, um olhar regular sobre as chances de acesso, e Corrida pelo Acesso, sobre a reta final e os playoffs.</li>
+          <li><a href={withBase("/pt/guides")}>Guias</a>: textos para quem está chegando, como o guia do Seoul E-Land FC.</li>
+        </ul>
+        <h3>Elenco</h3>
+        <p>
+          A página do <a href={withBase("/pt/players")}>Elenco</a> traz o elenco principal atual, com um perfil para cada jogador e, para muitos, notas de observação sobre como jogam. Números, posições e fotos vêm do site oficial do clube e são atualizados a cada atualização do site.
+        </p>
+        <h3>Jogos</h3>
+        <p>
+          <a href={withBase("/pt/play")}>Jogos</a> é a casa dos jogos dos mascotes, descritos <a href="#games">abaixo</a>.
+        </p>
+        <p>
+          Em todo o arquivo, os nomes dos adversários levam a páginas (em inglês) que explicam quem é cada rival e por que o jogo importa para o Seoul E-Land. As novas publicações também saem por RSS, em <a href={withBase("/rss.xml")}>inglês</a> e em <a href={withBase("/ko/rss.xml")}>coreano</a>.
+        </p>
+        <p>
+          O que você não vai encontrar aqui: dicas de apostas, rumores de transferência tratados como fato, placar ao vivo ou jogos completos em vídeo. Para placar ao vivo e melhores momentos, o lugar certo é o site e os canais oficiais da K League.
+        </p>
+
+        <h2 id="digest">O que tem em cada resumo</h2>
+        <p>Todo resumo de rodada segue a mesma estrutura, para você saber onde procurar:</p>
+        <ul>
+          <li><strong>O resultado e a história do jogo</strong>: como foi a vitória, a derrota ou o empate, e os momentos que decidiram a partida.</li>
+          <li><strong>Os jogadores que fizeram a diferença</strong>, para o bem ou para o mal.</li>
+          <li><strong>Os números</strong>: finalizações, posse de bola e outros dados oficiais da liga.</li>
+          <li><strong>O que foi dito</strong>: as falas do técnico e dos jogadores publicadas na imprensa coreana, com link para as matérias originais.</li>
+          <li><strong>Minha Leitura Honesta</strong>: uma seção final de opinião sobre o que o resultado realmente significa. As opiniões ali são minhas e ficam separadas da parte informativa.</li>
+        </ul>
+
+        <h2 id="editions">Três edições</h2>
+        <p>
+          Tudo é escrito primeiro em inglês. A <a href={withBase("/pt")}>edição em português</a> é para torcedores do Brasil e de outros países de língua portuguesa, e a <a href={withBase("/ko")}>edição em coreano</a> é para torcedores na Coreia e para quem prefere ler em coreano. Resumos, prévias e artigos saem nos três idiomas; alguns guias e páginas existem em menos idiomas. Os botões de idioma perto do topo de cada página levam às outras edições quando existe tradução.
+        </p>
+        <p>
+          As traduções mantêm a grafia dos nomes de jogadores e clubes de acordo com cada idioma, com a ajuda de um glossário comum. Se algo soar errado em português ou em coreano, <a href="#contact">avise</a>: correções de tradução são tratadas como qualquer outra correção.
+        </p>
+
+        <h2 id="games">Os jogos</h2>
+        <p>
+          A seção Jogos tem {games.length} jogos gratuitos com o Leoul e a Lenyang, os mascotes leopardos do Seoul E-Land, além do elenco real de 2026 e dos mascotes dos outros clubes da K League 2. Eles funcionam no navegador do celular, do tablet ou do computador, sem nada para baixar, nada para comprar e sem precisar criar conta. Todos estão em português, e uma versão em coreano está em preparação.
+        </p>
+        <ul>
+          {games.map((game) => (
+            <li><a href={withBase(`/pt/play/${game.slug}`)}><strong>{game.title}</strong></a>: {game.desc}</li>
+          ))}
+        </ul>
+        <p>
+          <strong>Os seus dados nos jogos.</strong> Pontuações, cartas desbloqueadas, configurações e progresso ficam salvos só no navegador do seu aparelho, nunca num servidor. Você pode apagá-los quando quiser na <a href={withBase("/pt/privacy#browser-storage")}>página de privacidade</a>. O Clap for Seoul pede o seu microfone só enquanto uma partida está em andamento; o som é analisado no seu aparelho e nada é gravado ou enviado.
+        </p>
+        <p>
+          O Leoul, a Lenyang e as músicas do clube usadas nos jogos, 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022), pertencem ao Seoul E-Land FC. Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes. Todos são usados com permissão.
+        </p>
+
+        <h2 id="sources">Fontes, IA e o modelo</h2>
+        <p>O Digest é feito a partir de:</p>
+        <ul>
+          <li>resultados, classificação e dados oficiais de jogo da K League (kleague.com);</li>
+          <li>o site oficial do Seoul E-Land FC, para o elenco, os dados dos jogadores e os comunicados do clube;</li>
+          <li>as transmissões dos jogos;</li>
+          <li>jornais e sites esportivos coreanos, sempre citados pelo nome e com link quando são mencionados.</li>
+        </ul>
+        <p>
+          <strong>Uso de IA.</strong> Ferramentas de IA ajudam na pesquisa, na redação e nas traduções para o português e o coreano. Cada texto é conferido com as fontes acima e editado por mim antes de ser publicado, nada vai ao ar sem revisão, e as opiniões são minhas.
+        </p>
+        <p>
+          <strong>O modelo.</strong> As projeções do Rastreador e as chances de acesso da série Rumo à K1 vêm de modelos feitos para este site, com base na tabela atual, no momento recente e nos jogos que faltam; o Rumo à K1 simula o resto da temporada 20 mil vezes. Os números são estimativas do que pode acontecer, não promessas, e não são dicas de apostas.
+        </p>
+        <p>
+          <strong>Imagens.</strong> As fotos dos jogadores e os escudos dos clubes pertencem aos clubes e estão creditados na página de <a href={withBase("/credits")}>Créditos</a> (em inglês). O logo de leopardo do Digest foi criado para este site e não é o escudo do clube.
+        </p>
+
+        <h2 id="standards">Padrões e correções</h2>
+        <ul>
+          <li>Fatos, citações e estatísticas devem ter uma fonte identificada. Quando a fonte está em coreano, ela vem com link para você conferir.</li>
+          <li>Opinião é identificada como opinião e fica em seções claramente marcadas, como a Minha Leitura Honesta.</li>
+          <li>Rumores não são publicados como fato. Se algo não está confirmado, o texto diz isso.</li>
+          <li>Erros são corrigidos. Se você encontrar um, escreva para <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Correções que mudam o sentido de um texto são registradas no fim dele, com a data.</li>
+        </ul>
+
+        <h2 id="support">Apoio</h2>
+        <p>
+          O Digest não tem anúncios, posts patrocinados nem conteúdo pago, e não recebe dinheiro do clube. Ele se mantém com a ajuda dos leitores: se o site ajuda você a acompanhar os Leopards, você pode <a href={coffeeUrl} target="_blank" rel="noopener noreferrer">me pagar um café</a>. As contribuições são voluntárias e pagam a hospedagem, o domínio e as ferramentas por trás do site; a <a href={withBase("/support")}>página de apoio</a> (em inglês) explica os detalhes. Tudo no site continua gratuito para ler e jogar.
+        </p>
+
+        <h2 id="contact">Contato</h2>
+        <p>
+          Para correções, dicas, ajustes de tradução, dúvidas de privacidade ou pedidos de direitos autorais e remoção de conteúdo, escreva para <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Eu leio tudo e procuro responder em poucos dias.
+        </p>
+        <p>
+          Políticas: <a href={withBase("/pt/privacy")}>Privacidade</a> · <a href={withBase("/terms")}>Termos de uso</a> (em inglês) · <a href={withBase("/credits")}>Créditos e aviso legal</a> (em inglês)
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
