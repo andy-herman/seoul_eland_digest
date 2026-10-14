@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { withBase } from "../lib/paths";
+import TranslateButton from "../components/TranslateButton.astro";
 
 const CONTACT_EMAIL = "hello@seoulelanddigest.com";
 const UPDATED = "October 13, 2026";
@@ -19,6 +20,10 @@ const year = new Date().getFullYear();
         <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
           Last updated {UPDATED}.
         </p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <TranslateButton href="/pt/terms" code="PT" label="Português" ariaLabel="Ler os termos de uso em português" hreflang="pt-BR" />
+          <TranslateButton href="/ko/terms" code="KO" label="한국어" ariaLabel="이용약관 한국어로 보기" hreflang="ko" />
+        </div>
       </div>
     </header>
 

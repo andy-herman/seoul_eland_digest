@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import { withBase } from "../../lib/paths";
+
+const CONTACT_EMAIL = "hello@seoulelanddigest.com";
+const UPDATED = "13 de outubro de 2026";
+---
+
+<BaseLayout
+  title="Créditos e aviso legal — Seoul E-Land Digest"
+  description="O Seoul E-Land Digest é um site de torcedor, não oficial. A quem pertencem os nomes, escudos, mascotes, músicas, fotos e dados usados no site, e como pedir uma alteração."
+  lang="pt"
+>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">Políticas</p>
+        <h1 class="mt-4 text-4xl font-black uppercase tracking-tight sm:text-5xl">Créditos e aviso legal</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          Atualizados em {UPDATED}.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <TranslateButton href="/credits" code="EN" label="Inglês" ariaLabel="Read the credits and disclaimer in English" hreflang="en" />
+          <TranslateButton href="/ko/credits" code="KO" label="한국어" ariaLabel="출처 및 고지 한국어로 보기" hreflang="ko" />
+        </div>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <p><em>Esta tradução é oferecida para facilitar a leitura. Se houver divergência, prevalece a <a href={withBase("/credits")}>versão em inglês</a>.</em></p>
+
+        <h2 id="disclaimer">Aviso legal</h2>
+        <p>
+          O Seoul E-Land Digest é um site de torcedor independente e não oficial. Não tem vínculo, aval, patrocínio ou ligação com o Seoul E-Land FC, o E-Land Group, a K League (Korea Professional Football League) ou qualquer outro clube. As opiniões do site são do autor e não representam nenhum clube nem a liga.
+        </p>
+
+        <h2 id="marks">Nomes, escudos e mascotes</h2>
+        <p>
+          "Seoul E-Land FC", o seu escudo e os seus mascotes, o Leoul e a Lenyang, são propriedade do Seoul E-Land FC. Os nomes, escudos e mascotes dos outros clubes pertencem a esses clubes, e "K League" e as suas marcas pertencem à Korea Professional Football League. Eles aparecem neste site só para identificar os clubes e a competição e para noticiar e comentar sobre eles. Nenhum endosso está implícito.
+        </p>
+        <p>
+          O logo de leopardo do Digest foi criado para este site. Ele não é o escudo do clube e não deve ser confundido com ele.
+        </p>
+
+        <h2 id="photos">Fotos e escudos</h2>
+        <ul>
+          <li><strong>As fotos dos jogadores</strong> são © Seoul E-Land FC e são exibidas a partir do site oficial do clube, seoulelandfc.com.</li>
+          <li><strong>Os escudos dos clubes</strong> pertencem aos seus clubes. A maioria fica hospedada neste site para as páginas carregarem mais rápido; a chave da Copa da Coreia mostra os escudos direto do site da K League, kleague.com.</li>
+        </ul>
+
+        <h2 id="games">Os jogos</h2>
+        <ul>
+          <li>O Leoul, a Lenyang e as músicas 서울의 노래 (versão 2024) e 사랑하는 나의 서울 이랜드 (versão 2022) pertencem ao Seoul E-Land FC e são usados com permissão.</li>
+          <li>Os mascotes dos outros clubes da K League 2 pertencem aos seus clubes e são usados com permissão.</li>
+          <li>A arquibancada de Mokdong, os tambores e as notas do Seoul Song Rhythm foram feitos no Blender para o jogo, e as sequências de notas foram montadas a partir de uma análise do ritmo e da melodia de cada música.</li>
+        </ul>
+
+        <h2 id="data">Dados e reportagem</h2>
+        <ul>
+          <li>Resultados, classificação e estatísticas de jogo vêm dos dados oficiais da K League, em kleague.com.</li>
+          <li>Listas do elenco, dados dos jogadores e comunicados do clube vêm do site oficial do Seoul E-Land FC.</li>
+          <li>As citações de jornais e sites esportivos coreanos são trechos curtos, com crédito ao veículo e link para a matéria original. Essas matérias continuam sendo propriedade dos seus editores.</li>
+        </ul>
+
+        <h2 id="type">Tipografia</h2>
+        <p>
+          O site usa a fonte Pretendard, de Kil Hyung-jin, sob a SIL Open Font License 1.1 (<a href={withBase("/fonts/Pretendard-OFL.txt")}>texto da licença</a>).
+        </p>
+
+        <h2 id="requests">Correções e pedidos de direitos</h2>
+        <p>
+          Se você é dono de algo neste site e quer que seja retirado, creditado de outra forma ou acompanhado de um link, ou se algum crédito aqui estiver errado, escreva para <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>. Veja em <a href={withBase("/pt/terms#rights")}>Direitos autorais e pedidos de remoção</a> o que incluir no pedido.
+        </p>
+        <p>
+          Veja também: <a href={withBase("/pt/privacy")}>Privacidade</a> · <a href={withBase("/pt/terms")}>Termos de uso</a> · <a href={withBase("/pt/about")}>Sobre</a>
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

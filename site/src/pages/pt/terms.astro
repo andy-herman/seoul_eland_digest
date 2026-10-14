@@ -1,0 +1,112 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import { withBase } from "../../lib/paths";
+
+const CONTACT_EMAIL = "hello@seoulelanddigest.com";
+const UPDATED = "13 de outubro de 2026";
+const year = new Date().getFullYear();
+---
+
+<BaseLayout
+  title="Termos de uso — Seoul E-Land Digest"
+  description="Os termos para usar o Seoul E-Land Digest: compartilhar e citar o conteúdo, a precisão e o modelo de acesso, os jogos, as contribuições e os pedidos de direitos autorais e remoção."
+  lang="pt"
+>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">Políticas</p>
+        <h1 class="mt-4 text-4xl font-black uppercase tracking-tight sm:text-5xl">Termos de uso</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          Atualizados em {UPDATED}.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <TranslateButton href="/terms" code="EN" label="Inglês" ariaLabel="Read the terms of use in English" hreflang="en" />
+          <TranslateButton href="/ko/terms" code="KO" label="한국어" ariaLabel="이용약관 한국어로 보기" hreflang="ko" />
+        </div>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <p><em>Esta tradução é oferecida para facilitar a leitura. Se houver divergência, prevalece a <a href={withBase("/terms")}>versão em inglês</a>.</em></p>
+        <p>
+          O Seoul E-Land Digest (seoulelanddigest.com e as suas cópias espelhadas) é um site independente, feito por torcedor e mantido por Andy Herman. Ao usá-lo, você concorda com estes termos. Eles foram escritos para serem curtos e fáceis de ler; se algo não estiver claro, escreva para <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+        </p>
+
+        <h2 id="unofficial">Um site não oficial</h2>
+        <p>
+          O site não tem vínculo, aval ou ligação com o Seoul E-Land FC, o E-Land Group ou a K League. Nada aqui é declaração oficial de nenhum clube ou da liga. Nomes, escudos, mascotes e outras marcas dos clubes pertencem aos seus donos e são usados só para identificá-los; veja <a href={withBase("/pt/credits")}>Créditos e aviso legal</a>.
+        </p>
+
+        <h2 id="content">Uso do conteúdo</h2>
+        <p>
+          Os textos originais, as traduções, os gráficos, as visualizações de dados e os jogos deste site são © {year} Andy Herman (Seoul E-Land Digest), exceto o material que pertence a terceiros, indicado na página de Créditos.
+        </p>
+        <ul>
+          <li>Você pode compartilhar links de qualquer página e citar trechos curtos, desde que dê o crédito ao Seoul E-Land Digest e coloque um link para o original.</li>
+          <li>Não republique artigos ou traduções inteiros, não copie o site em massa (scraping) e não use o conteúdo para fins comerciais sem autorização por escrito.</li>
+          <li>O material de terceiros exibido no site, como fotos de jogadores, escudos e citações de outras publicações, pertence aos seus donos e não está incluído nesta autorização.</li>
+        </ul>
+
+        <h2 id="accuracy">Precisão, o modelo e apostas</h2>
+        <p>
+          O Digest é escrito com cuidado e conferido com fontes identificadas, mas é oferecido "no estado em que se encontra". As informações podem estar erradas, incompletas ou desatualizadas, e opiniões são opiniões. As projeções e as chances de acesso do site vêm de modelos simples; são estimativas, não previsões nem garantias.
+        </p>
+        <p>
+          <strong>Nada neste site é recomendação de apostas, financeira ou profissional.</strong> Não use o site como base para apostas ou qualquer outra decisão financeira.
+        </p>
+
+        <h2 id="ai">Conteúdo feito com ajuda de IA</h2>
+        <p>
+          Ferramentas de IA ajudam na pesquisa, na redação e na tradução. Todo o conteúdo é revisado e editado por uma pessoa antes de ser publicado, e o site assume a responsabilidade pelo que publica. Veja <a href={withBase("/pt/about#sources")}>Fontes, IA e o modelo</a>.
+        </p>
+
+        <h2 id="games">Os jogos</h2>
+        <ul>
+          <li>Os jogos são gratuitos e servem para diversão. Não há nada para comprar, nem prêmios, nem contas.</li>
+          <li>O progresso fica salvo só no seu navegador e pode se perder se você apagar os dados do navegador ou trocar de aparelho.</li>
+          <li>Os jogos podem ser alterados, rebalanceados ou retirados a qualquer momento.</li>
+          <li>O Clap for Seoul usa o seu microfone só com a sua permissão; jogue num volume razoável e respeite quem estiver por perto.</li>
+        </ul>
+
+        <h2 id="tips">Contribuições e apoio</h2>
+        <ul>
+          <li>As contribuições pelo Buy Me a Coffee são totalmente voluntárias. São um agradecimento, não uma compra: não dão direito a produtos, serviços, benefícios, acesso nem influência sobre a cobertura.</li>
+          <li>O Seoul E-Land Digest não é uma instituição de caridade, então as contribuições não são dedutíveis de impostos.</li>
+          <li>As contribuições são processadas pelo Buy Me a Coffee segundo os seus próprios <a href="https://buymeacoffee.com/terms" target="_blank" rel="noopener noreferrer">termos</a>. Se você contribuir por engano ou for cobrado em duplicidade, escreva para mim e o valor será devolvido. Fora isso, as contribuições não são reembolsáveis, salvo quando a lei exigir.</li>
+        </ul>
+
+        <h2 id="links">Links para outros sites</h2>
+        <p>
+          O site tem links para notícias, páginas oficiais de clubes e da liga, canais de vídeo e outros serviços. Eles são mantidos por terceiros, e o Digest não é responsável pelo conteúdo nem pelas práticas de privacidade deles.
+        </p>
+
+        <h2 id="rights">Direitos autorais e pedidos de remoção</h2>
+        <p>
+          Se você é dono de algum material que aparece neste site e acredita que ele está sendo usado sem permissão, ou quer um crédito diferente, escreva para <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> informando:
+        </p>
+        <ul>
+          <li>qual é o material e em que página ele aparece;</li>
+          <li>quem você é e como detém os direitos;</li>
+          <li>o que você gostaria que fosse feito: remoção, outro crédito ou um link.</li>
+        </ul>
+        <p>Os pedidos são analisados com rapidez, e o material é retirado ou corrigido quando o pedido procede.</p>
+
+        <h2 id="liability">Responsabilidade</h2>
+        <p>
+          Na medida permitida por lei, o Seoul E-Land Digest não se responsabiliza por perdas ou danos decorrentes do uso do site, do seu conteúdo ou dos jogos. Nada nestes termos limita direitos que você tenha e que a lei não permita limitar.
+        </p>
+
+        <h2 id="changes">Alterações</h2>
+        <p>
+          Estes termos podem ser atualizados de tempos em tempos. A data no topo mostra quando mudaram pela última vez.
+        </p>
+        <p>
+          Veja também: <a href={withBase("/pt/privacy")}>Privacidade</a> · <a href={withBase("/pt/credits")}>Créditos e aviso legal</a> · <a href={withBase("/pt/about")}>Sobre</a>
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>

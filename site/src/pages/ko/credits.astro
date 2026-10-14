@@ -1,0 +1,82 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import TranslateButton from "../../components/TranslateButton.astro";
+import { withBase } from "../../lib/paths";
+
+const CONTACT_EMAIL = "hello@seoulelanddigest.com";
+const UPDATED = "2026년 10월 13일";
+---
+
+<BaseLayout
+  title="출처 및 고지 — 서울 이랜드 다이제스트"
+  description="서울 이랜드 다이제스트는 비공식 팬 사이트입니다. 사이트에 쓰인 구단 이름, 엠블럼, 마스코트, 노래, 사진, 데이터의 권리자와 수정 요청 방법을 안내합니다."
+  lang="ko"
+>
+  <article class="mx-auto max-w-4xl">
+    <header class="supporter-panel rounded-[2rem]">
+      <div class="relative p-6 sm:p-8 lg:p-10">
+        <p class="eyebrow">정책</p>
+        <h1 class="mt-4 text-4xl font-black tracking-tight sm:text-5xl">출처 및 고지</h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 sm:text-lg sm:leading-8" style="color: var(--color-link);">
+          최종 수정일: {UPDATED}
+        </p>
+        <div class="mt-6 flex flex-wrap gap-2">
+          <TranslateButton href="/credits" code="EN" label="영어" ariaLabel="Read the credits and disclaimer in English" hreflang="en" />
+          <TranslateButton href="/pt/credits" code="PT" label="포르투갈어" ariaLabel="Ler os créditos e o aviso legal em português" hreflang="pt-BR" />
+        </div>
+      </div>
+    </header>
+
+    <section class="editorial-shell mx-auto mt-8">
+      <div class="prose-eland digest-body mx-auto">
+        <p><em>이 번역은 이해를 돕기 위해 제공합니다. 내용이 다를 경우 <a href={withBase("/credits")}>영문판</a>이 우선합니다.</em></p>
+
+        <h2 id="disclaimer">고지</h2>
+        <p>
+          서울 이랜드 다이제스트는 독립적인 비공식 팬 사이트입니다. 서울 이랜드 FC, 이랜드그룹, 한국프로축구연맹(K리그), 그 밖의 어떤 구단과도 제휴, 승인, 후원 관계가 없으며 관련되어 있지 않습니다. 사이트의 의견은 필자 개인의 것이며 어떤 구단이나 리그의 입장도 대변하지 않습니다.
+        </p>
+
+        <h2 id="marks">구단 이름, 엠블럼, 마스코트</h2>
+        <p>
+          '서울 이랜드 FC'와 그 엠블럼, 마스코트 레울과 레냥은 서울 이랜드 FC의 자산입니다. 다른 구단의 이름, 엠블럼, 마스코트는 각 구단의 것이며, 'K리그'와 그 표지는 한국프로축구연맹의 것입니다. 이 사이트에서는 구단과 대회를 식별하고 이에 관해 보도하고 논평하기 위해서만 사용하며, 어떠한 보증이나 승인을 뜻하지 않습니다.
+        </p>
+        <p>
+          다이제스트의 레오파드 로고는 이 사이트를 위해 만든 것입니다. 구단 엠블럼이 아니며, 엠블럼으로 오인되도록 의도한 것이 아닙니다.
+        </p>
+
+        <h2 id="photos">사진과 엠블럼</h2>
+        <ul>
+          <li><strong>선수 사진</strong>의 저작권은 서울 이랜드 FC에 있으며, 구단 공식 웹사이트(seoulelandfc.com)에서 불러와 표시합니다.</li>
+          <li><strong>구단 엠블럼</strong>은 각 구단의 자산입니다. 대부분은 페이지를 빠르게 불러오기 위해 이 사이트에 두고 있으며, 코리아컵 대진표의 엠블럼은 K리그 웹사이트(kleague.com)에서 직접 불러와 표시합니다.</li>
+        </ul>
+
+        <h2 id="games">게임</h2>
+        <ul>
+          <li>레울과 레냥, 그리고 노래 서울의 노래(2024 ver)와 사랑하는 나의 서울 이랜드(2022 ver)는 서울 이랜드 FC의 자산이며 허가를 받아 사용했습니다.</li>
+          <li>다른 K리그2 마스코트는 각 구단의 자산이며 허가를 받아 사용했습니다.</li>
+          <li>Seoul Song Rhythm의 목동 스탠드, 북, 노트는 이 게임을 위해 Blender로 만들었고, 노트 채보는 각 곡의 박자와 멜로디를 분석해 만들었습니다.</li>
+        </ul>
+
+        <h2 id="data">데이터와 보도</h2>
+        <ul>
+          <li>결과, 순위, 경기 기록은 K리그 공식 데이터(kleague.com)에서 가져옵니다.</li>
+          <li>선수 명단, 선수 정보, 구단 공지는 서울 이랜드 FC 공식 웹사이트에서 가져옵니다.</li>
+          <li>국내 신문과 스포츠 매체의 인용문은 짧은 발췌이며, 매체 이름을 밝히고 원문 기사에 링크합니다. 해당 기사의 권리는 각 언론사에 있습니다.</li>
+        </ul>
+
+        <h2 id="type">글꼴</h2>
+        <p>
+          이 사이트는 길형진(Kil Hyung-jin)의 Pretendard 글꼴을 SIL 오픈 폰트 라이선스 1.1에 따라 사용합니다(<a href={withBase("/fonts/Pretendard-OFL.txt")}>라이선스 전문</a>).
+        </p>
+
+        <h2 id="requests">정정 및 권리 요청</h2>
+        <p>
+          이 사이트에 실린 자료의 권리자로서 삭제, 출처 표기 변경, 링크 추가를 원하거나, 이 페이지의 출처 표기가 틀렸다면 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>으로 알려 주십시오. 요청에 담을 내용은 이용약관의 <a href={withBase("/ko/terms#rights")}>저작권 및 게시 중단 요청</a>을 참고해 주십시오.
+        </p>
+        <p>
+          함께 보기: <a href={withBase("/ko/privacy")}>개인정보 처리방침</a> · <a href={withBase("/ko/terms")}>이용약관</a> · <a href={withBase("/ko/about")}>소개</a>
+        </p>
+      </div>
+    </section>
+  </article>
+</BaseLayout>
