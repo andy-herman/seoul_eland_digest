@@ -201,7 +201,9 @@ fixtures:
     date: 2026-10-18
     venue: home
     opponent: "Gimhae FC"
-    result: "TBD"
+    home_score: 6
+    away_score: 2
+    result: "W 6-2"
   # Round 30: bye
   - round: 31
     date: 2026-10-31

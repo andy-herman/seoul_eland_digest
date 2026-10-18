@@ -111,7 +111,7 @@ seoul_dist = Counter(r["pts"][SEOUL] for r in runs)
 ssb_dist = Counter(r["pts"]["suwon-samsung"] for r in runs)
 
 # Round 26 branch
-r26 = (29, "seoul-e-land", "gimhae")  # next Seoul fixture; "W" below means a Seoul win
+r26 = (31, "yongin", "seoul-e-land")  # next Seoul fixture; "W" below means a Seoul win
 branch = defaultdict(lambda: Counter())
 for r in runs:
     h, a = r["results"][r26]

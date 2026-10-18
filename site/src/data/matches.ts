@@ -188,7 +188,7 @@ export const fixtures: MatchFixture[] = [
   { round: 26, date: "2026-09-12", time: "16:30", venue: "home", opponent: "Suwon Bluewings", stadium: "Mokdong Stadium", homeScore: 0, awayScore: 1, result: "L 0-1" },
   { round: 27, date: "2026-09-19", time: "19:00", venue: "home", opponent: "Daegu", stadium: "Mokdong Stadium", homeScore: 2, awayScore: 1, result: "W 2-1" },
   { round: 28, date: "2026-10-09", time: "16:30", venue: "away", opponent: "Gimpo Citizen", stadium: "Gimpo Solteo Football Field", homeScore: 0, awayScore: 1, result: "W 1-0" },
-  { round: 29, date: "2026-10-18", time: "14:00", venue: "home", opponent: "Gimhae FC", stadium: "Mokdong Stadium", result: "TBD" },
+  { round: 29, date: "2026-10-18", time: "14:00", venue: "home", opponent: "Gimhae FC", stadium: "Mokdong Stadium", homeScore: 6, awayScore: 2, result: "W 6-2" },
   { round: 31, date: "2026-10-31", time: "14:00", venue: "away", opponent: "Yongin", stadium: "Yongin Mireu Stadium", result: "TBD" },
   { round: 32, date: "2026-11-07", time: "16:30", venue: "home", opponent: "Jeonnam Dragons", stadium: "Mokdong Stadium", result: "TBD" },
   { round: 33, date: "2026-11-22", time: "16:30", venue: "home", opponent: "Chungnam Asan", stadium: "Mokdong Stadium", result: "TBD" },
