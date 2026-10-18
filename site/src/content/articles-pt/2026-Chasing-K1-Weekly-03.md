@@ -103,3 +103,5 @@ Quatro jogos; os totais possíveis vão de 54 a 66, e o modelo projeta 62,6. O S
 Com a diferença no desempate em um gol, os gols também contam: um 2-0 em Yongin, o placar mais provável do modelo, vale mais que um 1-0. Primeiro a vitória, depois os gols, a começar por Yongin no sábado, 31 de outubro, às 14:00.
 
 Próxima edição depois da 30ª rodada.
+
+*Atualização, 18 de outubro: a partir desta semana, o Rumo à K1 roda no modelo descrito em [O Previsor da Reta Final](/pt/articles/2026-run-in-predictor). Com os mesmos resultados, ele coloca o Seoul com 23 por cento, e não os 26 desta carta, e com 47 por cento de chance de vencer em Yongin, e não 70. Os números acima foram mantidos como publicados. A Semanal Nº 4 vai usar o novo modelo, com o número desta semana recalculado nele.*

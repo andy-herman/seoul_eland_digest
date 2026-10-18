@@ -8,9 +8,9 @@ round: "31"
 date: "2026-10-31"
 opponent: "Yongin FC"
 venue_for_seoul: "away"
-forecast_probabilities: {"seoul_eland_win":0.70,"draw":0.19,"opponent_win":0.11}
+forecast_probabilities: {"seoul_eland_win":0.47,"draw":0.30,"opponent_win":0.23}
 forecast_labels: {"seoul_eland_win":"Vitória do Seoul","draw":"Empate","opponent_win":"Vitória do Yongin"}
-forecast_note: "Leitura por simulação Monte Carlo sobre a classificação após a 29ª rodada completa: taxas de ataque e defesa da temporada e dos últimos cinco jogos dos dois times, vantagem de casa e um pequeno ajuste para um Yongin que já não pode chegar ao top 6. Arredondado para inteiros. Será atualizada após a 30ª rodada."
+forecast_note: "Modelo do Previsor da Reta Final (250.000 simulações) sobre a classificação após a 29ª rodada completa: índices de força calculados a partir de todos os jogos da K League 2 desde 2024, vantagem de casa, confronto direto, uma calibragem de empates, trocas de treinador, o clima previsto para o horário do jogo a partir da climatologia e cartões e suspensões simulados dos dois lados. Arredondado para inteiros. Será atualizada após a 30ª rodada."
 predicted_lineup_label: "Provável XI do Seoul"
 predicted_lineup_team: "Seoul E-Land"
 predicted_formation: "3-4-3"
@@ -31,13 +31,13 @@ tags: [seoul-eland, pre-match-preview, scouting]
 | Contexto do adversário | 13º, 27 jogos, 27 pontos, 5-12-10, 32-41 (-9) |
 | Confrontos em 2026 | 12ª rodada (16/05/2026): Seoul E-Land 2-2 Yongin em Mokdong |
 | Confrontos futuros em 2026 | Nenhum; este é o jogo de volta |
-| Leitura do modelo | Seoul 70%, empate 19%, Yongin 11% |
+| Leitura do modelo | Seoul 47%, empate 30%, Yongin 23% |
 | No mesmo fim de semana | Suwon Samsung em Daegu no sábado às 16:30; Suwon FC x Ansan no domingo às 14:00 |
 | Contexto | Primeiro jogo do Seoul depois da folga da 30ª rodada; antes, o Yongin joga em Chungbuk Cheongju na 30ª rodada |
 
 ## Por Que Este Jogo Importa
 
-O Seoul entra na folga empatado em 54 pontos com o Suwon FC, que é segundo por liderar em gols marcados, 53 a 52, e que enfrenta o Chungnam Asan na 30ª rodada enquanto o Seoul descansa. A 29ª rodada reduziu a desvantagem do Seoul nesse primeiro critério de desempate de cinco gols para um, e o modelo agora dá ao Seoul 26 por cento de chance de top 2. Uma vitória em Yongin eleva esse número para cerca de um terço. Um empate o derruba para cerca de 14 por cento; uma derrota, para cerca de 6. O veredito de Kim Do-gyun depois do Gimhae foi que o Seoul precisa vencer todos os jogos restantes para que haja esperança. Este é o primeiro dos quatro, e o único deles longe de Mokdong antes da última rodada.
+O Seoul entra na folga empatado em 54 pontos com o Suwon FC, que é segundo por liderar em gols marcados, 53 a 52, e que enfrenta o Chungnam Asan na 30ª rodada enquanto o Seoul descansa. A 29ª rodada reduziu a desvantagem do Seoul nesse primeiro critério de desempate de cinco gols para um, e o modelo agora dá ao Seoul 23 por cento de chance de top 2. Uma vitória em Yongin eleva esse número para cerca de 35 por cento. Um empate o derruba para cerca de 16; uma derrota, para cerca de 10. O veredito de Kim Do-gyun depois do Gimhae foi que o Seoul precisa vencer todos os jogos restantes para que haja esperança. Este é o primeiro dos quatro, e o único deles longe de Mokdong antes da última rodada.
 
 ## Notícias do Elenco do Seoul E-Land
 
@@ -128,7 +128,7 @@ Os escanteios e as faltas de Euller e os quatro homens altos na área viraram um
 
 ## Modelo x Mercado
 
-O modelo aponta 70 por cento Seoul, 19 por cento empate e 11 por cento Yongin, com 2-0 para o Seoul como o placar exato mais provável e 46 por cento de chance de o Seoul não sofrer gol. Ele carrega um pequeno ajuste, um leve desconto para o Yongin em casa, agora que o time não pode chegar ao top 6 e venceu apenas dois de quatorze jogos no Mireu Stadium. O goleiro deles, cuja lesão fazia parte de uma versão anterior desse ajuste, está recuperado, então essa parte foi retirada. Ainda não encontramos mercado de casas de apostas para este jogo, a duas semanas da partida. Esta prévia será atualizada depois da 30ª rodada, quando o Yongin já tiver enfrentado o Cheongju e a tabela tiver se mexido.
+O modelo aponta 47 por cento Seoul, 30 por cento empate e 23 por cento Yongin, com 1-1 como o placar exato mais provável (14 por cento), 2-1 para o Seoul como a vitória mais provável (9 por cento) e 31 por cento de chance de o Seoul não sofrer gol. A primeira versão desta prévia citava o modelo antigo do site, com 70 por cento para o Seoul. A partir desta semana usamos o [Previsor da Reta Final](/pt/articles/2026-run-in-predictor), mais completo, que dá menos peso à forma recente e espera mais empates, as duas coisas respaldadas pelo teste que fez sobre esta temporada, e o Yongin empata mais do que a maioria. Ele também simula a 30ª rodada antes: quatro titulares habituais do Yongin, entre eles o capitão Choi Young-jun, estão a um amarelo da suspensão, e um cartão em Cheongju em 25 de outubro tiraria esse jogador desta partida. Ainda não encontramos mercado de casas de apostas para este jogo, a duas semanas da partida. Esta prévia será atualizada depois da 30ª rodada, quando o Yongin já tiver enfrentado o Cheongju e a tabela tiver se mexido.
 
 ## Conclusão
 

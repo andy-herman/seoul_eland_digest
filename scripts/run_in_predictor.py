@@ -31,7 +31,10 @@ Factors and how each enters:
 Usage:
     uv run --with numpy --with scipy python scripts/run_in_predictor.py --backtest
     uv run --with numpy --with scipy python scripts/run_in_predictor.py --sims 250000
-Inputs:  research_dump/predictor/{schedules,club_records,match_info,weather,context}.json
+Inputs:  research_dump/predictor/{schedules,club_records,match_info,recent_apps,weather,context}.json
+         (refresh with scripts/predictor_fetch.py; context.json is edited by hand)
+Chasing K1 (from 2026-10-18) reads the "chasing_k1" block; --cutoff reruns the model as of an
+earlier moment, for a like-for-like comparison with the previous week.
 Output:  research_dump/predictor/run_in_predictor.json
 """
 
@@ -701,12 +704,21 @@ def main():
     ap.add_argument("--ref-goals", action="store_true")
     ap.add_argument("--ablation-sims", type=int, default=100000)
     ap.add_argument("--today", default="2026-10-18T20:00")
+    ap.add_argument("--cutoff", help="rerun as of this moment (e.g. 2026-10-16T00:00): later results are treated as unplayed")
     args = ap.parse_args()
 
     played, remaining = load_matches()
     weather = Weather(load_json("weather.json"))
     ctx = load_context()
     today = dt.datetime.fromisoformat(args.today)
+    cutoff = dt.datetime.fromisoformat(args.cutoff) if args.cutoff else None
+    later = []
+    if cutoff:
+        later = [m for m in played if m["when"] >= cutoff]
+        played = [m for m in played if m["when"] < cutoff]
+        remaining = sorted([{k: v for k, v in m.items() if k not in ("hg", "ag")} for m in later if m["year"] == 2026] + remaining,
+                           key=lambda m: (m["when"], m["home"]))
+        today = cutoff
 
     if args.backtest:
         rows = run_backtest(played, weather, ctx)
@@ -721,6 +733,16 @@ def main():
 
     info = load_json("match_info.json")
     records = load_json("club_records.json")
+    if cutoff:   # take back the cautions shown after the cutoff
+        minus = Counter()
+        for m in later:
+            for half in ("firstHalf", "secondHalf", "EfirstHalf", "EsecondHalf"):
+                for e in (info.get(m["gid"]) or {}).get(half) or []:
+                    if e.get("eventName") == "경고":
+                        minus[(e.get("teamId"), e.get("playerName"))] += 1
+        for t, lst in records.items():
+            for pl in lst:
+                pl["warnQty"] = (pl.get("warnQty") or 0) - minus.get((t, pl["name"]), 0)
     roster = json.loads((DATA / "seoul_roster.json").read_text(encoding="utf-8")) if (DATA / "seoul_roster.json").exists() else []
 
     cfg = dict(team_home=not args.no_team_home, coach=not args.no_coach, ref_goals=args.ref_goals,
@@ -860,6 +882,35 @@ def main():
     result["tiebreak"] = {"level_with_suwon_fc": float(level.mean()),
                           "seoul_above_when_level": float((rank[level, s] < rank[level, sfc]).mean()) if level.any() else None}
 
+    # Chasing K1 block: rival fixtures, Suwon FC swing matches, Seoul branches, pairs, thresholds
+    watch = ["K02", "K29", "K17", "K39", SEOUL]
+    ck = {"fixtures": [], "swings": [], "seoul_branches": []}
+    for fx in sim["fixtures"]:
+        f, hg, ag = fx["f"], fx["hg"], fx["ag"]
+        if not any(t in (f["home"], f["away"]) for t in watch):
+            continue
+        row = {"round": f["round"], "date": f["when"].isoformat(), "kickoff_set": f["kickoff_set"],
+               "home": NAME[f["home"]], "away": NAME[f["away"]], "home_win": float((hg > ag).mean()),
+               "draw": float((hg == ag).mean()), "away_win": float((hg < ag).mean())}
+        ck["fixtures"].append(row)
+        if "K29" in (f["home"], f["away"]):
+            win = (hg > ag) if f["home"] == "K29" else (ag > hg)
+            ck["swings"].append(dict(row, sfc_win=float(win.mean()),
+                                     seoul_top2_if_sfc_win=float((rank[win, s] <= 2).mean()),
+                                     seoul_top2_if_not=float((rank[~win, s] <= 2).mean())))
+        if SEOUL in (f["home"], f["away"]):
+            own, opp = (hg, ag) if f["home"] == SEOUL else (ag, hg)
+            ck["seoul_branches"].append({"round": f["round"], **{k: {"p": float(mk.mean()), "top2": float((rank[mk, s] <= 2).mean())}
+                                                                  for k, mk in (("W", own > opp), ("D", own == opp), ("L", own < opp))}})
+    first_two = np.sort(np.argsort(rank, axis=1)[:, :2], axis=1)
+    pc = Counter(map(tuple, first_two.tolist()))
+    ck["promoted_pairs"] = [{"pair": [NAME[teams_s[a]], NAME[teams_s[b]]], "p": c / N} for (a, b), c in pc.most_common(5)]
+    ck["suwon_fc_final"] = {"le60": float((sfc_pts <= 60).mean()), "le63": float((sfc_pts <= 63).mean()), "ge64": float((sfc_pts >= 64).mean())}
+    ck["expected_remaining_points"] = {NAME[t]: float(sim["pts"][:, ti[t]].mean() - table0[t]["pts"]) for t in ("K29", SEOUL, "K02", "K17")}
+    ck["seoul_coin_flip_total"] = min([k for k, v in result["seoul_top2_given_points"].items() if v >= 0.5], default=None)
+    ck["seoul_win_all"] = float((sp == table0[SEOUL]["pts"] + 3 * len(result["seoul_fixtures"])).mean())
+    result["chasing_k1"] = ck
+
     # card risk for Seoul players
     risk = []
     for j, p in enumerate(sim["track"]):
@@ -872,21 +923,26 @@ def main():
 
     # ablations
     abl = {}
+    if args.ablation_sims <= 0:
+        variants_off = True
+    else:
+        variants_off = False
     variants = {
         "no head-to-head": dict(full, h2h=False),
         "no weather": dict(full, weather=False),
         "no cards or suspensions": dict(full, cards=False),
         "no known absences": dict(full, absences=False),
     }
-    for name, c in variants.items():
+    for name, c in ({} if variants_off else variants).items():
         o = simulate(mdl, rho, DRAW_BOOST, played, remaining, table0, tracked, ref_pool, ref_mult, red_rate, league_red,
                      outlooks, absences, c, args.ablation_sims, seed=7)
         abl[name] = float((o["rank"][:, ti[SEOUL]] <= 2).mean())
-    o = simulate(mdl, rho, 0.0, played, remaining, table0, tracked, ref_pool, ref_mult, red_rate, league_red,
-                 outlooks, absences, full, args.ablation_sims, seed=7)
-    abl["no draw calibration"] = float((o["rank"][:, ti[SEOUL]] <= 2).mean())
-    for name, kw in {"no coach terms": dict(coach=False), "no club home effect": dict(team_home=False),
-                     "no time decay": "decay"}.items():
+    if not variants_off:
+        o = simulate(mdl, rho, 0.0, played, remaining, table0, tracked, ref_pool, ref_mult, red_rate, league_red,
+                     outlooks, absences, full, args.ablation_sims, seed=7)
+        abl["no draw calibration"] = float((o["rank"][:, ti[SEOUL]] <= 2).mean())
+    for name, kw in ({} if variants_off else {"no coach terms": dict(coach=False), "no club home effect": dict(team_home=False),
+                     "no time decay": "decay"}).items():
         c2 = dict(cfg)
         if kw == "decay":
             wts = np.ones(len(played))
@@ -900,7 +956,8 @@ def main():
         abl[name] = float((o["rank"][:, ti[SEOUL]] <= 2).mean())
     result["ablation_seoul_top2"] = abl
 
-    out = DATA / "run_in_predictor.json"
+    result["cutoff"] = args.cutoff
+    out = DATA / ("run_in_predictor_cutoff.json" if cutoff else "run_in_predictor.json")
     out.write_text(json.dumps(result, indent=1, ensure_ascii=False, default=str), encoding="utf-8")
     print(json.dumps({k: result[k] for k in ("rho", "home_advantage", "weather_effects", "coach_effects")}, indent=1, ensure_ascii=False))
     for k in ("seoul-e-land", "suwon-fc", "suwon-samsung", "daegu"):

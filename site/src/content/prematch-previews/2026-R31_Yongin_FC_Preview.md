@@ -8,9 +8,9 @@ round: "31"
 date: "2026-10-31"
 opponent: "Yongin FC"
 venue_for_seoul: "away"
-forecast_probabilities: {"seoul_eland_win":0.70,"draw":0.19,"opponent_win":0.11}
+forecast_probabilities: {"seoul_eland_win":0.47,"draw":0.30,"opponent_win":0.23}
 forecast_labels: {"seoul_eland_win":"Seoul win","draw":"Draw","opponent_win":"Yongin win"}
-forecast_note: "Monte Carlo read on the complete Round 29 table: season and last-five attack and defense rates for both sides, home advantage, and a small adjustment for a Yongin side that can no longer reach the top six. Rounded to whole percentages. Will be refreshed after Round 30."
+forecast_note: "Run-In Predictor model (250,000 simulations) on the complete Round 29 table: ratings from every K League 2 match since 2024, home advantage, head-to-head, a draw calibration, coaching changes, kickoff weather from climatology, and simulated bookings and suspensions on both sides. Rounded to whole percentages. Will be refreshed after Round 30."
 predicted_lineup_label: "Predicted Seoul XI"
 predicted_lineup_team: "Seoul E-Land"
 predicted_formation: "3-4-3"
@@ -31,13 +31,13 @@ tags: [seoul-eland, pre-match-preview, scouting]
 | Opponent table context | 13th, 27 played, 27 points, 5-12-10, 32-41 (-9) |
 | Prior 2026 meetings | R12 (2026-05-16): Seoul E-Land 2-2 Yongin at Mokdong |
 | Future 2026 meetings | None; this is the return fixture |
-| Forecast read | Seoul 70%, draw 19%, Yongin 11% |
+| Forecast read | Seoul 47%, draw 30%, Yongin 23% |
 | Same weekend | Suwon Samsung at Daegu on Saturday at 16:30; Suwon FC v Ansan on Sunday at 14:00 |
 | Context | Seoul's first match after the Round 30 bye; Yongin play at Chungbuk Cheongju in Round 30 first |
 
 ## Why This Match Matters
 
-Seoul go into the bye level on 54 points with Suwon FC, who are second because they lead on goals scored, 53 to 52, and who play Chungnam Asan in Round 30 while Seoul rest. Round 29 cut Seoul's deficit on that first tiebreaker from five goals to one, and the model now gives Seoul a 26 percent chance of the top two. A win at Yongin lifts that to about a third. A draw drops it to about 14 percent, a defeat to about 6. Kim Do-gyun's verdict after Gimhae was that Seoul have to win every remaining match for there to be hope. This is the first of the four, and the only one of them away from Mokdong before the last day.
+Seoul go into the bye level on 54 points with Suwon FC, who are second because they lead on goals scored, 53 to 52, and who play Chungnam Asan in Round 30 while Seoul rest. Round 29 cut Seoul's deficit on that first tiebreaker from five goals to one, and the model now gives Seoul a 23 percent chance of the top two. A win at Yongin lifts that to about 35 percent. A draw drops it to about 16, a defeat to about 10. Kim Do-gyun's verdict after Gimhae was that Seoul have to win every remaining match for there to be hope. This is the first of the four, and the only one of them away from Mokdong before the last day.
 
 ## Seoul E-Land Squad News
 
@@ -128,7 +128,7 @@ Euller's corners and free kicks and the four tall men in the box have become one
 
 ## Forecast vs the Market
 
-The model makes it 70 percent Seoul, 19 percent draw and 11 percent Yongin, with 2-0 to Seoul the likeliest single score and a 46 percent chance of a Seoul clean sheet. It carries one small adjustment, a slight discount to Yongin at home now that they cannot reach the top six and have won only two of fourteen at Mireu Stadium. Their goalkeeper, whose injury was part of an earlier version of that adjustment, is fit again, so that part has been removed. We found no bookmaker market for this fixture yet, two weeks out. This preview will be refreshed after Round 30, when Yongin have played Cheongju and the table has moved.
+The model makes it 47 percent Seoul, 30 percent draw and 23 percent Yongin, with 1-1 the likeliest single score (14 percent), 2-1 to Seoul the likeliest win (9 percent) and a 31 percent chance of a Seoul clean sheet. The first version of this preview quoted the site's older model at 70 percent for Seoul. From this week we use the fuller [Run-In Predictor](/articles/2026-run-in-predictor), which gives recent form less weight and expects more draws, both backed by its test on this season, and Yongin draw more than most. It also plays out Round 30 first: four Yongin regulars, captain Choi Young-jun among them, are one booking from a ban, and a caution at Cheongju on October 25 would keep that player out of this match. We found no bookmaker market for this fixture yet, two weeks out. This preview will be refreshed after Round 30, when Yongin have played Cheongju and the table has moved.
 
 ## Bottom Line
 

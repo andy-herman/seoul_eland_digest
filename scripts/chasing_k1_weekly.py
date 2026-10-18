@@ -1,6 +1,10 @@
 """
 Chasing K1 Weekly: the numbers block for the weekly promotion-race letter.
 
+SUPERSEDED on 2026-10-18: Chasing K1 now runs on scripts/run_in_predictor.py
+(see the "chasing_k1" block in research_dump/predictor/run_in_predictor.json and
+--cutoff for last week's number on the same model). Kept for the earlier editions.
+
 Reuses the model in simulate_final_stretch.py (same table, form, adjustments)
 and produces, for the coming round and every round after it:
 

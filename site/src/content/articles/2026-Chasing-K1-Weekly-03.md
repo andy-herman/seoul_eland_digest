@@ -103,3 +103,5 @@ Four matches; the possible totals run from 54 to 66, and the model projects 62.6
 With the tiebreak gap at one, the goals count too: a 2-0 at Yongin, the model's likeliest score, is worth more than a 1-0. The win first, then the goals, starting at Yongin on Saturday October 31, 14:00.
 
 Next edition after Round 30.
+
+*Update, October 18: from this week Chasing K1 runs on the model described in [The Run-In Predictor](/articles/2026-run-in-predictor). On the same results it puts Seoul at 23 percent rather than the 26 in this letter, and Seoul at 47 percent to win at Yongin rather than 70. The figures above are left as published. Weekly No. 4 will use the new model, with this week's number recomputed on it.*
