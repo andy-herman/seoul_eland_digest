@@ -15,7 +15,7 @@ Obsidian vault (Luna Master)         site/
                                └───→ └── src/content/prematch-previews-pt/
 ```
 
-The vault is the authoring source of truth. The sync script copies sanitized, supporter-facing markdown into `src/content/` on every `dev`/`build`; committed copies let Vercel build even when the local vault is unavailable.
+Rounds are now written straight into `src/content/`, so the committed copies there are usually newer than the vault. On every `dev`/`build` the sync script adds sanitized, supporter-facing vault notes the repo has never had; it never deletes, never overwrites an existing file, and never re-adds a file git shows was removed. Set `SEOUL_ELAND_SYNC_OVERWRITE=1` to let the vault's version replace existing files. Committed copies let Vercel build even when the local vault is unavailable.
 
 ## Develop
 

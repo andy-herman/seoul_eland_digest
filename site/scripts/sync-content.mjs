@@ -1,12 +1,16 @@
-// Copies digests + player notes from the Obsidian vault into src/content/
-// for Astro's content collections to pick up.
+// Copies digests, previews, guides, articles and player notes from the Obsidian
+// vault into src/content/ for Astro's content collections to pick up.
 //
-// Source of truth is the vault. Content in src/content/{digests,digests-pt,players,places}
-// is refreshed on every build.
+// Rounds are now written straight into src/content/, so the repo, not the vault,
+// usually holds the newer copy. The sync therefore only adds notes the site has
+// never had: it never deletes, never overwrites an existing file, and never
+// brings back a file git shows was removed. Set SEOUL_ELAND_SYNC_OVERWRITE=1 to
+// let the vault's version replace existing files; removed files stay removed.
 
-import { mkdir, readdir, copyFile, readFile, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, stat, writeFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { execFileSync } from "node:child_process";
+import { dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,6 +18,28 @@ const __dirname = dirname(__filename);
 
 const VAULT_BASE = process.env.SEOUL_ELAND_VAULT_BASE || "C:/Andy Herman/Luna Master/Sports/Seoul_E-Land";
 const SITE_BASE = join(__dirname, "..", "src", "content");
+const OVERWRITE = process.env.SEOUL_ELAND_SYNC_OVERWRITE === "1";
+
+// Every path under src/content/ that git has ever tracked, relative to it. Null
+// when git is unavailable, in which case only files on disk are protected.
+function trackedContentPaths() {
+  try {
+    const out = execFileSync(
+      "git",
+      ["-c", "core.quotePath=false", "log", "--all", "--no-renames", "--diff-filter=A",
+        "--name-only", "--format=", "--relative", "-z", "--", "."],
+      { cwd: SITE_BASE, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], maxBuffer: 64 * 1024 * 1024 },
+    );
+    return new Set(out.split("\0").map((path) => path.trim()).filter(Boolean));
+  } catch {
+    console.warn("[sync] git history unavailable; removed files are not protected");
+    return null;
+  }
+}
+
+const TRACKED = existsSync(VAULT_BASE) ? trackedContentPaths() : null;
+const held = [];
+const removed = [];
 
 const SRC = {
   digests: join(VAULT_BASE, "Digests"),
@@ -81,13 +107,15 @@ function scrubPreviewForSite(content) {
     .join("\n"));
 }
 
-async function copyTree(srcDir, destDir, predicate, transform) {
+// Returns how many files were written. Existing files the vault disagrees with
+// go to `held`, previously removed files to `removed`, for the summary in main().
+async function syncTree(srcDir, destDir, predicate, transform) {
+  await mkdir(destDir, { recursive: true });
   if (!existsSync(srcDir)) {
     console.warn(`[sync] missing source: ${srcDir} — skipping`);
     return 0;
   }
-  await rm(destDir, { recursive: true, force: true });
-  await mkdir(destDir, { recursive: true });
+  const relDir = relative(SITE_BASE, destDir).split(sep).join("/");
   const entries = await readdir(srcDir);
   let count = 0;
   for (const entry of entries) {
@@ -97,39 +125,19 @@ async function copyTree(srcDir, destDir, predicate, transform) {
     if (!entry.endsWith(".md")) continue;
     if (predicate && !predicate(entry)) continue;
     const destPath = join(destDir, entry);
-    if (transform) {
-      const content = await readFile(srcPath, "utf8");
-      await writeFile(destPath, transform(content), "utf8");
-    } else {
-      await copyFile(srcPath, destPath);
+    const raw = await readFile(srcPath, "utf8");
+    const content = transform ? transform(raw) : raw;
+    if (existsSync(destPath)) {
+      if (!OVERWRITE) {
+        const current = await readFile(destPath, "utf8");
+        if (current.replace(/\r\n/g, "\n") !== content.replace(/\r\n/g, "\n")) held.push(`${relDir}/${entry}`);
+        continue;
+      }
+    } else if (TRACKED?.has(`${relDir}/${entry}`)) {
+      removed.push(`${relDir}/${entry}`);
+      continue;
     }
-    count += 1;
-  }
-  return count;
-}
-
-async function mergeTree(srcDir, destDir, predicate, transform) {
-  if (!existsSync(srcDir)) {
-    console.warn(`[sync] missing source: ${srcDir} — skipping`);
-    await mkdir(destDir, { recursive: true });
-    return 0;
-  }
-  await mkdir(destDir, { recursive: true });
-  const entries = await readdir(srcDir);
-  let count = 0;
-  for (const entry of entries) {
-    const srcPath = join(srcDir, entry);
-    const s = await stat(srcPath);
-    if (!s.isFile()) continue;
-    if (!entry.endsWith(".md")) continue;
-    if (predicate && !predicate(entry)) continue;
-    const destPath = join(destDir, entry);
-    if (transform) {
-      const content = await readFile(srcPath, "utf8");
-      await writeFile(destPath, transform(content), "utf8");
-    } else {
-      await copyFile(srcPath, destPath);
-    }
+    await writeFile(destPath, content, "utf8");
     count += 1;
   }
   return count;
@@ -138,10 +146,10 @@ async function mergeTree(srcDir, destDir, predicate, transform) {
 async function main() {
   console.log("[sync] vault →", VAULT_BASE);
 
-  const digestCount = await copyTree(SRC.digests, DEST.digests, undefined, scrubDigestForSite);
+  const digestCount = await syncTree(SRC.digests, DEST.digests, undefined, scrubDigestForSite);
   console.log(`[sync] copied ${digestCount} digest(s)`);
 
-  const digestPtCount = await copyTree(
+  const digestPtCount = await syncTree(
     SRC.digestsPt,
     DEST.digestsPt,
     (name) => /^\d{4}-R\d+_Seoul_E-Land_Digest\.md$/i.test(name),
@@ -149,53 +157,62 @@ async function main() {
   );
   console.log(`[sync] copied ${digestPtCount} Portuguese digest(s)`);
 
-  const digestKoCount = await mergeTree(
+  const digestKoCount = await syncTree(
     SRC.digestsKo,
     DEST.digestsKo,
     (name) => /^\d{4}-R\d+_Seoul_E-Land_Digest\.md$/i.test(name),
     scrubDigestForSite,
   );
-  console.log(`[sync] merged ${digestKoCount} Korean digest(s)`);
+  console.log(`[sync] copied ${digestKoCount} Korean digest(s)`);
 
   // Place names: file name ends with a venue noun. Don't match the Korean
   // surname "Park" — players named "Park Chang-hwan" must stay players.
   const placeRegex = /\b(Stadium|Arena|Field|Park)\.md$|\b(Stadium|Arena|Field)\b/i;
-  const playerCount = await copyTree(SRC.players, DEST.players, (name) => {
+  const playerCount = await syncTree(SRC.players, DEST.players, (name) => {
     return !placeRegex.test(name);
   }, scrubReferenceNoteForSite);
   console.log(`[sync] copied ${playerCount} player note(s)`);
 
-  const placeCount = await copyTree(SRC.players, DEST.places, (name) => {
+  const placeCount = await syncTree(SRC.players, DEST.places, (name) => {
     return placeRegex.test(name);
   }, scrubReferenceNoteForSite);
   console.log(`[sync] copied ${placeCount} place note(s)`);
 
-  const previewCount = await copyTree(SRC.prematchPreviews, DEST.prematchPreviews, undefined, scrubPreviewForSite);
+  const previewCount = await syncTree(SRC.prematchPreviews, DEST.prematchPreviews, undefined, scrubPreviewForSite);
   console.log(`[sync] copied ${previewCount} pre-match preview(s)`);
 
-  const previewPtCount = await copyTree(SRC.prematchPreviewsPt, DEST.prematchPreviewsPt, undefined, scrubPreviewForSite);
+  const previewPtCount = await syncTree(SRC.prematchPreviewsPt, DEST.prematchPreviewsPt, undefined, scrubPreviewForSite);
   console.log(`[sync] copied ${previewPtCount} Portuguese pre-match preview(s)`);
 
-  const previewKoCount = await mergeTree(SRC.prematchPreviewsKo, DEST.prematchPreviewsKo, undefined, scrubPreviewForSite);
-  console.log(`[sync] merged ${previewKoCount} Korean pre-match preview(s)`);
+  const previewKoCount = await syncTree(SRC.prematchPreviewsKo, DEST.prematchPreviewsKo, undefined, scrubPreviewForSite);
+  console.log(`[sync] copied ${previewKoCount} Korean pre-match preview(s)`);
 
-  const guideCount = await copyTree(SRC.guides, DEST.guides, undefined, polishFanFacingCopy);
+  const guideCount = await syncTree(SRC.guides, DEST.guides, undefined, polishFanFacingCopy);
   console.log(`[sync] copied ${guideCount} guide(s)`);
 
-  const guidePtCount = await copyTree(SRC.guidesPt, DEST.guidesPt, undefined, polishFanFacingCopy);
+  const guidePtCount = await syncTree(SRC.guidesPt, DEST.guidesPt, undefined, polishFanFacingCopy);
   console.log(`[sync] copied ${guidePtCount} Portuguese guide(s)`);
 
-  const guideKoCount = await mergeTree(SRC.guidesKo, DEST.guidesKo, undefined, polishFanFacingCopy);
-  console.log(`[sync] merged ${guideKoCount} Korean guide(s)`);
+  const guideKoCount = await syncTree(SRC.guidesKo, DEST.guidesKo, undefined, polishFanFacingCopy);
+  console.log(`[sync] copied ${guideKoCount} Korean guide(s)`);
 
-  const articleCount = await copyTree(SRC.articles, DEST.articles, undefined, polishFanFacingCopy);
+  const articleCount = await syncTree(SRC.articles, DEST.articles, undefined, polishFanFacingCopy);
   console.log(`[sync] copied ${articleCount} article(s)`);
 
-  const articlePtCount = await copyTree(SRC.articlesPt, DEST.articlesPt, undefined, polishFanFacingCopy);
+  const articlePtCount = await syncTree(SRC.articlesPt, DEST.articlesPt, undefined, polishFanFacingCopy);
   console.log(`[sync] copied ${articlePtCount} Portuguese article(s)`);
 
-  const articleKoCount = await mergeTree(SRC.articlesKo, DEST.articlesKo, undefined, polishFanFacingCopy);
-  console.log(`[sync] merged ${articleKoCount} Korean article(s)`);
+  const articleKoCount = await syncTree(SRC.articlesKo, DEST.articlesKo, undefined, polishFanFacingCopy);
+  console.log(`[sync] copied ${articleKoCount} Korean article(s)`);
+
+  if (held.length) {
+    console.warn(`[sync] kept ${held.length} repo file(s) that differ from the vault (SEOUL_ELAND_SYNC_OVERWRITE=1 takes the vault's version):`);
+    for (const path of held) console.warn(`  ${path}`);
+  }
+  if (removed.length) {
+    console.warn(`[sync] skipped ${removed.length} vault file(s) that were removed from the repo:`);
+    for (const path of removed) console.warn(`  ${path}`);
+  }
 
   // Always seed empty content folders so Astro doesn't error if vault is empty.
   for (const dir of Object.values(DEST)) {

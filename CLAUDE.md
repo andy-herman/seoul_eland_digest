@@ -53,7 +53,7 @@ The site has a Korean edition under `/ko/` (hreflang `ko-KR`, `/ko/rss.xml`). Ko
 
 ## The site half
 
-`site/` is an Astro 5 + Tailwind static site. `site/scripts/sync-content.mjs` copies sanitized vault markdown into `site/src/content/` on every dev and build; the vault is the source of truth. Wikilinks resolve via `remark-wiki-link` with hardcoded slug sets in `site/astro.config.mjs` (new players need a slug added there).
+`site/` is an Astro 5 + Tailwind static site. `site/scripts/sync-content.mjs` copies sanitized vault markdown into `site/src/content/` on every dev and build, but only notes the repo has never had: rounds are now written straight into `site/src/content/`, so the repo usually holds the newer copy. The sync never deletes, never overwrites an existing file, and never re-adds a file git shows was removed; `SEOUL_ELAND_SYNC_OVERWRITE=1` lets the vault's version replace existing files. Wikilinks resolve via `remark-wiki-link` with hardcoded slug sets in `site/astro.config.mjs` (new players need a slug added there).
 
 There are two deploy paths, both triggered by a push to main:
 
