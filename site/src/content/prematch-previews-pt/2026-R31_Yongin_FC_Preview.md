@@ -8,9 +8,9 @@ round: "31"
 date: "2026-10-31"
 opponent: "Yongin FC"
 venue_for_seoul: "away"
-forecast_probabilities: {"seoul_eland_win":0.47,"draw":0.30,"opponent_win":0.23}
+forecast_probabilities: {"seoul_eland_win":0.45,"draw":0.30,"opponent_win":0.25}
 forecast_labels: {"seoul_eland_win":"Vitória do Seoul","draw":"Empate","opponent_win":"Vitória do Yongin"}
-forecast_note: "Modelo do Previsor da Reta Final (250.000 simulações) sobre a classificação após a 29ª rodada completa: índices de força calculados a partir de todos os jogos da K League 2 desde 2024, vantagem de casa, confronto direto, uma calibragem de empates, trocas de treinador, o clima previsto para o horário do jogo a partir da climatologia e cartões e suspensões simulados dos dois lados. Arredondado para inteiros. Será atualizada após a 30ª rodada."
+forecast_note: "Modelo do Previsor da Reta Final (250.000 simulações) sobre a classificação após a 30ª rodada completa: índices de força calculados a partir de todos os jogos da K League 2 desde 2024, vantagem de casa, confronto direto, uma calibragem de empates, trocas de treinador, o clima no horário do jogo a partir da previsão do tempo e da climatologia e cartões e suspensões simulados dos dois lados. Arredondado para inteiros. Atualizada após a 30ª rodada."
 predicted_lineup_label: "Provável XI do Seoul"
 predicted_lineup_team: "Seoul E-Land"
 predicted_formation: "3-4-3"
@@ -28,16 +28,16 @@ tags: [seoul-eland, pre-match-preview, scouting]
 | Jogo | 31ª rodada, sábado 31/10/2026, 14:00, Yongin Mireu Stadium |
 | Mando | Seoul fora |
 | Contexto do Seoul | 3º, 28 jogos, 54 pontos, 16-6-6, 52-32 (+20) |
-| Contexto do adversário | 13º, 27 jogos, 27 pontos, 5-12-10, 32-41 (-9) |
+| Contexto do adversário | 13º, 28 jogos, 30 pontos, 6-12-10, 34-41 (-7) |
 | Confrontos em 2026 | 12ª rodada (16/05/2026): Seoul E-Land 2-2 Yongin em Mokdong |
 | Confrontos futuros em 2026 | Nenhum; este é o jogo de volta |
-| Leitura do modelo | Seoul 47%, empate 30%, Yongin 23% |
+| Leitura do modelo | Seoul 45%, empate 30%, Yongin 25% |
 | No mesmo fim de semana | Suwon Samsung em Daegu no sábado às 16:30; Suwon FC x Ansan no domingo às 14:00 |
-| Contexto | Primeiro jogo do Seoul depois da folga da 30ª rodada; antes, o Yongin joga em Chungbuk Cheongju na 30ª rodada |
+| Contexto | Primeiro jogo do Seoul depois da folga da 30ª rodada; o Yongin venceu por 2-0 em Chungbuk Cheongju na 30ª rodada |
 
 ## Por Que Este Jogo Importa
 
-O Seoul entra na folga empatado em 54 pontos com o Suwon FC, que é segundo por liderar em gols marcados, 53 a 52, e que enfrenta o Chungnam Asan na 30ª rodada enquanto o Seoul descansa. A 29ª rodada reduziu a desvantagem do Seoul nesse primeiro critério de desempate de cinco gols para um, e o modelo agora dá ao Seoul 23 por cento de chance de top 2. Uma vitória em Yongin eleva esse número para cerca de 35 por cento. Um empate o derruba para cerca de 16; uma derrota, para cerca de 10. O veredito de Kim Do-gyun depois do Gimhae foi que o Seoul precisa vencer todos os jogos restantes para que haja esperança. Este é o primeiro dos quatro, e o único deles longe de Mokdong antes da última rodada.
+O Seoul sai da folga empatado em 54 pontos com o Suwon FC, que é segundo por liderar em gols marcados, 53 a 52, e que perdeu por 1-0 em casa para o Chungnam Asan na 30ª rodada enquanto o Seoul descansava. A 29ª rodada já tinha reduzido a desvantagem do Seoul nesse primeiro critério de desempate de cinco gols para um, e o modelo agora dá ao Seoul 34 por cento de chance de top 2, contra 23 há uma semana. Uma vitória em Yongin eleva esse número para cerca de 50 por cento. Um empate o derruba para cerca de 25; uma derrota, para cerca de 16. O veredito de Kim Do-gyun depois do Gimhae foi que o Seoul precisa vencer todos os jogos restantes para que haja esperança. Este é o primeiro dos quatro, e o único deles longe de Mokdong antes da última rodada.
 
 ## Notícias do Elenco do Seoul E-Land
 
@@ -68,28 +68,28 @@ O 3-4-3 com [[Caio Marcelo]], Osmar e Baek Ji-woong começou duas vezes e o Seou
 
 ## Relatório de Observação do Adversário
 
-O **Yongin FC** está em sua primeira temporada, um dos três clubes novos, ao lado de Gimhae e Paju, que fizeram desta uma divisão de 17 times. O clube fez sua cerimônia de fundação em 4 de janeiro, estabeleceu a meta de chegar à K League 1 até 2030 e contratou um rosto famoso como diretor técnico, Lee Dong-gook, com Kim Jin-hyung como gerente-geral. O treinador é Choi Yun-kyum, nomeado pela prefeitura em julho de 2025, veterano de Bucheon, Daejeon, Gangwon, Busan, Jeju e Chungbuk Cheongju. Um lugar entre os dez primeiros foi apontado como a meta realista para esta primeira temporada. O time é 13º e, como 42 pontos é o máximo com que pode terminar, contra os 44 do Hwaseong, sexto colocado, já não pode chegar aos playoffs; o que resta é a briga pelo décimo lugar, com Cheongju, Seongnam e Paju logo acima.
+O **Yongin FC** está em sua primeira temporada, um dos três clubes novos, ao lado de Gimhae e Paju, que fizeram desta uma divisão de 17 times. O clube fez sua cerimônia de fundação em 4 de janeiro, estabeleceu a meta de chegar à K League 1 até 2030 e contratou um rosto famoso como diretor técnico, Lee Dong-gook, com Kim Jin-hyung como gerente-geral. O treinador é Choi Yun-kyum, nomeado pela prefeitura em julho de 2025, veterano de Bucheon, Daejeon, Gangwon, Busan, Jeju e Chungbuk Cheongju. Um lugar entre os dez primeiros foi apontado como a meta realista para esta primeira temporada. O time é 13º e, como 42 pontos é o máximo com que pode terminar, contra os 45 do Hwaseong, sexto colocado, já não pode chegar aos playoffs; o que resta é a briga pelo décimo lugar, com Cheongju, Seongnam e Paju logo acima.
 
-**Quem observar.** Os gols são divididos: Seok Hyun-jun e o brasileiro Gabriel têm seis gols na liga cada, Choi Chi-woong quatro, Yoo Dong-gyu e Lee Seung-jun três. Kim Bo-seop é o criador, com seis assistências, e jogou todas as 27 partidas. Choi Young-jun usou a braçadeira de capitão em todos os jogos desde 5 de setembro. O goleiro Hwang Sung-min se machucou num choque com Frizzo, do Suwon FC, em 5 de setembro, entrou e saiu do time depois disso e voltou a ser titular contra o Ansan.
+**Quem observar.** O brasileiro Gabriel agora lidera a artilharia do time, com oito gols na liga, depois de marcar os dois em Cheongju; Seok Hyun-jun tem seis, Choi Chi-woong quatro, Yoo Dong-gyu e Lee Seung-jun três. Kim Bo-seop é o criador, com seis assistências, e jogou todas as 28 partidas. Choi Young-jun usou a braçadeira de capitão em todos os jogos desde 5 de setembro. O goleiro Hwang Sung-min se machucou num choque com Frizzo, do Suwon FC, em 5 de setembro, entrou e saiu do time depois disso e voltou a ser titular contra o Ansan.
 
-**O padrão.** O Yongin empata. Doze de seus 27 jogos terminaram empatados, atrás apenas dos 14 do Chungbuk Cheongju, e no Mireu Stadium o time venceu apenas duas vezes, 4-1 sobre o Gimhae em abril e 2-0 sobre o Busan em agosto, com sete empates e cinco derrotas. O problema recente são os gols: três nos últimos cinco jogos, e nenhum em dois dos últimos três em casa.
+**O padrão.** O Yongin empata. Doze de seus 28 jogos terminaram empatados, atrás apenas dos 14 do Chungbuk Cheongju, e no Mireu Stadium o time venceu apenas duas vezes, 4-1 sobre o Gimhae em abril e 2-0 sobre o Busan em agosto, com sete empates e cinco derrotas. O problema recente tem sido fazer gols: quatro nos últimos cinco jogos, dois deles em Cheongju, e nenhum em dois dos últimos três em casa.
 
-**O desmoronamento contra o Ansan.** O Yongin estava empatado em 0-0 no intervalo, em casa, contra o Ansan em 17 de outubro, e perdeu por 4-0. Um recuo de Kim Bo-seop deu de presente a Lima o primeiro gol aos 49, o Yongin se adiantou para buscar o empate, e o Ansan marcou mais três em contra-ataques, com Lima completando o hat-trick nos acréscimos. Uma cabeçada de Gabriel foi anulada por impedimento. O Yongin teve 55 por cento da bola e três finalizações no alvo contra dez do Ansan. Choi Yun-kyum pediu desculpas aos torcedores da casa, disse que a culpa era toda dele e afirmou que o time não podia continuar como estava e que era preciso mudar. Espere um time titular diferente daquele que o Ansan venceu.
+**O desmoronamento contra o Ansan.** O Yongin estava empatado em 0-0 no intervalo, em casa, contra o Ansan em 17 de outubro, e perdeu por 4-0. Um recuo de Kim Bo-seop deu de presente a Lima o primeiro gol aos 49, o Yongin se adiantou para buscar o empate, e o Ansan marcou mais três em contra-ataques, com Lima completando o hat-trick nos acréscimos. Uma cabeçada de Gabriel foi anulada por impedimento. O Yongin teve 55 por cento da bola e três finalizações no alvo contra dez do Ansan. Choi Yun-kyum pediu desculpas aos torcedores da casa, disse que a culpa era toda dele e afirmou que o time não podia continuar como estava e que era preciso mudar. Uma semana depois, o Yongin venceu por 2-0 em Chungbuk Cheongju.
 
-**Disponibilidade.** Lee Gyu-dong, expulso contra o Gyeongnam em setembro, está de volta ao elenco. Lim Chae-min tem seis amarelos e um vermelho nesta temporada, e Gabriel cinco amarelos; a 30ª rodada em Cheongju pode mudar o quadro disciplinar antes da chegada do Seoul.
+**Disponibilidade.** Lee Gyu-dong, expulso contra o Gyeongnam em setembro, está de volta ao elenco. Lim Chae-min tem seis amarelos e um vermelho nesta temporada, e Gabriel cinco amarelos. Nenhum jogador do Yongin recebeu amarelo em Cheongju, então os quatro titulares habituais com quatro amarelos, entre eles o capitão Choi Young-jun, chegam todos disponíveis, e o Yongin não tem nenhum suspenso.
 
 ## Forma Recente do Adversário
 
 | Rodada | Data | Jogo | Resultado | Notas |
 | --- | --- | --- | --- | --- |
+| 30 | 25 out | Chungbuk Cheongju x Yongin (F) | V 2-0 | Gabriel 12', 88'; o Chungbuk Cheongju teve um jogador expulso por dois amarelos aos 73' |
 | 29 | 17 out | Yongin x Ansan (C) | D 0-4 | 0-0 no intervalo; hat-trick de Lima 49', 75', 90+4', Ryu Seung-wan 79' |
 | 28 | 10 out | Jeonnam x Yongin (F) | D 1-2 | Choi Chi-woong 90+1'; o Jeonnam decidiu no terceiro minuto dos acréscimos |
 | 27 | 20 set | Yongin x Gyeongnam (C) | E 0-0 | Lee Gyu-dong expulso por dois amarelos |
 | 26 | 12 set | Daegu x Yongin (F) | D 1-3 | Kim Jin-ho 56'; Deckers marcou duas vezes |
 | 25 | 5 set | Yongin x Suwon FC (C) | E 1-1 | Vitinho 53'; Hwang Sung-min lesionado aos 17 minutos |
-| 24 | 30 ago | Gimhae x Yongin (F) | V 3-0 | Vitinho 7', Seok Hyun-jun 23', Kim Han-seo 25' |
 
-Temporada: 5-12-10, 32 marcados, 41 sofridos. Em casa 2-7-5, 15 marcados e 21 sofridos; fora 3-5-5. Cinco jogos sem vencer. A 30ª rodada, em Chungbuk Cheongju, em 25 de outubro, ainda está por ser disputada.
+Temporada: 6-12-10, 34 marcados, 41 sofridos. Em casa 2-7-5, 15 marcados e 21 sofridos; fora 4-5-5. A vitória em Cheongju encerrou uma sequência de cinco jogos sem vencer.
 
 ## Como o Seoul E-Land se Compara
 
@@ -119,7 +119,7 @@ Os escanteios e as faltas de Euller e os quatro homens altos na área viraram um
 
 ## O Que Observar
 
-- Os resultados da 30ª rodada enquanto o Seoul descansa: Suwon FC x Chungnam Asan e Seongnam x Suwon Samsung em 25 de outubro, e Jeonnam x Daegu em 24 de outubro.
+- Suwon FC x Ansan no dia seguinte, domingo, 1º de novembro. O Seoul joga antes, e uma vitória o deixaria três pontos à frente do Suwon FC por uma noite.
 - Quem substitui Son Hyuk-chan na ala esquerda.
 - Se Kim Oh-kyu volta aos relacionados.
 - As mudanças que Choi Yun-kyum prometeu depois da derrota para o Ansan.
@@ -128,10 +128,10 @@ Os escanteios e as faltas de Euller e os quatro homens altos na área viraram um
 
 ## Modelo x Mercado
 
-O modelo aponta 47 por cento Seoul, 30 por cento empate e 23 por cento Yongin, com 1-1 como o placar exato mais provável (14 por cento), 2-1 para o Seoul como a vitória mais provável (9 por cento) e 31 por cento de chance de o Seoul não sofrer gol. A primeira versão desta prévia citava o modelo antigo do site, com 70 por cento para o Seoul. A partir desta semana usamos o [Previsor da Reta Final](/pt/articles/2026-run-in-predictor), mais completo, que dá menos peso à forma recente e espera mais empates, as duas coisas respaldadas pelo teste que fez sobre esta temporada, e o Yongin empata mais do que a maioria. Ele também simula a 30ª rodada antes: quatro titulares habituais do Yongin, entre eles o capitão Choi Young-jun, estão a um amarelo da suspensão, e um cartão em Cheongju em 25 de outubro tiraria esse jogador desta partida. Ainda não encontramos mercado de casas de apostas para este jogo, a duas semanas da partida. Esta prévia será atualizada depois da 30ª rodada, quando o Yongin já tiver enfrentado o Cheongju e a tabela tiver se mexido.
+O modelo aponta 45 por cento Seoul, 30 por cento empate e 25 por cento Yongin, com 1-1 como o placar exato mais provável (14 por cento), 2-1 para o Seoul como a vitória mais provável (9 por cento) e 30 por cento de chance de o Seoul não sofrer gol. A primeira versão desta prévia citava o modelo antigo do site, com 70 por cento para o Seoul. A partir da 29ª rodada usamos o [Previsor da Reta Final](/pt/articles/2026-run-in-predictor), mais completo, que dá menos peso à forma recente e espera mais empates, as duas coisas respaldadas pelo teste que fez sobre esta temporada, e o Yongin empata mais do que a maioria. Antes da 30ª rodada, ele apontava 47, 30 e 23 para este jogo. A vitória do Yongin por 2-0 em Cheongju deslocou a leitura em dois pontos para o lado deles, e nenhum dos seus quatro titulares habituais com quatro amarelos levou cartão lá, então ninguém fica fora desta partida. Quando esta prévia foi escrita pela primeira vez, a duas semanas do jogo, não encontramos mercado de casas de apostas para esta partida. Esta versão foi atualizada depois da 30ª rodada.
 
 ## Conclusão
 
-O Seoul deveria vencer este jogo, e na última vez em que enfrentou o Yongin precisou do oitavo minuto dos acréscimos para empatar. O Yongin está há cinco jogos sem vencer, não tem mais nada pelo que jogar além do décimo lugar e foi desmontado em casa duas semanas antes. O Seoul venceu três seguidas e marcou nove nesses três jogos. A pergunta não é se o Seoul é melhor. É se vai marcar primeiro, e quantos vai marcar depois disso.
+O Seoul deveria vencer este jogo, e na última vez em que enfrentou o Yongin precisou do oitavo minuto dos acréscimos para empatar. O Yongin não tem mais nada pelo que jogar além do décimo lugar, foi desmontado em casa pelo Ansan duas semanas antes desta partida e, nesse meio-tempo, venceu em Cheongju. O Seoul venceu três seguidas e marcou nove nesses três jogos. A pergunta não é se o Seoul é melhor. É se vai marcar primeiro, e quantos vai marcar depois disso.
 
 **Previsão: Yongin FC 0-2 Seoul E-Land.** Um de bola parada antes do intervalo, outro em contra-ataque depois que o Yongin se abrir.
