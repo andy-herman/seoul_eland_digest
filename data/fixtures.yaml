@@ -209,12 +209,16 @@ fixtures:
     date: 2026-10-31
     venue: away
     opponent: "Yongin"
-    result: "TBD"
+    home_score: 4
+    away_score: 2
+    result: "L 2-4"
   - round: 32
     date: 2026-11-07
     venue: home
     opponent: "Jeonnam Dragons"
-    result: "TBD"
+    home_score: 3
+    away_score: 2
+    result: "W 3-2"
   - round: 33
     date: 2026-11-22
     venue: home

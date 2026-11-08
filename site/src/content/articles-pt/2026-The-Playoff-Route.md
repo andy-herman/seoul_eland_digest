@@ -15,10 +15,9 @@ Todas as probabilidades aqui vêm do mesmo modelo por trás de [Rumo à K1](/pt/
 A K League 1 passa a ter 14 clubes em 2027, e o acordo do Gimcheon Sangmu com sua cidade-sede termina ao fim desta temporada, por isso a liga mudou o sistema de acesso apenas para 2026. As regras, segundo o regulamento oficial da K League 2:
 
 - **Primeiro e segundo** sobem diretamente. Sem playoff, sem adversário da K League 1.
-- **Do terceiro ao sexto** vão aos playoffs. As semifinais são na **quinta-feira, 3 de dezembro**: o terceiro recebe o sexto, o quarto recebe o quinto. Cada uma é um jogo único de 90 minutos. Se estiver empatado ao fim dos 90 minutos, não há prorrogação nem disputa de pênaltis: avança o clube mais bem colocado.
-- **A final** é no **domingo, 6 de dezembro**, no estádio do mais bem colocado entre os dois vencedores das semifinais. De novo jogo único, de novo sem prorrogação: o empate dá o acesso ao clube mais bem colocado. **O vencedor sobe.**
-- **O derrotado da final** ganha mais uma chance, um playoff de acesso e rebaixamento contra o clube que terminar em **12º na K League 1**, mas só se esse clube não for o Gimcheon Sangmu. O Gimcheon é rebaixado aconteça o que acontecer. O formato e as datas desse último confronto não foram divulgados.
-- **Se o Gimcheon terminar mesmo em 12º**, não há playoff de acesso e rebaixamento algum, e a final da K League 2 passa a ser disputada em jogos de ida e volta.
+- **Do terceiro ao sexto** vão aos playoffs. As semifinais são na **quarta-feira, 2 de dezembro**: o terceiro recebe o sexto, o quarto recebe o quinto. Cada uma é um jogo único de 90 minutos. Se estiver empatado ao fim dos 90 minutos, não há prorrogação nem disputa de pênaltis: avança o clube mais bem colocado.
+- **A final** é no **sábado, 5 de dezembro**, no estádio do mais bem colocado entre os dois vencedores das semifinais. De novo jogo único, de novo sem prorrogação: o empate dá o acesso ao clube mais bem colocado. **O vencedor sobe.**
+- **O derrotado da final** ganha mais uma chance, um playoff de acesso e rebaixamento contra o clube que terminar em **12º na K League 1**. Esse confronto só acontece se esse clube não for o Gimcheon Sangmu, que é rebaixado aconteça o que acontecer, e, desde o empate em 1-1 em Gwangju em 31 de outubro, o Gimcheon já não pode terminar em 12º, então ele será disputado. O formato e as datas desse último confronto não foram divulgados.
 
 Compare com a temporada passada, quando só o campeão subia diretamente, o vice tinha de enfrentar o 11º colocado da K League 1 em ida e volta, e o vencedor dos playoffs tinha de derrotar o 10º colocado da K League 1. Em 2026, o vencedor dos playoffs da K League 2 não precisa enfrentar nenhum time da primeira divisão.
 
@@ -50,7 +49,7 @@ A briga que importa para o caminho do Seoul nos playoffs é, portanto, com o Dae
 | 5º | Hwaseong (59%), Busan (29%) | Hwaseong: derrota por 1-2 em casa, empate em 0-0 fora |
 | 6º | Busan (62%), Hwaseong (30%) | Busan: derrota por 2-3 em casa, vitória por 2-1 fora |
 
-Assim, a semifinal mais provável é Seoul x Busan em Mokdong, em 3 de dezembro, e a final mais provável é Seoul contra Daegu ou Hwaseong em Mokdong, em 6 de dezembro. Como o modelo vê esses jogos únicos em casa, com base na temporada e na fase recente de cada time:
+Assim, a semifinal mais provável é Seoul x Busan em Mokdong, em 2 de dezembro, e a final mais provável é Seoul contra Daegu ou Hwaseong em Mokdong, em 5 de dezembro. Como o modelo vê esses jogos únicos em casa, com base na temporada e na fase recente de cada time:
 
 | Seoul em Mokdong contra | Vitória | Empate | Derrota | Seoul avança (vitória ou empate) |
 |---|---|---|---|---|
@@ -75,7 +74,7 @@ São cerca de duas chances em três de acesso sem precisar do confronto final co
 
 ## A Última Chance: O 12º Colocado da K League 1
 
-Se o Seoul perder a final em 6 de dezembro, a temporada não necessariamente terminou. O clube que terminar em 12º na K League 1 enfrenta o derrotado da final, a menos que esse 12º colocado seja o Gimcheon. Hoje o 12º é o Gwangju FC, com 18 pontos em 31 jogos, 2 vitórias na temporada inteira e saldo de gols de menos 41. O Gimcheon é 10º, 15 pontos à frente do Gwangju com sete jogos por disputar, então o confronto extra deve acontecer. O formato ainda não foi anunciado.
+Se o Seoul perder a final em 5 de dezembro, a temporada não necessariamente terminou. O clube que terminar em 12º na K League 1 enfrenta o derrotado da final, a menos que esse 12º colocado seja o Gimcheon. Hoje o 12º é o Gwangju FC, com 18 pontos em 31 jogos, 2 vitórias na temporada inteira e saldo de gols de menos 41. O Gimcheon é 10º, 15 pontos à frente do Gwangju com sete jogos por disputar, então o confronto extra deve acontecer. O formato ainda não foi anunciado.
 
 A história desaconselha dar qualquer coisa como certa. Entre 2022 e 2025, os clubes da K League 2 venceram só 2 de 8 playoffs de acesso e rebaixamento contra times da K League 1, embora esses adversários tivessem terminado em 10º ou 11º, e não na lanterna. Este confronto exato não tem precedente. Não tentamos modelá-lo.
 
@@ -93,12 +92,14 @@ Em fevereiro, ele disse que a meta era terminar entre os dois primeiros. Depois 
 
 **Caminho um, o top 2 (19 por cento).** Vencer quase todos os cinco últimos jogos e torcer para o Suwon FC não vencer pelo menos três dos seus seis últimos. Em grande parte, fora das mãos do Seoul.
 
-**Caminho dois, o terceiro lugar e dois jogos em casa (a forma mais provável de subir).** Ficar à frente do Daegu, que está cinco pontos atrás com um jogo a menos. Depois, em Mokdong, em 3 e 6 de dezembro, não perder. Em cada um dos dois jogos, o empate basta.
+**Caminho dois, o terceiro lugar e dois jogos em casa (a forma mais provável de subir).** Ficar à frente do Daegu, que está cinco pontos atrás com um jogo a menos. Depois, em Mokdong, em 2 e 5 de dezembro, não perder. Em cada um dos dois jogos, o empate basta.
 
-**Caminho três, o quarto lugar.** Vencer ou empatar em casa contra o quinto em 3 de dezembro, e depois quase certamente vencer, não empatar, no estádio do terceiro em 6 de dezembro.
+**Caminho três, o quarto lugar.** Vencer ou empatar em casa contra o quinto em 2 de dezembro, e depois quase certamente vencer, não empatar, no estádio do terceiro em 5 de dezembro.
 
-**Caminho quatro, o derrotado da final.** Vencer o 12º colocado da K League 1, se esse clube não for o Gimcheon, num confronto cujo formato ainda não se conhece.
+**Caminho quatro, o derrotado da final.** Vencer o 12º colocado da K League 1 num confronto cujo formato ainda não se conhece.
 
 ## Conclusão
 
-As novas regras fizeram do terceiro lugar uma das melhores posições da segunda divisão do futebol coreano. Um clube que termina em terceiro precisa de dois resultados em casa que não sejam derrotas, contra times que ele deixou para trás ao longo de 32 jogos. O Seoul é terceiro agora, cinco pontos à frente do quarto. A versão isolada mais provável da temporada, segundo o modelo, é o Seoul terminando em terceiro, vencendo o Busan ou empatando com ele em Mokdong em 3 de dezembro e evitando a derrota contra Daegu ou Hwaseong três dias depois. Há dois anos, o Seoul ficou a um confronto da primeira divisão. Neste ano, talvez nem seja preciso vencer o último jogo.
+As novas regras fizeram do terceiro lugar uma das melhores posições da segunda divisão do futebol coreano. Um clube que termina em terceiro precisa de dois resultados em casa que não sejam derrotas, contra times que ele deixou para trás ao longo de 32 jogos. O Seoul é terceiro agora, cinco pontos à frente do quarto. A versão isolada mais provável da temporada, segundo o modelo, é o Seoul terminando em terceiro, vencendo o Busan ou empatando com ele em Mokdong em 2 de dezembro e evitando a derrota contra Daegu ou Hwaseong três dias depois. Há dois anos, o Seoul ficou a um confronto da primeira divisão. Neste ano, talvez nem seja preciso vencer o último jogo.
+
+*Atualização, 7 de novembro: um comunicado da liga de 27 de outubro transferiu as semifinais de quinta-feira, 3 de dezembro, para quarta-feira, 2 de dezembro (19:00), e a final de domingo, 6 de dezembro, para sábado, 5 de dezembro (16:30), e as datas acima foram alteradas de acordo. Como o Gimcheon já não pode terminar em 12º na K League 1, o playoff de acesso e rebaixamento do derrotado da final será disputado, e a final continua sendo um jogo único. Os números do modelo acima são os publicados em 12 de outubro; os números atuais estão em [Rumo à K1](/pt/articles/2026-chasing-k1-promotion).*

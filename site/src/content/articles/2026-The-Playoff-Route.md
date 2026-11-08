@@ -15,10 +15,9 @@ All probabilities here come from the same model behind [Chasing K1](/articles/20
 K League 1 grows to 14 clubs in 2027 and Gimcheon Sangmu's agreement with their home city ends after this season, so the league changed the promotion system for 2026 alone. The rules, from the official K League 2 competition regulations:
 
 - **First and second** go up automatically. No playoff, no K League 1 opponent.
-- **Third to sixth** go into the playoffs. The semi-finals are on **Thursday December 3**: third hosts sixth, fourth hosts fifth. Each is a single 90-minute match. If it is level after 90 minutes, there is no extra time and no penalty shootout: the higher-placed club goes through.
-- **The final** is on **Sunday December 6**, at the ground of the higher-placed of the two semi-final winners. Again a single match, again no extra time: a draw sends the higher-placed club up. **The winner is promoted.**
-- **The loser of the final** gets one more chance, a promotion-relegation playoff against the club that finishes **12th in K League 1**, but only if Gimcheon Sangmu are not that club. Gimcheon are relegated whatever happens. The format and dates of that last tie have not been published.
-- **If Gimcheon do finish 12th**, there is no promotion-relegation playoff at all, and the K League 2 final is played over two legs instead.
+- **Third to sixth** go into the playoffs. The semi-finals are on **Wednesday December 2**: third hosts sixth, fourth hosts fifth. Each is a single 90-minute match. If it is level after 90 minutes, there is no extra time and no penalty shootout: the higher-placed club goes through.
+- **The final** is on **Saturday December 5**, at the ground of the higher-placed of the two semi-final winners. Again a single match, again no extra time: a draw sends the higher-placed club up. **The winner is promoted.**
+- **The loser of the final** gets one more chance, a promotion-relegation playoff against the club that finishes **12th in K League 1**. That tie only happens if Gimcheon Sangmu, who are relegated whatever happens, are not that club, and since their 1-1 draw at Gwangju on October 31 they can no longer finish 12th, so it will be played. The format and dates of that last tie have not been published.
 
 Compare that with last season, when only the champion went up automatically, the runner-up had to play K League 1's 11th-placed club over two legs, and the playoff winner had to beat K League 1's 10th-placed club. In 2026 the K League 2 playoff winner does not have to play a top-flight side at all.
 
@@ -50,7 +49,7 @@ The fight that matters for Seoul's playoff route is therefore with Daegu, not wi
 | 5th | Hwaseong (59%), Busan (29%) | Hwaseong: lost 1-2 at home, drew 0-0 away |
 | 6th | Busan (62%), Hwaseong (30%) | Busan: lost 2-3 at home, won 2-1 away |
 
-So the most likely semi-final is Seoul against Busan at Mokdong on December 3, and the most likely final is Seoul against Daegu or Hwaseong at Mokdong on December 6. The model's view of those single matches at home, using each side's season and recent form:
+So the most likely semi-final is Seoul against Busan at Mokdong on December 2, and the most likely final is Seoul against Daegu or Hwaseong at Mokdong on December 5. The model's view of those single matches at home, using each side's season and recent form:
 
 | Seoul at Mokdong against | Win | Draw | Loss | Seoul go through (win or draw) |
 |---|---|---|---|---|
@@ -75,7 +74,7 @@ That is roughly a two-in-three chance of promotion without needing the final tie
 
 ## The Last Chance: K League 1's 12th Place
 
-If Seoul lose the final on December 6, their season is not necessarily over. The K League 1 club that finishes 12th plays the losing finalist, unless that 12th-placed club is Gimcheon. Right now 12th is Gwangju FC, with 18 points from 31 matches, 2 wins all season and a goal difference of minus 41. Gimcheon are 10th, 15 points clear of Gwangju with seven matches left, so the extra tie is likely to happen. Its format has not been announced.
+If Seoul lose the final on December 5, their season is not necessarily over. The K League 1 club that finishes 12th plays the losing finalist, unless that 12th-placed club is Gimcheon. Right now 12th is Gwangju FC, with 18 points from 31 matches, 2 wins all season and a goal difference of minus 41. Gimcheon are 10th, 15 points clear of Gwangju with seven matches left, so the extra tie is likely to happen. Its format has not been announced.
 
 History is a warning against assuming anything. Between 2022 and 2025, K League 2 clubs won only 2 of 8 promotion-relegation ties against K League 1 sides, although those opponents finished 10th or 11th rather than bottom. This exact matchup has no precedent. We have not tried to model it.
 
@@ -93,12 +92,14 @@ In February he said the goal was a top-two finish. After the home defeat to Suwo
 
 **Route one, the top two (19 percent).** Win almost all of the last five and hope Suwon FC fail to win at least three of their last six. Mostly out of Seoul's hands.
 
-**Route two, third place and two home matches (the most likely way up).** Stay ahead of Daegu, who are five points back with a game in hand. Then, at Mokdong on December 3 and December 6, do not lose. A draw in either match is enough.
+**Route two, third place and two home matches (the most likely way up).** Stay ahead of Daegu, who are five points back with a game in hand. Then, at Mokdong on December 2 and December 5, do not lose. A draw in either match is enough.
 
-**Route three, fourth place.** Win or draw at home against fifth on December 3, then almost certainly win, not draw, at third's ground on December 6.
+**Route three, fourth place.** Win or draw at home against fifth on December 2, then almost certainly win, not draw, at third's ground on December 5.
 
-**Route four, the losing finalist.** Beat K League 1's 12th-placed club, if that club is not Gimcheon, in a tie whose format is not yet known.
+**Route four, the losing finalist.** Beat K League 1's 12th-placed club in a tie whose format is not yet known.
 
 ## Bottom Line
 
-The new rules have made third place one of the best positions in Korean football's second tier. A club that finishes third needs two home results that are not defeats, against sides it has finished above over 32 matches. Seoul are third now, five points clear of fourth. The model's single most likely version of the season is Seoul finishing third, beating Busan or drawing with them at Mokdong on December 3, and avoiding defeat against Daegu or Hwaseong three days later. Two years ago they were one tie from the top flight. This year the last match may not even need to be won.
+The new rules have made third place one of the best positions in Korean football's second tier. A club that finishes third needs two home results that are not defeats, against sides it has finished above over 32 matches. Seoul are third now, five points clear of fourth. The model's single most likely version of the season is Seoul finishing third, beating Busan or drawing with them at Mokdong on December 2, and avoiding defeat against Daegu or Hwaseong three days later. Two years ago they were one tie from the top flight. This year the last match may not even need to be won.
+
+*Update, November 7: the league's notice of October 27 moved the semi-finals from Thursday December 3 to Wednesday December 2 (19:00) and the final from Sunday December 6 to Saturday December 5 (16:30), and the dates above have been changed to match. Since Gimcheon can no longer finish 12th in K League 1, the promotion-relegation playoff for the losing finalist will be played and the final stays a single match. The model figures above are as published on October 12; the current numbers are in [Chasing K1](/articles/2026-chasing-k1-promotion).*

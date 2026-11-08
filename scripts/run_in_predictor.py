@@ -909,6 +909,11 @@ def main():
     ck["expected_remaining_points"] = {NAME[t]: float(sim["pts"][:, ti[t]].mean() - table0[t]["pts"]) for t in ("K29", SEOUL, "K02", "K17")}
     ck["seoul_coin_flip_total"] = min([k for k, v in result["seoul_top2_given_points"].items() if v >= 0.5], default=None)
     ck["seoul_win_all"] = float((sp == table0[SEOUL]["pts"] + 3 * len(result["seoul_fixtures"])).mean())
+    gain_s, gain_f = sp - table0[SEOUL]["pts"], sfc_pts - table0["K29"]["pts"]
+    ck["points_grid_seoul_vs_suwonfc"] = {
+        f"{int(a)}|{int(b)}": {"p": float(((gain_s == a) & (gain_f == b)).mean()),
+                               "seoul_top2": float((rank[(gain_s == a) & (gain_f == b), s] <= 2).mean())}
+        for a in np.unique(gain_s) for b in np.unique(gain_f) if ((gain_s == a) & (gain_f == b)).sum() > 200}
     result["chasing_k1"] = ck
 
     # card risk for Seoul players
